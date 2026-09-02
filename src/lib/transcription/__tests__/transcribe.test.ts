@@ -11,17 +11,17 @@
 import { transcribeAudio, TranscriptionUnavailableError } from '../transcribe';
 import { isFfmpegAvailable, segmentAudioForTranscription } from '../segment-audio';
 
-jest.mock('../segment-audio', () => ({
-  isFfmpegAvailable: jest.fn(),
-  segmentAudioForTranscription: jest.fn(),
+vi.mock('../segment-audio', () => ({
+  isFfmpegAvailable: vi.fn(),
+  segmentAudioForTranscription: vi.fn(),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 
-const mockedFfmpegAvailable = jest.mocked(isFfmpegAvailable);
-const mockedSegment = jest.mocked(segmentAudioForTranscription);
+const mockedFfmpegAvailable = vi.mocked(isFfmpegAvailable);
+const mockedSegment = vi.mocked(segmentAudioForTranscription);
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/audio/transcriptions';
 
@@ -36,7 +36,7 @@ function makeBlob(bytes: number): Blob {
 
 function mockFetchGroqOk(texts: string[]) {
   let call = 0;
-  return jest.fn(async (url: string | URL | Request) => {
+  return vi.fn(async (url: string | URL | Request) => {
     if (String(url) !== GROQ_URL) throw new Error(`unexpected fetch: ${url}`);
     const text = texts[Math.min(call, texts.length - 1)];
     call += 1;
@@ -51,7 +51,7 @@ describe('transcribeAudio', () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     process.env.GROQ_API_KEY = 'test-key';
   });
 
@@ -91,7 +91,7 @@ describe('transcribeAudio', () => {
   it('fails with a user-actionable error when every provider is unavailable', async () => {
     mockedFfmpegAvailable.mockResolvedValue(false);
     // Local whisper service not reachable either.
-    global.fetch = jest.fn(async () => {
+    global.fetch = vi.fn(async () => {
       throw new Error('ECONNREFUSED');
     }) as unknown as typeof fetch;
 

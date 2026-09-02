@@ -17,14 +17,14 @@
  */
 
 // The FOR UPDATE lock select. Returns the row the re-check sees under the lock.
-const mockTxExecute = jest.fn();
+const mockTxExecute = vi.fn();
 // The update().set().where().returning() chain inside apply.
-const mockReturning = jest.fn();
-const mockTxUpdate = jest.fn(() => ({
+const mockReturning = vi.fn();
+const mockTxUpdate = vi.fn((..._args: unknown[]) => ({
   set: () => ({ where: () => ({ returning: mockReturning }) }),
 }));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     // guardedTransition runs `db.transaction(cb)`; invoke cb with a fake tx.
     transaction: (cb: (tx: unknown) => unknown) =>
@@ -42,7 +42,7 @@ const APPT_ID = 'appt-1';
 const UPDATED_ROW = { id: APPT_ID, status: BOOKING_STATUS.COMPLETED } as never;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockReturning.mockResolvedValue([UPDATED_ROW]);
 });
 

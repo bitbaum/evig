@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/admin/team/help-requests/[id]/resolve
  *
@@ -17,19 +17,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -42,22 +41,22 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockGetDbUserId = jest.fn();
+const mockGetDbUserId = vi.fn();
 
-jest.mock('@/lib/api/task-helpers', () => ({
-  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
+vi.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockValidateResolveHelpRequest = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockValidateResolveHelpRequest = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -70,7 +69,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   helpRequests: {
     id: 'hr_id',
     requesterId: 'hr_requesterId',
@@ -83,24 +82,22 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
 }));
 
-jest.mock('@/config/activity', () => ({
+vi.mock('@/config/activity', () => ({
   HELP_REQUEST_STATUS: { RESOLVED: 'resolved', CANCELLED: 'cancelled' },
 }));
 
-jest.mock('@/lib/schemas/activity', () => ({
-  validateResolveHelpRequest: (...args: unknown[]) =>
-    mockValidateResolveHelpRequest.apply(null, args),
+vi.mock('@/lib/schemas/activity', () => ({
+  validateResolveHelpRequest: (...args: unknown[]) => mockValidateResolveHelpRequest(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -112,15 +109,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -154,7 +151,7 @@ function makeContext(id = 'hr-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockValidateResolveHelpRequest.mockReturnValue({

@@ -1,22 +1,21 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/listings/favorites
  */
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -25,16 +24,16 @@ jest.mock('@/lib/api/middleware', () => ({
   parsePagination: () => ({ limit: 20, offset: 0, page: 1 }),
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockLimit = jest.fn();
-const mockOffset = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockLimit = vi.fn();
+const mockOffset = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -43,8 +42,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -54,20 +52,20 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/marketplace/listing-helpers', () => ({
+vi.mock('@/lib/marketplace/listing-helpers', () => ({
   listingThumbnailSubquery: { __sql: 'thumbnail_subquery' },
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', REMOVED: 'removed', DRAFT: 'draft', SOLD: 'sold' },
   LISTING_STATUSES: ['active', 'removed', 'draft', 'sold'],
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
@@ -76,7 +74,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listings: {
     id: 'l_id',
     sellerId: 'l_sellerId',
@@ -117,7 +115,7 @@ jest.mock('@/db/schema', () => ({
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
@@ -162,7 +160,7 @@ function makeRequest(url: string) {
 // ── Setup ──────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, leftJoin: mockLeftJoin, where: mockWhere });

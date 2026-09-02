@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/POST /api/admin/donations
  *
@@ -26,21 +26,20 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
-const mockGetQuerySafeParse = jest.fn();
-const mockCreateSafeParse = jest.fn();
+const mockAuth = vi.fn();
+const mockGetQuerySafeParse = vi.fn();
+const mockCreateSafeParse = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -48,18 +47,18 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockLimit = jest.fn();
-const mockOffset = jest.fn();
-const mockInsert = jest.fn();
-const mockInsertValues = jest.fn();
-const mockInsertReturning = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockLimit = vi.fn();
+const mockOffset = vi.fn();
+const mockInsert = vi.fn();
+const mockInsertValues = vi.fn();
+const mockInsertReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -72,7 +71,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   donations: {
     id: 'd_id',
     userId: 'd_userId',
@@ -108,8 +107,8 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-// alias is called at module level — must be static (not jest.fn())
-jest.mock('drizzle-orm/pg-core', () => ({
+// alias is called at module level — must be static (not vi.fn())
+vi.mock('drizzle-orm/pg-core', () => ({
   alias: (_table: unknown, name: string) => ({
     id: `${name}_id`,
     name: `${name}_name`,
@@ -117,41 +116,40 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  gte: jest.fn().mockReturnValue({ __gte: true }),
-  lte: jest.fn().mockReturnValue({ __lte: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
-  asc: jest.fn().mockReturnValue({ __asc: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'count(*)' }), {
-    raw: jest.fn(),
-    join: jest.fn(),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  gte: vi.fn().mockReturnValue({ __gte: true }),
+  lte: vi.fn().mockReturnValue({ __lte: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
+  asc: vi.fn().mockReturnValue({ __asc: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'count(*)' }), {
+    raw: vi.fn(),
+    join: vi.fn(),
   }),
 }));
 
-jest.mock('@/lib/schemas/donations', () => ({
+vi.mock('@/lib/schemas/donations', () => ({
   GetDonationsQuerySchema: {
-    safeParse: (...args: unknown[]) => mockGetQuerySafeParse.apply(null, args),
+    safeParse: (...args: unknown[]) => mockGetQuerySafeParse(...args),
   },
   CreateDonationSchema: {
-    safeParse: (...args: unknown[]) => mockCreateSafeParse.apply(null, args),
+    safeParse: (...args: unknown[]) => mockCreateSafeParse(...args),
   },
 }));
 
-jest.mock('@/config/donations', () => ({
+vi.mock('@/config/donations', () => ({
   DONATION_TYPES: { MONETARY: 'money', DEVICE: 'device' },
   DONATION_STATUSES: { RECORDED: 'recorded', ARCHIVED: 'archived' },
-  getEstimatedValue: jest.fn().mockReturnValue(5000),
+  getEstimatedValue: vi.fn().mockReturnValue(5000),
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -163,15 +161,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -227,7 +225,7 @@ function makePostRequest(body: Record<string, unknown>) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockFrom.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere, orderBy: mockOrderBy });

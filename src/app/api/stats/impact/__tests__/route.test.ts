@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/stats/impact
  *
@@ -21,22 +21,22 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockQuery = jest.fn();
+const mockQuery = vi.fn();
 
-jest.mock('@/lib/auth/db', () => ({
-  query: (...args: unknown[]) => mockQuery.apply(null, args),
+vi.mock('@/lib/auth/db', () => ({
+  query: (...args: unknown[]) => mockQuery(...args),
 }));
 
-jest.mock('@/config/co2-impact', () => ({
+vi.mock('@/config/co2-impact', () => ({
   // SSOT function: 20 kg per sold laptop, no claim for unknown categories.
   estimateCO2Savings: (category: string) => (category === 'laptop' ? 20 : null),
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { SOLD: 'sold', REMOVED: 'removed' },
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: {
     LISTINGS: 'listings',
     IT_HILFE_REQUESTS: 'it_hilfe_requests',
@@ -44,17 +44,15 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccessCached: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
 }));
@@ -63,6 +61,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -88,7 +87,7 @@ function setupQueryMocks() {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   setupQueryMocks();
 });
 

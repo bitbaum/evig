@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/ai/extract
  *
@@ -9,17 +9,16 @@
  *          200 (successful extraction with result from registryExtract)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -27,13 +26,13 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockRegistryExtract = jest.fn();
-jest.mock('@/lib/ai/extract', () => ({
+const mockRegistryExtract = vi.fn();
+vi.mock('@/lib/ai/extract', () => ({
   registryExtract: (...args: unknown[]) => mockRegistryExtract(...args),
 }));
 
 // Mock FORM_AI_REGISTRY with known test forms
-jest.mock('@/lib/ai/config/prompts', () => ({
+vi.mock('@/lib/ai/config/prompts', () => ({
   FORM_AI_REGISTRY: {
     erfassung: {
       auth: 'user',
@@ -48,12 +47,11 @@ jest.mock('@/lib/ai/config/prompts', () => ({
   },
 }));
 
-jest.mock('@/lib/permissions', () => ({
+vi.mock('@/lib/permissions', () => ({
   isStaffEmail: (email: string) => email.endsWith('@revamp-it.ch'),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -66,11 +64,12 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -111,7 +110,7 @@ function makeRequest(body: unknown) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockRegistryExtract.mockResolvedValue(MOCK_EXTRACT_RESULT);
 });

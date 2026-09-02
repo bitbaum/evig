@@ -1,22 +1,21 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for PATCH /api/admin/marketplace/questions/[id]
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -29,19 +28,19 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockLimit = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockReturning = jest.fn();
-const mockValidateBody = jest.fn();
-const mockLogAdminAction = jest.fn();
-const mockGetClientIdentifier = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockLimit = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockReturning = vi.fn();
+const mockValidateBody = vi.fn();
+const mockLogAdminAction = vi.fn();
+const mockGetClientIdentifier = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -54,7 +53,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listingQuestions: {
     id: 'q_id',
     listingId: 'q_listingId',
@@ -64,42 +63,41 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
     ID_REQUIRED: 'ID erforderlich',
   },
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_QUESTION_STATUS: { OPEN: 'open', ANSWERED: 'answered', HIDDEN: 'hidden' },
 }));
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
 }));
 
-jest.mock('@/lib/schemas/marketplace', () => ({
+vi.mock('@/lib/schemas/marketplace', () => ({
   ModerateListingQuestionSchema: {},
 }));
 
-jest.mock('@/lib/auth/audit', () => ({
-  logAdminAction: (...args: unknown[]) => mockLogAdminAction.apply(null, args),
+vi.mock('@/lib/auth/audit', () => ({
+  logAdminAction: (...args: unknown[]) => mockLogAdminAction(...args),
 }));
 
-jest.mock('@/lib/security/rate-limit', () => ({
-  getClientIdentifier: (...args: unknown[]) => mockGetClientIdentifier.apply(null, args),
+vi.mock('@/lib/security/rate-limit', () => ({
+  getClientIdentifier: (...args: unknown[]) => mockGetClientIdentifier(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -111,11 +109,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PATCH } from '../route';
 
 const MOCK_SESSION = {
@@ -143,7 +141,7 @@ function makeContext(id = 'q-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockFrom.mockReturnValue({ where: mockWhere });
   mockWhere.mockReturnValue({ limit: mockLimit });
@@ -166,7 +164,6 @@ describe('PATCH /api/admin/marketplace/questions/[id] — unauthenticated', () =
 
 describe('PATCH /api/admin/marketplace/questions/[id] — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(

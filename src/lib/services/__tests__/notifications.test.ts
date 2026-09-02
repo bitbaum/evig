@@ -6,6 +6,7 @@
  * preferences, and that email failures never propagate.
  */
 
+import type { Mock } from 'vitest';
 import { logger } from '@/lib/logger';
 import { sendCustomEmail } from '@/lib/email';
 import { notificationEmail } from '@/lib/email/templates/notification';
@@ -20,21 +21,21 @@ let selectResult: unknown[] = [];
 let updateResult: unknown[] = [];
 
 const mockInsertChain = {
-  values: jest.fn().mockReturnThis(),
-  returning: jest.fn().mockImplementation(() => Promise.resolve(insertReturningResult)),
+  values: vi.fn().mockReturnThis(),
+  returning: vi.fn().mockImplementation(() => Promise.resolve(insertReturningResult)),
 };
 
 const mockSelectChain = {
-  from: jest.fn().mockReturnThis(),
-  innerJoin: jest.fn().mockReturnThis(),
-  leftJoin: jest.fn().mockReturnThis(),
-  where: jest.fn().mockImplementation(() => Promise.resolve(selectResult)),
+  from: vi.fn().mockReturnThis(),
+  innerJoin: vi.fn().mockReturnThis(),
+  leftJoin: vi.fn().mockReturnThis(),
+  where: vi.fn().mockImplementation(() => Promise.resolve(selectResult)),
 };
 
 const mockUpdateChain = {
-  set: jest.fn().mockReturnThis(),
-  where: jest.fn().mockImplementation(() => Promise.resolve(updateResult)),
-  catch: jest.fn().mockReturnThis(),
+  set: vi.fn().mockReturnThis(),
+  where: vi.fn().mockImplementation(() => Promise.resolve(updateResult)),
+  catch: vi.fn().mockReturnThis(),
 };
 
 // The update().set().where() chain needs a .catch() on its terminal — but
@@ -42,22 +43,22 @@ const mockUpdateChain = {
 //   db.update(notifications).set({...}).where(...).catch(...)
 // So we need where() to return an object with .catch()
 const mockUpdateTerminal = {
-  catch: jest.fn().mockImplementation(() => Promise.resolve(undefined)),
+  catch: vi.fn().mockImplementation(() => Promise.resolve(undefined)),
 };
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    insert: jest.fn(() => mockInsertChain),
-    select: jest.fn(() => mockSelectChain),
-    update: jest.fn(() => ({
-      set: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue(mockUpdateTerminal),
+    insert: vi.fn((..._args: unknown[]) => mockInsertChain),
+    select: vi.fn((..._args: unknown[]) => mockSelectChain),
+    update: vi.fn((..._args: unknown[]) => ({
+      set: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue(mockUpdateTerminal),
       }),
     })),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   notifications: {
     id: 'notifications.id',
     userId: 'notifications.user_id',
@@ -80,20 +81,20 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn((...args: unknown[]) => ({ _tag: 'eq', args })),
-  ne: jest.fn((...args: unknown[]) => ({ _tag: 'ne', args })),
-  and: jest.fn((...args: unknown[]) => ({ _tag: 'and', args })),
-  inArray: jest.fn((...args: unknown[]) => ({ _tag: 'inArray', args })),
-  sql: jest.fn(),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn((...args: unknown[]) => ({ _tag: 'eq', args })),
+  ne: vi.fn((...args: unknown[]) => ({ _tag: 'ne', args })),
+  and: vi.fn((...args: unknown[]) => ({ _tag: 'and', args })),
+  inArray: vi.fn((...args: unknown[]) => ({ _tag: 'inArray', args })),
+  sql: vi.fn(),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() },
 }));
-jest.mock('@/lib/email', () => ({ sendCustomEmail: jest.fn() }));
-jest.mock('@/lib/email/templates/notification', () => ({
-  notificationEmail: jest.fn(() => ({
+vi.mock('@/lib/email', () => ({ sendCustomEmail: vi.fn() }));
+vi.mock('@/lib/email/templates/notification', () => ({
+  notificationEmail: vi.fn((..._args: unknown[]) => ({
     subject: 'Test',
     html: '<p>Test</p>',
     text: 'Test',
@@ -109,10 +110,10 @@ import {
 } from '@/lib/services/notifications';
 import { db } from '@/db';
 
-const mockSendEmail = sendCustomEmail as jest.Mock;
+const mockSendEmail = sendCustomEmail as Mock;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   insertReturningResult = [];
   selectResult = [];
   updateResult = [];
@@ -301,7 +302,7 @@ describe('notifyAllStaff', () => {
   });
 
   it('excludes the specified user from notifications', async () => {
-    const { ne } = require('drizzle-orm');
+    const { ne } = (await import('drizzle-orm')) as any;
 
     selectResult = [{ user_id: 'staff-b', email: 'b@r.ch', email_notifications: true }];
     insertReturningResult = [{ id: 'n1' }];
@@ -324,7 +325,7 @@ describe('notifyAllStaff', () => {
   });
 
   it('does not call ne() when no excludeUserId is given', async () => {
-    const { ne } = require('drizzle-orm');
+    const { ne } = (await import('drizzle-orm')) as any;
 
     selectResult = [{ user_id: 'staff-a', email: 'a@r.ch', email_notifications: true }];
     insertReturningResult = [{ id: 'n1' }];
@@ -429,7 +430,7 @@ describe('notifyUsers', () => {
 
 describe('fireNotification', () => {
   it('calls the provided function', async () => {
-    const fn = jest.fn().mockResolvedValue(undefined);
+    const fn = vi.fn().mockResolvedValue(undefined);
     fireNotification(fn, 'test-context');
     // Allow the microtask queue to flush
     await Promise.resolve();
@@ -438,7 +439,7 @@ describe('fireNotification', () => {
 
   it('logs errors without rethrowing — never breaks the caller', async () => {
     const error = new Error('DB down');
-    const fn = jest.fn().mockRejectedValue(error);
+    const fn = vi.fn().mockRejectedValue(error);
 
     // Must not throw
     expect(() => fireNotification(fn, 'failing-context')).not.toThrow();

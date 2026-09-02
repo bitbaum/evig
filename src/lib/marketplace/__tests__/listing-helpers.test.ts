@@ -15,19 +15,19 @@
  *     a regression here breaks marketplace search/filter.
  */
 
-const mockIndexListing = jest.fn();
-const mockLoggerError = jest.fn();
+const mockIndexListing = vi.fn();
+const mockLoggerError = vi.fn();
 
-jest.mock('@/lib/search/meilisearch', () => ({
-  indexListing: (...args: unknown[]) => mockIndexListing.apply(null, args),
+vi.mock('@/lib/search/meilisearch', () => ({
+  indexListing: (...args: unknown[]) => mockIndexListing(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: (...args: unknown[]) => mockLoggerError.apply(null, args),
-    debug: jest.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: (...args: unknown[]) => mockLoggerError(...args),
+    debug: vi.fn(),
   },
 }));
 

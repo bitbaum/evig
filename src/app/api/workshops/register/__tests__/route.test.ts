@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/workshops/register (authenticated)
  *
@@ -8,17 +8,16 @@
  *          409 (already registered), 400 (no available instance), 200 (success)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -31,13 +30,13 @@ jest.mock('@/lib/api/middleware', () => ({
 // passing the duplicate check together. The mock delegates tx.select/insert
 // to the existing stubs so the per-test `mockSelect.mockReturnValueOnce(...)`
 // configuration drives the inner SQL unchanged.
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
-const mockTransaction = jest.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
+const mockTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -48,7 +47,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshops: {
     id: 'ws_id',
     title: 'ws_title',
@@ -72,7 +71,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
@@ -82,7 +81,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/workshop-registration-status', () => ({
+vi.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
     PENDING: 'pending',
     CONFIRMED: 'confirmed',
@@ -101,7 +100,7 @@ jest.mock('@/config/workshop-registration-status', () => ({
   ] as [string, ...string[]],
 }));
 
-jest.mock('@/config/workshops', () => ({
+vi.mock('@/config/workshops', () => ({
   WORKSHOP_INSTANCE_STATUS: {
     SCHEDULED: 'scheduled',
     CANCELLED: 'cancelled',
@@ -109,7 +108,7 @@ jest.mock('@/config/workshops', () => ({
   },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     INTERNAL_SERVER_ERROR: 'Internal server error',
     ALREADY_REGISTERED_WORKSHOP: 'Bereits für diesen Workshop angemeldet',
@@ -120,30 +119,29 @@ jest.mock('@/config/error-messages', () => ({
   },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'https://revamp-it.ch',
 }));
 
 // The real limiter is an in-memory LRU that persists across tests in a suite —
 // after 5 calls every later test would 400. Always allow here.
-jest.mock('@/lib/security/rate-limit', () => ({
+vi.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: new Proxy({}, { get: () => () => true }),
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/date-formats', () => ({
-  formatDateTimeWithWeekday: jest.fn().mockReturnValue('Montag, 1. Juni 2026, 10:00'),
+vi.mock('@/lib/date-formats', () => ({
+  formatDateTimeWithWeekday: vi.fn().mockReturnValue('Montag, 1. Juni 2026, 10:00'),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -156,7 +154,8 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -185,30 +184,30 @@ const MOCK_INSTANCE = {
 
 // Build a chain for workshop lookup (single row via destructuring in route)
 function makeWorkshopChain(workshop: unknown) {
-  const where = jest.fn().mockResolvedValue(workshop ? [workshop] : []);
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockResolvedValue(workshop ? [workshop] : []);
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
 // Build a chain for the parallel duplicate check + instance lookup (uses .then())
 function makeParallelChain(row: unknown) {
-  const thenFn = jest
+  const thenFn = vi
     .fn()
     .mockImplementation((cb: (rows: unknown[]) => unknown) =>
       Promise.resolve(cb(row ? [row] : [])),
     );
   // .limit(1).for('update') — the instance lookup locks its row.
-  const forUpdate = jest.fn().mockReturnValue({ then: thenFn });
-  const limit = jest.fn().mockReturnValue({ then: thenFn, for: forUpdate });
-  const orderBy = jest.fn().mockReturnValue({ limit });
-  const where = jest.fn().mockReturnValue({ then: thenFn, orderBy });
-  const innerJoin = jest.fn().mockReturnValue({ where });
-  const from = jest.fn().mockReturnValue({ where, innerJoin });
+  const forUpdate = vi.fn().mockReturnValue({ then: thenFn });
+  const limit = vi.fn().mockReturnValue({ then: thenFn, for: forUpdate });
+  const orderBy = vi.fn().mockReturnValue({ limit });
+  const where = vi.fn().mockReturnValue({ then: thenFn, orderBy });
+  const innerJoin = vi.fn().mockReturnValue({ where });
+  const from = vi.fn().mockReturnValue({ where, innerJoin });
   return { from };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockValues.mockReturnValue({ returning: mockReturning });
   mockReturning.mockResolvedValue([{ id: 'registration-1', createdAt: new Date() }]);
@@ -335,8 +334,8 @@ describe('POST /api/workshops/register — already registered', () => {
 
     // Inspect the duplicate-check's WHERE clause: it should be an `and(...)`
     // wrapping eq(userId), eq(workshopId), AND ne(status, 'cancelled').
-    const whereMock = (parallelChain.from as jest.Mock).mock.results[0].value.innerJoin.mock
-      .results[0].value.where as jest.Mock;
+    const whereMock = (parallelChain.from as Mock).mock.results[0].value.innerJoin.mock.results[0]
+      .value.where as Mock;
     const whereArg = whereMock.mock.calls[0][0] as { __and?: unknown[] };
     expect(whereArg.__and).toBeDefined();
     const containsCancelledExclusion = whereArg.__and!.some(

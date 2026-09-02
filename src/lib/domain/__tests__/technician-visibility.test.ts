@@ -8,13 +8,13 @@ import {
 } from '@/lib/domain/technician-visibility';
 import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status';
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   repairerProfiles: {
     isActive: 'isActive',
     isVerified: 'isVerified',

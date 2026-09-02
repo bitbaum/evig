@@ -32,14 +32,14 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.update = jest.fn().mockReturnValue(chain);
-  chain.set = jest.fn().mockReturnValue(chain);
-  chain.insert = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.update = vi.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
+  chain.insert = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -50,19 +50,19 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbUpdate = jest.fn(() => makeChain());
-const mockDbInsert = jest.fn(() => makeChain());
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeChain());
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeChain());
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
   },
 }));
 
-jest.mock('@/db/schema/inventory', () => ({
+vi.mock('@/db/schema/inventory', () => ({
   aiExtractedProducts: {
     id: 'aep_id',
     brand: 'aep_brand',
@@ -104,45 +104,46 @@ jest.mock('@/db/schema/inventory', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
 }));
 
-const mockUploadImage = jest.fn();
-const mockDeleteImage = jest.fn();
+const mockUploadImage = vi.fn();
+const mockDeleteImage = vi.fn();
 
-jest.mock('@/lib/storage/image-upload', () => ({
-  uploadImage: (...args: unknown[]) => mockUploadImage.apply(null, args),
-  deleteImage: (...args: unknown[]) => mockDeleteImage.apply(null, args),
+vi.mock('@/lib/storage/image-upload', () => ({
+  uploadImage: (...args: unknown[]) => mockUploadImage(...args),
+  deleteImage: (...args: unknown[]) => mockDeleteImage(...args),
 }));
 
-jest.mock('@/config/marketplace-status', () => ({
+vi.mock('@/config/marketplace-status', () => ({
   PRODUCT_STATUS: { APPROVED: 'approved' },
   MARKETPLACE_STATUS: { PUBLISHED: 'published', DRAFT: 'draft' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // publishProduct/unpublishProduct now delegate the actual listing create/refresh/
 // remove to the unified-marketplace helpers (the old inline marketplace_listings
 // insert/update is gone). Those helpers have their own tests; here we only assert
 // the orchestration: inventory lookup → delegate (or skip when not found).
-const mockPublishRevampitListing = jest.fn().mockResolvedValue('listing-1');
-const mockUnpublishRevampitListing = jest.fn().mockResolvedValue(undefined);
+const mockPublishRevampitListing = vi.fn().mockResolvedValue('listing-1');
+const mockUnpublishRevampitListing = vi.fn().mockResolvedValue(undefined);
 
-jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
-  publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing.apply(null, args),
-  unpublishRevampitListing: (...args: unknown[]) => mockUnpublishRevampitListing.apply(null, args),
+vi.mock('@/lib/marketplace/publish-revampit-listing', () => ({
+  publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing(...args),
+  unpublishRevampitListing: (...args: unknown[]) => mockUnpublishRevampitListing(...args),
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   publishProduct,
   unpublishProduct,
@@ -155,7 +156,7 @@ import {
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockDbUpdate.mockImplementation(() => makeChain());
   mockDbInsert.mockImplementation(() => makeChain());

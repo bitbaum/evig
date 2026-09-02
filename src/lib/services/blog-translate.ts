@@ -51,7 +51,7 @@ function languageName(locale: string): string {
  * stalling the request for a full minute.
  */
 // No real backoff under test (keeps the suite fast); real delay in prod.
-const RETRY_BASE_MS = process.env.JEST_WORKER_ID ? 0 : 2000;
+const RETRY_BASE_MS = process.env.VITEST || process.env.JEST_WORKER_ID ? 0 : 2000;
 async function withRetry<T>(fn: () => Promise<T | null>, attempts = 3): Promise<T | null> {
   for (let i = 0; i < attempts; i++) {
     const result = await fn();

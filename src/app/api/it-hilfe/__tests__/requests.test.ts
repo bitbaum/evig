@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for IT-Hilfe requests API routes
  *
@@ -10,61 +10,61 @@
 
 // Detail/update route uses Drizzle select/update chains
 const mockSelectChain = {
-  from: jest.fn().mockReturnThis(),
-  where: jest.fn().mockReturnThis(),
-  innerJoin: jest.fn().mockReturnThis(),
-  leftJoin: jest.fn().mockReturnThis(),
-  orderBy: jest.fn().mockReturnThis(),
-  limit: jest.fn().mockReturnThis(),
-  offset: jest.fn().mockReturnThis(),
+  from: vi.fn().mockReturnThis(),
+  where: vi.fn().mockReturnThis(),
+  innerJoin: vi.fn().mockReturnThis(),
+  leftJoin: vi.fn().mockReturnThis(),
+  orderBy: vi.fn().mockReturnThis(),
+  limit: vi.fn().mockReturnThis(),
+  offset: vi.fn().mockReturnThis(),
 };
 const mockUpdateChain = {
-  set: jest.fn().mockReturnThis(),
-  where: jest.fn().mockResolvedValue([]),
+  set: vi.fn().mockReturnThis(),
+  where: vi.fn().mockResolvedValue([]),
 };
 
 // Browse route uses db.execute(sql`...`) for raw Drizzle SQL
-const mockExecute = jest.fn();
+const mockExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(() => mockSelectChain),
-    update: jest.fn(() => mockUpdateChain),
+    select: vi.fn((..._args: unknown[]) => mockSelectChain),
+    update: vi.fn((..._args: unknown[]) => mockUpdateChain),
     execute: mockExecute,
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('@/auth', () => ({
-  auth: jest.fn(),
+vi.mock('@/auth', () => ({
+  auth: vi.fn(),
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/security/rate-limit', () => ({
+vi.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: {
-    itHilfeCreate: jest.fn().mockReturnValue(true),
+    itHilfeCreate: vi.fn().mockReturnValue(true),
   },
 }));
 
-jest.mock('@/lib/security/sanitize', () => ({
-  sanitizeInput: jest.fn((input: string) => input),
+vi.mock('@/lib/security/sanitize', () => ({
+  sanitizeInput: vi.fn((input: string) => input),
 }));
 
-jest.mock('@/lib/schemas/it-hilfe', () => {
-  const actual = jest.requireActual('@/lib/schemas/it-hilfe');
+vi.mock('@/lib/schemas/it-hilfe', async () => {
+  const actual = await vi.importActual('@/lib/schemas/it-hilfe');
   return {
     ...actual,
-    validateAndRespond: jest.fn().mockReturnValue({
+    validateAndRespond: vi.fn().mockReturnValue({
       success: true,
       data: {
         categoryId: 'laptop',
@@ -82,16 +82,17 @@ jest.mock('@/lib/schemas/it-hilfe', () => {
   };
 });
 
-jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  itHilfeRequestConfirmation: jest.fn().mockReturnValue({ subject: '', html: '' }),
-  adminNewITHilfeRequest: jest.fn().mockReturnValue({ subject: '', html: '' }),
-  helperNewMatchingRequest: jest.fn().mockReturnValue({ subject: '', html: '' }),
+vi.mock('@/lib/email/templates/it-hilfe', () => ({
+  itHilfeRequestConfirmation: vi.fn().mockReturnValue({ subject: '', html: '' }),
+  adminNewITHilfeRequest: vi.fn().mockReturnValue({ subject: '', html: '' }),
+  helperNewMatchingRequest: vi.fn().mockReturnValue({ subject: '', html: '' }),
 }));
 
+import type { MockedFunction } from 'vitest';
 import { NextRequest } from 'next/server';
 import { auth } from '@/auth';
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as MockedFunction<typeof auth>;
 
 // Helper to create a NextRequest with URL
 function makeRequest(url: string, init?: RequestInit) {
@@ -136,7 +137,7 @@ describe('GET /api/it-hilfe/requests', () => {
   let GET: (req: NextRequest) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/route');
+    const mod = (await import('../../it-hilfe/requests/route')) as any;
     GET = mod.GET;
   });
 
@@ -233,7 +234,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
   let GET: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/route');
+    const mod = (await import('../../it-hilfe/requests/[id]/route')) as any;
     GET = mod.GET;
   });
 
@@ -329,7 +330,7 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
   let PUT: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/route');
+    const mod = (await import('../../it-hilfe/requests/[id]/route')) as any;
     PUT = mod.PUT;
   });
 

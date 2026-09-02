@@ -13,9 +13,9 @@
  * URLSearchParams from it, so the mock is sufficient.
  */
 
-jest.mock('next/server', () => ({
+vi.mock('next/server', () => ({
   NextRequest: class NextRequest {},
-  NextResponse: { json: jest.fn() },
+  NextResponse: { json: vi.fn() },
 }));
 
 import { parsePagination } from '../api/helpers';

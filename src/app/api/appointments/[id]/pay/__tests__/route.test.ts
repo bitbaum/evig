@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/appointments/[id]/pay
  *
@@ -7,18 +7,18 @@
  *   POST - 401, 404, 401 (not owner), 400 (wrong status), 400 (already paid), 400 (zero amount), 200
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockSelect = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -28,7 +28,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   serviceAppointments: {
     id: 'sa_id',
     userId: 'sa_userId',
@@ -55,7 +55,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -66,8 +66,7 @@ jest.mock('drizzle-orm', () => ({
   isNull: (a: unknown) => ({ __isNull: a }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -84,27 +83,27 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-const mockValidateBody = jest.fn((_schema: unknown, data: unknown) => ({ success: true, data }));
+const mockValidateBody = vi.fn((_schema: unknown, data: unknown) => ({ success: true, data }));
 
-jest.mock('@/lib/schemas', () => ({
+vi.mock('@/lib/schemas', () => ({
   validateBody: (schema: unknown, data: unknown) => mockValidateBody(schema, data),
   PayAppointmentSchema: {},
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: { SUCCEEDED: 'succeeded', PENDING: 'pending' },
   PAYMENT_TRANSACTION_TYPE: { PAYMENT: 'payment' },
 }));
 
-jest.mock('@/config/appointment-status', () => ({
+vi.mock('@/config/appointment-status', () => ({
   APPOINTMENT_STATUS: { CONFIRMED: 'confirmed', COMPLETED: 'completed', REQUESTED: 'requested' },
 }));
 
-jest.mock('@/config/booking-status', () => ({
+vi.mock('@/config/booking-status', () => ({
   BOOKING_STATUS: {
     REQUESTED: 'requested',
     QUOTE_APPROVED: 'quote_approved',
@@ -113,24 +112,24 @@ jest.mock('@/config/booking-status', () => ({
   isPayableBookingStatus: (status: string) => ['quote_approved', 'in_progress'].includes(status),
 }));
 
-jest.mock('@/config/service-appointments', () => ({
+vi.mock('@/config/service-appointments', () => ({
   SERVICE_APPOINTMENT_ROUTES: {
     detail: (id: string) => `/dashboard/appointments/${id}`,
   },
 }));
 
-jest.mock('@/lib/payments/payment-flow', () => ({
-  processPaymentWithoutInvoice: jest.fn().mockResolvedValue({
+vi.mock('@/lib/payments/payment-flow', () => ({
+  processPaymentWithoutInvoice: vi.fn().mockResolvedValue({
     paymentUrl: 'https://pay.example.com/abc',
     transactionId: 'txn-1',
     totalAmountCents: 5000,
     currency: 'CHF',
   }),
-  centsToDisplay: jest.fn((cents: number) => (cents / 100).toFixed(2)),
+  centsToDisplay: vi.fn((cents: number) => (cents / 100).toFixed(2)),
   DEFAULT_AUTO_RELEASE_DAYS: 7,
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -165,23 +164,23 @@ const DEFAULT_PAY_BODY = {
 };
 
 function makeSelectChain(rows: unknown[]) {
-  const where = jest.fn().mockResolvedValue(rows);
-  const innerJoin = jest.fn();
+  const where = vi.fn().mockResolvedValue(rows);
+  const innerJoin = vi.fn();
   // innerJoin is called twice: after from, then after first innerJoin
   // Both subsequent calls should return { innerJoin, where }
   innerJoin.mockReturnValue({ innerJoin, where });
-  const from = jest.fn().mockReturnValue({ innerJoin, where });
+  const from = vi.fn().mockReturnValue({ innerJoin, where });
   return { from };
 }
 
 function makeCountChain(totalPaid: number) {
-  const where = jest.fn().mockResolvedValue([{ total_paid: totalPaid }]);
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockResolvedValue([{ total_paid: totalPaid }]);
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockValidateBody.mockImplementation((_schema: unknown, data: unknown) => ({
     success: true,
@@ -191,9 +190,8 @@ beforeEach(() => {
   mockSet.mockReturnValue({ where: mockUpdateWhere });
   mockUpdateWhere.mockResolvedValue(undefined);
 
-  const { processPaymentWithoutInvoice, centsToDisplay } = jest.requireMock(
-    '@/lib/payments/payment-flow',
-  );
+  const { processPaymentWithoutInvoice, centsToDisplay } =
+    (await import('@/lib/payments/payment-flow')) as any;
   processPaymentWithoutInvoice.mockResolvedValue({
     paymentUrl: 'https://pay.example.com/abc',
     transactionId: 'txn-1',
@@ -328,7 +326,7 @@ describe('POST /api/appointments/[id]/pay — success', () => {
     });
     const response = await POST(req);
     expect(response.status).toBe(200);
-    const { processPaymentWithoutInvoice } = jest.requireMock('@/lib/payments/payment-flow');
+    const { processPaymentWithoutInvoice } = (await import('@/lib/payments/payment-flow')) as any;
     const callArgs = processPaymentWithoutInvoice.mock.calls[0][0];
     // 30% of 5000 = 1500
     expect(callArgs.baseAmountCents).toBe(1500);
@@ -359,7 +357,7 @@ describe('POST /api/appointments/[id]/pay — success', () => {
     });
     await POST(req);
 
-    const { processPaymentWithoutInvoice } = jest.requireMock('@/lib/payments/payment-flow');
+    const { processPaymentWithoutInvoice } = (await import('@/lib/payments/payment-flow')) as any;
     const callArgs = processPaymentWithoutInvoice.mock.calls[0][0];
     expect(callArgs.successRedirectUrl).toMatch(
       /\/dashboard\/appointments\/appt-1\?payment=success$/,

@@ -23,19 +23,19 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockCallWithFallback = jest.fn();
+const mockCallWithFallback = vi.fn();
 
-jest.mock('@/lib/ai/providers', () => ({
-  callWithFallback: (...args: unknown[]) => mockCallWithFallback.apply(null, args),
+vi.mock('@/lib/ai/providers', () => ({
+  callWithFallback: (...args: unknown[]) => mockCallWithFallback(...args),
 }));
 
 // BRAND_CONTEXT is a module-level constant read at import time — must be
-// inlined in the factory to avoid TDZ issues during jest.mock hoisting.
-jest.mock('@/lib/ai/config/prompts', () => ({
+// inlined in the factory to avoid TDZ issues during vi.mock hoisting.
+vi.mock('@/lib/ai/config/prompts', () => ({
   BRAND_CONTEXT: 'Revamp-IT ist ein Schweizer Verein.',
 }));
 
-jest.mock('@/lib/schemas/decisions', () => ({}));
+vi.mock('@/lib/schemas/decisions', () => ({}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -62,7 +62,7 @@ const BASE_PARAMS = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockCallWithFallback.mockResolvedValue({
     text: 'Der Vorstand hat beschlossen.',
     provider: 'groq',

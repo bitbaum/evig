@@ -6,7 +6,7 @@
  */
 
 // Prevent the module-level setInterval from keeping Jest alive
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 import { maskSensitiveData, validatePaymentData, PaymentRateLimiter } from '../security';
 
@@ -167,13 +167,13 @@ describe('PaymentRateLimiter', () => {
     for (let i = 0; i < 10; i++) limiter.isAllowed('user-7', 10, 1000);
     expect(limiter.isAllowed('user-7', 10, 1000)).toBe(false);
     // Advance time past the 1000ms window
-    jest.advanceTimersByTime(1500);
+    vi.advanceTimersByTime(1500);
     expect(limiter.isAllowed('user-7', 10, 1000)).toBe(true);
   });
 
   it('cleanup removes expired entries', () => {
     limiter.isAllowed('user-8', 3, 100);
-    jest.advanceTimersByTime(200);
+    vi.advanceTimersByTime(200);
     limiter.cleanup();
     // After cleanup, should allow again (window expired)
     expect(limiter.isAllowed('user-8', 3, 100)).toBe(true);

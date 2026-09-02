@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/payments/escrow/[id] and POST /api/payments/escrow/[id]
  *
@@ -9,17 +9,16 @@
  *          401 (not buyer or admin), 400 (amount too large), 200 (full release), 200 (partial release)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -27,14 +26,14 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockExecute = jest.fn();
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockUpdate = jest.fn();
-const mockValues = jest.fn();
-const mockSet = jest.fn();
+const mockExecute = vi.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockUpdate = vi.fn();
+const mockValues = vi.fn();
+const mockSet = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     execute: (...args: unknown[]) => mockExecute(...args),
     select: (...args: unknown[]) => mockSelect(...args),
@@ -49,7 +48,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   escrowAccounts: {
     id: 'ea_id',
     transactionId: 'ea_txId',
@@ -87,7 +86,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -95,8 +94,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -111,27 +109,27 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: { SUCCEEDED: 'succeeded', PENDING: 'pending' },
   ESCROW_STATUS: { ACTIVE: 'active', RELEASED: 'released' },
   PAYMENT_TRANSACTION_TYPE: { TRANSFER: 'transfer' },
 }));
 
-jest.mock('@/lib/payments/payrexx-client', () => ({
-  captureTransaction: jest.fn().mockResolvedValue({ id: 'capture-1' }),
-  cancelTransaction: jest.fn().mockResolvedValue({ id: 'cancel-1' }),
+vi.mock('@/lib/payments/payrexx-client', () => ({
+  captureTransaction: vi.fn().mockResolvedValue({ id: 'capture-1' }),
+  cancelTransaction: vi.fn().mockResolvedValue({ id: 'cancel-1' }),
 }));
 
-jest.mock('@/lib/schemas', () => {
-  const actual = jest.requireActual('@/lib/schemas');
+vi.mock('@/lib/schemas', async () => {
+  const actual = await vi.importActual('@/lib/schemas');
   return actual;
 });
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 const MOCK_SESSION = {
@@ -196,16 +194,16 @@ function makeContext(id: string) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: db.execute returns escrow row
   mockExecute.mockResolvedValue({ rows: [MOCK_ESCROW_ROW] });
 
   // Default: db.select chain for POST
-  const mockWhere = jest.fn();
-  const mockFrom = jest.fn();
-  const mockInnerJoin = jest.fn();
+  const mockWhere = vi.fn();
+  const mockFrom = vi.fn();
+  const mockInnerJoin = vi.fn();
   mockInnerJoin.mockReturnValue({ where: mockWhere });
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin });
   mockSelect.mockReturnValue({ from: mockFrom });
@@ -229,7 +227,7 @@ beforeEach(() => {
   mockValues.mockResolvedValue(undefined);
 
   // db.update chain
-  const mockWhere2 = jest.fn().mockResolvedValue(undefined);
+  const mockWhere2 = vi.fn().mockResolvedValue(undefined);
   mockSet.mockReturnValue({ where: mockWhere2 });
 });
 
@@ -339,9 +337,9 @@ describe('POST /api/payments/escrow/[id] — validation', () => {
 describe('POST /api/payments/escrow/[id] — not found', () => {
   it('returns 404 when no active escrow found', async () => {
     // Make the select chain return empty
-    const mockWhere = jest.fn().mockResolvedValue([]);
-    const mockInnerJoin = jest.fn().mockReturnValue({ where: mockWhere });
-    const mockFrom = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin });
+    const mockWhere = vi.fn().mockResolvedValue([]);
+    const mockInnerJoin = vi.fn().mockReturnValue({ where: mockWhere });
+    const mockFrom = vi.fn().mockReturnValue({ innerJoin: mockInnerJoin });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
     const req = makePostRequest('escrow-unknown', { amount: 100, releaseType: 'full' });
@@ -389,7 +387,7 @@ describe('POST /api/payments/escrow/[id] — amount exceeded', () => {
 
 describe('POST /api/payments/escrow/[id] — success', () => {
   it('returns 200 on full release', async () => {
-    const { captureTransaction } = require('@/lib/payments/payrexx-client');
+    const { captureTransaction } = (await import('@/lib/payments/payrexx-client')) as any;
     const req = makePostRequest('escrow-1', { amount: 100, releaseType: 'full' });
     const response = await POST(req, makeContext('escrow-1'));
     expect(response.status).toBe(200);
@@ -400,7 +398,7 @@ describe('POST /api/payments/escrow/[id] — success', () => {
   });
 
   it('returns 200 on partial release', async () => {
-    const { captureTransaction } = require('@/lib/payments/payrexx-client');
+    const { captureTransaction } = (await import('@/lib/payments/payrexx-client')) as any;
     const req = makePostRequest('escrow-1', { amount: 50, releaseType: 'partial' });
     const response = await POST(req, makeContext('escrow-1'));
     expect(response.status).toBe(200);

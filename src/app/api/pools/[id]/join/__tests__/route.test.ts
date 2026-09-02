@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/pools/[id]/join (authenticated)
  *
@@ -8,17 +8,16 @@
  *          200 (re-join — reactivates left membership), 201 (new membership)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -32,18 +31,18 @@ jest.mock('@/lib/api/middleware', () => ({
 // rest go through tx.select/insert/update. The mock delegates each tx method
 // to a top-level stub so per-test configuration is independent of the
 // transaction wrapper.
-const mockSelect = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockUpdateReturning = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockInsertReturning = jest.fn();
-const mockExecute = jest.fn();
-const mockTransaction = jest.fn();
+const mockSelect = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockUpdateReturning = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockInsertReturning = vi.fn();
+const mockExecute = vi.fn();
+const mockTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -58,7 +57,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   subscriptionPools: {
     id: 'sp_id',
     maxMembers: 'sp_maxMembers',
@@ -75,7 +74,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -83,14 +82,13 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: { POOL_MEMBERSHIPS: 'pool_memberships' },
   POOL_STATUS: { ACTIVE: 'active', CLOSED: 'closed' },
   POOL_MEMBERSHIP_STATUS: { ACTIVE: 'active', LEFT: 'left' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -103,11 +101,12 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -143,11 +142,11 @@ function makeRequest() {
 // Persistent mock references so tests can override specific step results.
 // mockMemberLimit drives the existing-membership lookup; mockCountWhere
 // drives the COUNT(*) query for capacity.
-let mockMemberLimit: jest.Mock;
-let mockCountWhere: jest.Mock;
+let mockMemberLimit: Mock;
+let mockCountWhere: Mock;
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: pool found and active.
@@ -155,14 +154,14 @@ beforeEach(() => {
 
   // Count query chain: tx.select({count}).from().where() → [{ count }]
   // Default: 2 active members (well below max of 5).
-  mockCountWhere = jest.fn().mockResolvedValue([{ count: 2 }]);
-  const countFrom = jest.fn().mockReturnValue({ where: mockCountWhere });
+  mockCountWhere = vi.fn().mockResolvedValue([{ count: 2 }]);
+  const countFrom = vi.fn().mockReturnValue({ where: mockCountWhere });
 
   // Membership lookup chain: tx.select(...).from().where().limit(1) → [row?]
   // Default: no existing membership.
-  mockMemberLimit = jest.fn().mockResolvedValue([]);
-  const memberWhere = jest.fn().mockReturnValue({ limit: mockMemberLimit });
-  const memberFrom = jest.fn().mockReturnValue({ where: memberWhere });
+  mockMemberLimit = vi.fn().mockResolvedValue([]);
+  const memberWhere = vi.fn().mockReturnValue({ limit: mockMemberLimit });
+  const memberFrom = vi.fn().mockReturnValue({ where: memberWhere });
 
   // First select() in tx is the COUNT, second is the membership lookup.
   mockSelect.mockReturnValueOnce({ from: countFrom }).mockReturnValue({ from: memberFrom });

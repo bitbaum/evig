@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/services
  *
@@ -20,27 +20,25 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockGetFeaturedServices = jest.fn();
-const mockGetBookableServices = jest.fn();
-const mockGetAllServices = jest.fn();
+const mockGetFeaturedServices = vi.fn();
+const mockGetBookableServices = vi.fn();
+const mockGetAllServices = vi.fn();
 
-jest.mock('@/lib/services', () => ({
-  getFeaturedServices: (...args: unknown[]) => mockGetFeaturedServices.apply(null, args),
-  getBookableServices: (...args: unknown[]) => mockGetBookableServices.apply(null, args),
-  getAllServices: (...args: unknown[]) => mockGetAllServices.apply(null, args),
+vi.mock('@/lib/services', () => ({
+  getFeaturedServices: (...args: unknown[]) => mockGetFeaturedServices(...args),
+  getBookableServices: (...args: unknown[]) => mockGetBookableServices(...args),
+  getAllServices: (...args: unknown[]) => mockGetAllServices(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccessCached: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
 }));
@@ -49,7 +47,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -93,7 +91,7 @@ function makeRequest(params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockGetFeaturedServices.mockResolvedValue(FEATURED_SERVICES);
   mockGetBookableServices.mockResolvedValue(BOOKABLE_SERVICES);
   mockGetAllServices.mockResolvedValue(ALL_SERVICES);

@@ -35,7 +35,7 @@
 // ---------------------------------------------------------------------------
 
 const originalFetch = global.fetch;
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 
 beforeAll(() => {
   global.fetch = mockFetch;
@@ -48,15 +48,15 @@ afterAll(() => {
 // Mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   MEILISEARCH_URL: 'http://meilisearch.test',
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   MARKETPLACE_SELLER_TYPE: {
     REVAMPIT: 'revampit',
     COMMUNITY: 'community',
@@ -86,7 +86,7 @@ function okResponse(body: unknown = {}) {
   return {
     ok: true,
     status: 200,
-    json: jest.fn().mockResolvedValue(body),
+    json: vi.fn().mockResolvedValue(body),
   };
 }
 
@@ -94,7 +94,7 @@ function errResponse(status: number) {
   return {
     ok: false,
     status,
-    json: jest.fn().mockResolvedValue({}),
+    json: vi.fn().mockResolvedValue({}),
   };
 }
 
@@ -125,7 +125,7 @@ function makeListing(overrides: Partial<MeilisearchDocument> = {}): MeilisearchD
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 // ============================================================================

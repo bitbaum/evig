@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/reviews and POST /api/reviews
  *
@@ -8,17 +8,16 @@
  *   POST - 401, 400 (invalid body), 400 (duplicate), 404 (target not found), 201 (success)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -26,16 +25,16 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-let mockOffset: jest.Mock;
+const mockSelect = vi.fn();
+let mockOffset: Mock;
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema/reviews', () => ({
+vi.mock('@/db/schema/reviews', () => ({
   reviews: {
     id: 'r_id',
     reviewerId: 'r_reviewerId',
@@ -80,19 +79,19 @@ jest.mock('@/db/schema/reviews', () => ({
   },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('@/db/schema/services', () => ({
+vi.mock('@/db/schema/services', () => ({
   repairerProfiles: { id: 'rp_id', businessName: 'rp_businessName', userId: 'rp_userId' },
 }));
 
-jest.mock('@/db/schema/marketplace', () => ({
+vi.mock('@/db/schema/marketplace', () => ({
   listings: { id: 'l_id', title: 'l_title' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -102,7 +101,7 @@ jest.mock('drizzle-orm', () => ({
   desc: (a: unknown) => ({ __desc: a }),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   REVIEW_TARGET_TYPES: {
     REPAIRER: 'repairer',
     SERVICE: 'service',
@@ -112,7 +111,7 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('@/config/review-status', () => ({
+vi.mock('@/config/review-status', () => ({
   REVIEW_STATUS: {
     PUBLISHED: 'published',
     PENDING_MODERATION: 'pending_moderation',
@@ -121,8 +120,7 @@ jest.mock('@/config/review-status', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -141,22 +139,21 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Internal Server Error' },
 }));
 
-jest.mock('@/lib/schemas', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/schemas', async () => {
   return {
-    validateBody: jest.fn((schema: unknown, body: unknown) => {
+    validateBody: vi.fn((schema: unknown, body: unknown) => {
       // Pass through for most tests — individual tests override per-test
       return { success: true as const, data: body };
     }),
-    validateQuery: jest.fn((_schema: unknown, params: Record<string, string | null>) => {
+    validateQuery: vi.fn((_schema: unknown, params: Record<string, string | null>) => {
       // Provide defaults matching what the real schema would produce
       return {
         success: true as const,
@@ -176,31 +173,31 @@ jest.mock('@/lib/schemas', () => {
   };
 });
 
-jest.mock('@/lib/reviews/review-service', () => ({
-  validateReviewTarget: jest.fn(),
-  notifyRepairerOfReview: jest.fn(),
+vi.mock('@/lib/reviews/review-service', () => ({
+  validateReviewTarget: vi.fn(),
+  notifyRepairerOfReview: vi.fn(),
 }));
 
-jest.mock('@/lib/reviews/create-review', () => ({
-  createReview: jest.fn(),
-  findDuplicateReview: jest.fn(),
+vi.mock('@/lib/reviews/create-review', () => ({
+  createReview: vi.fn(),
+  findDuplicateReview: vi.fn(),
 }));
 
-jest.mock('@/lib/security/rate-limit', () => ({
+vi.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: {
-    reviewCreate: jest.fn().mockReturnValue(true),
+    reviewCreate: vi.fn().mockReturnValue(true),
   },
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
-const { validateBody, validateQuery } = jest.requireMock('@/lib/schemas');
-const { validateReviewTarget, notifyRepairerOfReview } = jest.requireMock(
-  '@/lib/reviews/review-service',
-);
-const { createReview, findDuplicateReview } = jest.requireMock('@/lib/reviews/create-review');
-const { rateLimiters } = jest.requireMock('@/lib/security/rate-limit');
+const { validateBody, validateQuery } = (await import('@/lib/schemas')) as any;
+const { validateReviewTarget, notifyRepairerOfReview } =
+  (await import('@/lib/reviews/review-service')) as any;
+const { createReview, findDuplicateReview } = (await import('@/lib/reviews/create-review')) as any;
+const { rateLimiters } = (await import('@/lib/security/rate-limit')) as any;
 
 const MOCK_SESSION = {
   user: {
@@ -257,11 +254,11 @@ const MOCK_REVIEW_ROW = {
 };
 
 function buildSelectChain(resolvedValue: unknown[]) {
-  mockOffset = jest.fn().mockResolvedValue(resolvedValue);
-  const mockLimit = jest.fn().mockReturnValue({ offset: mockOffset });
-  const mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit });
-  const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-  const mockLeftJoin = jest.fn().mockReturnValue({
+  mockOffset = vi.fn().mockResolvedValue(resolvedValue);
+  const mockLimit = vi.fn().mockReturnValue({ offset: mockOffset });
+  const mockOrderBy = vi.fn().mockReturnValue({ limit: mockLimit });
+  const mockWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+  const mockLeftJoin = vi.fn().mockReturnValue({
     leftJoin: undefined as unknown,
     where: mockWhere,
     orderBy: mockOrderBy,
@@ -270,18 +267,18 @@ function buildSelectChain(resolvedValue: unknown[]) {
   const chainObj: Record<string, unknown> = {
     where: mockWhere,
     orderBy: mockOrderBy,
-    leftJoin: jest.fn(),
-    innerJoin: jest.fn(),
+    leftJoin: vi.fn(),
+    innerJoin: vi.fn(),
   };
-  const mockInnerJoin = jest.fn().mockReturnValue(chainObj);
-  const mockLeftJoin2 = jest.fn().mockReturnValue(chainObj);
+  const mockInnerJoin = vi.fn().mockReturnValue(chainObj);
+  const mockLeftJoin2 = vi.fn().mockReturnValue(chainObj);
   chainObj.leftJoin = mockLeftJoin2;
   chainObj.innerJoin = mockInnerJoin;
   mockLeftJoin.mockReturnValue(chainObj);
-  const mockFrom = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin, leftJoin: mockLeftJoin });
+  const mockFrom = vi.fn().mockReturnValue({ innerJoin: mockInnerJoin, leftJoin: mockLeftJoin });
 
   // Subquery chain: .from().where().as() — synchronous only
-  const mockSubAs = jest.fn().mockReturnValue({
+  const mockSubAs = vi.fn().mockReturnValue({
     id: 'sub_id',
     reviewId: 'sub_reviewId',
     content: 'sub_content',
@@ -289,8 +286,8 @@ function buildSelectChain(resolvedValue: unknown[]) {
     responderId: 'sub_responderId',
     name: 'sub_name',
   });
-  const mockSubWhere = jest.fn().mockReturnValue({ as: mockSubAs });
-  const mockSubFrom = jest.fn().mockReturnValue({ as: mockSubAs, where: mockSubWhere });
+  const mockSubWhere = vi.fn().mockReturnValue({ as: mockSubAs });
+  const mockSubFrom = vi.fn().mockReturnValue({ as: mockSubAs, where: mockSubWhere });
 
   // Main select vs subquery select: first two calls are subqueries (return sync chain), rest are main query
   let selectCallCount = 0;
@@ -305,11 +302,11 @@ function buildSelectChain(resolvedValue: unknown[]) {
   });
 
   // Override the where on chainObj to chain to orderBy/limit/offset
-  chainObj.where = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
+  chainObj.where = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   validateBody.mockImplementation((_schema: unknown, body: unknown) => ({
     success: true as const,
@@ -434,9 +431,6 @@ describe('GET /api/reviews — non-published requires auth', () => {
 
 describe('GET /api/reviews — query validation failure', () => {
   it('returns 400 when query params are invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server') as {
-      NextResponse: typeof import('next/server').NextResponse;
-    };
     validateQuery.mockReturnValueOnce({
       success: false as const,
       error: NextResponse.json(
@@ -482,9 +476,6 @@ describe('POST /api/reviews — rate limit', () => {
 
 describe('POST /api/reviews — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server') as {
-      NextResponse: typeof import('next/server').NextResponse;
-    };
     validateBody.mockReturnValueOnce({
       success: false as const,
       error: NextResponse.json(

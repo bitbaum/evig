@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/auth/login-status
  *
@@ -23,24 +23,23 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockLoginStatusLimiter = jest.fn().mockReturnValue(true); // not limited by default
+const mockLoginStatusLimiter = vi.fn().mockReturnValue(true); // not limited by default
 
-jest.mock('@/lib/security/rate-limit', () => ({
-  createRateLimiter: jest
+vi.mock('@/lib/security/rate-limit', () => ({
+  createRateLimiter: vi
     .fn()
     .mockReturnValue((...args: unknown[]) => mockLoginStatusLimiter(...args)),
-  getClientIdentifier: jest.fn().mockReturnValue('127.0.0.1'),
+  getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     EMAIL_REQUIRED: 'E-Mail-Adresse ist erforderlich',
     STATUS_CHECK_FAILED: 'Statusprüfung fehlgeschlagen',
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -56,7 +55,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -80,7 +79,7 @@ const EXPECTED_UNIFORM = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockLoginStatusLimiter.mockReturnValue(true);
 });
 

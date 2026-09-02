@@ -7,27 +7,27 @@
 // Mock Drizzle db with chainable API
 let mockSelectResult: unknown[] = [];
 const mockSelectChain = {
-  select: jest.fn().mockReturnThis(),
-  from: jest.fn().mockReturnThis(),
-  where: jest.fn().mockImplementation(() => Promise.resolve(mockSelectResult)),
+  select: vi.fn().mockReturnThis(),
+  from: vi.fn().mockReturnThis(),
+  where: vi.fn().mockImplementation(() => Promise.resolve(mockSelectResult)),
 };
 const mockInsertChain = {
-  values: jest.fn().mockResolvedValue(undefined),
+  values: vi.fn().mockResolvedValue(undefined),
 };
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(() => mockSelectChain),
-    insert: jest.fn(() => mockInsertChain),
+    select: vi.fn((..._args: unknown[]) => mockSelectChain),
+    insert: vi.fn((..._args: unknown[]) => mockInsertChain),
   },
 }));
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'users.id', email: 'users.email' },
 }));
-jest.mock('@/db/schema/messaging', () => ({
+vi.mock('@/db/schema/messaging', () => ({
   notifications: { id: 'notifications.id', userId: 'notifications.user_id' },
 }));
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   tasks: {
     id: 'tasks.id',
     title: 'tasks.title',
@@ -35,30 +35,31 @@ jest.mock('@/db/schema/misc', () => ({
     isArchived: 'tasks.is_archived',
   },
 }));
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  inArray: jest.fn(),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  inArray: vi.fn(),
 }));
-jest.mock('@/lib/api/helpers', () => ({
-  apiBadRequest: jest.fn((msg: string) => ({ error: msg })),
-  apiNotFound: jest.fn((msg: string) => ({ error: msg })),
+vi.mock('@/lib/api/helpers', () => ({
+  apiBadRequest: vi.fn((msg: string) => ({ error: msg })),
+  apiNotFound: vi.fn((msg: string) => ({ error: msg })),
 }));
-jest.mock('@/lib/logger', () => ({
-  logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() },
 }));
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: jest.fn().mockResolvedValue(undefined),
-  createNotification: jest.fn().mockResolvedValue(undefined),
-  notifyAllStaff: jest.fn().mockResolvedValue(undefined),
-  fireNotification: jest.fn(),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: vi.fn().mockResolvedValue(undefined),
+  createNotification: vi.fn().mockResolvedValue(undefined),
+  notifyAllStaff: vi.fn().mockResolvedValue(undefined),
+  fireNotification: vi.fn(),
 }));
 
 // Import AFTER mocks
+import type { Mock } from 'vitest';
 import { createInAppNotifications } from '@/lib/api/task-helpers';
 import { db } from '@/db';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockSelectResult = [];
 });
 
@@ -85,7 +86,7 @@ describe('createInAppNotifications', () => {
   });
 
   it('deduplicates recipients and delegates to notifyUsers', async () => {
-    const { notifyUsers } = require('@/lib/services/notifications');
+    const { notifyUsers } = (await import('@/lib/services/notifications')) as any;
 
     await createInAppNotifications({
       recipientIds: ['u1', 'u2', 'u1'],
@@ -109,7 +110,7 @@ describe('createInAppNotifications', () => {
   });
 
   it('delegates single recipient to notifyUsers', async () => {
-    const { notifyUsers } = require('@/lib/services/notifications');
+    const { notifyUsers } = (await import('@/lib/services/notifications')) as any;
 
     await createInAppNotifications({
       recipientIds: ['u1'],
@@ -124,7 +125,7 @@ describe('createInAppNotifications', () => {
   });
 
   it('does not throw on notifyUsers failure (logs warning instead)', async () => {
-    const { notifyUsers } = require('@/lib/services/notifications');
+    const { notifyUsers } = (await import('@/lib/services/notifications')) as any;
     notifyUsers.mockRejectedValueOnce(new Error('Service error'));
 
     await expect(
@@ -135,7 +136,7 @@ describe('createInAppNotifications', () => {
       }),
     ).resolves.toBeUndefined();
 
-    const { logger } = require('@/lib/logger');
+    const { logger } = (await import('@/lib/logger')) as any;
     expect(logger.warn).toHaveBeenCalledWith(
       'Failed to create in-app notifications',
       expect.objectContaining({ error: expect.any(Error) }),

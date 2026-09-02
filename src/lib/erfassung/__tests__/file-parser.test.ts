@@ -8,10 +8,10 @@
 // exceljs is only used by parseExcel; these tests exercise parseCSV only.
 // Stub it so Jest never loads exceljs' ESM-only `uuid` dependency (which isn't
 // transformed and otherwise crashes the whole suite at import time).
-jest.mock('exceljs', () => ({ Workbook: class {} }));
+vi.mock('exceljs', () => ({ Workbook: class {} }));
 
 // Mock next/server
-jest.mock('next/server', () => ({
+vi.mock('next/server', () => ({
   NextRequest: class {},
   NextResponse: {
     json: (data: unknown, init?: { status?: number }) => ({
@@ -21,6 +21,7 @@ jest.mock('next/server', () => ({
   },
 }));
 
+import type { Mock } from 'vitest';
 import { parseCSV } from '../file-parser';
 
 // ============================================================================

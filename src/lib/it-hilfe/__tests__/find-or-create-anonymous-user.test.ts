@@ -6,10 +6,10 @@
  * same account, and invalid-email rejection.
  */
 
-const mockGetUserByEmail = jest.fn();
-const mockCreateUser = jest.fn();
+const mockGetUserByEmail = vi.fn();
+const mockCreateUser = vi.fn();
 
-jest.mock('@/lib/auth/db', () => ({
+vi.mock('@/lib/auth/db', () => ({
   getUserByEmail: (...args: unknown[]) => mockGetUserByEmail(...args),
   createUser: (...args: unknown[]) => mockCreateUser(...args),
 }));
@@ -17,7 +17,7 @@ jest.mock('@/lib/auth/db', () => ({
 import { findOrCreateAnonymousUser } from '../find-or-create-anonymous-user';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 // ============================================================================

@@ -26,6 +26,7 @@
  *   - returns totalDocuments, totalChunks, lastIndexed, byType
  */
 
+import type { Mock } from 'vitest';
 import * as crypto from 'crypto';
 
 // ---------------------------------------------------------------------------
@@ -35,14 +36,14 @@ import * as crypto from 'crypto';
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
-  chain.set = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.groupBy = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.groupBy = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -53,23 +54,23 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbInsert = jest.fn(() => makeChain([]));
-const mockDbUpdate = jest.fn(() => makeChain([]));
-const mockDbDelete = jest.fn(() => makeChain([]));
-const mockDbExecute = jest.fn();
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbDelete = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
+    delete: (...args: unknown[]) => mockDbDelete(...args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   hirnDocuments: {
     id: 'hd_id',
     sourcePath: 'hd_sourcePath',
@@ -83,48 +84,44 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  count: jest.fn().mockReturnValue({ __count: 0 }),
-  max: jest.fn().mockReturnValue({ __max: null }),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  count: vi.fn().mockReturnValue({ __count: 0 }),
+  max: vi.fn().mockReturnValue({ __max: null }),
 }));
 
-const mockChunkText = jest
-  .fn()
-  .mockReturnValue([{ content: 'text chunk', index: 0, metadata: {} }]);
-const mockChunkMarkdown = jest
+const mockChunkText = vi.fn().mockReturnValue([{ content: 'text chunk', index: 0, metadata: {} }]);
+const mockChunkMarkdown = vi
   .fn()
   .mockReturnValue([{ content: 'md chunk', index: 0, metadata: {} }]);
-const mockChunkCode = jest
-  .fn()
-  .mockReturnValue([{ content: 'code chunk', index: 0, metadata: {} }]);
+const mockChunkCode = vi.fn().mockReturnValue([{ content: 'code chunk', index: 0, metadata: {} }]);
 
-jest.mock('../chunking', () => ({
-  chunkText: (...args: unknown[]) => mockChunkText.apply(null, args),
-  chunkMarkdown: (...args: unknown[]) => mockChunkMarkdown.apply(null, args),
-  chunkCode: (...args: unknown[]) => mockChunkCode.apply(null, args),
+vi.mock('../chunking', () => ({
+  chunkText: (...args: unknown[]) => mockChunkText(...args),
+  chunkMarkdown: (...args: unknown[]) => mockChunkMarkdown(...args),
+  chunkCode: (...args: unknown[]) => mockChunkCode(...args),
 }));
 
-const mockGenerateEmbeddings = jest.fn();
+const mockGenerateEmbeddings = vi.fn();
 
-jest.mock('../providers', () => ({
-  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings.apply(null, args),
+vi.mock('../providers', () => ({
+  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings(...args),
 }));
 
-const mockReadFile = jest.fn();
-const mockReaddir = jest.fn();
+const mockReadFile = vi.fn();
+const mockReaddir = vi.fn();
 
-jest.mock('fs/promises', () => ({
-  readFile: (...args: unknown[]) => mockReadFile.apply(null, args),
-  readdir: (...args: unknown[]) => mockReaddir.apply(null, args),
+vi.mock('fs/promises', () => ({
+  readFile: (...args: unknown[]) => mockReadFile(...args),
+  readdir: (...args: unknown[]) => mockReaddir(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -145,7 +142,7 @@ const DOC_CONTENT = 'Hello world document';
 const DOC_PATH = '/docs/intro.md';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockDbInsert.mockImplementation(() => makeChain([]));
   mockDbUpdate.mockImplementation(() => makeChain([]));

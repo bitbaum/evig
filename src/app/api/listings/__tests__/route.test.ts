@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/listings and POST /api/listings
  *
@@ -20,17 +20,16 @@
 // Auth mock
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -42,12 +41,12 @@ jest.mock('@/lib/api/middleware', () => ({
 // Schema + validation mocks
 // ---------------------------------------------------------------------------
 
-const mockValidateBody = jest.fn();
-const mockValidateQuery = jest.fn();
+const mockValidateBody = vi.fn();
+const mockValidateQuery = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
-  validateQuery: (...args: unknown[]) => mockValidateQuery.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
+  validateQuery: (...args: unknown[]) => mockValidateQuery(...args),
   CreateListingSchema: {},
   UpdateListingSchema: {},
   ListingsQuerySchema: {},
@@ -57,7 +56,7 @@ jest.mock('@/lib/schemas', () => ({
 // Config mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', REMOVED: 'removed', DRAFT: 'draft', SOLD: 'sold' },
   MARKETPLACE_SELLER_TYPE: { REVAMPIT: 'revampit', COMMUNITY: 'community' },
   SPEC_QUERY_PARAM_KEYS: {
@@ -65,32 +64,32 @@ jest.mock('@/config/marketplace', () => ({
     spec_storage_min: ['Speicher'],
     spec_display_min: ['Display', 'Grösse'],
   },
-  normalizeSpecValue: jest.fn().mockReturnValue(null),
+  normalizeSpecValue: vi.fn().mockReturnValue(null),
 }));
 
-jest.mock('@/config/marketplace-status', () => ({
+vi.mock('@/config/marketplace-status', () => ({
   MARKETPLACE_STATUS: { DRAFT: 'draft' },
 }));
 
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
 
 // ---------------------------------------------------------------------------
 // Rate limiter + sanitize mocks
 // ---------------------------------------------------------------------------
 
-// NOTE: jest.mock factories are hoisted before variable declarations.
+// NOTE: vi.mock factories are hoisted before variable declarations.
 // To avoid the "Cannot access before initialization" error, we use
-// jest.fn() directly in the factory and expose them via module-level
-// handles that are wired in beforeEach via require().
-jest.mock('@/lib/security/rate-limit', () => ({
+// vi.fn() directly in the factory and expose them via module-level
+// handles that are wired in beforeEach via await import().
+vi.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: {
-    listingBrowse: jest.fn().mockReturnValue(true),
-    listingCreate: jest.fn().mockReturnValue(true),
+    listingBrowse: vi.fn().mockReturnValue(true),
+    listingCreate: vi.fn().mockReturnValue(true),
   },
-  getClientIdentifier: jest.fn().mockReturnValue('127.0.0.1'),
+  getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
-jest.mock('@/lib/security/sanitize', () => ({
+vi.mock('@/lib/security/sanitize', () => ({
   sanitizeInput: (v: string) => v,
 }));
 
@@ -98,8 +97,7 @@ jest.mock('@/lib/security/sanitize', () => ({
 // Helper mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -122,42 +120,42 @@ jest.mock('@/lib/api/helpers', () => {
 // Logger mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Marketplace helpers + search mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/marketplace/listing-helpers', () => ({
+vi.mock('@/lib/marketplace/listing-helpers', () => ({
   listingThumbnailSubquery: { __sql: 'thumbnail_subquery' },
-  indexListingInSearch: jest.fn(),
-  buildMeiliSpecs: jest.fn().mockReturnValue({}),
+  indexListingInSearch: vi.fn(),
+  buildMeiliSpecs: vi.fn().mockReturnValue({}),
 }));
 
-jest.mock('@/lib/search/meilisearch', () => ({
-  indexListing: jest.fn().mockResolvedValue(undefined),
-  removeListing: jest.fn().mockResolvedValue(undefined),
+vi.mock('@/lib/search/meilisearch', () => ({
+  indexListing: vi.fn().mockResolvedValue(undefined),
+  removeListing: vi.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock('@/lib/permissions', () => ({
-  isStaffEmail: jest.fn().mockReturnValue(false),
+vi.mock('@/lib/permissions', () => ({
+  isStaffEmail: vi.fn().mockReturnValue(false),
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/email/templates/marketplace', () => ({
-  listingPublishedConfirmation: jest.fn().mockReturnValue({}),
+vi.mock('@/lib/email/templates/marketplace', () => ({
+  listingPublishedConfirmation: vi.fn().mockReturnValue({}),
 }));
 
 // ---------------------------------------------------------------------------
 // drizzle-orm mock
 // ---------------------------------------------------------------------------
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
@@ -175,7 +173,7 @@ jest.mock('drizzle-orm', () => ({
 // Schema mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listings: {
     id: 'l_id',
     sellerId: 'l_sellerId',
@@ -248,20 +246,20 @@ jest.mock('@/db/schema', () => ({
 // Drizzle chain mocks (declared here, wired in beforeEach)
 // ---------------------------------------------------------------------------
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockLimit = jest.fn();
-const mockOffset = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
-const mockTransactionFn = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockLimit = vi.fn();
+const mockOffset = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
+const mockTransactionFn = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -279,7 +277,7 @@ jest.mock('@/db', () => ({
 // Imports (after all mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -341,12 +339,12 @@ function makePostRequest(body: Record<string, unknown> = {}) {
 // beforeEach — wire the Drizzle chain
 // ---------------------------------------------------------------------------
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
-  // Wire rate limiters via require() — avoids hoisting issues with const declarations
-  const rl = require('@/lib/security/rate-limit');
+  // Wire rate limiters via await import() — avoids hoisting issues with const declarations
+  const rl = (await import('@/lib/security/rate-limit')) as any;
   rl.rateLimiters.listingBrowse.mockReturnValue(true);
   rl.rateLimiters.listingCreate.mockReturnValue(true);
 
@@ -396,28 +394,28 @@ beforeEach(() => {
   mockReturning.mockResolvedValue([{ id: 'new-listing-id' }]);
 
   // Re-wire fire-and-forget mocks after resetAllMocks() so .catch() calls don't throw
-  const { indexListingInSearch } = require('@/lib/marketplace/listing-helpers');
-  const { sendCustomEmail } = require('@/lib/email');
+  const { indexListingInSearch } = (await import('@/lib/marketplace/listing-helpers')) as any;
+  const { sendCustomEmail } = (await import('@/lib/email')) as any;
   indexListingInSearch.mockReturnValue(undefined);
   sendCustomEmail.mockResolvedValue({ success: true });
 
   // Transaction default: success
   mockTransactionFn.mockImplementation(async (callback: (tx: unknown) => unknown) => {
     const tx = {
-      insert: jest.fn().mockReturnValue({
-        values: jest.fn().mockReturnValue({
-          returning: jest.fn().mockResolvedValue([{ id: 'new-listing-id' }]),
+      insert: vi.fn().mockReturnValue({
+        values: vi.fn().mockReturnValue({
+          returning: vi.fn().mockResolvedValue([{ id: 'new-listing-id' }]),
         }),
       }),
-      select: jest.fn().mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]), // no existing seller profile
+      select: vi.fn().mockReturnValue({
+        from: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([]), // no existing seller profile
         }),
       }),
-      update: jest.fn().mockReturnValue({
-        set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+      update: vi.fn().mockReturnValue({
+        set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }),
       }),
-      delete: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+      delete: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }),
     };
     return callback(tx);
   });
@@ -429,7 +427,7 @@ beforeEach(() => {
 
 describe('GET /api/listings — rate limiting', () => {
   it('returns 429 when rate limiter returns false', async () => {
-    const rl = require('@/lib/security/rate-limit');
+    const rl = (await import('@/lib/security/rate-limit')) as any;
     rl.rateLimiters.listingBrowse.mockReturnValueOnce(false);
     const response = await GET(makeGetRequest());
     expect(response.status).toBe(429);
@@ -462,11 +460,11 @@ describe('GET /api/listings — with items', () => {
     // First select (main query): returns rows with _total
     mockOffset.mockResolvedValueOnce([MOCK_LISTING_ROW]);
     // Second select (specs query): terminal is orderBy
-    const mockSpecsOrderBy = jest
+    const mockSpecsOrderBy = vi
       .fn()
       .mockResolvedValue([{ listing_id: 'listing-1', key: 'RAM', value: '16GB', unit: null }]);
-    const mockSpecsWhere = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy });
-    const mockSpecsFrom = jest.fn().mockReturnValue({ where: mockSpecsWhere });
+    const mockSpecsWhere = vi.fn().mockReturnValue({ orderBy: mockSpecsOrderBy });
+    const mockSpecsFrom = vi.fn().mockReturnValue({ where: mockSpecsWhere });
     // Second call to mockFrom returns the specs chain
     mockFrom.mockReturnValueOnce({
       innerJoin: mockInnerJoin,
@@ -488,8 +486,8 @@ describe('GET /api/listings — with items', () => {
 
   it('returns 200 with items when rows returned', async () => {
     // Simple setup: offset returns one row, second select orderBy returns specs
-    const mockSpecsOrderBy2 = jest.fn().mockResolvedValue([]);
-    const mockSpecsWhere2 = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy2 });
+    const mockSpecsOrderBy2 = vi.fn().mockResolvedValue([]);
+    const mockSpecsWhere2 = vi.fn().mockReturnValue({ orderBy: mockSpecsOrderBy2 });
 
     mockFrom
       .mockReturnValueOnce({
@@ -512,8 +510,8 @@ describe('GET /api/listings — with items', () => {
 
   it('attaches specs to items', async () => {
     const specRow = { listing_id: 'listing-1', key: 'RAM', value: '16GB', unit: null };
-    const mockSpecsOrderBy3 = jest.fn().mockResolvedValue([specRow]);
-    const mockSpecsWhere3 = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy3 });
+    const mockSpecsOrderBy3 = vi.fn().mockResolvedValue([specRow]);
+    const mockSpecsWhere3 = vi.fn().mockReturnValue({ orderBy: mockSpecsOrderBy3 });
 
     mockFrom
       .mockReturnValueOnce({
@@ -551,7 +549,7 @@ describe('POST /api/listings — authentication', () => {
 
 describe('POST /api/listings — rate limiting', () => {
   it('returns 400 when rate limited', async () => {
-    const rl = require('@/lib/security/rate-limit');
+    const rl = (await import('@/lib/security/rate-limit')) as any;
     rl.rateLimiters.listingCreate.mockReturnValueOnce(false);
     const response = await POST(makePostRequest());
     expect(response.status).toBe(400);
@@ -562,7 +560,6 @@ describe('POST /api/listings — rate limiting', () => {
 
 describe('POST /api/listings — validation', () => {
   it('returns 400 when body validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(

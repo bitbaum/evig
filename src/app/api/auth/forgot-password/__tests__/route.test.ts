@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/auth/forgot-password
  *
@@ -22,60 +22,56 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockCheckRateLimit = jest.fn();
-const mockGetClientIp = jest.fn().mockReturnValue('10.0.0.1');
+const mockCheckRateLimit = vi.fn();
+const mockGetClientIp = vi.fn().mockReturnValue('10.0.0.1');
 
-jest.mock('@/lib/auth/rate-limiter', () => ({
-  checkRateLimit: (...args: unknown[]) => mockCheckRateLimit.apply(null, args),
-  getClientIp: (...args: unknown[]) => mockGetClientIp.apply(null, args),
+vi.mock('@/lib/auth/rate-limiter', () => ({
+  checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
+  getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
 }));
 
-const mockGetUserByEmail = jest.fn();
-const mockCreatePasswordResetToken = jest.fn().mockResolvedValue('reset-token-abc');
+const mockGetUserByEmail = vi.fn();
+const mockCreatePasswordResetToken = vi.fn().mockResolvedValue('reset-token-abc');
 
-jest.mock('@/lib/auth/db', () => ({
-  getUserByEmail: (...args: unknown[]) => mockGetUserByEmail.apply(null, args),
-  createPasswordResetToken: (...args: unknown[]) => mockCreatePasswordResetToken.apply(null, args),
+vi.mock('@/lib/auth/db', () => ({
+  getUserByEmail: (...args: unknown[]) => mockGetUserByEmail(...args),
+  createPasswordResetToken: (...args: unknown[]) => mockCreatePasswordResetToken(...args),
 }));
 
-const mockSendEmail = jest.fn().mockResolvedValue({ success: true, messageId: 'msg-1' });
+const mockSendEmail = vi.fn().mockResolvedValue({ success: true, messageId: 'msg-1' });
 
-jest.mock('@/lib/email', () => ({
-  sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
+vi.mock('@/lib/email', () => ({
+  sendEmail: (...args: unknown[]) => mockSendEmail(...args),
 }));
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   ORG: { name: 'RevampIT' },
   CONTACT: { email: 'kontakt@revamp-it.ch' },
 }));
 
-jest.mock('@/config/urls', () => ({
-  getPasswordResetUrl: jest.fn((token: string) => `https://example.com/reset?token=${token}`),
+vi.mock('@/config/urls', () => ({
+  getPasswordResetUrl: vi.fn((token: string) => `https://example.com/reset?token=${token}`),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown, status = 200) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data }, { status });
   },
   apiBadRequest: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 400 });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
   apiRateLimited: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 429 });
   },
 }));
@@ -84,7 +80,8 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -102,7 +99,7 @@ function makeRequest(body: unknown) {
 const MOCK_USER = { id: 'user-1', name: 'Hans', email: 'hans@example.com' };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 9, resetAt: 0 });
   mockGetUserByEmail.mockResolvedValue(MOCK_USER);
   mockSendEmail.mockResolvedValue({ success: true, messageId: 'msg-1' });
@@ -195,9 +192,9 @@ describe('POST /api/auth/forgot-password — user found', () => {
     // a silent send failure logged "Password reset email sent" (false
     // positive) and the user was locked out with no diagnostic trail.
     // Regression: check the resolved-failure case is logged as error.
-    const logger = jest.requireMock('@/lib/logger').logger as {
-      info: jest.Mock;
-      error: jest.Mock;
+    const logger = (await import('@/lib/logger')).logger as unknown as {
+      info: Mock;
+      error: Mock;
     };
     mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' });
 

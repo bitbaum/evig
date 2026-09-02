@@ -29,16 +29,16 @@
 // ---------------------------------------------------------------------------
 
 // Lucide icons are React components — mock them as plain strings to keep tests lightweight
-jest.mock('lucide-react', () => {
+vi.mock('lucide-react', () => {
   const icon = (name: string) => ({ displayName: name });
-  return new Proxy({}, { get: (_t, prop) => icon(prop as string) });
+  return new Proxy({}, { get: (_t, prop) => icon(prop as string), has: () => true });
 });
 
-const mockFormatPriceCents = jest.fn((cents: number | null) =>
+const mockFormatPriceCents = vi.fn((cents: number | null) =>
   cents === null ? 'Auf Anfrage' : `CHF ${(cents / 100).toFixed(2)}`,
 );
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   formatPriceCents: (...args: unknown[]) => mockFormatPriceCents(...(args as [number | null])),
 }));
 
@@ -58,7 +58,7 @@ import {
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 // ============================================================================

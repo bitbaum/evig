@@ -5,22 +5,23 @@
  * and DB disable flags are respected.
  */
 
+import type { Mock } from 'vitest';
 import { __resetProviderCache, __loadProviderRuntimeConfig } from '@/lib/ai/providers';
 
 // Drizzle chain mock
 const mockSelectChain = {
-  from: jest.fn().mockReturnThis(),
-  where: jest.fn().mockReturnThis(),
-  orderBy: jest.fn().mockResolvedValue([]),
+  from: vi.fn().mockReturnThis(),
+  where: vi.fn().mockReturnThis(),
+  orderBy: vi.fn().mockResolvedValue([]),
 };
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    selectDistinctOn: jest.fn(() => mockSelectChain),
+    selectDistinctOn: vi.fn((..._args: unknown[]) => mockSelectChain),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   hirnProviderSettings: {
     provider: 'provider',
     isEnabled: 'is_enabled',
@@ -31,16 +32,16 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  desc: jest.fn(),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  desc: vi.fn(),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { warn: jest.fn(), error: jest.fn(), info: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   OLLAMA_URL: 'http://localhost:11434',
 }));
 
@@ -52,7 +53,7 @@ function makeRow(provider: string, isEnabled: boolean, settings: Record<string, 
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   __resetProviderCache();
   // Set known env vars
   process.env.GROQ_API_KEY = 'env-groq-key';
@@ -124,7 +125,7 @@ describe('loadProviderRuntimeConfig', () => {
   });
 
   it('caches config and reuses on second call', async () => {
-    const { db } = jest.requireMock('@/db') as { db: { selectDistinctOn: jest.Mock } };
+    const { db } = (await import('@/db')) as unknown as { db: { selectDistinctOn: Mock } };
 
     await __loadProviderRuntimeConfig();
     await __loadProviderRuntimeConfig();

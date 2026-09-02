@@ -20,29 +20,30 @@
  *   - handleFileUpload is the same reference as inner hook's handleFileSelect
  */
 
-const mockReset = jest.fn();
-const mockStartCamera = jest.fn();
-const mockStopCamera = jest.fn();
-const mockCapturePhoto = jest.fn();
-const mockHandleFileSelect = jest.fn();
+const mockReset = vi.fn();
+const mockStartCamera = vi.fn();
+const mockStopCamera = vi.fn();
+const mockCapturePhoto = vi.fn();
+const mockHandleFileSelect = vi.fn();
 
 // Capture the options object passed to useAIProductAnalysis so we can invoke onAnalyzed
-const mockUseAIProductAnalysis = jest.fn();
+const mockUseAIProductAnalysis = vi.fn();
 
-jest.mock('../useAIProductAnalysis', () => ({
-  useAIProductAnalysis: (...args: unknown[]) => mockUseAIProductAnalysis.apply(null, args),
+vi.mock('../useAIProductAnalysis', () => ({
+  useAIProductAnalysis: (...args: unknown[]) => mockUseAIProductAnalysis(...args),
 }));
 
-jest.mock('@/components/marketplace/ai-camera/config', () => ({
-  getCategoryIcon: jest.fn().mockReturnValue(() => null),
+vi.mock('@/components/marketplace/ai-camera/config', () => ({
+  getCategoryIcon: vi.fn().mockReturnValue(() => null),
 }));
 
+import type { MockedFunction } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useAICamera } from '../useAICamera';
 import type { ProductAnalysis } from '../useAIProductAnalysis';
 import { getCategoryIcon } from '@/components/marketplace/ai-camera/config';
 
-const mockGetCategoryIcon = getCategoryIcon as jest.MockedFunction<typeof getCategoryIcon>;
+const mockGetCategoryIcon = getCategoryIcon as MockedFunction<typeof getCategoryIcon>;
 
 /** Default return value for the inner hook mock */
 function makeInnerHook() {

@@ -16,11 +16,11 @@ import { renderHook, act } from '@testing-library/react';
 import { useDebounce } from '../useDebounce';
 
 beforeEach(() => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 });
 
 afterEach(() => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 // ============================================================================
@@ -63,7 +63,7 @@ describe('useDebounce — debounce timing', () => {
 
     // Halfway through delay — still old value
     act(() => {
-      jest.advanceTimersByTime(200);
+      vi.advanceTimersByTime(200);
     });
     expect(result.current).toBe('first');
   });
@@ -76,12 +76,12 @@ describe('useDebounce — debounce timing', () => {
 
     rerender({ value: 'second' });
     act(() => {
-      jest.advanceTimersByTime(299);
+      vi.advanceTimersByTime(299);
     });
     expect(result.current).toBe('first'); // not yet
 
     act(() => {
-      jest.advanceTimersByTime(1);
+      vi.advanceTimersByTime(1);
     });
     expect(result.current).toBe('second'); // now updated
   });
@@ -94,17 +94,17 @@ describe('useDebounce — debounce timing', () => {
 
     rerender({ value: 'b' });
     act(() => {
-      jest.advanceTimersByTime(100);
+      vi.advanceTimersByTime(100);
     });
     rerender({ value: 'c' });
     act(() => {
-      jest.advanceTimersByTime(100);
+      vi.advanceTimersByTime(100);
     });
     rerender({ value: 'd' });
 
     // Only "d" should ever appear after the next 300ms — "b" and "c" cancelled
     act(() => {
-      jest.advanceTimersByTime(300);
+      vi.advanceTimersByTime(300);
     });
     expect(result.current).toBe('d');
   });
@@ -117,13 +117,13 @@ describe('useDebounce — debounce timing', () => {
 
     rerender({ value: 'changed' });
     act(() => {
-      jest.advanceTimersByTime(100);
+      vi.advanceTimersByTime(100);
     });
 
     // Revert
     rerender({ value: 'initial' });
     act(() => {
-      jest.advanceTimersByTime(300);
+      vi.advanceTimersByTime(300);
     });
 
     // Final value is still "initial"
@@ -140,7 +140,7 @@ describe('useDebounce — debounce timing', () => {
     expect(result.current).toBe('a'); // setTimeout schedules even at 0ms
 
     act(() => {
-      jest.advanceTimersByTime(0);
+      vi.advanceTimersByTime(0);
     });
     expect(result.current).toBe('b');
   });
@@ -159,14 +159,14 @@ describe('useDebounce — delay parameter changes', () => {
 
     rerender({ value: 'second', delay: 1000 });
     act(() => {
-      jest.advanceTimersByTime(300);
+      vi.advanceTimersByTime(300);
     });
 
     // New delay is 1000ms; 300ms is not enough
     expect(result.current).toBe('first');
 
     act(() => {
-      jest.advanceTimersByTime(700);
+      vi.advanceTimersByTime(700);
     });
     expect(result.current).toBe('second');
   });
@@ -188,7 +188,7 @@ describe('useDebounce — cleanup on unmount', () => {
 
     // Advance past the delay — no warning, no crash
     act(() => {
-      jest.advanceTimersByTime(500);
+      vi.advanceTimersByTime(500);
     });
 
     // Result captured before unmount stays at "first"

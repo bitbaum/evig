@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/cron/release-escrow
  *
@@ -10,16 +10,16 @@
  *   - A capture failure leaves the row active (not counted released) for the next run
  */
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockSelectWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockCapture = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockSelectWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockCapture = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...a: unknown[]) => {
       mockSelect(...a);
@@ -32,7 +32,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   escrowAccounts: {
     id: 'ea_id',
     status: 'ea_status',
@@ -44,7 +44,7 @@ jest.mock('@/db/schema', () => ({
   paymentTransactions: { id: 'pt_id', providerTransactionId: 'pt_provider' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   isNotNull: (a: unknown) => ({ __isNotNull: a }),
@@ -54,16 +54,16 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/payments/payrexx-client', () => ({
+vi.mock('@/lib/payments/payrexx-client', () => ({
   captureTransaction: (...a: unknown[]) => mockCapture(...a),
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   ESCROW_STATUS: { ACTIVE: 'active', RELEASED: 'released' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 import { NextRequest } from 'next/server';
@@ -77,7 +77,7 @@ function setDue(rows: unknown[]) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   // Configured, because an unset secret now denies every request —
   // these routes are no longer reachable without one.
   process.env.CRON_SECRET = 'test-cron-secret';

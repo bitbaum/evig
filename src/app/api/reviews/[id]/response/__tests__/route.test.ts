@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/reviews/[id]/response, PUT /api/reviews/[id]/response,
  * and DELETE /api/reviews/[id]/response
@@ -10,13 +10,12 @@
  *   DELETE - 401, 404 (response not found), 403 (not owner/admin/repairer), 200 (success)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -24,12 +23,12 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockUpdate = jest.fn();
-const mockDelete = jest.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockUpdate = vi.fn();
+const mockDelete = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => mockInsert(...args),
@@ -38,7 +37,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema/reviews', () => ({
+vi.mock('@/db/schema/reviews', () => ({
   reviews: {
     id: 'r_id',
     targetType: 'r_targetType',
@@ -55,11 +54,11 @@ jest.mock('@/db/schema/reviews', () => ({
   },
 }));
 
-jest.mock('@/db/schema/services', () => ({
+vi.mock('@/db/schema/services', () => ({
   repairerProfiles: { id: 'rp_id', userId: 'rp_userId' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -67,7 +66,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   REVIEW_TARGET_TYPES: {
     REPAIRER: 'repairer',
     SERVICE: 'service',
@@ -77,7 +76,7 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('@/config/review-status', () => ({
+vi.mock('@/config/review-status', () => ({
   REVIEW_STATUS: {
     PUBLISHED: 'published',
     PENDING_MODERATION: 'pending_moderation',
@@ -86,8 +85,7 @@ jest.mock('@/config/review-status', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -102,26 +100,27 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal Server Error' },
 }));
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: jest.fn((_schema: unknown, body: unknown) => ({
+vi.mock('@/lib/schemas', () => ({
+  validateBody: vi.fn((_schema: unknown, body: unknown) => ({
     success: true as const,
     data: body,
   })),
   ReviewResponseSchema: {},
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST, PUT, DELETE } from '../route';
 
-const { validateBody } = jest.requireMock('@/lib/schemas');
+const { validateBody } = (await import('@/lib/schemas')) as any;
 
 const MOCK_SESSION = {
   user: {
@@ -172,52 +171,52 @@ function setupPostSelectMocks(reviewRows: unknown[], existingResponseRows: unkno
     selectCallIndex++;
     if (selectCallIndex === 1) {
       // First select: get review + repairer join
-      const chainObj: Record<string, jest.Mock> = {};
-      const mockWhere = jest.fn().mockResolvedValue(reviewRows);
-      const mockLeftJoin = jest.fn().mockReturnValue({ where: mockWhere });
+      const chainObj: Record<string, Mock> = {};
+      const mockWhere = vi.fn().mockResolvedValue(reviewRows);
+      const mockLeftJoin = vi.fn().mockReturnValue({ where: mockWhere });
       chainObj.leftJoin = mockLeftJoin;
       chainObj.where = mockWhere;
-      const mockFrom = jest.fn().mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere });
+      const mockFrom = vi.fn().mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere });
       return { from: mockFrom };
     }
     // Second select: check existing response
-    const mockWhere = jest.fn().mockResolvedValue(existingResponseRows);
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
+    const mockWhere = vi.fn().mockResolvedValue(existingResponseRows);
+    const mockFrom = vi.fn().mockReturnValue({ where: mockWhere });
     return { from: mockFrom };
   });
 }
 
 function setupPutDeleteSelectMocks(responseRows: unknown[]) {
-  const chainObj: Record<string, jest.Mock> = {};
-  const mockWhere = jest.fn().mockResolvedValue(responseRows);
-  const mockLeftJoin = jest.fn().mockReturnValue({ where: mockWhere });
-  const mockInnerJoin = jest.fn().mockReturnValue(chainObj);
+  const chainObj: Record<string, Mock> = {};
+  const mockWhere = vi.fn().mockResolvedValue(responseRows);
+  const mockLeftJoin = vi.fn().mockReturnValue({ where: mockWhere });
+  const mockInnerJoin = vi.fn().mockReturnValue(chainObj);
   chainObj.leftJoin = mockLeftJoin;
   chainObj.innerJoin = mockInnerJoin;
   chainObj.where = mockWhere;
-  const mockFrom = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin });
+  const mockFrom = vi.fn().mockReturnValue({ innerJoin: mockInnerJoin });
   mockSelect.mockReturnValue({ from: mockFrom });
 }
 
 function setupInsertMock(responseId = 'response-1') {
-  const mockReturning = jest.fn().mockResolvedValue([{ id: responseId }]);
-  const mockValues = jest.fn().mockReturnValue({ returning: mockReturning });
+  const mockReturning = vi.fn().mockResolvedValue([{ id: responseId }]);
+  const mockValues = vi.fn().mockReturnValue({ returning: mockReturning });
   mockInsert.mockReturnValue({ values: mockValues });
 }
 
 function setupUpdateMock() {
-  const mockWhere = jest.fn().mockResolvedValue([]);
-  const mockSet = jest.fn().mockReturnValue({ where: mockWhere });
+  const mockWhere = vi.fn().mockResolvedValue([]);
+  const mockSet = vi.fn().mockReturnValue({ where: mockWhere });
   mockUpdate.mockReturnValue({ set: mockSet });
 }
 
 function setupDeleteMock() {
-  const mockWhere = jest.fn().mockResolvedValue([]);
+  const mockWhere = vi.fn().mockResolvedValue([]);
   mockDelete.mockReturnValue({ where: mockWhere });
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_REPAIRER_SESSION);
   validateBody.mockImplementation((_schema: unknown, body: unknown) => ({
     success: true as const,

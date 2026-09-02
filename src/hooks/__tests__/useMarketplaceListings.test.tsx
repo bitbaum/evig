@@ -25,13 +25,13 @@
  *   - Failure: error state populated, listings empty
  */
 
-const mockApiFetch = jest.fn();
+const mockApiFetch = vi.fn();
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   MARKETPLACE_LIMITS: { DEFAULT_PAGE_SIZE: 20 },
 }));
 
@@ -62,6 +62,13 @@ const lastUrl = () => mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1
 
 beforeEach(() => {
   mockApiFetch.mockReset();
+});
+
+// A test that enables fake timers and then times out never reaches its own
+// cleanup call, leaving fake timers active for every test that runs after it
+// in this file. This safety net guarantees real timers are restored either way.
+afterEach(() => {
+  vi.useRealTimers();
 });
 
 // ============================================================================
@@ -300,14 +307,14 @@ describe('fetch — failure', () => {
 
 describe('debounced search', () => {
   it('searchInput typing does NOT fire fetch immediately (waits for 300ms debounce)', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     mockApiFetch.mockResolvedValue(okResponse());
 
     const { result } = renderListings();
 
     // Wait for the initial mount-fetch to settle (only the first call)
     await act(async () => {
-      jest.advanceTimersByTime(0);
+      await vi.advanceTimersByTimeAsync(0);
     });
 
     const initialCalls = mockApiFetch.mock.calls.length;
@@ -321,17 +328,20 @@ describe('debounced search', () => {
       mockApiFetch.mock.calls.some((call) => (call[0] as string).includes('search=macbook')),
     ).toBe(false);
 
-    // After 300ms debounce — search applied, new fetch fires
+    // After 300ms debounce — search applied, new fetch fires.
+    // testing-library's waitFor polls with real timers and hangs once
+    // vi.useFakeTimers() is active, so assert directly after an explicit
+    // flush instead of polling for the state update.
     await act(async () => {
-      jest.advanceTimersByTime(300);
+      await vi.advanceTimersByTimeAsync(300);
+      await Promise.resolve();
+      await Promise.resolve();
     });
 
-    await waitFor(() => {
-      expect(mockApiFetch.mock.calls.length).toBeGreaterThan(initialCalls);
-      expect(lastUrl()).toContain('search=macbook');
-    });
+    expect(mockApiFetch.mock.calls.length).toBeGreaterThan(initialCalls);
+    expect(lastUrl()).toContain('search=macbook');
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });
 
@@ -341,18 +351,18 @@ describe('debounced search', () => {
 
 describe('handleSearch', () => {
   it('preventDefault on submit; term applies via the 300ms debounce', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     mockApiFetch.mockResolvedValue(okResponse());
     const { result } = renderListings();
     await act(async () => {
-      jest.advanceTimersByTime(0);
+      await vi.advanceTimersByTimeAsync(0);
     });
 
     act(() => {
       result.current.filters.setSearchInput('quick search');
     });
 
-    const preventDefault = jest.fn();
+    const preventDefault = vi.fn();
     const fakeEvent = { preventDefault } as unknown as React.FormEvent;
 
     act(() => {
@@ -362,14 +372,14 @@ describe('handleSearch', () => {
     expect(preventDefault).toHaveBeenCalled();
 
     await act(async () => {
-      jest.advanceTimersByTime(300);
+      await vi.advanceTimersByTimeAsync(300);
+      await Promise.resolve();
+      await Promise.resolve();
     });
 
-    await waitFor(() => {
-      expect(lastUrl()).toContain('search=quick');
-    });
+    expect(lastUrl()).toContain('search=quick');
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('typing a search resets offset to 0', async () => {
@@ -390,7 +400,7 @@ describe('handleSearch', () => {
       result.current.filters.setSearchInput('reset me');
     });
 
-    const preventDefault = jest.fn();
+    const preventDefault = vi.fn();
     act(() => {
       result.current.handleSearch({ preventDefault } as unknown as React.FormEvent);
     });

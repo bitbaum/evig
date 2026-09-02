@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/task-projects/[id], PATCH /api/task-projects/[id],
  * and DELETE /api/task-projects/[id]
@@ -14,19 +14,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params
@@ -39,8 +38,7 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -56,11 +54,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   taskProjects: {
     id: 'tp_id',
     title: 'tp_title',
@@ -97,12 +95,12 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  sql: Object.assign(jest.fn().mockReturnValue({}), { raw: jest.fn().mockReturnValue({}) }),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  sql: Object.assign(vi.fn().mockReturnValue({}), { raw: vi.fn().mockReturnValue({}) }),
 }));
 
-jest.mock('@/lib/schemas/tasks', () => ({
+vi.mock('@/lib/schemas/tasks', () => ({
   updateProjectSchema: {
     safeParse: (b: unknown) => {
       const body = b as Record<string, unknown>;
@@ -114,11 +112,11 @@ jest.mock('@/lib/schemas/tasks', () => ({
   },
 }));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    select: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
   },
 }));
 
@@ -128,26 +126,26 @@ jest.mock('@/db', () => ({
 
 function makeSelectChain(terminalMethod: string, value: unknown[]) {
   const methods = ['from', 'leftJoin', 'where', 'orderBy', 'groupBy', 'limit', 'set'];
-  const c: Record<string, jest.Mock> = {};
+  const c: Record<string, Mock> = {};
   methods.forEach((m) => {
-    c[m] = jest.fn().mockReturnValue(c);
+    c[m] = vi.fn().mockReturnValue(c);
   });
-  c[terminalMethod] = jest.fn().mockResolvedValue(value);
+  c[terminalMethod] = vi.fn().mockResolvedValue(value);
   return c;
 }
 
 function makeUpdateChain(returnValue: unknown[]) {
-  const c: Record<string, jest.Mock> = {};
-  c.set = jest.fn().mockReturnValue(c);
-  c.where = jest.fn().mockReturnValue(c);
-  c.returning = jest.fn().mockResolvedValue(returnValue);
+  const c: Record<string, Mock> = {};
+  c.set = vi.fn().mockReturnValue(c);
+  c.where = vi.fn().mockReturnValue(c);
+  c.returning = vi.fn().mockResolvedValue(returnValue);
   return c;
 }
 
 function makeDeleteChain(returnValue: unknown[]) {
-  const c: Record<string, jest.Mock> = {};
-  c.where = jest.fn().mockReturnValue(c);
-  c.returning = jest.fn().mockResolvedValue(returnValue);
+  const c: Record<string, Mock> = {};
+  c.where = vi.fn().mockReturnValue(c);
+  c.returning = vi.fn().mockResolvedValue(returnValue);
   return c;
 }
 
@@ -155,7 +153,8 @@ function makeDeleteChain(returnValue: unknown[]) {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, PATCH, DELETE } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -224,7 +223,7 @@ function makeDeleteRequest(id = 'proj-1') {
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 });
 
@@ -242,7 +241,7 @@ describe('GET /api/task-projects/[id] — unauthenticated', () => {
 
 describe('GET /api/task-projects/[id] — authenticated', () => {
   it('returns 200 with project and tasks', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select
       .mockReturnValueOnce(makeSelectChain('where', [MOCK_PROJECT]))
       .mockReturnValueOnce(makeSelectChain('orderBy', [MOCK_TASK]));
@@ -257,7 +256,7 @@ describe('GET /api/task-projects/[id] — authenticated', () => {
   });
 
   it('returns 404 when project not found', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select.mockReturnValueOnce(makeSelectChain('where', []));
 
     const response = await GET(makeGetRequest('nonexistent'), makeContext('nonexistent'));
@@ -286,7 +285,7 @@ describe('PATCH /api/task-projects/[id] — validation', () => {
 
 describe('PATCH /api/task-projects/[id] — not found', () => {
   it('returns 404 when project does not exist', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select.mockReturnValueOnce(makeSelectChain('where', []));
 
     const response = await PATCH(makePatchRequest('proj-1', { title: 'Updated' }), makeContext());
@@ -296,7 +295,7 @@ describe('PATCH /api/task-projects/[id] — not found', () => {
 
 describe('PATCH /api/task-projects/[id] — success', () => {
   it('returns 200 with updated project', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select.mockReturnValueOnce(makeSelectChain('where', [{ id: 'proj-1' }]));
     mockDb.update.mockReturnValue(makeUpdateChain([{ ...MOCK_PROJECT, title: 'Updated' }]));
 
@@ -322,7 +321,7 @@ describe('DELETE /api/task-projects/[id] — unauthenticated', () => {
 
 describe('DELETE /api/task-projects/[id] — not found', () => {
   it('returns 404 when project does not exist', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.delete.mockReturnValue(makeDeleteChain([]));
 
     const response = await DELETE(makeDeleteRequest('nonexistent'), makeContext('nonexistent'));
@@ -332,7 +331,7 @@ describe('DELETE /api/task-projects/[id] — not found', () => {
 
 describe('DELETE /api/task-projects/[id] — success', () => {
   it('returns 200 when project deleted', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.delete.mockReturnValue(makeDeleteChain([{ id: 'proj-1' }]));
 
     const response = await DELETE(makeDeleteRequest(), makeContext());

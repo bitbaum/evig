@@ -16,10 +16,11 @@
  * here silently breaks payment confirmation.
  */
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
+import type { Mock } from 'vitest';
 import {
   PAYREXX_TRANSACTION_STATUS,
   createGateway,
@@ -29,7 +30,7 @@ import {
 } from '../payrexx-client';
 
 const ORIGINAL_ENV = { ...process.env };
-const mockFetch = global.fetch as jest.Mock;
+const mockFetch = global.fetch as Mock;
 
 beforeEach(() => {
   mockFetch.mockReset();

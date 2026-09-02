@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/locations/[id]/approve — approve or reject a location
  * Note: uses auth() directly (not withAuth middleware).
@@ -8,23 +8,23 @@
  *   POST - 401 (unauthenticated), 403 (non-staff), 400 (invalid body), 404, 400 (invalid transition), 200
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockTransactionFn = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockTransactionFn = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -39,7 +39,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   locations: {
     id: 'loc_id',
     name: 'loc_name',
@@ -61,7 +61,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -69,7 +69,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/location-status', () => ({
+vi.mock('@/config/location-status', () => ({
   LOCATION_STATUS: {
     PENDING: 'pending',
     APPROVED: 'approved',
@@ -78,30 +78,29 @@ jest.mock('@/config/location-status', () => ({
   },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     INTERNAL_SERVER_ERROR: 'Internal server error',
     UNAUTHORIZED: 'Unauthorized',
   },
 }));
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   ApproveLocationSchema: {},
 }));
 
-const mockSendEmail = jest.fn().mockResolvedValue({ success: true, messageId: 'test-msg' });
+const mockSendEmail = vi.fn().mockResolvedValue({ success: true, messageId: 'test-msg' });
 
-jest.mock('@/lib/email', () => ({
+vi.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail(...args),
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
-  locationSubmissionConfirmation: jest.fn().mockReturnValue({}),
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
+  locationSubmissionConfirmation: vi.fn().mockReturnValue({}),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -118,11 +117,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -176,18 +175,16 @@ function makeRequest(body?: unknown) {
 // Helper to set up transaction mock that runs the callback with a mock tx
 function setupSuccessfulTransaction() {
   mockTransactionFn.mockImplementation(async (callback: (tx: unknown) => unknown) => {
-    const mockTxUpdate = jest.fn().mockReturnValue({
-      set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+    const mockTxUpdate = vi.fn().mockReturnValue({
+      set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }),
     });
-    const mockTxInsert = jest
-      .fn()
-      .mockReturnValue({ values: jest.fn().mockResolvedValue(undefined) });
+    const mockTxInsert = vi.fn().mockReturnValue({ values: vi.fn().mockResolvedValue(undefined) });
     return callback({ update: mockTxUpdate, insert: mockTxInsert });
   });
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_STAFF_SESSION);
 
   mockValidateBody.mockReturnValue({
@@ -207,10 +204,10 @@ beforeEach(() => {
   let dbSelectCallCount = 0;
   mockSelect.mockImplementation(() => {
     dbSelectCallCount++;
-    const mockLocWhere = jest
+    const mockLocWhere = vi
       .fn()
       .mockResolvedValue(dbSelectCallCount === 1 ? [MOCK_LOCATION] : [MOCK_CREATOR]);
-    return { from: jest.fn().mockReturnValue({ where: mockLocWhere }) };
+    return { from: vi.fn().mockReturnValue({ where: mockLocWhere }) };
   });
   mockFrom.mockReturnValue({ where: mockWhere });
   mockWhere.mockResolvedValue([MOCK_LOCATION]);
@@ -248,7 +245,6 @@ describe('POST /api/locations/[id]/approve — forbidden', () => {
 
 describe('POST /api/locations/[id]/approve — validation', () => {
   it('returns 400 when body validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Invalid body' }, { status: 400 }),
@@ -261,8 +257,8 @@ describe('POST /api/locations/[id]/approve — validation', () => {
   it('returns 404 when location does not exist', async () => {
     // Override mockSelect so first call returns empty (location not found)
     mockSelect.mockImplementationOnce(() => {
-      const mockLocWhere = jest.fn().mockResolvedValue([]);
-      return { from: jest.fn().mockReturnValue({ where: mockLocWhere }) };
+      const mockLocWhere = vi.fn().mockResolvedValue([]);
+      return { from: vi.fn().mockReturnValue({ where: mockLocWhere }) };
     });
     const req = makeRequest({ action: 'approve' });
     const response = await POST(req, makeContext());
@@ -272,10 +268,10 @@ describe('POST /api/locations/[id]/approve — validation', () => {
   it('returns 400 for invalid status transition (e.g. reject approved location)', async () => {
     // Override mockSelect so first call returns approved location
     mockSelect.mockImplementationOnce(() => {
-      const mockLocWhere = jest
+      const mockLocWhere = vi
         .fn()
         .mockResolvedValue([{ ...MOCK_LOCATION, approvalStatus: 'approved' }]);
-      return { from: jest.fn().mockReturnValue({ where: mockLocWhere }) };
+      return { from: vi.fn().mockReturnValue({ where: mockLocWhere }) };
     });
     mockValidateBody.mockReturnValueOnce({
       success: true,
@@ -330,7 +326,7 @@ describe('POST /api/locations/[id]/approve — success', () => {
     const response = await POST(req, makeContext());
     expect(response.status).toBe(200); // The decision still applies
 
-    const { logger } = require('@/lib/logger');
+    const { logger } = (await import('@/lib/logger')) as any;
     expect(logger.warn).toHaveBeenCalledWith(
       'Location approval notification email failed (resolved)',
       expect.objectContaining({ action: 'approve', error: 'SMTP rejected' }),

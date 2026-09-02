@@ -1,22 +1,21 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/listings/[id]/report
  */
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -24,20 +23,20 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   ReportListingSchema: {},
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -50,8 +49,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -64,20 +62,20 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', REMOVED: 'removed', DRAFT: 'draft', SOLD: 'sold' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listings: { id: 'l_id', sellerId: 'l_sellerId', status: 'l_status' },
   listingReports: {
     id: 'lr_id',
@@ -89,7 +87,7 @@ jest.mock('@/db/schema', () => ({
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
@@ -133,7 +131,7 @@ function makeContext(id: string) {
 // ── Setup ──────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: validation passes
@@ -161,7 +159,6 @@ describe('POST /api/listings/[id]/report', () => {
   });
 
   it('returns 400 when validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server') as typeof import('next/server');
     mockValidateBody.mockReturnValue({
       success: false,
       error: NextResponse.json(

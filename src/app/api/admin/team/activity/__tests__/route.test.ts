@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/admin/team/activity
  *
@@ -15,19 +15,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -35,30 +34,30 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockDbExecute = jest.fn();
-const mockValidateActivityStreamFilter = jest.fn();
+const mockDbExecute = vi.fn();
+const mockValidateActivityStreamFilter = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   taskCompletions: {},
   tasks: {},
 }));
 
-jest.mock('@/db/schema/team', () => ({
+vi.mock('@/db/schema/team', () => ({
   activityUpdates: {},
   helpRequests: {},
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: {},
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   sql: Object.assign((...args: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
     join: (parts: unknown[], _sep: unknown) => ({ __join: parts }),
@@ -66,17 +65,15 @@ jest.mock('drizzle-orm', () => ({
   getTableName: (_table: unknown) => 'mock_table',
 }));
 
-jest.mock('@/config/activity', () => ({
+vi.mock('@/config/activity', () => ({
   HELP_REQUEST_STATUSES: { RESOLVED: 'resolved' },
 }));
 
-jest.mock('@/lib/schemas/activity', () => ({
-  validateActivityStreamFilter: (...args: unknown[]) =>
-    mockValidateActivityStreamFilter.apply(null, args),
+vi.mock('@/lib/schemas/activity', () => ({
+  validateActivityStreamFilter: (...args: unknown[]) => mockValidateActivityStreamFilter(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -90,7 +87,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -126,7 +123,7 @@ function makeRequest(params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockValidateActivityStreamFilter.mockReturnValue({ success: true, data: MOCK_FILTERS });

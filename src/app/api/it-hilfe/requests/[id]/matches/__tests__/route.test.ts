@@ -1,25 +1,25 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/it-hilfe/requests/[id]/matches (public, no auth)
  */
 
 // ── DB mocks ───────────────────────────────────────────────────────────────
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockGroupBy = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockGroupBy = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   itHilfeRequests: {
     id: 'ihr_id',
     requesterId: 'ihr_requesterId',
@@ -53,7 +53,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
@@ -62,8 +62,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccessCached: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (_err: unknown, msg: string, status = 500) =>
@@ -75,16 +74,16 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
-  getCategoryById: jest.fn().mockReturnValue(null),
+vi.mock('@/config/it-hilfe', () => ({
+  getCategoryById: vi.fn().mockReturnValue(null),
   MATCH_SCORES: {
     PER_SKILL: 10,
     DEVICE_CATEGORY_BONUS: 5,
@@ -95,20 +94,20 @@ jest.mock('@/config/it-hilfe', () => ({
   BUDGET_TIER: { GRATIS: 'gratis', KULTURLEGI: 'kulturlegi', PAID: 'paid', FREE: 'free' },
 }));
 
-jest.mock('@/config/repairer-status', () => ({
+vi.mock('@/config/repairer-status', () => ({
   REPAIRER_PROFILE_TIER: { COMMUNITY: 'community', PROFESSIONAL: 'professional' },
 }));
 
-jest.mock('@/lib/it-hilfe/sql', () => ({
-  technicianHasSkillMatch: jest.fn().mockReturnValue({ __skillMatch: true }),
+vi.mock('@/lib/it-hilfe/sql', () => ({
+  technicianHasSkillMatch: vi.fn().mockReturnValue({ __skillMatch: true }),
 }));
 
 // The route composes its WHERE from publicTechnicianListCondition(), whose
 // internals call drizzle's or()/REPAIRER_STATUS (not part of these unit mocks).
 // Mock it like technicianHasSkillMatch — it returns an opaque SQL fragment the
 // route only feeds into and().
-jest.mock('@/lib/domain/technician-visibility', () => ({
-  publicTechnicianListCondition: jest.fn().mockReturnValue({ __publicVisibility: true }),
+vi.mock('@/lib/domain/technician-visibility', () => ({
+  publicTechnicianListCondition: vi.fn().mockReturnValue({ __publicVisibility: true }),
 }));
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
@@ -147,7 +146,8 @@ const MOCK_HELPER = {
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -162,7 +162,7 @@ function makeRequest(id: string) {
 
 describe('GET /api/it-hilfe/requests/[id]/matches', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('returns 404 for invalid UUID format', async () => {
@@ -181,8 +181,8 @@ describe('GET /api/it-hilfe/requests/[id]/matches', () => {
 
     // First select: request not found
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
 
@@ -193,8 +193,8 @@ describe('GET /api/it-hilfe/requests/[id]/matches', () => {
   it('returns 200 with matches array', async () => {
     // First select: request data
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([MOCK_REQUEST_DATA]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([MOCK_REQUEST_DATA]),
       }),
     });
 
@@ -218,8 +218,8 @@ describe('GET /api/it-hilfe/requests/[id]/matches', () => {
   it('returns 200 with empty matches when no helpers match', async () => {
     // Request with no skills needed
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([{ ...MOCK_REQUEST_DATA, skillsNeeded: [] }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([{ ...MOCK_REQUEST_DATA, skillsNeeded: [] }]),
       }),
     });
 

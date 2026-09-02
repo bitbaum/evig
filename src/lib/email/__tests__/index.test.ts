@@ -23,116 +23,212 @@
 
 // ---------------------------------------------------------------------------
 // Template mocks (inline arrow fns — no external var references allowed in
-// jest.mock factories due to hoisting before variable declarations)
+// vi.mock factories due to hoisting before variable declarations)
 // ---------------------------------------------------------------------------
 
 const DEFAULT_EMAIL = () => ({ subject: 'Test Email', html: '<p>Test</p>', text: 'Test' });
 
-jest.mock('../templates/auth', () => ({
-  verificationCode: jest.fn(() => ({ subject: 'Test Email', html: '<p>Test</p>', text: 'Test' })),
-  staffVerificationCode: jest.fn(() => ({
+vi.mock('../templates/auth', () => ({
+  verificationCode: vi.fn((..._args: unknown[]) => ({
     subject: 'Test Email',
     html: '<p>Test</p>',
     text: 'Test',
   })),
-  emailVerification: jest.fn(() => ({ subject: 'Test Email', html: '<p>Test</p>', text: 'Test' })),
-  welcome: jest.fn(() => ({ subject: 'Test Email', html: '<p>Test</p>', text: 'Test' })),
-  staffWelcome: jest.fn(() => ({ subject: 'Test Email', html: '<p>Test</p>', text: 'Test' })),
-  passwordReset: jest.fn(() => ({ subject: 'Test Email', html: '<p>Test</p>', text: 'Test' })),
-  passwordChangeConfirmation: jest.fn(() => ({
+  staffVerificationCode: vi.fn((..._args: unknown[]) => ({
+    subject: 'Test Email',
+    html: '<p>Test</p>',
+    text: 'Test',
+  })),
+  emailVerification: vi.fn((..._args: unknown[]) => ({
+    subject: 'Test Email',
+    html: '<p>Test</p>',
+    text: 'Test',
+  })),
+  welcome: vi.fn((..._args: unknown[]) => ({
+    subject: 'Test Email',
+    html: '<p>Test</p>',
+    text: 'Test',
+  })),
+  staffWelcome: vi.fn((..._args: unknown[]) => ({
+    subject: 'Test Email',
+    html: '<p>Test</p>',
+    text: 'Test',
+  })),
+  passwordReset: vi.fn((..._args: unknown[]) => ({
+    subject: 'Test Email',
+    html: '<p>Test</p>',
+    text: 'Test',
+  })),
+  passwordChangeConfirmation: vi.fn((..._args: unknown[]) => ({
     subject: 'Test Email',
     html: '<p>Test</p>',
     text: 'Test',
   })),
 }));
 
-jest.mock('../templates/workshop', () => ({
-  workshopRegistrationConfirmation: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopRegistrationStatusUpdate: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopReminder: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopCancellation: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopFeedbackRequest: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopProposalSubmitted: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopProposalApproved: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopProposalRejected: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  workshopProposalChangesRequested: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
+vi.mock('../templates/workshop', () => ({
+  workshopRegistrationConfirmation: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  workshopRegistrationStatusUpdate: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  workshopReminder: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  workshopCancellation: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  workshopFeedbackRequest: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  workshopProposalSubmitted: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  workshopProposalApproved: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  workshopProposalRejected: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  workshopProposalChangesRequested: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
 }));
 
-jest.mock('../templates/admin', () => ({
-  adminNewWorkshopProposal: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  adminNewBlogSubmission: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  adminNewSellerApplication: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
+vi.mock('../templates/admin', () => ({
+  adminNewWorkshopProposal: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  adminNewBlogSubmission: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  adminNewSellerApplication: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
 }));
 
-jest.mock('../templates/misc', () => ({
-  newsletterConfirmation: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  blogSubmissionReceived: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  blogSubmissionApproved: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  blogSubmissionRejected: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  blogSubmissionPublished: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  blogSubmissionChangesRequested: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  newReviewNotification: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  sellerApplicationSubmitted: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  locationApprovalNotification: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  locationSubmissionConfirmation: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  contentSubmissionApproved: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  contentSubmissionRejected: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
+vi.mock('../templates/misc', () => ({
+  newsletterConfirmation: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  blogSubmissionReceived: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  blogSubmissionApproved: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  blogSubmissionRejected: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  blogSubmissionPublished: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  blogSubmissionChangesRequested: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  newReviewNotification: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  sellerApplicationSubmitted: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  locationApprovalNotification: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  locationSubmissionConfirmation: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  contentSubmissionApproved: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  contentSubmissionRejected: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
 }));
 
-jest.mock('../templates/it-hilfe', () => ({
-  itHilfeRequestConfirmation: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  adminNewITHilfeRequest: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  helperNewMatchingRequest: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
+vi.mock('../templates/it-hilfe', () => ({
+  itHilfeRequestConfirmation: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  adminNewITHilfeRequest: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  helperNewMatchingRequest: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
 }));
 
-jest.mock('../templates/appointments', () => ({
-  appointmentNewBooking: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  appointmentQuoteReceived: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  appointmentStatusUpdate: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  appointmentUnassignedAlert: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
+vi.mock('../templates/appointments', () => ({
+  appointmentNewBooking: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  appointmentQuoteReceived: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  appointmentStatusUpdate: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  appointmentUnassignedAlert: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
 }));
 
-jest.mock('../templates/decisions', () => ({
-  decisionVotingOpened: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  decisionDeadlineReminder: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  decisionClosed: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
+vi.mock('../templates/decisions', () => ({
+  decisionVotingOpened: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
+  decisionDeadlineReminder: vi.fn((..._args: unknown[]) => ({
+    subject: 'T',
+    html: 'H',
+    text: 'T',
+  })),
+  decisionClosed: vi.fn((..._args: unknown[]) => ({ subject: 'T', html: 'H', text: 'T' })),
 }));
 
-jest.mock('../templates', () => ({}));
+vi.mock('../templates', () => ({}));
 
 // ---------------------------------------------------------------------------
 // Transport and provider mocks
 // ---------------------------------------------------------------------------
 
-const mockSendMail = jest.fn();
-const mockGetTransporter = jest.fn();
-const mockGetFromEmail = jest.fn();
+const mockSendMail = vi.fn();
+const mockGetTransporter = vi.fn();
+const mockGetFromEmail = vi.fn();
 
-jest.mock('../transporter', () => ({
-  getTransporter: (...args: unknown[]) => mockGetTransporter.apply(null, args),
-  getFromEmail: (...args: unknown[]) => mockGetFromEmail.apply(null, args),
-  testEmailConfig: jest.fn(),
+vi.mock('../transporter', () => ({
+  getTransporter: (...args: unknown[]) => mockGetTransporter(...args),
+  getFromEmail: (...args: unknown[]) => mockGetFromEmail(...args),
+  testEmailConfig: vi.fn(),
 }));
 
-const mockSendViaListmonk = jest.fn();
-const mockIsListmonkEnabled = jest.fn();
+const mockSendViaListmonk = vi.fn();
+const mockIsListmonkEnabled = vi.fn();
 
-jest.mock('../listmonk', () => ({
-  sendViaListmonk: (...args: unknown[]) => mockSendViaListmonk.apply(null, args),
-  testListmonkConnection: jest.fn(),
-  isListmonkEnabled: (...args: unknown[]) => mockIsListmonkEnabled.apply(null, args),
-  subscribeToList: jest.fn(),
-  getListmonkConfig: jest.fn(),
+vi.mock('../listmonk', () => ({
+  sendViaListmonk: (...args: unknown[]) => mockSendViaListmonk(...args),
+  testListmonkConnection: vi.fn(),
+  isListmonkEnabled: (...args: unknown[]) => mockIsListmonkEnabled(...args),
+  subscribeToList: vi.fn(),
+  getListmonkConfig: vi.fn(),
 }));
 
-const mockGetEmailProvider = jest.fn();
+const mockGetEmailProvider = vi.fn();
 
-jest.mock('@/config/email', () => ({
-  getEmailProvider: (...args: unknown[]) => mockGetEmailProvider.apply(null, args),
+vi.mock('@/config/email', () => ({
+  getEmailProvider: (...args: unknown[]) => mockGetEmailProvider(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -155,7 +251,7 @@ const CUSTOM_CONTENT: EmailContent = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 
   // Default: SMTP provider
   mockGetEmailProvider.mockReturnValue('smtp');

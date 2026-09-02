@@ -64,14 +64,14 @@ describe('useFocusTrap', () => {
   });
 
   it('calls onEscape when Escape is pressed while active', () => {
-    const onEscape = jest.fn();
+    const onEscape = vi.fn();
     setup(true, onEscape, '<button>A</button>');
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     expect(onEscape).toHaveBeenCalledTimes(1);
   });
 
   it('does NOT call onEscape when inactive', () => {
-    const onEscape = jest.fn();
+    const onEscape = vi.fn();
     setup(false, onEscape, '<button>A</button>');
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     expect(onEscape).not.toHaveBeenCalled();

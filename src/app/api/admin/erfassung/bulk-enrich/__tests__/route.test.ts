@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/admin/erfassung/bulk-enrich
  *
@@ -19,19 +19,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -39,18 +38,18 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockExtractMultipleProducts = jest.fn();
+const mockExtractMultipleProducts = vi.fn();
 
-jest.mock('@/lib/erfassung/bulk-extraction', () => ({
-  extractMultipleProducts: (...args: unknown[]) => mockExtractMultipleProducts.apply(null, args),
+vi.mock('@/lib/erfassung/bulk-extraction', () => ({
+  extractMultipleProducts: (...args: unknown[]) => mockExtractMultipleProducts(...args),
 }));
 
-jest.mock('@/config/erfassung', () => ({
+vi.mock('@/config/erfassung', () => ({
   BULK_LIMITS: { maxProducts: 3, saveChunkSize: 10 },
 }));
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: jest.fn().mockReturnValue({
+vi.mock('@/lib/schemas', () => ({
+  validateBody: vi.fn().mockReturnValue({
     success: true,
     data: {
       items: [
@@ -62,8 +61,7 @@ jest.mock('@/lib/schemas', () => ({
   BulkEnrichSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -73,15 +71,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -128,12 +126,12 @@ function makeRequest(body: Record<string, unknown> = { items: MOCK_ITEMS }) {
   });
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockExtractMultipleProducts.mockResolvedValue(MOCK_ENRICHED);
 
-  const schemas = require('@/lib/schemas');
+  const schemas = (await import('@/lib/schemas')) as any;
   schemas.validateBody.mockReturnValue({ success: true, data: { items: MOCK_ITEMS } });
 });
 
@@ -151,8 +149,7 @@ describe('POST /api/admin/erfassung/bulk-enrich — unauthenticated', () => {
 
 describe('POST /api/admin/erfassung/bulk-enrich — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const schemas = require('@/lib/schemas');
-    const { NextResponse } = jest.requireActual('next/server');
+    const schemas = (await import('@/lib/schemas')) as any;
     schemas.validateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(
@@ -165,7 +162,7 @@ describe('POST /api/admin/erfassung/bulk-enrich — validation', () => {
   });
 
   it('returns 400 when item count exceeds limit', async () => {
-    const schemas = require('@/lib/schemas');
+    const schemas = (await import('@/lib/schemas')) as any;
     schemas.validateBody.mockReturnValueOnce({
       success: true,
       data: {

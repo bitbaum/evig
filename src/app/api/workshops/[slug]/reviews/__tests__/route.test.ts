@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/workshops/[slug]/reviews (public)
  *
@@ -7,20 +7,20 @@
  *   GET - 404 (workshop not found), 200 with reviews and stats
  */
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockOrderBy = jest.fn();
-const mockLimit = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockOrderBy = vi.fn();
+const mockLimit = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshops: { id: 'w_id', slug: 'w_slug' },
   workshopRegistrations: {
     id: 'wr_id',
@@ -38,7 +38,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -50,8 +50,7 @@ jest.mock('drizzle-orm', () => ({
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccessCached: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (_err: unknown, msg: string, status = 500) =>
@@ -61,15 +60,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/api-defaults', () => ({
+vi.mock('@/config/api-defaults', () => ({
   API_DEFAULTS: { RECENT_REVIEWS_LIMIT: 20 },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_WORKSHOP = { id: 'workshop-1' };
@@ -97,15 +96,15 @@ function makeRequest(slug = 'linux-basics') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
 describe('GET /api/workshops/[slug]/reviews', () => {
   it('returns 404 when workshop not found', async () => {
     // Workshop slug lookup returns empty
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
 
@@ -118,20 +117,20 @@ describe('GET /api/workshops/[slug]/reviews', () => {
   it('returns 200 with reviews and stats', async () => {
     // 1. Workshop found
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([MOCK_WORKSHOP]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([MOCK_WORKSHOP]),
       }),
     });
     // 2. Reviews (with innerJoin x2 + where + orderBy + limit) — via Promise.all
     // 3. Stats (with innerJoin + where) — via Promise.all
     // Both use Promise.all internally
     const reviewsChain = {
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              orderBy: jest.fn().mockReturnValue({
-                limit: jest.fn().mockResolvedValue([MOCK_REVIEW]),
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          innerJoin: vi.fn().mockReturnValue({
+            where: vi.fn().mockReturnValue({
+              orderBy: vi.fn().mockReturnValue({
+                limit: vi.fn().mockResolvedValue([MOCK_REVIEW]),
               }),
             }),
           }),
@@ -139,9 +138,9 @@ describe('GET /api/workshops/[slug]/reviews', () => {
       }),
     };
     const statsChain = {
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([MOCK_STATS]),
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([MOCK_STATS]),
         }),
       }),
     };
@@ -161,18 +160,18 @@ describe('GET /api/workshops/[slug]/reviews', () => {
   it('returns 200 with empty reviews and zero stats when none exist', async () => {
     // Workshop found
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([MOCK_WORKSHOP]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([MOCK_WORKSHOP]),
       }),
     });
     // Reviews — empty
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              orderBy: jest.fn().mockReturnValue({
-                limit: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          innerJoin: vi.fn().mockReturnValue({
+            where: vi.fn().mockReturnValue({
+              orderBy: vi.fn().mockReturnValue({
+                limit: vi.fn().mockResolvedValue([]),
               }),
             }),
           }),
@@ -181,9 +180,9 @@ describe('GET /api/workshops/[slug]/reviews', () => {
     });
     // Stats — empty / null
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([{ average_rating: null, review_count: '0' }]),
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([{ average_rating: null, review_count: '0' }]),
         }),
       }),
     });

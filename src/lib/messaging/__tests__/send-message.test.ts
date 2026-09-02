@@ -27,28 +27,28 @@
 function makeChain(result: unknown = []) {
   const resolved = Array.isArray(result) ? Promise.resolve(result) : Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
-  chain.set = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
   return chain;
 }
 
-const mockTxSelect = jest.fn(() => makeChain([]));
-const mockTxInsert = jest.fn(() => makeChain([]));
-const mockTxUpdate = jest.fn(() => makeChain([]));
+const mockTxSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockTxInsert = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockTxUpdate = vi.fn((..._args: unknown[]) => makeChain([]));
 
 const mockTx = {
-  select: (...args: unknown[]) => mockTxSelect.apply(null, args),
-  insert: (...args: unknown[]) => mockTxInsert.apply(null, args),
-  update: (...args: unknown[]) => mockTxUpdate.apply(null, args),
+  select: (...args: unknown[]) => mockTxSelect(...args),
+  insert: (...args: unknown[]) => mockTxInsert(...args),
+  update: (...args: unknown[]) => mockTxUpdate(...args),
 };
 
-const mockDbTransaction = jest
+const mockDbTransaction = vi
   .fn()
   .mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
@@ -56,13 +56,13 @@ const mockDbTransaction = jest
 // Mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
+    transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
 }));
 
-jest.mock('@/db/schema/messaging', () => ({
+vi.mock('@/db/schema/messaging', () => ({
   conversations: {
     id: 'conversations_id',
     participant1: 'participant1',
@@ -85,7 +85,7 @@ jest.mock('@/db/schema/messaging', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   serviceAppointments: {
     id: 'serviceAppointments_id',
     messagesCount: 'messagesCount',
@@ -93,25 +93,25 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  isNull: jest.fn().mockReturnValue({ __isNull: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  isNull: vi.fn().mockReturnValue({ __isNull: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   CONVERSATION_TYPES: {
     APPOINTMENT: 'appointment',
     DIRECT: 'direct',
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -136,7 +136,7 @@ const BASE_PARAMS = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbTransaction.mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) =>
     fn(mockTx),
   );

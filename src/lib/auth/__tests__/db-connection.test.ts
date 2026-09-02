@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 
 /**
@@ -20,9 +20,9 @@
  *     and release() always called via finally.
  */
 
-const mockQuery = jest.fn();
-const mockConnect = jest.fn();
-const mockPoolOn = jest.fn();
+const mockQuery = vi.fn();
+const mockConnect = vi.fn();
+const mockPoolOn = vi.fn();
 
 class MockPool {
   query = mockQuery;
@@ -30,32 +30,36 @@ class MockPool {
   on = mockPoolOn;
 }
 
-jest.mock('pg', () => ({
-  Pool: jest.fn().mockImplementation(() => new MockPool()),
+vi.mock('pg', () => ({
+  // vitest's vi.fn(), unlike jest's jest.fn(), invokes `new Pool()` on the
+  // mockImplementation itself -- an arrow function isn't a valid constructor.
+  Pool: vi.fn().mockImplementation(function () {
+    return new MockPool();
+  }),
 }));
 
-jest.mock('../config', () => ({
-  getDbConfig: jest.fn(() => ({ host: 'localhost', database: 'test' })),
+vi.mock('../config', () => ({
+  getDbConfig: vi.fn((..._args: unknown[]) => ({ host: 'localhost', database: 'test' })),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 let dbConn: typeof import('../db-connection');
 
-beforeEach(() => {
-  jest.useFakeTimers();
-  jest.resetModules();
+beforeEach(async () => {
+  vi.useFakeTimers();
+  vi.resetModules();
   mockQuery.mockReset();
   mockConnect.mockReset();
   mockPoolOn.mockReset();
-  dbConn = require('../db-connection') as typeof import('../db-connection');
+  dbConn = (await import('../db-connection')) as unknown as typeof import('../db-connection');
 });
 
 afterEach(() => {
-  jest.clearAllTimers();
-  jest.useRealTimers();
+  vi.clearAllTimers();
+  vi.useRealTimers();
 });
 
 /** Helper: run sync code + drain all pending timers + microtasks */
@@ -64,7 +68,7 @@ async function runAndAdvance<T>(fn: () => Promise<T>): Promise<T> {
   // Allow the first attempt to resolve, then advance through all backoff timers
   for (let i = 0; i < 5; i++) {
     await Promise.resolve();
-    jest.runAllTimers();
+    vi.runAllTimers();
   }
   return promise;
 }
@@ -301,8 +305,8 @@ describe('paginatedQuery', () => {
 
 describe('transaction', () => {
   function makeClient() {
-    const queryFn = jest.fn().mockResolvedValue({ rows: [], rowCount: 0 });
-    const release = jest.fn();
+    const queryFn = vi.fn().mockResolvedValue({ rows: [], rowCount: 0 });
+    const release = vi.fn();
     return {
       client: { query: queryFn, release } as unknown as import('pg').PoolClient,
       queryFn,
@@ -343,13 +347,13 @@ describe('transaction', () => {
   });
 
   it('always releases the client (even on COMMIT failure)', async () => {
-    const queryFn = jest
+    const queryFn = vi
       .fn()
       .mockResolvedValueOnce({ rows: [], rowCount: 0 }) // BEGIN
       .mockResolvedValueOnce({ rows: [], rowCount: 0 }) // callback query
       .mockRejectedValueOnce(new Error('COMMIT failed: deadlock')) // COMMIT
       .mockResolvedValueOnce({ rows: [], rowCount: 0 }); // ROLLBACK
-    const release = jest.fn();
+    const release = vi.fn();
     mockConnect.mockResolvedValueOnce({
       query: queryFn,
       release,

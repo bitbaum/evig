@@ -11,23 +11,24 @@
  * the body and init args from the jest mock.
  */
 
-// Mock next/server BEFORE importing helpers. Jest hoists `jest.mock()`
+// Mock next/server BEFORE importing helpers. Jest hoists `vi.mock()`
 // above all imports, so we cannot reference outer variables in the
-// factory — must define jest.fn() inline.
-jest.mock('next/server', () => ({
+// factory — must define vi.fn() inline.
+vi.mock('next/server', () => ({
   NextRequest: class {},
-  NextResponse: { json: jest.fn().mockReturnValue('mocked-response') },
+  NextResponse: { json: vi.fn().mockReturnValue('mocked-response') },
 }));
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    error: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
-    debug: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    debug: vi.fn(),
   },
 }));
 
+import type { Mock } from 'vitest';
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import {
@@ -42,8 +43,8 @@ import {
 } from '../helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 
-const mockJson = NextResponse.json as jest.Mock;
-const mockLoggerError = logger.error as jest.Mock;
+const mockJson = NextResponse.json as Mock;
+const mockLoggerError = logger.error as Mock;
 
 beforeEach(() => {
   mockJson.mockClear();

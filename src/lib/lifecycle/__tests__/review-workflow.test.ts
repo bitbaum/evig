@@ -13,14 +13,14 @@
  */
 
 interface FakeConn {
-  execute: jest.Mock;
-  transaction: jest.Mock;
+  execute: Mock;
+  transaction: Mock;
 }
 
 let preReadResults: Array<{ rows: unknown[] }>;
 let txResults: Array<{ rows: unknown[] }>;
 let executedTxSql: string[];
-let fakeTx: { execute: jest.Mock; transaction: jest.Mock };
+let fakeTx: { execute: Mock; transaction: Mock };
 let mockDb: FakeConn;
 
 function sqlToString(query: unknown): string {
@@ -38,22 +38,23 @@ function sqlToString(query: unknown): string {
   return '?';
 }
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     execute: (q: unknown) => mockDb.execute(q),
     transaction: (cb: (t: unknown) => unknown) => mockDb.transaction(cb),
   },
 }));
 
-const mockDispatch = jest.fn().mockResolvedValue(undefined);
-jest.mock('../dispatch', () => ({
+const mockDispatch = vi.fn().mockResolvedValue(undefined);
+vi.mock('../dispatch', () => ({
   dispatchWorkflowEvent: (event: unknown) => mockDispatch(event),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { warn: jest.fn(), error: jest.fn(), info: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
+import type { Mock } from 'vitest';
 import { runReviewTransition } from '../review-workflow';
 
 const TRANSITIONS = [
@@ -67,15 +68,17 @@ function setup(opts: { pre: unknown[]; locked?: unknown[] }) {
   txResults = [{ rows: opts.locked ?? opts.pre }];
   executedTxSql = [];
   fakeTx = {
-    execute: jest.fn((q: unknown) => {
+    execute: vi.fn((q: unknown) => {
       executedTxSql.push(sqlToString(q));
       return Promise.resolve(txResults.shift() ?? { rows: [] });
     }),
-    transaction: jest.fn((cb: (t: unknown) => unknown) => cb(fakeTx)),
+    transaction: vi.fn((cb: (t: unknown) => unknown) => cb(fakeTx)),
   };
   mockDb = {
-    execute: jest.fn(() => Promise.resolve(preReadResults.shift() ?? { rows: [] })),
-    transaction: jest.fn(async (cb: (t: unknown) => unknown) => cb(fakeTx)),
+    execute: vi.fn((..._args: unknown[]) =>
+      Promise.resolve(preReadResults.shift() ?? { rows: [] }),
+    ),
+    transaction: vi.fn(async (cb: (t: unknown) => unknown) => cb(fakeTx)),
   };
 }
 
@@ -87,7 +90,7 @@ const baseOpts = {
 } as const;
 
 describe('runReviewTransition', () => {
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => vi.clearAllMocks());
 
   it('returns not_found without opening a transaction when the row is missing', async () => {
     setup({ pre: [] });
@@ -133,7 +136,7 @@ describe('runReviewTransition', () => {
   it('success: UPDATE + applyInTxn in the transaction, emit dispatched after', async () => {
     setup({ pre: [{ status: 'submitted', user_id: 'u1' }] });
     const order: string[] = [];
-    const applyInTxn = jest.fn(async () => {
+    const applyInTxn = vi.fn(async () => {
       order.push('apply');
     });
     mockDispatch.mockImplementation(async () => {

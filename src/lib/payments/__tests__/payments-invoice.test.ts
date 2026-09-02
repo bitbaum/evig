@@ -27,9 +27,9 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.insert = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.insert = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -40,15 +40,17 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbInsert = jest.fn(() => makeChain([{ id: 'inv-1', invoiceNumber: 'INV-2026-001' }]));
+const mockDbInsert = vi.fn((..._args: unknown[]) =>
+  makeChain([{ id: 'inv-1', invoiceNumber: 'INV-2026-001' }]),
+);
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   invoices: {
     id: 'inv_id',
     invoiceNumber: 'inv_invoiceNumber',
@@ -69,33 +71,34 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
-jest.mock('@/lib/payments/tax-compliance', () => ({
+vi.mock('@/lib/payments/tax-compliance', () => ({
   SWISS_VAT_RATES: { standard: 0.081 },
 }));
 
-jest.mock('@/config/invoice-status', () => ({
+vi.mock('@/config/invoice-status', () => ({
   INVOICE_STATUS: { DRAFT: 'draft' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/payments/payments-fees', () => ({
-  calculateSwissVAT: jest.fn((cents: number) => Math.round(cents * 0.081)),
+vi.mock('@/lib/payments/payments-fees', () => ({
+  calculateSwissVAT: vi.fn((cents: number) => Math.round(cents * 0.081)),
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { createInvoice, buildInvoiceLineItem } from '../payments-invoice';
 
 // ---------------------------------------------------------------------------
@@ -113,7 +116,7 @@ const BASE_PARAMS = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbInsert.mockImplementation(() =>
     makeChain([{ id: 'inv-1', invoiceNumber: 'INV-2026-001' }]),
   );
@@ -183,8 +186,8 @@ describe('createInvoice', () => {
     let capturedValues: Record<string, unknown> | null = null;
     mockDbInsert.mockImplementationOnce(() => {
       const chain = makeChain([{ id: 'inv-1', invoiceNumber: 'INV-2026-001' }]);
-      const origValues = chain.values as jest.Mock;
-      chain.values = jest.fn((...args: unknown[]) => {
+      const origValues = chain.values as Mock;
+      chain.values = vi.fn((...args: unknown[]) => {
         capturedValues = args[0] as Record<string, unknown>;
         return origValues(...args);
       });
@@ -202,8 +205,8 @@ describe('createInvoice', () => {
     let capturedValues: Record<string, unknown> | null = null;
     mockDbInsert.mockImplementationOnce(() => {
       const chain = makeChain([{ id: 'inv-1', invoiceNumber: 'INV-2026-001' }]);
-      const origValues = chain.values as jest.Mock;
-      chain.values = jest.fn((...args: unknown[]) => {
+      const origValues = chain.values as Mock;
+      chain.values = vi.fn((...args: unknown[]) => {
         capturedValues = args[0] as Record<string, unknown>;
         return origValues(...args);
       });
@@ -219,8 +222,8 @@ describe('createInvoice', () => {
     let capturedValues: Record<string, unknown> | null = null;
     mockDbInsert.mockImplementationOnce(() => {
       const chain = makeChain([{ id: 'inv-1', invoiceNumber: 'INV-2026-001' }]);
-      const origValues = chain.values as jest.Mock;
-      chain.values = jest.fn((...args: unknown[]) => {
+      const origValues = chain.values as Mock;
+      chain.values = vi.fn((...args: unknown[]) => {
         capturedValues = args[0] as Record<string, unknown>;
         return origValues(...args);
       });
@@ -238,8 +241,8 @@ describe('createInvoice', () => {
     let capturedValues: Record<string, unknown> | null = null;
     mockDbInsert.mockImplementationOnce(() => {
       const chain = makeChain([{ id: 'inv-1', invoiceNumber: 'INV-2026-001' }]);
-      const origValues = chain.values as jest.Mock;
-      chain.values = jest.fn((...args: unknown[]) => {
+      const origValues = chain.values as Mock;
+      chain.values = vi.fn((...args: unknown[]) => {
         capturedValues = args[0] as Record<string, unknown>;
         return origValues(...args);
       });

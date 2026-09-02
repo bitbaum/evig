@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/public/blog/submit (public, optional auth)
  *
@@ -7,37 +7,37 @@
  *   POST - 429 (rate limited), 400 (invalid body), 200 (success)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockCheckRateLimit = jest.fn();
-const mockGetClientIp = jest.fn();
+const mockCheckRateLimit = vi.fn();
+const mockGetClientIp = vi.fn();
 
-jest.mock('@/lib/auth/rate-limiter', () => ({
+vi.mock('@/lib/auth/rate-limiter', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
   getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
 }));
 
-const mockSendEmail = jest.fn();
+const mockSendEmail = vi.fn();
 
-jest.mock('@/lib/email', () => ({
+vi.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail(...args),
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'https://revampit.test',
 }));
 
-const mockGenerateSlug = jest.fn();
+const mockGenerateSlug = vi.fn();
 
-jest.mock('@/lib/utils/slug', () => ({
+vi.mock('@/lib/utils/slug', () => ({
   generateSlug: (...args: unknown[]) => mockGenerateSlug(...args),
 }));
 
-jest.mock('@/config/approval-status', () => ({
+vi.mock('@/config/approval-status', () => ({
   APPROVAL_STATUS: {
     PENDING: 'pending',
     APPROVED: 'approved',
@@ -47,14 +47,14 @@ jest.mock('@/config/approval-status', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -64,7 +64,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   blogCategories: {
     id: 'bc_id',
     name: 'bc_name',
@@ -91,7 +91,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -101,15 +101,14 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
+vi.mock('@/lib/schemas', () => ({
   validateBody: (...args: unknown[]) => mockValidateBody(...args),
   BlogSubmissionSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -120,11 +119,12 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const VALID_SUBMISSION = {
@@ -138,7 +138,7 @@ const VALID_SUBMISSION = {
 };
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 
   mockAuth.mockResolvedValue(null); // anonymous by default
   mockGetClientIp.mockReturnValue('127.0.0.1');
@@ -150,7 +150,7 @@ beforeEach(() => {
   mockValidateBody.mockReturnValue({ success: true, data: VALID_SUBMISSION });
 
   // Default select for category lookup: returns category
-  const mockWhereFn = jest.fn().mockResolvedValue([{ id: 'cat-1' }]);
+  const mockWhereFn = vi.fn().mockResolvedValue([{ id: 'cat-1' }]);
   mockFrom.mockReturnValue({ where: mockWhereFn });
   mockSelect.mockReturnValue({ from: mockFrom });
 
@@ -187,7 +187,6 @@ describe('POST /api/public/blog/submit — rate limiting', () => {
 
 describe('POST /api/public/blog/submit — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server') as typeof import('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(
@@ -213,12 +212,12 @@ describe('POST /api/public/blog/submit — validation', () => {
 describe('POST /api/public/blog/submit — success', () => {
   it('returns 200 with submission id (anonymous)', async () => {
     // Category select: category found
-    const mockWhereFn = jest.fn().mockResolvedValue([{ id: 'cat-1' }]);
+    const mockWhereFn = vi.fn().mockResolvedValue([{ id: 'cat-1' }]);
     mockFrom.mockReturnValue({ where: mockWhereFn });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
     // Admin users select: no admins (avoids fan-out email complexity)
-    const mockAdminWhere = jest.fn().mockResolvedValue([]);
+    const mockAdminWhere = vi.fn().mockResolvedValue([]);
     mockFrom.mockReturnValue({ where: mockAdminWhere });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
@@ -243,12 +242,12 @@ describe('POST /api/public/blog/submit — success', () => {
     });
 
     // Category select
-    const mockWhereFn = jest.fn().mockResolvedValue([{ id: 'cat-1' }]);
+    const mockWhereFn = vi.fn().mockResolvedValue([{ id: 'cat-1' }]);
     mockFrom.mockReturnValue({ where: mockWhereFn });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
     // Admin users select: no admins
-    const mockAdminWhere = jest.fn().mockResolvedValue([]);
+    const mockAdminWhere = vi.fn().mockResolvedValue([]);
     mockFrom.mockReturnValue({ where: mockAdminWhere });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
@@ -269,16 +268,16 @@ describe('POST /api/public/blog/submit — success', () => {
     // logger.info('Blog submission confirmation email sent') unconditionally —
     // a false-positive success log on a silent failure. Regression: the
     // (resolved) failure must surface as a warn so an operator can investigate.
-    const logger = jest.requireMock('@/lib/logger').logger as {
-      info: jest.Mock;
-      warn: jest.Mock;
+    const logger = (await import('@/lib/logger')).logger as unknown as {
+      info: Mock;
+      warn: Mock;
     };
     mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' });
 
-    const mockWhereFn = jest.fn().mockResolvedValue([{ id: 'cat-1' }]);
+    const mockWhereFn = vi.fn().mockResolvedValue([{ id: 'cat-1' }]);
     mockFrom.mockReturnValue({ where: mockWhereFn });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
-    const mockAdminWhere = jest.fn().mockResolvedValue([]);
+    const mockAdminWhere = vi.fn().mockResolvedValue([]);
     mockFrom.mockReturnValue({ where: mockAdminWhere });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
@@ -305,19 +304,19 @@ describe('POST /api/public/blog/submit — success', () => {
     // result inspection — every admin email failure was silently dropped
     // and admins never saw the submission ping. Regression: per-admin
     // (resolved) failure logs a warn with the admin email.
-    const logger = jest.requireMock('@/lib/logger').logger as {
-      info: jest.Mock;
-      warn: jest.Mock;
+    const logger = (await import('@/lib/logger')).logger as unknown as {
+      info: Mock;
+      warn: Mock;
     };
     // First sendEmail = submitter confirmation (succeeds), second = admin (fails resolved)
     mockSendEmail
       .mockResolvedValueOnce({ success: true, messageId: 'msg-1' })
       .mockResolvedValueOnce({ success: false, error: 'Mailbox full' });
 
-    const mockWhereFn = jest.fn().mockResolvedValue([{ id: 'cat-1' }]);
+    const mockWhereFn = vi.fn().mockResolvedValue([{ id: 'cat-1' }]);
     mockFrom.mockReturnValue({ where: mockWhereFn });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
-    const mockAdminWhere = jest.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }]);
+    const mockAdminWhere = vi.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }]);
     mockFrom.mockReturnValue({ where: mockAdminWhere });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
@@ -343,18 +342,18 @@ describe('POST /api/public/blog/submit — success', () => {
     // throw despite the inner catch (e.g. unexpected exceptions outside the
     // SMTP path). Per-admin rejected logging gives the operator the failed
     // admin email so they can investigate.
-    const logger = jest.requireMock('@/lib/logger').logger as {
-      info: jest.Mock;
-      warn: jest.Mock;
+    const logger = (await import('@/lib/logger')).logger as unknown as {
+      info: Mock;
+      warn: Mock;
     };
     mockSendEmail
       .mockResolvedValueOnce({ success: true, messageId: 'msg-1' })
       .mockRejectedValueOnce(new Error('connection refused'));
 
-    const mockWhereFn = jest.fn().mockResolvedValue([{ id: 'cat-1' }]);
+    const mockWhereFn = vi.fn().mockResolvedValue([{ id: 'cat-1' }]);
     mockFrom.mockReturnValue({ where: mockWhereFn });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
-    const mockAdminWhere = jest.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }]);
+    const mockAdminWhere = vi.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }]);
     mockFrom.mockReturnValue({ where: mockAdminWhere });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
@@ -373,12 +372,12 @@ describe('POST /api/public/blog/submit — success', () => {
 
   it('sends confirmation email to submitter', async () => {
     // Category select
-    const mockWhereFn = jest.fn().mockResolvedValue([{ id: 'cat-1' }]);
+    const mockWhereFn = vi.fn().mockResolvedValue([{ id: 'cat-1' }]);
     mockFrom.mockReturnValue({ where: mockWhereFn });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 
     // Admin users select: no admins
-    const mockAdminWhere = jest.fn().mockResolvedValue([]);
+    const mockAdminWhere = vi.fn().mockResolvedValue([]);
     mockFrom.mockReturnValue({ where: mockAdminWhere });
     mockSelect.mockReturnValueOnce({ from: mockFrom });
 

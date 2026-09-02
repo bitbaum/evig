@@ -1,18 +1,19 @@
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ProtocolDetailClient from '../ProtocolDetailClient';
 import type { ProtocolDetail } from '@/lib/schemas/protocols';
 
-const refreshMock = jest.fn();
+const refreshMock = vi.fn();
 
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
     refresh: refreshMock,
-    push: jest.fn(),
+    push: vi.fn(),
   }),
 }));
 
 describe('ProtocolDetailClient', () => {
-  const scrollIntoViewMock = jest.fn();
+  const scrollIntoViewMock = vi.fn();
 
   const baseProtocol: ProtocolDetail = {
     id: 'p-1',
@@ -43,10 +44,10 @@ describe('ProtocolDetailClient', () => {
     refreshMock.mockReset();
     scrollIntoViewMock.mockReset();
     Element.prototype.scrollIntoView = scrollIntoViewMock;
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ success: true }),
-    }) as jest.Mock;
+    }) as Mock;
   });
 
   it('uses notes reprocess endpoint and body (content) in review mode', async () => {

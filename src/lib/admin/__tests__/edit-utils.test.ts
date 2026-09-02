@@ -17,10 +17,11 @@
  * Mock the logger to silence the info-log inside createEditSnapshot.
  */
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
+import type { Mock } from 'vitest';
 import {
   createEditSnapshot,
   appendEditHistory,

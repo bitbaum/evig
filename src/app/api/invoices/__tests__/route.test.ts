@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/invoices (create invoice) and GET /api/invoices (list invoices)
  *
@@ -8,17 +8,16 @@
  *   GET  - 401 (unauthenticated), 200 (list invoices)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -26,19 +25,19 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockLimit = jest.fn();
-const mockOffset = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
-const mockExecute = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockLimit = vi.fn();
+const mockOffset = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
+const mockExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -49,7 +48,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   invoices: {
     id: 'inv_id',
     invoiceNumber: 'inv_number',
@@ -68,7 +67,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -80,13 +79,13 @@ jest.mock('drizzle-orm', () => ({
   getTableColumns: () => ({}),
 }));
 
-const mockCalculateTaxes = jest.fn();
+const mockCalculateTaxes = vi.fn();
 
-jest.mock('@/lib/payments/tax-compliance', () => ({
+vi.mock('@/lib/payments/tax-compliance', () => ({
   calculateTaxes: (...args: unknown[]) => mockCalculateTaxes(...args),
 }));
 
-jest.mock('@/config/invoice-status', () => ({
+vi.mock('@/config/invoice-status', () => ({
   INVOICE_STATUS: {
     DRAFT: 'draft',
     SENT: 'sent',
@@ -96,15 +95,14 @@ jest.mock('@/config/invoice-status', () => ({
   },
 }));
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   CreateInvoiceSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -122,11 +120,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST, GET } from '../route';
 
 const MOCK_SESSION = {
@@ -205,7 +203,7 @@ function makeRequest(method = 'GET', body?: unknown, url = 'http://localhost/api
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default tax calculation
@@ -263,7 +261,6 @@ describe('POST /api/invoices — unauthenticated', () => {
 
 describe('POST /api/invoices — validation', () => {
   it('returns 400 when body validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Invalid body' }, { status: 400 }),
@@ -350,8 +347,8 @@ describe('GET /api/invoices — success', () => {
         return { from: mockFrom };
       }
       // count query: db.select({ total: sql... }).from(invoices).where(where)
-      const mockCountWhere = jest.fn().mockResolvedValue([{ total: '1' }]);
-      const mockCountFrom = jest.fn().mockReturnValue({ where: mockCountWhere });
+      const mockCountWhere = vi.fn().mockResolvedValue([{ total: '1' }]);
+      const mockCountFrom = vi.fn().mockReturnValue({ where: mockCountWhere });
       return { from: mockCountFrom };
     });
 

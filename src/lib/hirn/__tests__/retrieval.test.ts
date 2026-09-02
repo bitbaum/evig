@@ -33,8 +33,8 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -45,47 +45,48 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbDelete = jest.fn(() => makeChain([]));
+const mockDbExecute = vi.fn();
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbDelete = vi.fn((..._args: unknown[]) => makeChain([]));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    delete: (...args: unknown[]) => mockDbDelete(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   hirnDocuments: { id: 'hd_id', sourceType: 'hd_sourceType' },
   hirnChunks: { id: 'hc_id', documentId: 'hc_documentId' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
-    join: jest.fn().mockReturnValue({ __join: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
+    join: vi.fn().mockReturnValue({ __join: true }),
   }),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  count: jest.fn().mockReturnValue({ __count: 0 }),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  count: vi.fn().mockReturnValue({ __count: 0 }),
 }));
 
-const mockGenerateEmbeddings = jest.fn();
+const mockGenerateEmbeddings = vi.fn();
 
-jest.mock('../providers', () => ({
-  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings.apply(null, args),
+vi.mock('../providers', () => ({
+  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   searchSimilar,
   formatContext,
@@ -129,7 +130,7 @@ function makeRetrievalResult(overrides: Partial<RetrievalResult> = {}): Retrieva
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbExecute.mockResolvedValue({ rows: [] });
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockDbDelete.mockImplementation(() => makeChain([]));

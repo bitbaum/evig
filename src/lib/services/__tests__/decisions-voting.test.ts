@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Unit tests for decisions-voting pure functions:
  *  - validateVoteData  (vote input validation for all 6 methods)

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/workshops/registration/[instanceId] (optional auth)
  *
@@ -9,21 +9,21 @@
  *         200 {registered: true, registration: {...}} when registered
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockSelect = jest.fn();
+const mockSelect = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshopRegistrations: {
     id: 'wr_id',
     userId: 'wr_userId',
@@ -44,17 +44,16 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -63,7 +62,7 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_SESSION = {
@@ -83,15 +82,15 @@ const MOCK_REGISTRATION = {
 
 // Build a query chain with innerJoins and where clause
 function makeRegistrationQueryChain(reg: unknown) {
-  const where = jest.fn().mockResolvedValue(reg ? [reg] : []);
-  const innerJoin2 = jest.fn().mockReturnValue({ where });
-  const innerJoin1 = jest.fn().mockReturnValue({ innerJoin: innerJoin2 });
-  const from = jest.fn().mockReturnValue({ innerJoin: innerJoin1 });
+  const where = vi.fn().mockResolvedValue(reg ? [reg] : []);
+  const innerJoin2 = vi.fn().mockReturnValue({ where });
+  const innerJoin1 = vi.fn().mockReturnValue({ innerJoin: innerJoin2 });
+  const from = vi.fn().mockReturnValue({ innerJoin: innerJoin1 });
   return { from };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(null); // unauthenticated by default
 });
 

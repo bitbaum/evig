@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for PUT /api/admin/workshops/registrations/[id]
  *
@@ -7,19 +7,18 @@
  *   PUT - 401, 400 (validation), 404, 400 (no fields), 200 (no email), 200 (with email)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -32,17 +31,17 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockValidateBody = jest.fn();
-const mockSendEmail = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockValidateBody = vi.fn();
+const mockSendEmail = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -55,7 +54,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshopRegistrations: {
     id: 'wr_id',
     workshopInstanceId: 'wr_instanceId',
@@ -71,14 +70,14 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
 }));
 
-jest.mock('@/config/workshop-registration-status', () => ({
+vi.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
     CONFIRMED: 'confirmed',
     CANCELLED: 'cancelled',
@@ -88,21 +87,20 @@ jest.mock('@/config/workshop-registration-status', () => ({
   },
 }));
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   AdminWorkshopRegistrationUpdateSchema: {},
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
+vi.mock('@/lib/email', () => ({
+  sendEmail: (...args: unknown[]) => mockSendEmail(...args),
 }));
 
-jest.mock('@/lib/date-formats', () => ({
+vi.mock('@/lib/date-formats', () => ({
   formatDateTimeWithWeekday: (_date: unknown) => 'Montag, 1. Juni 2026, 10:00',
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -114,11 +112,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PUT } from '../route';
 
 const MOCK_SESSION = {
@@ -154,7 +152,7 @@ function makeContext(id = 'reg-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: validateBody succeeds with status=attended (no email)
@@ -183,7 +181,6 @@ describe('PUT /api/admin/workshops/registrations/[id] — unauthenticated', () =
 
 describe('PUT /api/admin/workshops/registrations/[id] — validation', () => {
   it('returns 400 when body validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Invalid body' }, { status: 400 }),
@@ -236,7 +233,7 @@ describe('PUT /api/admin/workshops/registrations/[id] — success', () => {
     const response = await PUT(makeRequest({ status: 'confirmed' }), makeContext());
     expect(response.status).toBe(200); // status change applies regardless
 
-    const { logger } = require('@/lib/logger');
+    const { logger } = (await import('@/lib/logger')) as any;
     expect(logger.warn).toHaveBeenCalledWith(
       'Workshop status update email failed (resolved)',
       expect.objectContaining({ newStatus: 'confirmed', error: 'Listmonk disabled' }),

@@ -17,14 +17,14 @@
  *   - isProcessing lifecycle (true mid-flight, false after via finally)
  */
 
-const mockApiFetch = jest.fn();
+const mockApiFetch = vi.fn();
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 import { renderHook, act, waitFor } from '@testing-library/react';

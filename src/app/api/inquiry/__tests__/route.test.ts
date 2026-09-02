@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/inquiry
  *
@@ -21,48 +21,44 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockCheckRateLimit = jest.fn();
-const mockGetClientIp = jest.fn().mockReturnValue('127.0.0.1');
+const mockCheckRateLimit = vi.fn();
+const mockGetClientIp = vi.fn().mockReturnValue('127.0.0.1');
 
-jest.mock('@/lib/auth/rate-limiter', () => ({
-  checkRateLimit: (...args: unknown[]) => mockCheckRateLimit.apply(null, args),
-  getClientIp: (...args: unknown[]) => mockGetClientIp.apply(null, args),
+vi.mock('@/lib/auth/rate-limiter', () => ({
+  checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
+  getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
 }));
 
-const mockSendCustomEmail = jest.fn().mockResolvedValue(undefined);
+const mockSendCustomEmail = vi.fn().mockResolvedValue(undefined);
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
 }));
 
-jest.mock('@/lib/email/templates/inquiry', () => ({
-  inquiryNotification: jest.fn().mockReturnValue({ subject: 'Notification', html: '', text: '' }),
-  inquiryConfirmation: jest.fn().mockReturnValue({ subject: 'Confirmation', html: '', text: '' }),
+vi.mock('@/lib/email/templates/inquiry', () => ({
+  inquiryNotification: vi.fn().mockReturnValue({ subject: 'Notification', html: '', text: '' }),
+  inquiryConfirmation: vi.fn().mockReturnValue({ subject: 'Confirmation', html: '', text: '' }),
 }));
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   CONTACT: { email: 'kontakt@revamp-it.ch' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiBadRequest: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 400 });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
   apiRateLimited: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 429 });
   },
 }));
@@ -71,7 +67,8 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -94,7 +91,7 @@ function makeRequest(body: unknown) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 9, resetAt: 0 });
   mockSendCustomEmail.mockResolvedValue(undefined);
 });
@@ -194,7 +191,7 @@ describe('POST /api/inquiry — resolved-failure swallow lock', () => {
     // throwing. A bare `.catch()` would miss this — the route uses
     // `.then(r => if !r.success warn)` to detect resolved-failure. Without
     // this assertion a refactor could silently revert to bare-catch.
-    const { logger } = jest.requireMock('@/lib/logger') as { logger: { warn: jest.Mock } };
+    const { logger } = (await import('@/lib/logger')) as unknown as { logger: { warn: Mock } };
     mockSendCustomEmail.mockResolvedValue({ success: false, error: 'Listmonk 500' });
 
     const response = await POST(makeRequest(VALID_BODY));

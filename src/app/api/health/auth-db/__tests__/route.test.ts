@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/health/auth-db
  *
@@ -20,32 +20,30 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockExecute = jest.fn();
+const mockExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   users: {},
   userProfiles: {},
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'SELECT 1' }), { raw: jest.fn() }),
-  getTableName: jest.fn().mockReturnValue('users'),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'SELECT 1' }), { raw: vi.fn() }),
+  getTableName: vi.fn().mockReturnValue('users'),
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown, status = 200) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data }, { status });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
 }));
@@ -54,6 +52,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -68,7 +67,7 @@ function setupHealthyMocks() {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   setupHealthyMocks();
 });
 

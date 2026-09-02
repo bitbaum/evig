@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/health
  *
@@ -21,29 +21,28 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'sql' }), { raw: jest.fn() }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'sql' }), { raw: vi.fn() }),
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   MEILISEARCH_URL: 'http://localhost:7700',
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -54,6 +53,8 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
+import type { Mock } from 'vitest';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -64,11 +65,11 @@ const MEILISEARCH_OK = new Response(JSON.stringify({ status: 'available' }), { s
 const MEILISEARCH_DOWN = new Response(null, { status: 503 });
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockDbExecute.mockResolvedValue({ rows: [{ now: new Date().toISOString() }] });
 
   // Static mock for global fetch — survives resetAllMocks
-  global.fetch = jest.fn().mockResolvedValue(MEILISEARCH_OK);
+  global.fetch = vi.fn().mockResolvedValue(MEILISEARCH_OK);
 });
 
 // ============================================================================
@@ -137,7 +138,7 @@ describe('GET /api/health — database unhealthy', () => {
 
 describe('GET /api/health — meilisearch unhealthy', () => {
   it('returns 200 with degraded status when Meilisearch is down', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce(MEILISEARCH_DOWN);
+    (global.fetch as Mock).mockResolvedValueOnce(MEILISEARCH_DOWN);
     const response = await GET();
     expect(response.status).toBe(200);
     const body = await response.json();
@@ -145,7 +146,7 @@ describe('GET /api/health — meilisearch unhealthy', () => {
   });
 
   it('reports meilisearch as unhealthy', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce(MEILISEARCH_DOWN);
+    (global.fetch as Mock).mockResolvedValueOnce(MEILISEARCH_DOWN);
     const response = await GET();
     const body = await response.json();
     expect(body.data.services.meilisearch.status).toBe('unhealthy');

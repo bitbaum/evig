@@ -12,12 +12,12 @@ const ITEMS = [
 
 describe('pickNextDeadline', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2026-06-10T12:00:00Z'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-06-10T12:00:00Z'));
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('returns the soonest future deadline', () => {

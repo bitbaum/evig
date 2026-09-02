@@ -17,10 +17,10 @@
  * Locks request shape, error message fallbacks, and isLoading lifecycle.
  */
 
-const mockApiFetch = jest.fn();
+const mockApiFetch = vi.fn();
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
 }));
 
 import { renderHook, act, waitFor } from '@testing-library/react';

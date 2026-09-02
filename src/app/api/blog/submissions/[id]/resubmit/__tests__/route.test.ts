@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/blog/submissions/[id]/resubmit
  *
@@ -24,19 +24,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth:
     (handler: (req: Request, session: unknown, context: unknown) => unknown) =>
     (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: unknown }).user) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -45,23 +44,23 @@ jest.mock('@/lib/api/middleware', () => ({
 }));
 
 // select chain: select().from().where()
-const mockSelectWhere = jest.fn();
-const mockSelectFrom = jest.fn().mockReturnValue({ where: mockSelectWhere });
-const mockSelect = jest.fn().mockReturnValue({ from: mockSelectFrom });
+const mockSelectWhere = vi.fn();
+const mockSelectFrom = vi.fn().mockReturnValue({ where: mockSelectWhere });
+const mockSelect = vi.fn().mockReturnValue({ from: mockSelectFrom });
 
 // update chain: update().set().where()
-const mockUpdateWhere = jest.fn();
-const mockUpdateSet = jest.fn().mockReturnValue({ where: mockUpdateWhere });
-const mockUpdate = jest.fn().mockReturnValue({ set: mockUpdateSet });
+const mockUpdateWhere = vi.fn();
+const mockUpdateSet = vi.fn().mockReturnValue({ where: mockUpdateWhere });
+const mockUpdate = vi.fn().mockReturnValue({ set: mockUpdateSet });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockSelect.apply(null, args),
-    update: (...args: unknown[]) => mockUpdate.apply(null, args),
+    select: (...args: unknown[]) => mockSelect(...args),
+    update: (...args: unknown[]) => mockUpdate(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   blogSubmissions: {
     id: 'bs_id',
     userId: 'bs_userId',
@@ -76,13 +75,13 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'sql' }), { raw: jest.fn() }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'sql' }), { raw: vi.fn() }),
 }));
 
-jest.mock('@/config/approval-status', () => ({
+vi.mock('@/config/approval-status', () => ({
   APPROVAL_STATUS: {
     PENDING: 'pending',
     APPROVED: 'approved',
@@ -92,18 +91,17 @@ jest.mock('@/config/approval-status', () => ({
   },
 }));
 
-const mockNotifyAllStaff = jest.fn().mockResolvedValue(undefined);
+const mockNotifyAllStaff = vi.fn().mockResolvedValue(undefined);
 
-jest.mock('@/lib/services/notifications', () => ({
-  notifyAllStaff: (...args: unknown[]) => mockNotifyAllStaff.apply(null, args),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyAllStaff: (...args: unknown[]) => mockNotifyAllStaff(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -121,7 +119,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -166,7 +164,7 @@ function makeContext(id = 'sub-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockSelect.mockReturnValue({ from: mockSelectFrom });
   mockSelectFrom.mockReturnValue({ where: mockSelectWhere });

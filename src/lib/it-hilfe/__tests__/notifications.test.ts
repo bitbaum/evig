@@ -29,32 +29,32 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.groupBy = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.groupBy = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
   return chain;
 }
 
-const mockDbSelect = jest.fn(() => makeChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
 
-jest.mock('@/db', () => ({
-  db: { select: (...args: unknown[]) => mockDbSelect.apply(null, args) },
+vi.mock('@/db', () => ({
+  db: { select: (...args: unknown[]) => mockDbSelect(...args) },
 }));
 
-jest.mock('@/db/schema/itHilfe', () => ({
+vi.mock('@/db/schema/itHilfe', () => ({
   userSkills: { userId: 'us_userId', skillId: 'us_skillId' },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('@/db/schema/services', () => ({
+vi.mock('@/db/schema/services', () => ({
   repairerProfiles: {
     userId: 'rp_userId',
     isActive: 'rp_isActive',
@@ -62,49 +62,50 @@ jest.mock('@/db/schema/services', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  ne: jest.fn().mockReturnValue({ __ne: true }),
-  inArray: jest.fn().mockReturnValue({ __inArray: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  ne: vi.fn().mockReturnValue({ __ne: true }),
+  inArray: vi.fn().mockReturnValue({ __inArray: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
-const mockSendCustomEmail = jest.fn();
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
+const mockSendCustomEmail = vi.fn();
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
 }));
 
-const mockNotifyUsers = jest.fn();
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: (...args: unknown[]) => mockNotifyUsers.apply(null, args),
+const mockNotifyUsers = vi.fn();
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: (...args: unknown[]) => mockNotifyUsers(...args),
 }));
 
-jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  adminNewITHilfeRequest: jest.fn().mockReturnValue({ subject: 'Admin', html: 'H', text: 'T' }),
+vi.mock('@/lib/email/templates/it-hilfe', () => ({
+  adminNewITHilfeRequest: vi.fn().mockReturnValue({ subject: 'Admin', html: 'H', text: 'T' }),
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
-  getCategoryById: jest.fn().mockReturnValue({ name: 'Software' }),
-  getUrgencyById: jest.fn().mockReturnValue({ name: 'Dringend' }),
-  getServiceTypeById: jest.fn().mockReturnValue({ name: 'Fernwartung' }),
-  getSkillById: jest.fn().mockReturnValue({ name: 'Windows' }),
+vi.mock('@/config/it-hilfe', () => ({
+  getCategoryById: vi.fn().mockReturnValue({ name: 'Software' }),
+  getUrgencyById: vi.fn().mockReturnValue({ name: 'Dringend' }),
+  getServiceTypeById: vi.fn().mockReturnValue({ name: 'Fernwartung' }),
+  getSkillById: vi.fn().mockReturnValue({ name: 'Windows' }),
   REVAMPIT_NOTIFICATION_EMAIL: 'notify@revamp-it.ch',
 }));
 
-jest.mock('@/config/urls', () => ({ APP_URL: 'http://localhost:3000' }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'http://localhost:3000' }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { sendRequestCreatedNotifications, sendItHilfeNotification } from '../notifications';
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
 
@@ -127,7 +128,7 @@ function flushAsync() {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockSendCustomEmail.mockResolvedValue({ success: true, messageId: 'msg-1' });
   mockNotifyUsers.mockResolvedValue(undefined);

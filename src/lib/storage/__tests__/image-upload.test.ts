@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 
 /**
@@ -8,20 +8,31 @@
  * The S3 SDK and `fs` are mocked so the tests never touch the network or disk.
  */
 
-const mockSend = jest.fn();
+const mockSend = vi.fn();
 
-jest.mock('@aws-sdk/client-s3', () => ({
-  S3Client: jest.fn(() => ({ send: mockSend })),
-  PutObjectCommand: jest.fn((input: unknown) => ({ __cmd: 'put', input })),
-  DeleteObjectCommand: jest.fn((input: unknown) => ({ __cmd: 'delete', input })),
+vi.mock('@aws-sdk/client-s3', () => ({
+  // vitest's vi.fn(), unlike jest's jest.fn(), invokes these on `new S3Client()`
+  // etc. -- an arrow function isn't a valid constructor.
+  S3Client: vi.fn(function () {
+    return { send: mockSend };
+  }),
+  PutObjectCommand: vi.fn(function (input: unknown) {
+    return { __cmd: 'put', input };
+  }),
+  DeleteObjectCommand: vi.fn(function (input: unknown) {
+    return { __cmd: 'delete', input };
+  }),
 }));
 
-jest.mock('fs', () => ({
-  existsSync: jest.fn(() => true),
-  mkdirSync: jest.fn(),
-  writeFileSync: jest.fn(),
-  unlinkSync: jest.fn(),
-}));
+vi.mock('fs', () => {
+  const fsMock = {
+    existsSync: vi.fn((..._args: unknown[]) => true),
+    mkdirSync: vi.fn(),
+    writeFileSync: vi.fn(),
+    unlinkSync: vi.fn(),
+  };
+  return { ...fsMock, default: fsMock };
+});
 
 import {
   uploadImage,

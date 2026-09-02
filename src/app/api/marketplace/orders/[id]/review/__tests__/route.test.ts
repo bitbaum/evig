@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/marketplace/orders/[id]/review
  *
@@ -17,17 +17,16 @@
 // Auth mock
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -39,17 +38,17 @@ jest.mock('@/lib/api/middleware', () => ({
 // Schema + validation mocks
 // ---------------------------------------------------------------------------
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
 }));
 
 // ---------------------------------------------------------------------------
 // Config mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   ORDER_STATUS: {
     PENDING_PAYMENT: 'pending_payment',
     PAID: 'paid',
@@ -61,22 +60,21 @@ jest.mock('@/config/marketplace', () => ({
   },
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   REVIEW_TARGET_TYPES: { LISTING: 'listing' },
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   NOTIFICATION_TYPES: { MARKETPLACE: 'marketplace' },
 }));
 
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
 
 // ---------------------------------------------------------------------------
 // Helper mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -95,41 +93,41 @@ jest.mock('@/lib/api/helpers', () => {
 // Review + notification mocks
 // ---------------------------------------------------------------------------
 
-const mockCreateReview = jest.fn();
+const mockCreateReview = vi.fn();
 
-jest.mock('@/lib/reviews/create-review', () => ({
+vi.mock('@/lib/reviews/create-review', () => ({
   createReview: (...args: unknown[]) => mockCreateReview(...args),
 }));
 
-jest.mock('@/lib/services/notifications', () => ({
-  createNotification: jest.fn().mockResolvedValue(undefined),
+vi.mock('@/lib/services/notifications', () => ({
+  createNotification: vi.fn().mockResolvedValue(undefined),
 }));
 
 // ---------------------------------------------------------------------------
 // Email mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/email/templates/marketplace', () => ({
-  orderReviewReceived: jest.fn().mockReturnValue({}),
+vi.mock('@/lib/email/templates/marketplace', () => ({
+  orderReviewReceived: vi.fn().mockReturnValue({}),
 }));
 
 // ---------------------------------------------------------------------------
 // Logger mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // drizzle-orm mock
 // ---------------------------------------------------------------------------
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -141,7 +139,7 @@ jest.mock('drizzle-orm', () => ({
 // Schema mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listings: { id: 'l_id', sellerId: 'l_sellerId', title: 'l_title', status: 'l_status' },
   marketplaceOrders: {
     id: 'mo_id',
@@ -167,12 +165,12 @@ jest.mock('@/db/schema', () => ({
 // Drizzle db mock
 // ---------------------------------------------------------------------------
 
-const mockSelect = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -186,7 +184,7 @@ jest.mock('@/db', () => ({
 // Imports (after all mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -243,16 +241,16 @@ function wireSelects(orderData: unknown, existingReviews: unknown[] = []) {
     callIndex++;
     if (callIndex === 1) {
       // order fetch
-      const whereFn = jest.fn().mockResolvedValue(orderData ? [orderData] : []);
-      const innerJoinFn = jest.fn();
-      const fromFn = jest.fn().mockReturnValue({ innerJoin: innerJoinFn, where: whereFn });
+      const whereFn = vi.fn().mockResolvedValue(orderData ? [orderData] : []);
+      const innerJoinFn = vi.fn();
+      const fromFn = vi.fn().mockReturnValue({ innerJoin: innerJoinFn, where: whereFn });
       innerJoinFn.mockReturnValue({ innerJoin: innerJoinFn, where: whereFn });
       return { from: fromFn };
     } else {
       // existing reviews check
-      const limitFn = jest.fn().mockResolvedValue(existingReviews);
-      const whereFn = jest.fn().mockReturnValue({ limit: limitFn });
-      const fromFn = jest.fn().mockReturnValue({ where: whereFn });
+      const limitFn = vi.fn().mockResolvedValue(existingReviews);
+      const whereFn = vi.fn().mockReturnValue({ limit: limitFn });
+      const fromFn = vi.fn().mockReturnValue({ where: whereFn });
       return { from: fromFn };
     }
   });
@@ -262,8 +260,8 @@ function wireSelects(orderData: unknown, existingReviews: unknown[] = []) {
 // beforeEach
 // ---------------------------------------------------------------------------
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: validation passes with rating=5
@@ -283,9 +281,9 @@ beforeEach(() => {
   mockUpdateWhere.mockResolvedValue(undefined);
 
   // Re-wire fire-and-forget mocks
-  const emailMod = require('@/lib/email');
+  const emailMod = (await import('@/lib/email')) as any;
   emailMod.sendCustomEmail.mockResolvedValue({ success: true });
-  const notifyMod = require('@/lib/services/notifications');
+  const notifyMod = (await import('@/lib/services/notifications')) as any;
   notifyMod.createNotification.mockResolvedValue(undefined);
 });
 
@@ -352,7 +350,6 @@ describe('POST review — already reviewed (reviewedAt)', () => {
 
 describe('POST review — validation fails', () => {
   it('returns 400 when body validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Ungültig' }, { status: 400 }),

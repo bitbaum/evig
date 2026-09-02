@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/admin/marketplace/orders
  *
@@ -15,19 +15,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -35,17 +34,17 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockLimit = jest.fn();
-const mockOffset = jest.fn();
-const mockValidateQuery = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockLimit = vi.fn();
+const mockOffset = vi.fn();
+const mockValidateQuery = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -54,7 +53,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   marketplaceOrders: {
     id: 'mo_id',
     status: 'mo_status',
@@ -74,7 +73,7 @@ jest.mock('@/db/schema', () => ({
 }));
 
 // alias is called at module init
-jest.mock('drizzle-orm/pg-core', () => ({
+vi.mock('drizzle-orm/pg-core', () => ({
   alias: (_table: unknown, name: string) => ({
     id: `${name}_id`,
     name: `${name}_name`,
@@ -82,7 +81,7 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   desc: (col: unknown) => ({ __desc: col }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -90,17 +89,16 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
 }));
 
-jest.mock('@/lib/schemas', () => ({
-  validateQuery: (...args: unknown[]) => mockValidateQuery.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateQuery: (...args: unknown[]) => mockValidateQuery(...args),
   AdminOrdersQuerySchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -114,7 +112,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -144,7 +142,7 @@ function makeRequest(params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Count query: from().where() (sequential, first)
@@ -182,7 +180,6 @@ describe('GET /api/admin/marketplace/orders — unauthenticated', () => {
 
 describe('GET /api/admin/marketplace/orders — validation', () => {
   it('returns 400 when query is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateQuery.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Ungültige Abfrage' }, { status: 400 }),

@@ -21,9 +21,9 @@
  *   any other userId                           → "Kein Zugriff"
  */
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: jest.fn((strings: TemplateStringsArray) => ({ __sql: strings.join('') })),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: vi.fn((strings: TemplateStringsArray) => ({ __sql: strings.join('') })),
 }));
 
 import { buildActionUpdate } from '../appointment-actions';

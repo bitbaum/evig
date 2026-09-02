@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for PATCH /api/admin/intake/[id]/checklist
  *
@@ -16,19 +16,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -41,15 +40,15 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockWhere = vi.fn();
 // Transaction-scoped chain (SELECT … FOR UPDATE → UPDATE)
-const mockTxFor = jest.fn();
-const mockTxUpdate = jest.fn();
-const mockTxSet = jest.fn();
-const mockTxUpdateWhere = jest.fn();
+const mockTxFor = vi.fn();
+const mockTxUpdate = vi.fn();
+const mockTxSet = vi.fn();
+const mockTxUpdateWhere = vi.fn();
 
 const tx = {
   select: () => ({
@@ -66,7 +65,7 @@ const tx = {
   },
 };
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -76,7 +75,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   inventoryItems: {
     id: 'ii_id',
     aiProductId: 'ii_aiProductId',
@@ -89,7 +88,7 @@ jest.mock('@/db/schema', () => ({
   aiExtractedProducts: { id: 'aep_id', category: 'aep_category', aiProductId: 'aep_aiProductId' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   isNotNull: (col: unknown) => ({ __isNotNull: col }),
@@ -98,35 +97,35 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
 }));
 
-jest.mock('@/lib/schemas/intake', () => ({
+vi.mock('@/lib/schemas/intake', () => ({
   ChecklistUpdateSchema: {},
 }));
 
-jest.mock('@/config/intake-checklist', () => ({
-  getChecklistForDevice: jest
+vi.mock('@/config/intake-checklist', () => ({
+  getChecklistForDevice: vi
     .fn()
     .mockReturnValue([{ id: 'photos', label: 'Fotos', category: 'Aufnahme' }]),
-  isChecklistComplete: jest.fn().mockReturnValue(false),
-  hasChecklistFailure: jest.fn().mockReturnValue(false),
-  violatesSecondPersonRule: jest.fn().mockReturnValue(false),
-  getChecklistProgress: jest.fn().mockReturnValue({ completed: 1, total: 1 }),
+  isChecklistComplete: vi.fn().mockReturnValue(false),
+  hasChecklistFailure: vi.fn().mockReturnValue(false),
+  violatesSecondPersonRule: vi.fn().mockReturnValue(false),
+  getChecklistProgress: vi.fn().mockReturnValue({ completed: 1, total: 1 }),
   CHECKLIST_RESULTS: { PASS: 'pass', FAIL: 'fail', NA: 'na' },
   CHECKLIST_RESULT_LABELS: { pass: 'Bestanden', fail: 'Fehlgeschlagen', na: 'Nicht zutreffend' },
 }));
 
-const mockAppendIntakeEvent = jest.fn();
+const mockAppendIntakeEvent = vi.fn();
 
-jest.mock('@/lib/intake/timeline', () => ({
-  appendIntakeEvent: (...args: unknown[]) => mockAppendIntakeEvent.apply(null, args),
+vi.mock('@/lib/intake/timeline', () => ({
+  appendIntakeEvent: (...args: unknown[]) => mockAppendIntakeEvent(...args),
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
     INTAKE_ITEM_NOT_FOUND: 'Nicht gefunden',
@@ -136,12 +135,11 @@ jest.mock('@/config/error-messages', () => ({
   },
 }));
 
-jest.mock('@/config/marketplace-status', () => ({
+vi.mock('@/config/marketplace-status', () => ({
   MARKETPLACE_STATUS: { PUBLISHED: 'published' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -153,15 +151,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PATCH } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -200,8 +198,8 @@ function makeContext(id = 'inv-1') {
   return { params: Promise.resolve({ id }) };
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin });
@@ -218,7 +216,7 @@ beforeEach(() => {
     data: { item_id: 'photos', result: 'pass', notes: '' },
   });
 
-  const checklist = require('@/config/intake-checklist');
+  const checklist = (await import('@/config/intake-checklist')) as any;
   checklist.getChecklistForDevice.mockReturnValue([
     { id: 'photos', label: 'Fotos', category: 'Aufnahme' },
   ]);
@@ -241,7 +239,6 @@ describe('PATCH /api/admin/intake/[id]/checklist — unauthenticated', () => {
 
 describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(
@@ -260,7 +257,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
   });
 
   it('returns 400 when checklist item_id is not valid for this device', async () => {
-    const checklist = require('@/config/intake-checklist');
+    const checklist = (await import('@/config/intake-checklist')) as any;
     checklist.getChecklistForDevice.mockReturnValueOnce([]); // no applicable items
     const response = await PATCH(
       makeRequest({ item_id: 'nonexistent', result: 'pass' }),
@@ -279,7 +276,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
   });
 
   it('returns 400 when the second-person rule is violated (Vier-Augen-Prinzip)', async () => {
-    const checklist = require('@/config/intake-checklist');
+    const checklist = (await import('@/config/intake-checklist')) as any;
     checklist.violatesSecondPersonRule.mockReturnValueOnce(true);
     const response = await PATCH(makeRequest(), makeContext());
     expect(response.status).toBe(400);
@@ -288,7 +285,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
   });
 
   it('does not infer a solo override from a generic note', async () => {
-    const checklist = require('@/config/intake-checklist');
+    const checklist = (await import('@/config/intake-checklist')) as any;
     checklist.violatesSecondPersonRule.mockReturnValue(true);
     mockValidateBody.mockReturnValueOnce({
       success: true,
@@ -302,7 +299,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
   });
 
   it('allows an explicit solo sign-off with an audited override reason', async () => {
-    const checklist = require('@/config/intake-checklist');
+    const checklist = (await import('@/config/intake-checklist')) as any;
     checklist.violatesSecondPersonRule.mockReturnValue(true);
     mockValidateBody.mockReturnValueOnce({
       success: true,
@@ -333,7 +330,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
   });
 
   it('does NOT apply the second-person rule to fail verdicts', async () => {
-    const checklist = require('@/config/intake-checklist');
+    const checklist = (await import('@/config/intake-checklist')) as any;
     checklist.violatesSecondPersonRule.mockReturnValue(true);
     mockValidateBody.mockReturnValueOnce({
       success: true,
@@ -409,7 +406,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — bulk (Alles in Ordnung)', (
   // column and silently dropped most verdicts. A bulk pass is ONE request,
   // ONE serialized write, ONE audit event.
   it('marks many items in one request with a single timeline event', async () => {
-    const checklist = require('@/config/intake-checklist');
+    const checklist = (await import('@/config/intake-checklist')) as any;
     checklist.getChecklistForDevice.mockReturnValue([
       { id: 'photos', label: 'Fotos', category: 'Aufnahme' },
       { id: 'cleaning', label: 'Reinigung', category: 'Aufnahme' },
@@ -435,7 +432,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — bulk (Alles in Ordnung)', (
   });
 
   it('refuses to bulk-sign a second-person item (final QA stays individual)', async () => {
-    const checklist = require('@/config/intake-checklist');
+    const checklist = (await import('@/config/intake-checklist')) as any;
     checklist.getChecklistForDevice.mockReturnValue([
       { id: 'photos', label: 'Fotos', category: 'Aufnahme' },
       { id: 'final_qa', label: 'QK', category: 'QK', requiresSecondPerson: true },

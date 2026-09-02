@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/marketplace/orders/[id] and PATCH /api/marketplace/orders/[id]
  *
@@ -21,17 +21,16 @@
 // Auth mock
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -43,10 +42,10 @@ jest.mock('@/lib/api/middleware', () => ({
 // Schema + validation mocks
 // ---------------------------------------------------------------------------
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   validateQuery: () => ({ success: true, data: {} }),
   UpdateOrderStatusSchema: {},
 }));
@@ -55,7 +54,7 @@ jest.mock('@/lib/schemas', () => ({
 // Config mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: {
     ACTIVE: 'active',
     REMOVED: 'removed',
@@ -92,14 +91,13 @@ jest.mock('@/config/marketplace', () => ({
   COMMISSION_RATE: 0.1,
 }));
 
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
 
 // ---------------------------------------------------------------------------
 // Helper mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -119,37 +117,37 @@ jest.mock('@/lib/api/helpers', () => {
 // Payment mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/payments/payrexx-client', () => ({
-  createGateway: jest.fn().mockResolvedValue({ id: 'gw-1', link: 'https://payrexx.com/pay/gw-1' }),
-  captureTransaction: jest.fn().mockResolvedValue({ success: true }),
-  cancelTransaction: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/payments/payrexx-client', () => ({
+  createGateway: vi.fn().mockResolvedValue({ id: 'gw-1', link: 'https://payrexx.com/pay/gw-1' }),
+  captureTransaction: vi.fn().mockResolvedValue({ success: true }),
+  cancelTransaction: vi.fn().mockResolvedValue({ success: true }),
 }));
 
 // ---------------------------------------------------------------------------
 // Email mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/email/templates/marketplace', () => ({
-  orderStatusUpdate: jest.fn().mockReturnValue({}),
+vi.mock('@/lib/email/templates/marketplace', () => ({
+  orderStatusUpdate: vi.fn().mockReturnValue({}),
 }));
 
 // ---------------------------------------------------------------------------
 // Logger mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // drizzle-orm mock
 // ---------------------------------------------------------------------------
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -166,7 +164,7 @@ jest.mock('drizzle-orm', () => ({
 // Schema mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listings: {
     id: 'l_id',
     sellerId: 'l_sellerId',
@@ -234,16 +232,16 @@ jest.mock('@/db/schema', () => ({
 // Drizzle db mock
 // ---------------------------------------------------------------------------
 
-const mockSelect = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
 // The FOR UPDATE lock select inside guardedTransition. Returns the row the
 // re-check sees under the lock; set per-test to simulate a race-loser (status
 // changed between the pre-lock fetch and acquiring the lock).
-const mockTxExecute = jest.fn();
+const mockTxExecute = vi.fn();
 
-jest.mock('@/db', () => {
+vi.mock('@/db', () => {
   const mkUpdate = (...args: unknown[]) => {
     mockUpdate(...args);
     return { set: mockSet };
@@ -252,7 +250,7 @@ jest.mock('@/db', () => {
     db: {
       select: (...args: unknown[]) => mockSelect(...args),
       update: mkUpdate,
-      insert: jest.fn(),
+      insert: vi.fn(),
       // guardedTransition runs `db.transaction(cb)`; invoke cb with a fake tx
       // exposing execute (the FOR UPDATE select) + update/select.
       transaction: (cb: (tx: unknown) => unknown) =>
@@ -269,7 +267,8 @@ jest.mock('@/db', () => {
 // Imports (after all mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, PATCH } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -336,15 +335,15 @@ function makeContext(id = 'order-1') {
 
 function wireSelectReturning(orderData: unknown) {
   // fetchOrderWithDetails: from → leftJoin(listings) → innerJoin → innerJoin → where
-  const whereFn = jest.fn().mockResolvedValue(orderData ? [orderData] : []);
-  const chain: { leftJoin: jest.Mock; innerJoin: jest.Mock; where: jest.Mock } = {
-    leftJoin: jest.fn(),
-    innerJoin: jest.fn(),
+  const whereFn = vi.fn().mockResolvedValue(orderData ? [orderData] : []);
+  const chain: { leftJoin: Mock; innerJoin: Mock; where: Mock } = {
+    leftJoin: vi.fn(),
+    innerJoin: vi.fn(),
     where: whereFn,
   };
   chain.leftJoin.mockReturnValue(chain);
   chain.innerJoin.mockReturnValue(chain);
-  const fromFn = jest.fn().mockReturnValue(chain);
+  const fromFn = vi.fn().mockReturnValue(chain);
   mockSelect.mockReturnValue({ from: fromFn });
 }
 
@@ -352,8 +351,8 @@ function wireSelectReturning(orderData: unknown) {
 // beforeEach
 // ---------------------------------------------------------------------------
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: validateBody succeeds with status: 'cancelled'
@@ -375,13 +374,13 @@ beforeEach(() => {
 
   // Re-wire fire-and-forget email mocks — resetAllMocks() clears implementations,
   // and .catch() on undefined would throw inside the route handler
-  const emailMod = require('@/lib/email');
+  const emailMod = (await import('@/lib/email')) as any;
   emailMod.sendCustomEmail.mockResolvedValue({ success: true });
-  const templatesMod = require('@/lib/email/templates/marketplace');
+  const templatesMod = (await import('@/lib/email/templates/marketplace')) as any;
   templatesMod.orderStatusUpdate.mockReturnValue({});
 
   // Re-wire payment mocks (resetAllMocks clears these too)
-  const payrexxMod = require('@/lib/payments/payrexx-client');
+  const payrexxMod = (await import('@/lib/payments/payrexx-client')) as any;
   payrexxMod.cancelTransaction.mockResolvedValue({ success: true });
   payrexxMod.captureTransaction.mockResolvedValue({ success: true });
 });
@@ -443,7 +442,6 @@ describe('PATCH /api/marketplace/orders/[id] — authentication', () => {
 
 describe('PATCH /api/marketplace/orders/[id] — validation', () => {
   it('returns 400 when status validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Ungültig' }, { status: 400 }),
@@ -514,7 +512,7 @@ describe('PATCH /api/marketplace/orders/[id] — success (buyer cancels)', () =>
 
 describe('PATCH /api/marketplace/orders/[id] — race-loser aborts cleanly', () => {
   it('does not write or capture when the order changed under the lock', async () => {
-    const payrexx = require('@/lib/payments/payrexx-client');
+    const payrexx = (await import('@/lib/payments/payrexx-client')) as any;
     // Pre-lock fetch sees a paid order (buyer cancel is valid)...
     wireSelectReturning({ ...MOCK_ORDER, status: 'paid' });
     mockValidateBody.mockReturnValueOnce({

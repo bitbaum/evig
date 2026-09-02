@@ -18,18 +18,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockInsertReturning = jest.fn().mockResolvedValue([]);
-const mockInsertValues = jest
+const mockInsertReturning = vi.fn().mockResolvedValue([]);
+const mockInsertValues = vi
   .fn()
   .mockReturnValue({ returning: mockInsertReturning, catch: mockInsertReturning });
-const mockDbInsert = jest.fn().mockReturnValue({ values: mockInsertValues });
+const mockDbInsert = vi.fn().mockReturnValue({ values: mockInsertValues });
 
 // Make .values() return a thenable that resolves (simulates Drizzle promise-like)
 // logActivity calls .catch() on the result of db.insert().values() — mock the chain
 function makeChain(error?: Error) {
   const result = error ? Promise.reject(error) : Promise.resolve([]);
   const chain = {
-    catch: jest.fn((handler: (e: unknown) => void) => {
+    catch: vi.fn((handler: (e: unknown) => void) => {
       if (error) return result.catch(handler);
       return result;
     }),
@@ -37,22 +37,22 @@ function makeChain(error?: Error) {
   return chain;
 }
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
   },
 }));
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   activityFeed: { tableName: 'activity_feed' },
 }));
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    warn: jest.fn(),
-    info: jest.fn(),
-    error: jest.fn(),
-    debug: jest.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
   },
 }));
 
@@ -60,6 +60,7 @@ jest.mock('@/lib/logger', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { logActivity } from '../activity';
 import { logger } from '../logger';
 
@@ -68,7 +69,7 @@ import { logger } from '../logger';
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Default: successful insert
   mockInsertValues.mockReturnValue(makeChain());
   mockDbInsert.mockReturnValue({ values: mockInsertValues });
@@ -148,7 +149,7 @@ describe('logActivity', () => {
     logActivity({ actorId: 'user-1', action: 'captured_device' });
     await flushPromises();
 
-    expect(logger.warn as jest.Mock).toHaveBeenCalledWith(
+    expect(logger.warn as Mock).toHaveBeenCalledWith(
       'activity feed insert failed',
       expect.objectContaining({ action: 'captured_device' }),
     );

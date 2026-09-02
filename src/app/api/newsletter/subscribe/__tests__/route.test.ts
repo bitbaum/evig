@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/newsletter/subscribe (public) and GET /api/newsletter/subscribe (admin)
  *
@@ -9,18 +9,17 @@
  *   GET  - 401 (no session / not staff), 200 (with stats)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       const s = session as { user?: { isStaff?: boolean; id?: string } } | null;
       if (!s?.user?.isStaff) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -28,43 +27,43 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockCheckRateLimit = jest.fn();
-const mockGetClientIp = jest.fn();
+const mockCheckRateLimit = vi.fn();
+const mockGetClientIp = vi.fn();
 
-jest.mock('@/lib/auth/rate-limiter', () => ({
+vi.mock('@/lib/auth/rate-limiter', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
   getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
 }));
 
-const mockSendEmail = jest.fn();
+const mockSendEmail = vi.fn();
 
-jest.mock('@/lib/email', () => ({
+vi.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail(...args),
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'https://revampit.test',
 }));
 
-jest.mock('@/config/email', () => ({
+vi.mock('@/config/email', () => ({
   LISTMONK_CONFIG: { URL: 'http://listmonk.test', USERNAME: 'user', PASSWORD: 'pass' },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockInsert = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockInsert = vi.fn();
 // Models the route's atomic-upsert chain:
 //   db.insert(table).values(...).onConflictDoUpdate({...}).returning({...})
 // The chain returns [row] or [] depending on whether the setWhere clause
 // blocked the conflict update — set mockReturning per-test to drive each
 // branch (new subscriber, re-subscribe, already-active rejection).
-const mockValues = jest.fn();
-const mockOnConflictDoUpdate = jest.fn();
-const mockReturning = jest.fn();
+const mockValues = vi.fn();
+const mockOnConflictDoUpdate = vi.fn();
+const mockReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -74,7 +73,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   newsletterSubscriptions: {
     email: 'ns_email',
     isActive: 'ns_isActive',
@@ -86,7 +85,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   desc: (a: unknown) => ({ __desc: a }),
@@ -95,8 +94,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/schemas', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/schemas', async () => {
   return {
     validateBody: (_schema: unknown, data: unknown) => {
       const d = data as Record<string, unknown>;
@@ -112,8 +110,7 @@ jest.mock('@/lib/schemas', () => {
   };
 });
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -129,11 +126,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 const MOCK_STAFF_SESSION = {
@@ -148,7 +145,7 @@ const MOCK_STAFF_SESSION = {
 };
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 
   mockAuth.mockResolvedValue(MOCK_STAFF_SESSION);
   mockGetClientIp.mockReturnValue('127.0.0.1');
@@ -246,7 +243,7 @@ describe('POST /api/newsletter/subscribe — email failure', () => {
     // send, so a failed confirmation email must NOT surface as a scary 502 the
     // user can't act on. The route returns 200 and records the failure via
     // logger.warn so the silent-failure-is-logged guarantee stays locked.
-    const { logger } = jest.requireMock('@/lib/logger');
+    const { logger } = (await import('@/lib/logger')) as any;
     mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' });
 
     const req = new NextRequest('http://localhost/api/newsletter/subscribe', {
@@ -326,7 +323,7 @@ describe('GET /api/newsletter/subscribe — admin', () => {
       },
     ];
     // For the GET handler, the select chain uses orderBy
-    const mockOrderByFn = jest.fn().mockResolvedValue(subscribers);
+    const mockOrderByFn = vi.fn().mockResolvedValue(subscribers);
     mockFrom.mockReturnValue({ orderBy: mockOrderByFn, where: mockWhere });
     mockSelect.mockReturnValue({ from: mockFrom });
 

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/DELETE /api/admin/hirn/history
  *
@@ -21,19 +21,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -41,18 +40,17 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockGetChatHistory = jest.fn();
-const mockGetUserSessions = jest.fn();
-const mockDeleteSession = jest.fn();
+const mockGetChatHistory = vi.fn();
+const mockGetUserSessions = vi.fn();
+const mockDeleteSession = vi.fn();
 
-jest.mock('@/lib/hirn', () => ({
-  getChatHistory: (...args: unknown[]) => mockGetChatHistory.apply(null, args),
-  getUserSessions: (...args: unknown[]) => mockGetUserSessions.apply(null, args),
-  deleteSession: (...args: unknown[]) => mockDeleteSession.apply(null, args),
+vi.mock('@/lib/hirn', () => ({
+  getChatHistory: (...args: unknown[]) => mockGetChatHistory(...args),
+  getUserSessions: (...args: unknown[]) => mockGetUserSessions(...args),
+  deleteSession: (...args: unknown[]) => mockDeleteSession(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -66,7 +64,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, DELETE } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -92,7 +90,7 @@ function makeRequest(method = 'GET', params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockGetChatHistory.mockResolvedValue([{ role: 'user', content: 'Hallo' }]);
   mockGetUserSessions.mockResolvedValue([{ id: 'sess-1', createdAt: '2026-05-01' }]);

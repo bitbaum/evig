@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/suggestions
  *
@@ -24,64 +24,60 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockApiGeneral = jest.fn().mockReturnValue(true); // true = allowed
+const mockApiGeneral = vi.fn().mockReturnValue(true); // true = allowed
 
-jest.mock('@/lib/security/rate-limit', () => ({
-  rateLimiters: { apiGeneral: (...args: unknown[]) => mockApiGeneral.apply(null, args) },
-  getClientIdentifier: jest.fn().mockReturnValue('127.0.0.1'),
+vi.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: { apiGeneral: (...args: unknown[]) => mockApiGeneral(...args) },
+  getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
-const mockSendCustomEmail = jest.fn().mockResolvedValue({ success: true });
+const mockSendCustomEmail = vi.fn().mockResolvedValue({ success: true });
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
 }));
 
 // Persistence + notification + auth are best-effort side channels — stub them
 // so the route's email behavior (the subject of these tests) is exercised.
-jest.mock('@/auth', () => ({ auth: () => Promise.resolve(null) }));
-jest.mock('@/db', () => ({
+vi.mock('@/auth', () => ({ auth: () => Promise.resolve(null) }));
+vi.mock('@/db', () => ({
   db: {
     insert: () => ({ values: () => Promise.resolve() }),
     select: () => ({ from: () => ({ where: () => Promise.resolve([]) }) }),
   },
 }));
-jest.mock('@/db/schema', () => ({ siteSuggestions: {}, users: {} }));
-jest.mock('@/lib/services/notifications', () => ({
-  createNotification: jest.fn().mockResolvedValue(undefined),
+vi.mock('@/db/schema', () => ({ siteSuggestions: {}, users: {} }));
+vi.mock('@/lib/services/notifications', () => ({
+  createNotification: vi.fn().mockResolvedValue(undefined),
 }));
-jest.mock('@/lib/permissions', () => ({ SUPER_ADMIN_EMAILS: [] }));
+vi.mock('@/lib/permissions', () => ({ SUPER_ADMIN_EMAILS: [] }));
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   CONTACT: { email: 'kontakt@revamp-it.ch' },
   ORG: { name: 'RevampIT' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-const mockEscapeHtml = jest.fn((s: string) => s.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+const mockEscapeHtml = vi.fn((s: string) => s.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 
-jest.mock('@/lib/utils/escape-html', () => ({
+vi.mock('@/lib/utils/escape-html', () => ({
   escapeHtml: (s: unknown) => mockEscapeHtml(s as string),
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiBadRequest: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 400 });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
   apiRateLimited: (msg = 'Zu viele Anfragen. Bitte versuche es später erneut.') => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 429 });
   },
 }));
@@ -90,7 +86,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -113,7 +109,7 @@ const VALID_BODY = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockApiGeneral.mockReturnValue(true);
   mockSendCustomEmail.mockResolvedValue(undefined);
   mockEscapeHtml.mockImplementation((s: string) => s.replace(/</g, '&lt;').replace(/>/g, '&gt;'));

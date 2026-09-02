@@ -6,7 +6,7 @@
  */
 
 // Mock sections to avoid lucide-react icons in test environment
-jest.mock('@/config/sections', () => ({
+vi.mock('@/config/sections', () => ({
   SECTIONS: {},
   ADMIN_SECTION_IDS: [
     'dashboard',
@@ -23,6 +23,7 @@ jest.mock('@/config/sections', () => ({
   isSensitiveSection: (id: string) => ['users', 'hirn', 'finanzen'].includes(id),
 }));
 
+import type { Mock } from 'vitest';
 import {
   isStaffEmail,
   isSuperAdmin,

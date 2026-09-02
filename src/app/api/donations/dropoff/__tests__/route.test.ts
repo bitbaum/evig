@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/donations/dropoff
  *
@@ -11,39 +11,38 @@
  *   - emails are fire-and-forget — a rejected sendCustomEmail still returns 200
  */
 
-const mockCheckRateLimit = jest.fn();
-const mockGetClientIp = jest.fn().mockReturnValue('127.0.0.1');
+const mockCheckRateLimit = vi.fn();
+const mockGetClientIp = vi.fn().mockReturnValue('127.0.0.1');
 
-jest.mock('@/lib/auth/rate-limiter', () => ({
-  checkRateLimit: (...args: unknown[]) => mockCheckRateLimit.apply(null, args),
-  getClientIp: (...args: unknown[]) => mockGetClientIp.apply(null, args),
+vi.mock('@/lib/auth/rate-limiter', () => ({
+  checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
+  getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
 }));
 
-const mockSendCustomEmail = jest.fn().mockResolvedValue(undefined);
+const mockSendCustomEmail = vi.fn().mockResolvedValue(undefined);
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
 }));
 
-jest.mock('@/lib/email/templates/donation-dropoff', () => ({
-  donationDropoffNotification: jest
+vi.mock('@/lib/email/templates/donation-dropoff', () => ({
+  donationDropoffNotification: vi
     .fn()
     .mockReturnValue({ subject: 'Notification', html: '', text: '' }),
-  donationDropoffConfirmation: jest
+  donationDropoffConfirmation: vi
     .fn()
     .mockReturnValue({ subject: 'Confirmation', html: '', text: '' }),
 }));
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   CONTACT: { email: 'kontakt@revamp-it.ch' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiBadRequest: (msg: string, details?: unknown) =>
@@ -55,14 +54,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     RATE_LIMITED: 'Zu viele Anfragen',
     INVALID_INPUT: 'Ungültige Eingabe',
   },
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const VALID_BODY = {
@@ -83,7 +83,7 @@ function makeRequest(body: unknown) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockGetClientIp.mockReturnValue('127.0.0.1');
   mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 10, resetAt: 0 });
   mockSendCustomEmail.mockResolvedValue(undefined);
@@ -160,7 +160,7 @@ describe('POST /api/donations/dropoff', () => {
     // `.then()` to detect resolved-failure and log it. Without this lock
     // a refactor could silently revert to the bare-catch shape (the bug
     // I just shipped in a8cc473c and fixed adjacent).
-    const { logger } = jest.requireMock('@/lib/logger') as { logger: { warn: jest.Mock } };
+    const { logger } = (await import('@/lib/logger')) as unknown as { logger: { warn: Mock } };
     mockSendCustomEmail.mockResolvedValue({ success: false, error: 'Listmonk 500' });
 
     const res = await POST(makeRequest(VALID_BODY));

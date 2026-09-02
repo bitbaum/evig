@@ -43,10 +43,10 @@
 function makeSelectChain(result: unknown[] = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
   chain.then = resolved.then.bind(resolved);
   chain.catch = resolved.catch.bind(resolved);
   chain.finally = resolved.finally.bind(resolved);
@@ -56,8 +56,8 @@ function makeSelectChain(result: unknown[] = []) {
 function makeInsertChain(result: unknown[] = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
   chain.then = resolved.then.bind(resolved);
   chain.catch = resolved.catch.bind(resolved);
   chain.finally = resolved.finally.bind(resolved);
@@ -67,9 +67,9 @@ function makeInsertChain(result: unknown[] = []) {
 function makeUpdateChain(result: unknown[] = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.set = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
   chain.then = resolved.then.bind(resolved);
   chain.catch = resolved.catch.bind(resolved);
   chain.finally = resolved.finally.bind(resolved);
@@ -80,21 +80,21 @@ function makeUpdateChain(result: unknown[] = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeSelectChain([]));
-const mockDbExecute = jest.fn();
-const mockDbInsert = jest.fn(() => makeInsertChain([]));
-const mockDbUpdate = jest.fn(() => makeUpdateChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeSelectChain([]));
+const mockDbExecute = vi.fn();
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeInsertChain([]));
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeUpdateChain([]));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   serviceTypes: {
     id: 'id',
     slug: 'slug',
@@ -108,31 +108,30 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' });
-  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
-  (sqlFn as unknown as Record<string, unknown>).join = jest
-    .fn()
-    .mockReturnValue({ __sql: 'joined' });
+vi.mock('drizzle-orm', async () => {
+  const sqlFn = vi.fn().mockReturnValue({ __sql: 'mocked' });
+  (sqlFn as unknown as Record<string, unknown>).raw = vi.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = vi.fn().mockReturnValue({ __sql: 'joined' });
   return {
-    ...jest.requireActual('drizzle-orm'),
+    ...(await vi.importActual('drizzle-orm')),
     sql: sqlFn,
-    eq: jest.fn().mockReturnValue({ __eq: true }),
-    and: jest.fn().mockReturnValue({ __and: true }),
-    asc: jest.fn().mockReturnValue({ __asc: true }),
-    desc: jest.fn().mockReturnValue({ __desc: true }),
-    getTableName: jest.fn().mockReturnValue('mock_service_types'),
+    eq: vi.fn().mockReturnValue({ __eq: true }),
+    and: vi.fn().mockReturnValue({ __and: true }),
+    asc: vi.fn().mockReturnValue({ __asc: true }),
+    desc: vi.fn().mockReturnValue({ __desc: true }),
+    getTableName: vi.fn().mockReturnValue('mock_service_types'),
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   getAllServiceTypes,
   getFeaturedServiceTypes,
@@ -181,7 +180,7 @@ function makeRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockDbSelect.mockImplementation(() => makeSelectChain([]));
   mockDbInsert.mockImplementation(() => makeInsertChain([]));
   mockDbUpdate.mockImplementation(() => makeUpdateChain([]));
@@ -287,9 +286,9 @@ describe('getAllServiceTypes', () => {
   it('returns empty array on DB error (graceful degradation)', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeSelectChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          orderBy: jest.fn().mockReturnValue(Promise.reject(new Error('DB down'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          orderBy: vi.fn().mockReturnValue(Promise.reject(new Error('DB down'))),
         }),
       }),
     });
@@ -313,9 +312,9 @@ describe('getFeaturedServiceTypes', () => {
   it('returns empty array on DB error', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeSelectChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          orderBy: jest.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          orderBy: vi.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
         }),
       }),
     });
@@ -357,8 +356,8 @@ describe('getServiceTypeBySlug', () => {
   it('returns null on DB error', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeSelectChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
       }),
     });
 
@@ -398,9 +397,9 @@ describe('getServiceTypesByCategory', () => {
   it('returns empty array on DB error', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeSelectChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          orderBy: jest.fn().mockReturnValue(Promise.reject(new Error('error'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          orderBy: vi.fn().mockReturnValue(Promise.reject(new Error('error'))),
         }),
       }),
     });
@@ -424,9 +423,9 @@ describe('getAllServiceSlugs', () => {
   it('returns empty array on error', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeSelectChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          orderBy: jest.fn().mockReturnValue(Promise.reject(new Error('error'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          orderBy: vi.fn().mockReturnValue(Promise.reject(new Error('error'))),
         }),
       }),
     });
@@ -513,8 +512,8 @@ describe('createServiceType', () => {
   it('throws on DB error', async () => {
     mockDbInsert.mockReturnValueOnce({
       ...makeInsertChain([]),
-      values: jest.fn().mockReturnValue({
-        returning: jest.fn().mockReturnValue(Promise.reject(new Error('duplicate slug'))),
+      values: vi.fn().mockReturnValue({
+        returning: vi.fn().mockReturnValue(Promise.reject(new Error('duplicate slug'))),
       }),
     });
 
@@ -548,9 +547,9 @@ describe('deleteServiceType', () => {
   it('throws on DB error', async () => {
     mockDbUpdate.mockReturnValueOnce({
       ...makeUpdateChain([]),
-      set: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          returning: jest.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
+      set: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          returning: vi.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
         }),
       }),
     });

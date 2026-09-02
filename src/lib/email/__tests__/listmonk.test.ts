@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 
 /**
@@ -18,7 +18,7 @@
  * 409-already-subscribed special case.
  */
 
-jest.mock('@/config/email', () => ({
+vi.mock('@/config/email', () => ({
   LISTMONK_CONFIG: {
     URL: 'http://listmonk.test',
     USERNAME: 'admin',
@@ -29,10 +29,11 @@ jest.mock('@/config/email', () => ({
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
+import type { Mock } from 'vitest';
 import {
   isListmonkEnabled,
   getListmonkConfig,
@@ -42,7 +43,7 @@ import {
 } from '../listmonk';
 import { LISTMONK_CONFIG } from '@/config/email';
 
-const mockFetch = global.fetch as jest.Mock;
+const mockFetch = global.fetch as Mock;
 
 const expectedAuth = 'Basic ' + Buffer.from('admin:pw').toString('base64');
 

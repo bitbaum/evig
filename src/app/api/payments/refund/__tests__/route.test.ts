@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/payments/refund
  *
@@ -10,17 +10,16 @@
  *          200 (admin refund — immediate Payrexx processing, status: processing)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -28,14 +27,14 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockUpdate = jest.fn();
-const mockValues = jest.fn();
-const mockSet = jest.fn();
-const mockDbTransaction = jest.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockUpdate = vi.fn();
+const mockValues = vi.fn();
+const mockSet = vi.fn();
+const mockDbTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -50,7 +49,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   paymentTransactions: {
     id: 'pt_id',
     userId: 'pt_userId',
@@ -84,7 +83,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   inArray: (a: unknown, b: unknown) => ({ __inArray: [a, b] }),
@@ -93,8 +92,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -109,16 +107,16 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: { SUCCEEDED: 'succeeded', PENDING: 'pending' },
   PAYMENT_TRANSACTION_TYPE: { REFUND: 'refund' },
 }));
 
-jest.mock('@/config/refund', () => ({
+vi.mock('@/config/refund', () => ({
   REFUND_STATUS: {
     REQUESTED: 'requested',
     APPROVED: 'approved',
@@ -128,20 +126,21 @@ jest.mock('@/config/refund', () => ({
   },
 }));
 
-jest.mock('@/lib/payments/payrexx-client', () => ({
-  refundTransaction: jest.fn().mockResolvedValue({ id: 'payrexx-refund-1' }),
+vi.mock('@/lib/payments/payrexx-client', () => ({
+  refundTransaction: vi.fn().mockResolvedValue({ id: 'payrexx-refund-1' }),
 }));
 
-jest.mock('@/lib/schemas', () => {
-  const actual = jest.requireActual('@/lib/schemas');
+vi.mock('@/lib/schemas', async () => {
+  const actual = await vi.importActual('@/lib/schemas');
   return actual;
 });
 
-import { NextRequest } from 'next/server';
+import type { MockedFunction } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 import { refundTransaction } from '@/lib/payments/payrexx-client';
 
-const mockRefundTransaction = refundTransaction as jest.MockedFunction<typeof refundTransaction>;
+const mockRefundTransaction = refundTransaction as MockedFunction<typeof refundTransaction>;
 
 const MOCK_SESSION = {
   user: {
@@ -189,10 +188,10 @@ function makeRequest(body: unknown) {
 }
 
 function setupSelectChain(txRow: unknown, existingRefundsTotal = 0) {
-  const mockWhere = jest.fn();
-  const mockFrom = jest.fn();
-  const mockInnerJoinFirst = jest.fn();
-  const mockInnerJoinSecond = jest.fn();
+  const mockWhere = vi.fn();
+  const mockFrom = vi.fn();
+  const mockInnerJoinFirst = vi.fn();
+  const mockInnerJoinSecond = vi.fn();
 
   // First select: transaction with joins
   mockInnerJoinSecond.mockReturnValue({ where: mockWhere });
@@ -200,8 +199,8 @@ function setupSelectChain(txRow: unknown, existingRefundsTotal = 0) {
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoinFirst });
 
   // Second select: existing refunds SUM
-  const mockWhere2 = jest.fn();
-  const mockFrom2 = jest.fn();
+  const mockWhere2 = vi.fn();
+  const mockFrom2 = vi.fn();
   mockFrom2.mockReturnValue({ where: mockWhere2 });
 
   let callCount = 0;
@@ -218,25 +217,25 @@ function setupSelectChain(txRow: unknown, existingRefundsTotal = 0) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   setupSelectChain(MOCK_TRANSACTION);
 
   // Default insert returning a refund row
   mockValues.mockReturnValue({
-    returning: jest.fn().mockResolvedValue([{ id: 'refund-1', refundNumber: 'REF-001' }]),
+    returning: vi.fn().mockResolvedValue([{ id: 'refund-1', refundNumber: 'REF-001' }]),
   });
 
   // Default update chain
-  const mockWhere3 = jest.fn().mockResolvedValue(undefined);
+  const mockWhere3 = vi.fn().mockResolvedValue(undefined);
   mockSet.mockReturnValue({ where: mockWhere3 });
 
   // Default db.transaction (for admin path)
   mockDbTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) => {
     const mockTx = {
-      update: () => ({ set: () => ({ where: jest.fn().mockResolvedValue(undefined) }) }),
-      insert: () => ({ values: jest.fn().mockResolvedValue(undefined) }),
+      update: () => ({ set: () => ({ where: vi.fn().mockResolvedValue(undefined) }) }),
+      insert: () => ({ values: vi.fn().mockResolvedValue(undefined) }),
     };
     return fn(mockTx);
   });

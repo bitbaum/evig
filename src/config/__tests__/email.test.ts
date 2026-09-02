@@ -25,7 +25,7 @@
 // Email config reads env at module load time but uses process.env at call time
 // We control the env around each test via beforeEach/afterEach.
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   ORG: {
     name: 'Revamp-IT',
     emailDomain: 'revamp-it.ch',
@@ -33,7 +33,7 @@ jest.mock('@/config/org', () => ({
 }));
 
 // Helper to isolate env vars for each test
-function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
+async function withEnv(vars: Record<string, string | undefined>, fn: () => void | Promise<void>) {
   const saved: Record<string, string | undefined> = {};
   for (const key of Object.keys(vars)) {
     saved[key] = process.env[key];
@@ -44,7 +44,7 @@ function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
     }
   }
   try {
-    fn();
+    await fn();
   } finally {
     for (const key of Object.keys(saved)) {
       if (saved[key] === undefined) {
@@ -58,69 +58,69 @@ function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
 
 // Reset module registry so email.ts re-evaluates with each describe block env
 // (module-level constants capture env at import time, but the functions read
-// process.env at call time, so we only need jest.resetModules for constants)
+// process.env at call time, so we only need vi.resetModules for constants)
 
 describe('getEmailProvider', () => {
-  it('returns "smtp" when LISTMONK_ENABLED is not set', () => {
+  it('returns "smtp" when LISTMONK_ENABLED is not set', async () => {
     // Import fresh in each test to avoid cross-contamination
-    jest.resetModules();
-    withEnv({ LISTMONK_ENABLED: undefined }, () => {
-      const { getEmailProvider } = require('../email');
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: undefined }, async () => {
+      const { getEmailProvider } = (await import('../email')) as any;
       expect(getEmailProvider()).toBe('smtp');
     });
   });
 
-  it('returns "listmonk" when LISTMONK_ENABLED=true', () => {
-    jest.resetModules();
-    withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      const { getEmailProvider } = require('../email');
+  it('returns "listmonk" when LISTMONK_ENABLED=true', async () => {
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: 'true' }, async () => {
+      const { getEmailProvider } = (await import('../email')) as any;
       expect(getEmailProvider()).toBe('listmonk');
     });
   });
 
-  it('returns "smtp" when LISTMONK_ENABLED=false', () => {
-    jest.resetModules();
-    withEnv({ LISTMONK_ENABLED: 'false' }, () => {
-      const { getEmailProvider } = require('../email');
+  it('returns "smtp" when LISTMONK_ENABLED=false', async () => {
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: 'false' }, async () => {
+      const { getEmailProvider } = (await import('../email')) as any;
       expect(getEmailProvider()).toBe('smtp');
     });
   });
 });
 
 describe('isEmailConfigured', () => {
-  it('returns true when LISTMONK_ENABLED=true', () => {
-    jest.resetModules();
-    withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      const { isEmailConfigured } = require('../email');
+  it('returns true when LISTMONK_ENABLED=true', async () => {
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: 'true' }, async () => {
+      const { isEmailConfigured } = (await import('../email')) as any;
       expect(isEmailConfigured()).toBe(true);
     });
   });
 
-  it('returns true when EMAIL_USER and EMAIL_PASS are both set', () => {
-    jest.resetModules();
-    withEnv(
+  it('returns true when EMAIL_USER and EMAIL_PASS are both set', async () => {
+    vi.resetModules();
+    await withEnv(
       {
         LISTMONK_ENABLED: undefined,
         EMAIL_USER: 'test@example.com',
         EMAIL_PASS: 'secret',
       },
-      () => {
-        const { isEmailConfigured } = require('../email');
+      async () => {
+        const { isEmailConfigured } = (await import('../email')) as any;
         expect(isEmailConfigured()).toBe(true);
       },
     );
   });
 
-  it('returns false when neither listmonk nor SMTP credentials are set', () => {
-    jest.resetModules();
-    withEnv(
+  it('returns false when neither listmonk nor SMTP credentials are set', async () => {
+    vi.resetModules();
+    await withEnv(
       {
         LISTMONK_ENABLED: undefined,
         EMAIL_USER: undefined,
         EMAIL_PASS: undefined,
       },
-      () => {
-        const { isEmailConfigured } = require('../email');
+      async () => {
+        const { isEmailConfigured } = (await import('../email')) as any;
         expect(isEmailConfigured()).toBe(false);
       },
     );
@@ -128,40 +128,40 @@ describe('isEmailConfigured', () => {
 });
 
 describe('validateEmailConfig', () => {
-  it('throws when SMTP is used without EMAIL_USER', () => {
-    jest.resetModules();
-    withEnv(
+  it('throws when SMTP is used without EMAIL_USER', async () => {
+    vi.resetModules();
+    await withEnv(
       {
         LISTMONK_ENABLED: undefined,
         EMAIL_USER: undefined,
         EMAIL_PASS: 'secret',
       },
-      () => {
-        const { validateEmailConfig } = require('../email');
+      async () => {
+        const { validateEmailConfig } = (await import('../email')) as any;
         expect(() => validateEmailConfig()).toThrow(/EMAIL_USER/);
       },
     );
   });
 
-  it('throws when SMTP is used without EMAIL_PASS', () => {
-    jest.resetModules();
-    withEnv(
+  it('throws when SMTP is used without EMAIL_PASS', async () => {
+    vi.resetModules();
+    await withEnv(
       {
         LISTMONK_ENABLED: undefined,
         EMAIL_USER: 'test@example.com',
         EMAIL_PASS: undefined,
       },
-      () => {
-        const { validateEmailConfig } = require('../email');
+      async () => {
+        const { validateEmailConfig } = (await import('../email')) as any;
         expect(() => validateEmailConfig()).toThrow(/EMAIL_PASS/);
       },
     );
   });
 
-  it('does not throw when LISTMONK_ENABLED=true', () => {
-    jest.resetModules();
-    withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      const { validateEmailConfig } = require('../email');
+  it('does not throw when LISTMONK_ENABLED=true', async () => {
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: 'true' }, async () => {
+      const { validateEmailConfig } = (await import('../email')) as any;
       expect(() => validateEmailConfig()).not.toThrow();
     });
   });

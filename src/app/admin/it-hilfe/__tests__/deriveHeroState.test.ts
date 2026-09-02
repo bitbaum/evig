@@ -83,9 +83,9 @@ function makeStats(overrides: Partial<Stats> = {}): Stats {
   };
 }
 
-const onJump = jest.fn();
+const onJump = vi.fn();
 const t = makeStubTranslator();
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => vi.clearAllMocks());
 
 describe('IT-Hilfe deriveHeroState', () => {
   it('URGENT wins when urgent requests > 0 (even if other conditions also true)', () => {

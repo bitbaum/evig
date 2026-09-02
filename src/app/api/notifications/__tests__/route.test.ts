@@ -3,29 +3,30 @@
  * PATCH /api/notifications — mark all as read
  */
 
+import type { Mock } from 'vitest';
 import { NextRequest } from 'next/server';
 import { auth } from '@/auth';
 
 // Mock Drizzle db with chainable API
 const mockSelectChain = {
-  select: jest.fn().mockReturnThis(),
-  from: jest.fn().mockReturnThis(),
-  where: jest.fn().mockReturnThis(),
-  orderBy: jest.fn().mockReturnThis(),
-  limit: jest.fn().mockResolvedValue([]),
+  select: vi.fn().mockReturnThis(),
+  from: vi.fn().mockReturnThis(),
+  where: vi.fn().mockReturnThis(),
+  orderBy: vi.fn().mockReturnThis(),
+  limit: vi.fn().mockResolvedValue([]),
 };
 const mockUpdateChain = {
-  set: jest.fn().mockReturnThis(),
-  where: jest.fn().mockResolvedValue(undefined),
+  set: vi.fn().mockReturnThis(),
+  where: vi.fn().mockResolvedValue(undefined),
 };
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(() => mockSelectChain),
-    update: jest.fn(() => mockUpdateChain),
+    select: vi.fn((..._args: unknown[]) => mockSelectChain),
+    update: vi.fn((..._args: unknown[]) => mockUpdateChain),
   },
 }));
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   notifications: {
     id: 'n.id',
     type: 'n.type',
@@ -39,50 +40,50 @@ jest.mock('@/db/schema', () => ({
     userId: 'n.user_id',
   },
 }));
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  and: jest.fn(),
-  asc: jest.fn(),
-  desc: jest.fn(),
-  sql: jest.fn(),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  and: vi.fn(),
+  asc: vi.fn(),
+  desc: vi.fn(),
+  sql: vi.fn(),
 }));
-jest.mock('@/auth', () => ({ auth: jest.fn() }));
-jest.mock('@/lib/permissions', () => ({
-  canAccessSection: jest.fn(() => true),
-  toStaffUser: jest.fn(),
+vi.mock('@/auth', () => ({ auth: vi.fn() }));
+vi.mock('@/lib/permissions', () => ({
+  canAccessSection: vi.fn((..._args: unknown[]) => true),
+  toStaffUser: vi.fn(),
   ADMIN_SECTIONS: {},
 }));
-jest.mock('@/lib/api/helpers', () => ({
-  apiSuccess: jest.fn((data) => ({
+vi.mock('@/lib/api/helpers', () => ({
+  apiSuccess: vi.fn((data) => ({
     status: 200,
     json: () => Promise.resolve({ success: true, data }),
   })),
-  apiError: jest.fn((_err: unknown, _msg: unknown, status = 500) => ({
+  apiError: vi.fn((_err: unknown, _msg: unknown, status = 500) => ({
     status,
     json: () => Promise.resolve({ success: false }),
   })),
-  apiUnauthorized: jest.fn((msg?: string) => ({
+  apiUnauthorized: vi.fn((msg?: string) => ({
     status: 401,
     json: () => Promise.resolve({ success: false, error: msg || 'Unauthorized' }),
   })),
-  apiForbidden: jest.fn((msg?: string) => ({
+  apiForbidden: vi.fn((msg?: string) => ({
     status: 403,
     json: () => Promise.resolve({ success: false, error: msg || 'Forbidden' }),
   })),
 }));
-jest.mock('@/lib/logger', () => ({
-  logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() },
 }));
 
 // Must import AFTER mocks are set up
 import { GET, PATCH } from '../route';
 import { db } from '@/db';
 
-const mockAuth = auth as jest.Mock;
+const mockAuth = auth as Mock;
 const mockRequest = {} as NextRequest;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Reset default chain behavior
   mockSelectChain.limit.mockResolvedValue([]);
   mockUpdateChain.where.mockResolvedValue(undefined);

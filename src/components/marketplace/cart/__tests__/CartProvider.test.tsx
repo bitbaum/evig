@@ -173,7 +173,7 @@ describe('CartProvider — drawer', () => {
 describe('useCart — guard', () => {
   it('throws a clear error when used outside a CartProvider', () => {
     // Silence the expected React error boundary log for this case.
-    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => renderHook(() => useCart())).toThrow('useCart must be used within a CartProvider');
     spy.mockRestore();
   });

@@ -1,27 +1,26 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/listings/similar
  */
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
-const mockSelect = jest.fn();
-const mockFrom1 = jest.fn();
-const mockWhere1 = jest.fn();
-const mockFrom2 = jest.fn();
-const mockWhere2 = jest.fn();
-const mockOrderBy2 = jest.fn();
-const mockLimit2 = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom1 = vi.fn();
+const mockWhere1 = vi.fn();
+const mockFrom2 = vi.fn();
+const mockWhere2 = vi.fn();
+const mockOrderBy2 = vi.fn();
+const mockLimit2 = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccessCached: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (_err: unknown, msg: string, status = 500) =>
@@ -32,20 +31,20 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/marketplace/listing-helpers', () => ({
+vi.mock('@/lib/marketplace/listing-helpers', () => ({
   listingThumbnailSubquery: { __sql: 'thumbnail_subquery' },
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', REMOVED: 'removed', DRAFT: 'draft', SOLD: 'sold' },
   LISTING_STATUSES: ['active', 'removed', 'draft', 'sold'],
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
@@ -55,7 +54,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listings: {
     id: 'l_id',
     sellerId: 'l_sellerId',
@@ -72,7 +71,7 @@ jest.mock('@/db/schema', () => ({
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
@@ -98,7 +97,7 @@ function makeRequest(url: string) {
 // ── Setup ──────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 
   // Default: two separate select chains
   mockFrom1.mockReturnValue({ where: mockWhere1 });

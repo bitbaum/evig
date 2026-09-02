@@ -38,11 +38,11 @@
 function makeSelectChain(result: unknown[] = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.leftJoin = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.leftJoin = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
   chain.then = resolved.then.bind(resolved);
   chain.catch = resolved.catch.bind(resolved);
   chain.finally = resolved.finally.bind(resolved);
@@ -52,8 +52,8 @@ function makeSelectChain(result: unknown[] = []) {
 function makeUpdateChain(result: unknown[] = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.set = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
   chain.then = resolved.then.bind(resolved);
   chain.catch = resolved.catch.bind(resolved);
   chain.finally = resolved.finally.bind(resolved);
@@ -64,19 +64,19 @@ function makeUpdateChain(result: unknown[] = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeSelectChain([]));
-const mockDbExecute = jest.fn();
-const mockDbUpdate = jest.fn(() => makeUpdateChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeSelectChain([]));
+const mockDbExecute = vi.fn();
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeUpdateChain([]));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   repairerProfiles: {
     id: 'repairerProfiles',
     isVerified: 'isVerified',
@@ -93,18 +93,18 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'users', email: 'email', name: 'name' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __sql: 'raw' }),
-    join: jest.fn().mockReturnValue({ __sql: 'joined' }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __sql: 'raw' }),
+    join: vi.fn().mockReturnValue({ __sql: 'joined' }),
   }),
-  getTableName: jest.fn().mockReturnValue('mock_table'),
+  getTableName: vi.fn().mockReturnValue('mock_table'),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   REVIEW_TARGET_TYPES: {
     REPAIRER: 'repairer',
     LISTING: 'listing',
@@ -114,24 +114,24 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'https://revamp-it.ch',
 }));
 
-const mockSendEmail = jest.fn().mockResolvedValue({ success: true });
-jest.mock('@/lib/email', () => ({
-  sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
+const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
+vi.mock('@/lib/email', () => ({
+  sendEmail: (...args: unknown[]) => mockSendEmail(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { COMPLETED: 'completed', OPEN: 'open' },
 }));
 
-jest.mock('@/config/review-status', () => ({
+vi.mock('@/config/review-status', () => ({
   REVIEW_STATUS: { PUBLISHED: 'published', PENDING: 'pending' },
 }));
 
@@ -139,6 +139,7 @@ jest.mock('@/config/review-status', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { validateReviewTarget, notifyRepairerOfReview } from '../review-service';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 
@@ -150,7 +151,7 @@ const TARGET_ID = 'target-1';
 const REVIEW_ID = 'review-1';
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockDbSelect.mockImplementation(() => makeSelectChain([]));
   mockDbUpdate.mockImplementation(() => makeUpdateChain([]));
   mockSendEmail.mockResolvedValue({ success: true });
@@ -281,7 +282,7 @@ describe('notifyRepairerOfReview', () => {
     );
     mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP down' });
 
-    const { logger } = jest.requireMock('@/lib/logger');
+    const { logger } = (await import('@/lib/logger')) as any;
 
     await notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Bob', 4, 'OK');
 
@@ -294,9 +295,9 @@ describe('notifyRepairerOfReview', () => {
   it('silently logs on unexpected error and does not throw', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeSelectChain([]),
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue(Promise.reject(new Error('Unexpected'))),
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockReturnValue(Promise.reject(new Error('Unexpected'))),
         }),
       }),
     });

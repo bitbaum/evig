@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/uploads (withAuth)
  *
@@ -7,17 +7,16 @@
  *   POST - 401, 400 (no files), 400 (invalid type), 200 (success)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -25,26 +24,26 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockUploadImageBuffer = jest.fn();
+const mockUploadImageBuffer = vi.fn();
 
-jest.mock('@/lib/storage/image-upload', () => ({
+vi.mock('@/lib/storage/image-upload', () => ({
   uploadImageBuffer: (...args: unknown[]) => mockUploadImageBuffer(...args),
 }));
 
 // Mock sharp
-jest.mock('sharp', () => {
+vi.mock('sharp', () => {
   const chain = {
-    metadata: jest.fn().mockResolvedValue({ format: 'jpeg' }),
-    resize: jest.fn().mockReturnThis(),
-    webp: jest.fn().mockReturnThis(),
-    toBuffer: jest.fn().mockResolvedValue(Buffer.from('optimized')),
+    metadata: vi.fn().mockResolvedValue({ format: 'jpeg' }),
+    resize: vi.fn().mockReturnThis(),
+    webp: vi.fn().mockReturnThis(),
+    toBuffer: vi.fn().mockResolvedValue(Buffer.from('optimized')),
   };
-  return jest.fn().mockReturnValue(chain);
+  return { default: vi.fn().mockReturnValue(chain) };
 });
 
 // Mock path.join to return predictable paths
-jest.mock('path', () => ({
-  ...jest.requireActual('path'),
+vi.mock('path', async () => ({
+  ...(await vi.importActual('path')),
   join: (...args: string[]) => args.join('/'),
   extname: (filename: string) => {
     const parts = filename.split('.');
@@ -56,8 +55,7 @@ jest.mock('path', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -68,23 +66,24 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/limits', () => ({
+vi.mock('@/config/limits', () => ({
   FILE_SIZE_LIMITS: { UPLOAD_MAX: 10 * 1024 * 1024 }, // 10MB
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   MARKETPLACE_LIMITS: { MAX_IMAGES: 8 },
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -116,7 +115,7 @@ function makeRequest(formData: FormData): NextRequest {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockUploadImageBuffer.mockImplementation((_buffer: Buffer, filename: string, folder: string) =>
     Promise.resolve({ success: true, url: `https://media.example/${folder}/${filename}` }),

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/protocols/[id]/finalize
  *
@@ -19,19 +19,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin:
     (handler: (req: Request, session: unknown, ctx: unknown) => unknown) =>
     (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -39,24 +38,23 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }));
 
-const mockFinalizeProtocol = jest.fn();
+const mockFinalizeProtocol = vi.fn();
 
-jest.mock('@/lib/services/protocols', () => ({
-  finalizeProtocol: (...args: unknown[]) => mockFinalizeProtocol.apply(null, args),
+vi.mock('@/lib/services/protocols', () => ({
+  finalizeProtocol: (...args: unknown[]) => mockFinalizeProtocol(...args),
 }));
 
-const mockNotifyAllStaff = jest.fn();
+const mockNotifyAllStaff = vi.fn();
 
-jest.mock('@/lib/services/notifications', () => ({
-  notifyAllStaff: (...args: unknown[]) => mockNotifyAllStaff.apply(null, args),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyAllStaff: (...args: unknown[]) => mockNotifyAllStaff(...args),
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   RELATED_TYPES: { PROTOCOL: 'protocol' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -69,15 +67,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -109,7 +107,7 @@ function makeContext(id = 'proto-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(makeSession());
   mockFinalizeProtocol.mockResolvedValue(true);
   mockNotifyAllStaff.mockResolvedValue(undefined);

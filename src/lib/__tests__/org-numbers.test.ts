@@ -32,10 +32,10 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -46,17 +46,17 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('server-only', () => ({}));
+vi.mock('server-only', () => ({}));
 
-const mockDbSelect = jest.fn(() => makeChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   orgNumbers: {
     key: 'on_key',
     value: 'on_value',
@@ -73,18 +73,18 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  asc: jest.fn().mockReturnValue({ __asc: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  asc: vi.fn().mockReturnValue({ __asc: true }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // Provide a minimal defaults map so fallback tests don't need to load the full file
-jest.mock('@/lib/org-numbers.defaults', () => ({
+vi.mock('@/lib/org-numbers.defaults', () => ({
   ORG_NUMBERS_DEFAULTS: {
     founding_year: {
       key: 'founding_year',
@@ -103,19 +103,20 @@ jest.mock('@/lib/org-numbers.defaults', () => ({
       confidence: 'estimate',
     },
   },
-  getDefaultNumeric: jest.fn((key: string) => {
+  getDefaultNumeric: vi.fn((key: string) => {
     const map: Record<string, number> = { founding_year: 2003, team_fte: 5 };
     const v = map[key];
     if (v == null) throw new Error(`Unknown key: ${key}`);
     return v;
   }),
-  getDefaultValue: jest.fn((key: string) => String(key)),
+  getDefaultValue: vi.fn((key: string) => String(key)),
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { getOrgNumber, getOrgNumbers, getNumericValue } from '../org-numbers';
 
 // ---------------------------------------------------------------------------
@@ -141,7 +142,7 @@ function makeRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
 });
 
@@ -236,13 +237,13 @@ describe('getOrgNumbers', () => {
   });
 
   it('passes category filter to query when provided', async () => {
-    const { eq } = jest.requireMock('drizzle-orm') as { eq: jest.Mock };
+    const { eq } = (await import('drizzle-orm')) as unknown as { eq: Mock };
     mockDbSelect.mockReturnValueOnce(makeChain([makeRow()]));
 
     await getOrgNumbers('impact');
 
     // eq should be called with the category column and 'impact'
-    const categoryCall = eq.mock.calls.find(([, v]: [unknown, string]) => v === 'impact');
+    const categoryCall = eq.mock.calls.find((call: unknown[]) => call[1] === 'impact');
     expect(categoryCall).toBeDefined();
   });
 

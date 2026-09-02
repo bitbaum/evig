@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/sellers/[id] (public)
  *
@@ -7,22 +7,22 @@
  *   GET - 404 (profile not found), 200 (with profile + listings + review_stats)
  */
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockExecute = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     execute: (...args: unknown[]) => mockExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   sellerProfiles: {
     userId: 'sp_userId',
     displayName: 'sp_displayName',
@@ -74,7 +74,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -83,11 +83,11 @@ jest.mock('drizzle-orm', () => ({
   getTableName: (_table: unknown) => 'reviews',
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   REVIEW_TARGET_TYPES: { LISTING: 'listing', USER: 'user' },
 }));
 
-jest.mock('@/config/review-status', () => ({
+vi.mock('@/config/review-status', () => ({
   REVIEW_STATUS: {
     PUBLISHED: 'published',
     PENDING_MODERATION: 'pending_moderation',
@@ -96,15 +96,15 @@ jest.mock('@/config/review-status', () => ({
   },
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', DRAFT: 'draft', SOLD: 'sold', REMOVED: 'removed' },
 }));
 
-jest.mock('@/lib/marketplace/listing-helpers', () => ({
+vi.mock('@/lib/marketplace/listing-helpers', () => ({
   listingThumbnailSubquery: { __sql: true, __isSubquery: true },
 }));
 
-jest.mock('@/lib/services/seller-service', () => ({
+vi.mock('@/lib/services/seller-service', () => ({
   sellerProfileCoreFields: {
     userId: 'sp_userId',
     displayName: 'sp_displayName',
@@ -112,8 +112,7 @@ jest.mock('@/lib/services/seller-service', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccessCached: (data: unknown, _maxAge?: number, _stale?: number) =>
       NextResponse.json({ success: true, data }),
@@ -124,11 +123,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_PROFILE = {
@@ -157,36 +156,36 @@ const MOCK_REVIEW_STATS = {
 };
 
 function makeSelectChain(result: unknown[]) {
-  const where = jest.fn().mockResolvedValue(result);
-  const leftJoin = jest.fn().mockReturnValue({ where });
-  const innerJoin = jest.fn().mockReturnValue({ leftJoin, where });
-  const from = jest.fn().mockReturnValue({ innerJoin, where });
+  const where = vi.fn().mockResolvedValue(result);
+  const leftJoin = vi.fn().mockReturnValue({ where });
+  const innerJoin = vi.fn().mockReturnValue({ leftJoin, where });
+  const from = vi.fn().mockReturnValue({ innerJoin, where });
   return { from, innerJoin, leftJoin, where };
 }
 
 // histogram: from().innerJoin().where().groupBy()
 function histogramChain(rows: unknown[]) {
-  const groupBy = jest.fn().mockResolvedValue(rows);
-  const where = jest.fn().mockReturnValue({ groupBy });
-  const innerJoin = jest.fn().mockReturnValue({ where });
-  const from = jest.fn().mockReturnValue({ innerJoin });
+  const groupBy = vi.fn().mockResolvedValue(rows);
+  const where = vi.fn().mockReturnValue({ groupBy });
+  const innerJoin = vi.fn().mockReturnValue({ where });
+  const from = vi.fn().mockReturnValue({ innerJoin });
   return { from };
 }
 
 // reviews: from().innerJoin().innerJoin().leftJoin().where().orderBy().limit()
 function reviewsChain(rows: unknown[]) {
-  const limit = jest.fn().mockResolvedValue(rows);
-  const orderBy = jest.fn().mockReturnValue({ limit });
-  const where = jest.fn().mockReturnValue({ orderBy });
-  const leftJoin = jest.fn().mockReturnValue({ where });
-  const innerJoinInner = jest.fn().mockReturnValue({ leftJoin });
-  const innerJoinOuter = jest.fn().mockReturnValue({ innerJoin: innerJoinInner });
-  const from = jest.fn().mockReturnValue({ innerJoin: innerJoinOuter });
+  const limit = vi.fn().mockResolvedValue(rows);
+  const orderBy = vi.fn().mockReturnValue({ limit });
+  const where = vi.fn().mockReturnValue({ orderBy });
+  const leftJoin = vi.fn().mockReturnValue({ where });
+  const innerJoinInner = vi.fn().mockReturnValue({ leftJoin });
+  const innerJoinOuter = vi.fn().mockReturnValue({ innerJoin: innerJoinInner });
+  const from = vi.fn().mockReturnValue({ innerJoin: innerJoinOuter });
   return { from };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockExecute.mockResolvedValue(MOCK_REVIEW_STATS);
 });
 
@@ -200,9 +199,9 @@ describe('GET /api/sellers/[id] — profile not found', () => {
     const chain1 = makeSelectChain([]);
     // Second select: listings query returns empty
     const chain2 = {
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          orderBy: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          orderBy: vi.fn().mockResolvedValue([]),
         }),
       }),
     };
@@ -223,16 +222,16 @@ describe('GET /api/sellers/[id] — profile not found', () => {
 describe('GET /api/sellers/[id] — success', () => {
   it('returns 200 with profile, listings, and review stats', async () => {
     // First select: profile query
-    const profileWhere = jest.fn().mockResolvedValue([MOCK_PROFILE]);
-    const profileLeftJoin = jest.fn().mockReturnValue({ where: profileWhere });
-    const profileInnerJoin = jest.fn().mockReturnValue({ leftJoin: profileLeftJoin });
-    const profileFrom = jest.fn().mockReturnValue({ innerJoin: profileInnerJoin });
+    const profileWhere = vi.fn().mockResolvedValue([MOCK_PROFILE]);
+    const profileLeftJoin = vi.fn().mockReturnValue({ where: profileWhere });
+    const profileInnerJoin = vi.fn().mockReturnValue({ leftJoin: profileLeftJoin });
+    const profileFrom = vi.fn().mockReturnValue({ innerJoin: profileInnerJoin });
     const chain1 = { from: profileFrom };
 
     // Second select: listings query
-    const listingsOrderBy = jest.fn().mockResolvedValue(MOCK_LISTINGS);
-    const listingsWhere = jest.fn().mockReturnValue({ orderBy: listingsOrderBy });
-    const listingsFrom = jest.fn().mockReturnValue({ where: listingsWhere });
+    const listingsOrderBy = vi.fn().mockResolvedValue(MOCK_LISTINGS);
+    const listingsWhere = vi.fn().mockReturnValue({ orderBy: listingsOrderBy });
+    const listingsFrom = vi.fn().mockReturnValue({ where: listingsWhere });
     const chain2 = { from: listingsFrom };
 
     mockSelect
@@ -279,16 +278,16 @@ describe('GET /api/sellers/[id] — success', () => {
 
   it('returns 200 with zero review stats when no reviews', async () => {
     // First select: profile query
-    const profileWhere = jest.fn().mockResolvedValue([MOCK_PROFILE]);
-    const profileLeftJoin = jest.fn().mockReturnValue({ where: profileWhere });
-    const profileInnerJoin = jest.fn().mockReturnValue({ leftJoin: profileLeftJoin });
-    const profileFrom = jest.fn().mockReturnValue({ innerJoin: profileInnerJoin });
+    const profileWhere = vi.fn().mockResolvedValue([MOCK_PROFILE]);
+    const profileLeftJoin = vi.fn().mockReturnValue({ where: profileWhere });
+    const profileInnerJoin = vi.fn().mockReturnValue({ leftJoin: profileLeftJoin });
+    const profileFrom = vi.fn().mockReturnValue({ innerJoin: profileInnerJoin });
     const chain1 = { from: profileFrom };
 
     // Second select: listings query — empty
-    const listingsOrderBy = jest.fn().mockResolvedValue([]);
-    const listingsWhere = jest.fn().mockReturnValue({ orderBy: listingsOrderBy });
-    const listingsFrom = jest.fn().mockReturnValue({ where: listingsWhere });
+    const listingsOrderBy = vi.fn().mockResolvedValue([]);
+    const listingsWhere = vi.fn().mockReturnValue({ orderBy: listingsOrderBy });
+    const listingsFrom = vi.fn().mockReturnValue({ where: listingsWhere });
     const chain2 = { from: listingsFrom };
 
     mockSelect

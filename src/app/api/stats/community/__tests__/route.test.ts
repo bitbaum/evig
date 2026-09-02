@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/stats/community
  *
@@ -20,13 +20,13 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockQuery = jest.fn();
+const mockQuery = vi.fn();
 
-jest.mock('@/lib/auth/db', () => ({
-  query: (...args: unknown[]) => mockQuery.apply(null, args),
+vi.mock('@/lib/auth/db', () => ({
+  query: (...args: unknown[]) => mockQuery(...args),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: {
     USERS: 'users',
     MARKETPLACE_LISTINGS: 'marketplace_listings',
@@ -35,22 +35,20 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // apiSuccessCached / apiError need NextResponse — mock them with real NextResponse
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccessCached: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   },
 }));
@@ -59,6 +57,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -70,7 +69,7 @@ function makeQueryResult(count: string | null) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Default: all queries return meaningful counts
   mockQuery
     .mockResolvedValueOnce(makeQueryResult('42')) // users

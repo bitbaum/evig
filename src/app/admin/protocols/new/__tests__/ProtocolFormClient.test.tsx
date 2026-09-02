@@ -1,18 +1,19 @@
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { apiFetch } from '@/lib/api/client';
 import ProtocolFormClient from '../ProtocolFormClient';
 
-jest.mock('@/lib/api/client');
+vi.mock('@/lib/api/client');
 
 // AIFormAssist uses useTranslations which requires IntlProvider — mock it out in unit tests
-jest.mock('@/components/ai/AIFormAssist', () => ({
+vi.mock('@/components/ai/AIFormAssist', () => ({
   AIFormAssist: () => null,
 }));
 
-const mockedApiFetch = jest.mocked(apiFetch);
-const pushMock = jest.fn();
+const mockedApiFetch = vi.mocked(apiFetch);
+const pushMock = vi.fn();
 
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: pushMock,
   }),
@@ -26,13 +27,13 @@ const teamMembers = [
 describe('ProtocolFormClient', () => {
   beforeEach(() => {
     pushMock.mockReset();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockedApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'p-100' } });
     // /process-sources call uses native fetch — keep global.fetch mock for it
-    global.fetch = jest.fn().mockResolvedValueOnce({
+    global.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true, data: { processed: true } }),
-    }) as jest.Mock;
+    }) as Mock;
   });
 
   it('creates protocol with typed notes (multi-source flow, YY.1)', async () => {

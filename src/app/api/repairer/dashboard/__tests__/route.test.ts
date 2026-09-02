@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/repairer/dashboard (authenticated, role-checked)
  *
@@ -10,20 +10,20 @@
  * It checks session.user.role === ROLES.REPAIRER || session.user.isStaff.
  */
 
-const mockAuth = jest.fn();
-const mockSelect = jest.fn();
+const mockAuth = vi.fn();
+const mockSelect = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   serviceAppointments: {
     id: 'sa_id',
     repairerId: 'sa_repairerId',
@@ -68,7 +68,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -82,7 +82,7 @@ jest.mock('drizzle-orm', () => ({
   count: () => ({ __count: true }),
 }));
 
-jest.mock('drizzle-orm/pg-core', () => ({
+vi.mock('drizzle-orm/pg-core', () => ({
   alias: (_t: unknown, name: string) => ({
     id: `${name}_id`,
     name: `${name}_name`,
@@ -90,8 +90,7 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -102,7 +101,7 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/config/appointment-status', () => ({
+vi.mock('@/config/appointment-status', () => ({
   APPOINTMENT_STATUS: {
     COMPLETED: 'completed',
     REQUESTED: 'requested',
@@ -111,26 +110,26 @@ jest.mock('@/config/appointment-status', () => ({
   },
 }));
 
-jest.mock('@/config/review-status', () => ({
+vi.mock('@/config/review-status', () => ({
   REVIEW_STATUS: { PUBLIC: 'public', PRIVATE: 'private' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   URGENCY_DEFAULT: 'normal',
 }));
 
-jest.mock('@/lib/constants', () => ({
+vi.mock('@/lib/constants', () => ({
   ROLES: {
     REPAIRER: 'repairer',
     REVAMPIT_ADMIN: 'revampit_admin',
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_REPAIRER_SESSION = {
@@ -165,12 +164,12 @@ const MOCK_STATS = {
 
 // Build a simple chain that resolves to a value for .from().where()?... etc.
 function makeChainThat(result: unknown) {
-  const mockLimit = jest.fn().mockResolvedValue(result);
-  const mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit });
-  const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy, limit: mockLimit });
-  const mockInnerJoin2 = jest.fn().mockReturnValue({ where: mockWhere });
-  const mockInnerJoin = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin2, where: mockWhere });
-  const mockFrom = jest.fn().mockReturnValue({ where: mockWhere, innerJoin: mockInnerJoin });
+  const mockLimit = vi.fn().mockResolvedValue(result);
+  const mockOrderBy = vi.fn().mockReturnValue({ limit: mockLimit });
+  const mockWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy, limit: mockLimit });
+  const mockInnerJoin2 = vi.fn().mockReturnValue({ where: mockWhere });
+  const mockInnerJoin = vi.fn().mockReturnValue({ innerJoin: mockInnerJoin2, where: mockWhere });
+  const mockFrom = vi.fn().mockReturnValue({ where: mockWhere, innerJoin: mockInnerJoin });
   return { from: mockFrom };
 }
 
@@ -188,13 +187,13 @@ function setupSuccessSelectMocks() {
     switch (callCount) {
       case 1: {
         // repairerProfiles lookup
-        const mockWhere = jest.fn().mockResolvedValue([{ id: 'rep-1' }]);
-        const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
+        const mockWhere = vi.fn().mockResolvedValue([{ id: 'rep-1' }]);
+        const mockFrom = vi.fn().mockReturnValue({ where: mockWhere });
         return { from: mockFrom };
       }
       case 2: {
         // bookings query: .from().innerJoin().innerJoin().where().orderBy().limit()
-        const mockLimit = jest.fn().mockResolvedValue([
+        const mockLimit = vi.fn().mockResolvedValue([
           {
             id: 'booking-1',
             customer_name: 'Kunde',
@@ -210,34 +209,32 @@ function setupSuccessSelectMocks() {
             created_at: new Date(),
           },
         ]);
-        const mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit });
-        const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-        const mockInnerJoin2 = jest.fn().mockReturnValue({ where: mockWhere });
-        const mockInnerJoin = jest
+        const mockOrderBy = vi.fn().mockReturnValue({ limit: mockLimit });
+        const mockWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+        const mockInnerJoin2 = vi.fn().mockReturnValue({ where: mockWhere });
+        const mockInnerJoin = vi
           .fn()
           .mockReturnValue({ innerJoin: mockInnerJoin2, where: mockWhere });
-        const mockFrom = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere });
+        const mockFrom = vi.fn().mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere });
         return { from: mockFrom };
       }
       case 3: {
         // stats query
-        const mockWhere = jest.fn().mockResolvedValue([MOCK_STATS]);
-        const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
+        const mockWhere = vi.fn().mockResolvedValue([MOCK_STATS]);
+        const mockFrom = vi.fn().mockReturnValue({ where: mockWhere });
         return { from: mockFrom };
       }
       case 4: {
         // reviews (rating info)
-        const mockWhere = jest
-          .fn()
-          .mockResolvedValue([{ average_rating: '4.5', review_count: '8' }]);
-        const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
+        const mockWhere = vi.fn().mockResolvedValue([{ average_rating: '4.5', review_count: '8' }]);
+        const mockFrom = vi.fn().mockReturnValue({ where: mockWhere });
         return { from: mockFrom };
       }
       case 5: {
         // services
-        const mockOrderBy = jest.fn().mockResolvedValue([]);
-        const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-        const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
+        const mockOrderBy = vi.fn().mockResolvedValue([]);
+        const mockWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+        const mockFrom = vi.fn().mockReturnValue({ where: mockWhere });
         return { from: mockFrom };
       }
       default:
@@ -247,7 +244,7 @@ function setupSuccessSelectMocks() {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_REPAIRER_SESSION);
 });
 

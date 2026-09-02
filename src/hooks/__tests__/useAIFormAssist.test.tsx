@@ -16,10 +16,11 @@
  * migration in the session log).
  */
 
+import type { Mock } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAIFormAssist } from '../useAIFormAssist';
 
-const mockFetch = global.fetch as jest.Mock;
+const mockFetch = global.fetch as Mock;
 
 interface SampleForm {
   title: string;
@@ -39,7 +40,7 @@ function okResponse(overrides?: {
 }) {
   return {
     ok: true,
-    json: jest.fn().mockResolvedValue({
+    json: vi.fn().mockResolvedValue({
       success: true,
       data: overrides?.data ?? { title: 'Auto', description: 'Generated' },
       confidence: overrides?.confidence ?? {},
@@ -55,7 +56,7 @@ function okResponse(overrides?: {
 
 describe('useAIFormAssist — initial state', () => {
   it('starts with no error, not extracting, no success, empty suggestedActions', () => {
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -73,7 +74,7 @@ describe('useAIFormAssist — initial state', () => {
 
 describe('extractFromText — input validation', () => {
   it('empty string → error "Bitte gib eine Beschreibung ein."', async () => {
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -87,7 +88,7 @@ describe('extractFromText — input validation', () => {
   });
 
   it('whitespace-only → same error (trimmed before length check)', async () => {
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -101,7 +102,7 @@ describe('extractFromText — input validation', () => {
   });
 
   it('text > 5000 chars → length error', async () => {
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -116,7 +117,7 @@ describe('extractFromText — input validation', () => {
 
   it('text exactly 5000 chars passes the length gate', async () => {
     mockFetch.mockResolvedValueOnce(okResponse());
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -136,7 +137,7 @@ describe('extractFromText — input validation', () => {
 describe('extractFromText — happy path', () => {
   it('POSTs to /api/ai/extract with formType + mode=extract + trimmed text', async () => {
     mockFetch.mockResolvedValueOnce(okResponse());
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -170,7 +171,7 @@ describe('extractFromText — happy path', () => {
       }),
     );
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -196,7 +197,7 @@ describe('extractFromText — happy path', () => {
   it('defaults model to "unknown" in metadata when API omits it', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: jest.fn().mockResolvedValue({
+      json: vi.fn().mockResolvedValue({
         success: true,
         data: { title: 'X' },
         confidence: { title: 0.8 },
@@ -204,7 +205,7 @@ describe('extractFromText — happy path', () => {
       }),
     });
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -219,7 +220,7 @@ describe('extractFromText — happy path', () => {
 
   it('sets success=true on successful extract', async () => {
     mockFetch.mockResolvedValueOnce(okResponse());
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -248,7 +249,7 @@ describe('suggestedActions handling', () => {
       }),
     );
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -276,7 +277,7 @@ describe('suggestedActions handling', () => {
       }),
     );
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -302,7 +303,7 @@ describe('suggestedActions handling', () => {
       }),
     );
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -324,10 +325,10 @@ describe('callAPI — failure handling', () => {
   it('result.success=false → error from result.error', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
-      json: jest.fn().mockResolvedValue({ success: false, error: 'Rate limited' }),
+      json: vi.fn().mockResolvedValue({ success: false, error: 'Rate limited' }),
     });
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -343,10 +344,10 @@ describe('callAPI — failure handling', () => {
   it('success=false without error message → "KI-Extraktion fehlgeschlagen"', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
-      json: jest.fn().mockResolvedValue({ success: false }),
+      json: vi.fn().mockResolvedValue({ success: false }),
     });
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -362,10 +363,10 @@ describe('callAPI — failure handling', () => {
     // CLAUDE.md rule #4 — Ungültig not Ungueltig
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: jest.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
+      json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
     });
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -381,7 +382,7 @@ describe('callAPI — failure handling', () => {
   it('network error → "Verbindung zum KI-Service fehlgeschlagen."', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Failed to fetch'));
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -398,7 +399,7 @@ describe('callAPI — failure handling', () => {
     abortErr.name = 'AbortError';
     mockFetch.mockRejectedValueOnce(abortErr);
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -426,7 +427,7 @@ describe('AbortController — in-flight cancellation', () => {
       .mockReturnValueOnce(firstPromise)
       .mockResolvedValueOnce(okResponse({ data: { title: 'Second' } }));
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -449,7 +450,7 @@ describe('AbortController — in-flight cancellation', () => {
     // Resolve the first (now-aborted) promise — should not affect state
     resolveFirst({
       ok: true,
-      json: jest.fn().mockResolvedValue({
+      json: vi.fn().mockResolvedValue({
         success: true,
         data: { title: 'First' },
         confidence: {},
@@ -469,7 +470,7 @@ describe('AbortController — in-flight cancellation', () => {
 
 describe('refineFields', () => {
   it('empty instruction → error "Bitte gib eine Anweisung ein."', async () => {
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -484,7 +485,7 @@ describe('refineFields', () => {
 
   it('POSTs with mode=refine + currentData + instruction', async () => {
     mockFetch.mockResolvedValueOnce(okResponse());
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -511,7 +512,7 @@ describe('refineFields', () => {
 describe('runQuickAction', () => {
   it('POSTs with mode=refine + currentData + quickAction key', async () => {
     mockFetch.mockResolvedValueOnce(okResponse());
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -535,7 +536,7 @@ describe('runQuickAction', () => {
 
   it('does NOT validate input length (quick actions are server-driven)', async () => {
     mockFetch.mockResolvedValueOnce(okResponse());
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -562,7 +563,7 @@ describe('isExtracting lifecycle', () => {
       }),
     );
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );
@@ -585,7 +586,7 @@ describe('isExtracting lifecycle', () => {
   it('flips back to false even after error', async () => {
     mockFetch.mockRejectedValueOnce(new Error('boom'));
 
-    const onFieldsFilled = jest.fn();
+    const onFieldsFilled = vi.fn();
     const { result } = renderHook(() =>
       useAIFormAssist<SampleForm>({ formType: 'erfassung', onFieldsFilled }),
     );

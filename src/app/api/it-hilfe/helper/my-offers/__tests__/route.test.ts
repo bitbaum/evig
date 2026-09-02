@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * GET /api/it-hilfe/helper/my-offers — removed; returns 410 Gone with successor link.
  */

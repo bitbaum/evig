@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/org-numbers
  *
@@ -21,10 +21,10 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockGetOrgNumbers = jest.fn();
+const mockGetOrgNumbers = vi.fn();
 
-jest.mock('@/lib/org-numbers', () => ({
-  getOrgNumbers: (...args: unknown[]) => mockGetOrgNumbers.apply(null, args),
+vi.mock('@/lib/org-numbers', () => ({
+  getOrgNumbers: (...args: unknown[]) => mockGetOrgNumbers(...args),
   ORG_NUMBERS_DEFAULTS: {
     'impact-devices': {
       key: 'devices_recycled',
@@ -50,21 +50,18 @@ jest.mock('@/lib/org-numbers', () => ({
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccessCached: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiBadRequest: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 400 });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
 }));
@@ -73,7 +70,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -100,7 +97,7 @@ function makeRequest(params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockGetOrgNumbers.mockResolvedValue(DB_NUMBERS);
 });
 

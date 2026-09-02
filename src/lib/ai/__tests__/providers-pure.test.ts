@@ -17,20 +17,21 @@
  */
 
 // Mock the heavy deps so we can import providers.ts without booting Drizzle
-jest.mock('@/db', () => ({ db: {} }));
-jest.mock('@/db/schema', () => ({ hirnProviderSettings: {} }));
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  desc: jest.fn(),
+vi.mock('@/db', () => ({ db: {} }));
+vi.mock('@/db/schema', () => ({ hirnProviderSettings: {} }));
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  desc: vi.fn(),
 }));
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   OLLAMA_URL: 'http://localhost:11434',
   APP_URL: 'http://localhost:3000',
 }));
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
+import type { Mock } from 'vitest';
 import { extractJson, buildFailureMessage } from '../providers';
 
 // Re-derive the ProviderError type from buildFailureMessage's parameter

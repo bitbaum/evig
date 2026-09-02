@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/cron/close-it-hilfe-requests
  *
@@ -12,12 +12,12 @@
  *     start expiring MATCHED/COMPLETED rows.
  */
 
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockWhere = jest.fn();
-const mockReturning = jest.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockWhere = vi.fn();
+const mockReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     update: (...args: unknown[]) => {
       mockUpdate(...args);
@@ -26,7 +26,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   itHilfeRequests: {
     id: 'ihr_id',
     status: 'ihr_status',
@@ -35,7 +35,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   isNotNull: (a: unknown) => ({ __isNotNull: a }),
@@ -45,11 +45,11 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', EXPIRED: 'expired' },
 }));
 
@@ -57,7 +57,7 @@ import { NextRequest } from 'next/server';
 import { GET } from '../route';
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   // Configured, because an unset secret now denies every request —
   // these routes are no longer reachable without one.
   process.env.CRON_SECRET = 'test-cron-secret';

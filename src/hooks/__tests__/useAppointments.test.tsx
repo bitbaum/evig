@@ -22,25 +22,25 @@
  * would break again.
  */
 
-const mockRouterPush = jest.fn();
-const mockRouterReplace = jest.fn();
-const mockUseSession = jest.fn();
-const mockApiFetch = jest.fn();
+const mockRouterPush = vi.fn();
+const mockRouterReplace = vi.fn();
+const mockUseSession = vi.fn();
+const mockApiFetch = vi.fn();
 const mockSearchParams = new Map<string, string>();
 
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: mockRouterPush, replace: mockRouterReplace }),
   useSearchParams: () => ({
     get: (key: string) => mockSearchParams.get(key) ?? null,
   }),
 }));
 
-jest.mock('next-auth/react', () => ({
+vi.mock('next-auth/react', () => ({
   useSession: () => mockUseSession(),
 }));
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
 }));
 
 import { renderHook, waitFor } from '@testing-library/react';

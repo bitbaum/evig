@@ -59,10 +59,10 @@
 function makeSelectChain(result: unknown[] = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
   chain.then = resolved.then.bind(resolved);
   chain.catch = resolved.catch.bind(resolved);
   chain.finally = resolved.finally.bind(resolved);
@@ -70,16 +70,16 @@ function makeSelectChain(result: unknown[] = []) {
 }
 
 // Update chain: db.update(table).set({}).where(cond)
-const mockUpdateWhere = jest.fn().mockResolvedValue([]);
-const mockUpdateSet = jest.fn().mockReturnValue({ where: mockUpdateWhere });
-const mockDbUpdate = jest.fn().mockReturnValue({ set: mockUpdateSet });
+const mockUpdateWhere = vi.fn().mockResolvedValue([]);
+const mockUpdateSet = vi.fn().mockReturnValue({ where: mockUpdateWhere });
+const mockDbUpdate = vi.fn().mockReturnValue({ set: mockUpdateSet });
 
 // Select — configurable per call; default returns empty
-const mockDbSelect = jest.fn(() => makeSelectChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeSelectChain([]));
 
 // db.execute — used for raw SQL (e.g. workshop_instances participant
 // decrement, which isn't modeled in the Drizzle schema)
-const mockDbExecute = jest.fn().mockResolvedValue({ rows: [] });
+const mockDbExecute = vi.fn().mockResolvedValue({ rows: [] });
 
 // db.transaction(callback) — payment webhooks now wrap multi-write
 // branches in a transaction. Default impl invokes the callback with a tx
@@ -87,26 +87,26 @@ const mockDbExecute = jest.fn().mockResolvedValue({ rows: [] });
 // outer mocks, so the same mock chain (mockDbUpdate / mockDbSelect /
 // mockDbExecute) drives both the per-statement test assertions AND the
 // transactional payment-webhook flow.
-const mockDbTransaction = jest
+const mockDbTransaction = vi
   .fn()
   .mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
     fn({
-      select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-      update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-      execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+      select: (...args: unknown[]) => mockDbSelect(...args),
+      update: (...args: unknown[]) => mockDbUpdate(...args),
+      execute: (...args: unknown[]) => mockDbExecute(...args),
     }),
   );
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
     transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   marketplaceOrders: { id: 'marketplaceOrders', deliveredAt: 'deliveredAt' },
   marketplaceOrderItems: {
     id: 'marketplaceOrderItems',
@@ -122,52 +122,52 @@ jest.mock('@/db/schema', () => ({
   serviceAppointments: { id: 'serviceAppointments' },
 }));
 
-jest.mock('@/db/schema/inventory', () => ({
+vi.mock('@/db/schema/inventory', () => ({
   inventoryItems: { id: 'inventoryItems' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __sql: 'raw' }),
-    join: jest.fn().mockReturnValue({ __sql: 'joined' }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __sql: 'raw' }),
+    join: vi.fn().mockReturnValue({ __sql: 'joined' }),
   }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/email/templates/marketplace', () => ({
-  orderConfirmationBuyer: jest.fn().mockReturnValue({ subject: 'Order', html: '' }),
-  newOrderNotificationSeller: jest.fn().mockReturnValue({ subject: 'New order', html: '' }),
+vi.mock('@/lib/email/templates/marketplace', () => ({
+  orderConfirmationBuyer: vi.fn().mockReturnValue({ subject: 'Order', html: '' }),
+  newOrderNotificationSeller: vi.fn().mockReturnValue({ subject: 'New order', html: '' }),
 }));
 
-jest.mock('@/lib/kivvi/client', () => ({
-  createKivviInvoice: jest.fn().mockResolvedValue({ id: 'kiv-1', number: 'RE-2026-001' }),
-  updateKivviDocumentStatus: jest.fn().mockResolvedValue(undefined),
-  recordKivviPayment: jest.fn().mockResolvedValue(undefined),
-  updateKivviInventoryItem: jest.fn().mockResolvedValue(undefined),
-  recordKivviAgencySale: jest.fn().mockResolvedValue({
+vi.mock('@/lib/kivvi/client', () => ({
+  createKivviInvoice: vi.fn().mockResolvedValue({ id: 'kiv-1', number: 'RE-2026-001' }),
+  updateKivviDocumentStatus: vi.fn().mockResolvedValue(undefined),
+  recordKivviPayment: vi.fn().mockResolvedValue(undefined),
+  updateKivviInventoryItem: vi.fn().mockResolvedValue(undefined),
+  recordKivviAgencySale: vi.fn().mockResolvedValue({
     journalEntryId: 'je-1',
     reference: 'MO-order-1',
     sourceType: 'marketplace_agency_sale',
   }),
-  recordKivviPayout: jest.fn().mockResolvedValue({
+  recordKivviPayout: vi.fn().mockResolvedValue({
     journalEntryId: 'je-2',
     reference: 'MO-order-1',
     sourceType: 'marketplace_payout',
   }),
 }));
 
-jest.mock('@/config/marketplace', () => ({
-  formatCHF: jest.fn((n: number) => `CHF ${n}`),
+vi.mock('@/config/marketplace', () => ({
+  formatCHF: vi.fn((n: number) => `CHF ${n}`),
   DELIVERY_LABELS: { pickup: 'Abholung', shipping: 'Versand' },
   ORDER_STATUS: {
     PENDING_PAYMENT: 'pending_payment',
@@ -185,7 +185,7 @@ jest.mock('@/config/marketplace', () => ({
   },
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: {
     PENDING: 'pending',
     SUCCEEDED: 'succeeded',
@@ -198,7 +198,7 @@ jest.mock('@/config/payment-status', () => ({
   },
 }));
 
-jest.mock('@/lib/payments/payrexx-client', () => ({
+vi.mock('@/lib/payments/payrexx-client', () => ({
   PAYREXX_TRANSACTION_STATUS: {
     RESERVED: 'reserved',
     CONFIRMED: 'confirmed',
@@ -216,7 +216,7 @@ jest.mock('@/lib/payments/payrexx-client', () => ({
 // APPOINTMENT_STATUS model. The module under test imports @/config/booking-status
 // directly; we use the real (unmocked) config here so assertions track the SSOT.
 
-jest.mock('@/config/workshop-registration-status', () => ({
+vi.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
     PENDING: 'pending',
     CONFIRMED: 'confirmed',
@@ -233,7 +233,7 @@ jest.mock('@/config/workshop-registration-status', () => ({
   },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'https://app.revamp-it.ch',
 }));
 
@@ -288,20 +288,20 @@ function makePaymentTx(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockUpdateWhere.mockResolvedValue([]);
   mockUpdateSet.mockReturnValue({ where: mockUpdateWhere });
   mockDbUpdate.mockReturnValue({ set: mockUpdateSet });
   mockDbSelect.mockImplementation(() => makeSelectChain([]));
   mockDbExecute.mockResolvedValue({ rows: [] });
-  // jest.clearAllMocks wipes mockDbTransaction's default impl too — restore
+  // vi.clearAllMocks wipes mockDbTransaction's default impl too — restore
   // it so the transactional payment-webhook flow continues to work for
   // tests that don't customize it.
   mockDbTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
     fn({
-      select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-      update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-      execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+      select: (...args: unknown[]) => mockDbSelect(...args),
+      update: (...args: unknown[]) => mockDbUpdate(...args),
+      execute: (...args: unknown[]) => mockDbExecute(...args),
     }),
   );
 });
@@ -389,7 +389,7 @@ describe('handleMarketplacePayment — RESERVED', () => {
 
   it('does not throw when fire-and-forget email fails', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
-    const { sendCustomEmail } = jest.requireMock('@/lib/email');
+    const { sendCustomEmail } = (await import('@/lib/email')) as any;
     sendCustomEmail.mockRejectedValueOnce(new Error('SMTP down'));
 
     await expect(
@@ -464,7 +464,7 @@ describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', (
         },
       ]),
     );
-    const { createKivviInvoice } = jest.requireMock('@/lib/kivvi/client');
+    const { createKivviInvoice } = (await import('@/lib/kivvi/client')) as any;
     const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT, listingId: 'listing-owned' });
 
     await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-owned', {
@@ -493,7 +493,7 @@ describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', (
       updateKivviDocumentStatus,
       recordKivviPayment,
       recordKivviAgencySale,
-    } = jest.requireMock('@/lib/kivvi/client');
+    } = (await import('@/lib/kivvi/client')) as any;
     const order = makeOrder({
       status: ORDER_STATUS.PENDING_PAYMENT,
       listingId: 'listing-p2p',
@@ -575,7 +575,7 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
 
   it('books P2P seller payout on CONFIRMED when escrow is released', async () => {
     mockDbSelect.mockImplementation(() => makeSelectChain([{ isRevampit: false }]));
-    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client');
+    const { recordKivviPayout } = (await import('@/lib/kivvi/client')) as any;
     const order = makeOrder({
       status: ORDER_STATUS.PAID,
       sellerPayoutChf: '230.00',
@@ -598,7 +598,7 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
 
   it('skips payout sync for owned-stock orders on CONFIRMED', async () => {
     mockDbSelect.mockImplementation(() => makeSelectChain([{ isRevampit: true }]));
-    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client');
+    const { recordKivviPayout } = (await import('@/lib/kivvi/client')) as any;
     const order = makeOrder({ status: ORDER_STATUS.PAID });
 
     await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, {

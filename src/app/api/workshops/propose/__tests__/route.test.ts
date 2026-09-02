@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/workshops/propose (authenticated)
  *
@@ -8,17 +8,16 @@
  *          400 (unapproved location), 200 (success)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -26,12 +25,12 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -41,7 +40,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshopProposals: {
     id: 'wp_id',
     userId: 'wp_userId',
@@ -53,7 +52,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', email: 'u_email', isStaff: 'u_isStaff' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   gte: (a: unknown, b: unknown) => ({ __gte: [a, b] }),
@@ -62,29 +61,28 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/approval-status', () => ({
+vi.mock('@/config/approval-status', () => ({
   APPROVAL_STATUS: { PENDING: 'pending', APPROVED: 'approved' },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
   SUCCESS_MESSAGES: {},
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'https://revamp-it.ch',
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -97,7 +95,8 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -127,34 +126,34 @@ const VALID_PROPOSAL_BODY = {
 
 // Build a standard db.select chain for spam check (0 proposals) + no location lookup
 function makeSpamCheckChain(count: number) {
-  const thenFn = jest
+  const thenFn = vi
     .fn()
     .mockImplementation((cb: (rows: unknown[]) => unknown) => Promise.resolve(cb([{ count }])));
-  const where = jest.fn().mockReturnValue({ then: thenFn });
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockReturnValue({ then: thenFn });
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
 function makeLocationChain(locationRow: unknown) {
-  const thenFn = jest
+  const thenFn = vi
     .fn()
     .mockImplementation((cb: (rows: unknown[]) => unknown) =>
       Promise.resolve(cb(locationRow ? [locationRow] : [])),
     );
-  const where = jest.fn().mockReturnValue({ then: thenFn });
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockReturnValue({ then: thenFn });
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
 // Admin emails lookup chain (flat promise)
 function makeAdminEmailsChain(emails: { email: string }[]) {
-  const where = jest.fn().mockResolvedValue(emails);
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockResolvedValue(emails);
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockValues.mockReturnValue({ returning: mockReturning });
   mockReturning.mockResolvedValue([{ id: 'proposal-1' }]);
@@ -297,11 +296,11 @@ describe('POST /api/workshops/propose — success', () => {
     // a warn so an operator can investigate.
     mockSelect.mockReturnValueOnce(makeSpamCheckChain(0)).mockReturnValue(makeAdminEmailsChain([]));
 
-    const emailMod = require('@/lib/email') as { sendEmail: jest.Mock };
+    const emailMod = (await import('@/lib/email')) as unknown as { sendEmail: Mock };
     emailMod.sendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' });
-    const logger = jest.requireMock('@/lib/logger').logger as {
-      info: jest.Mock;
-      warn: jest.Mock;
+    const logger = (await import('@/lib/logger')).logger as unknown as {
+      info: Mock;
+      warn: Mock;
     };
 
     const req = new NextRequest('http://localhost/api/workshops/propose', {
@@ -331,12 +330,12 @@ describe('POST /api/workshops/propose — success', () => {
       .mockReturnValueOnce(makeSpamCheckChain(0))
       .mockReturnValue(makeAdminEmailsChain([{ email: 'admin@revamp-it.ch' }]));
 
-    const emailMod = require('@/lib/email') as { sendEmail: jest.Mock };
+    const emailMod = (await import('@/lib/email')) as unknown as { sendEmail: Mock };
     // first call = proposer (succeeds), second = admin (resolved failure)
     emailMod.sendEmail
       .mockResolvedValueOnce({ success: true, messageId: 'msg-1' })
       .mockResolvedValueOnce({ success: false, error: 'Mailbox full' });
-    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock };
+    const logger = (await import('@/lib/logger')).logger as unknown as { warn: Mock };
 
     const req = new NextRequest('http://localhost/api/workshops/propose', {
       method: 'POST',
@@ -363,11 +362,11 @@ describe('POST /api/workshops/propose — success', () => {
       .mockReturnValueOnce(makeSpamCheckChain(0))
       .mockReturnValue(makeAdminEmailsChain([{ email: 'admin@revamp-it.ch' }]));
 
-    const emailMod = require('@/lib/email') as { sendEmail: jest.Mock };
+    const emailMod = (await import('@/lib/email')) as unknown as { sendEmail: Mock };
     emailMod.sendEmail
       .mockResolvedValueOnce({ success: true, messageId: 'msg-1' })
       .mockRejectedValueOnce(new Error('connection refused'));
-    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock };
+    const logger = (await import('@/lib/logger')).logger as unknown as { warn: Mock };
 
     const req = new NextRequest('http://localhost/api/workshops/propose', {
       method: 'POST',
@@ -390,7 +389,7 @@ describe('POST /api/workshops/propose — success', () => {
       .mockReturnValueOnce(makeSpamCheckChain(0))
       .mockReturnValue(makeAdminEmailsChain([{ email: 'admin@revamp-it.ch' }]));
 
-    const emailMod = require('@/lib/email');
+    const emailMod = (await import('@/lib/email')) as any;
     emailMod.sendEmail.mockResolvedValue({ success: true });
 
     const req = new NextRequest('http://localhost/api/workshops/propose', {

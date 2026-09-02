@@ -7,19 +7,19 @@
  * shapes for owner notifications/activity.
  */
 
-const mockRunReviewTransition = jest.fn();
+const mockRunReviewTransition = vi.fn();
 
-jest.mock('@/lib/lifecycle/review-workflow', () => ({
+vi.mock('@/lib/lifecycle/review-workflow', () => ({
   runReviewTransition: (opts: unknown) => mockRunReviewTransition(opts),
 }));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(),
+    select: vi.fn(),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   notifications: {},
   teamProfiles: {},
   timecards: {},
@@ -27,26 +27,26 @@ jest.mock('@/db/schema', () => ({
   users: {},
 }));
 
-jest.mock('drizzle-orm', () => ({
-  and: jest.fn(),
-  asc: jest.fn(),
-  eq: jest.fn(),
-  gte: jest.fn(),
-  lte: jest.fn(),
-  sql: Object.assign(jest.fn(), { raw: jest.fn(), join: jest.fn() }),
+vi.mock('drizzle-orm', () => ({
+  and: vi.fn(),
+  asc: vi.fn(),
+  eq: vi.fn(),
+  gte: vi.fn(),
+  lte: vi.fn(),
+  sql: Object.assign(vi.fn(), { raw: vi.fn(), join: vi.fn() }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { warn: jest.fn(), error: jest.fn(), info: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
-jest.mock('@/lib/services/notifications', () => ({
-  createNotification: jest.fn(),
-  notifyUsers: jest.fn(),
+vi.mock('@/lib/services/notifications', () => ({
+  createNotification: vi.fn(),
+  notifyUsers: vi.fn(),
 }));
 
-jest.mock('@/lib/activity', () => ({
-  logActivity: jest.fn(),
+vi.mock('@/lib/activity', () => ({
+  logActivity: vi.fn(),
 }));
 
 import { TIMECARD_STATUSES } from '@/config/timecards';
@@ -62,7 +62,7 @@ const row = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockRunReviewTransition.mockResolvedValue({ ok: false, code: 'not_found' });
 });
 

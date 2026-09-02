@@ -18,13 +18,13 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.leftJoin = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.leftJoin = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -35,15 +35,15 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   serviceAppointments: {
     id: 'sa_id',
     userId: 'sa_userId',
@@ -66,15 +66,15 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  inArray: jest.fn().mockReturnValue({ __inArray: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  inArray: vi.fn().mockReturnValue({ __inArray: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
 }));
 
-jest.mock('@/config/appointment-status', () => ({
+vi.mock('@/config/appointment-status', () => ({
   APPOINTMENT_STATUS: {
     REQUESTED: 'requested',
     CONFIRMED: 'confirmed',
@@ -86,6 +86,7 @@ jest.mock('@/config/appointment-status', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { getUserServiceAppointments, hasPendingAppointmentForService } from '../db-services';
 
 // ---------------------------------------------------------------------------
@@ -114,7 +115,7 @@ function makeAppointmentRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
 });
 

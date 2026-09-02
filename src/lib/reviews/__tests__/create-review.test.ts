@@ -32,12 +32,12 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.insert = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.insert = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -48,19 +48,19 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbInsert = jest.fn(() => makeChain([]));
-const mockDbExecute = jest.fn();
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema/reviews', () => ({
+vi.mock('@/db/schema/reviews', () => ({
   reviews: {
     id: 'r_id',
     reviewerId: 'r_reviewerId',
@@ -70,28 +70,28 @@ jest.mock('@/db/schema/reviews', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   helperProfiles: { userId: 'hp_userId' },
 }));
 
-jest.mock('@/db/schema/marketplace', () => ({
+vi.mock('@/db/schema/marketplace', () => ({
   sellerProfiles: { userId: 'sp_userId' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
-jest.mock('@/config/review-status', () => ({
+vi.mock('@/config/review-status', () => ({
   REVIEW_STATUS: { PUBLISHED: 'published', PENDING: 'pending' },
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   REVIEW_TARGET_TYPES: { IT_HILFE: 'it_hilfe', LISTING: 'listing', REPAIRER: 'repairer' },
   TABLE_NAMES: {
     REVIEWS: 'reviews',
@@ -103,18 +103,19 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   OFFER_STATUS: { ACCEPTED: 'accepted' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { findDuplicateReview, createReview } from '../create-review';
 
 // ---------------------------------------------------------------------------
@@ -134,7 +135,7 @@ function flushMicrotasks() {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockDbInsert.mockImplementation(() => makeChain([{ id: 'review-new' }]));
   mockDbExecute.mockResolvedValue({ rowCount: 1 });
@@ -181,8 +182,8 @@ describe('findDuplicateReview', () => {
     await findDuplicateReview('user-1', 'it_hilfe', 'req-1', 'booking-abc');
 
     // eq should be called more times (extra condition for bookingId)
-    const { eq } = jest.requireMock('drizzle-orm') as { eq: jest.Mock };
-    const calls = eq.mock.calls.map(([col]: [string]) => col);
+    const { eq } = (await import('drizzle-orm')) as unknown as { eq: Mock };
+    const calls = eq.mock.calls.map((c: unknown[]) => c[0]);
     // bookingId column should appear among eq calls
     expect(calls).toContain('r_bookingId');
   });

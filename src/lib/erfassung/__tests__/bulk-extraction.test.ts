@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for lib/erfassung/bulk-extraction.ts
  *
@@ -8,13 +8,13 @@
  *   fallbackParse (via AI null) - brand, price, condition, category, multiple lines, sourceType
  */
 
-const mockCallWithFallback = jest.fn();
+const mockCallWithFallback = vi.fn();
 
-jest.mock('@/lib/ai/providers', () => ({
+vi.mock('@/lib/ai/providers', () => ({
   callWithFallback: (...args: unknown[]) => mockCallWithFallback(...args),
 }));
 
-jest.mock('@/lib/ai/config/prompts', () => ({
+vi.mock('@/lib/ai/config/prompts', () => ({
   ERFASSUNG_PROMPTS: {
     system: 'You are a product extractor.',
     extractMulti: 'Extract: {text}. Schema: {schema}',
@@ -23,14 +23,14 @@ jest.mock('@/lib/ai/config/prompts', () => ({
   fillPromptTemplate: (_tmpl: string, vars: Record<string, string>) => vars.text,
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 import { extractMultipleProducts } from '../bulk-extraction';
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
 // ============================================================================

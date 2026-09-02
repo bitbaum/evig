@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET + POST /api/messages
  *
@@ -11,17 +11,16 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -30,15 +29,15 @@ jest.mock('@/lib/api/middleware', () => ({
   parsePagination: () => ({ limit: 20, offset: 0 }),
 }));
 
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -52,15 +51,14 @@ jest.mock('@/db', () => ({
   },
 }));
 
-const mockValidateBody = jest.fn();
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+const mockValidateBody = vi.fn();
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   SendMessageSchema: {},
   CreateConversationSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -72,38 +70,38 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/messaging/send-message', () => ({
-  sendMessageInConversation: jest.fn().mockResolvedValue({
+vi.mock('@/lib/messaging/send-message', () => ({
+  sendMessageInConversation: vi.fn().mockResolvedValue({
     conversationId: 'conv-1',
     messageId: 'msg-1',
     createdAt: new Date().toISOString(),
   }),
 }));
 
-const mockSendCustomEmail = jest.fn().mockResolvedValue({ success: true });
-const mockNewMarketplaceMessage = jest.fn().mockReturnValue({});
+const mockSendCustomEmail = vi.fn().mockResolvedValue({ success: true });
+const mockNewMarketplaceMessage = vi.fn().mockReturnValue({});
 
-jest.mock('@/lib/email', () => ({
+vi.mock('@/lib/email', () => ({
   sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
   newMarketplaceMessage: (...args: unknown[]) => mockNewMarketplaceMessage(...args),
 }));
 
-jest.mock('@/lib/security/rate-limit', () => ({
-  rateLimiters: { messageCreate: jest.fn().mockReturnValue(true) },
-  getClientIdentifier: jest.fn().mockReturnValue('127.0.0.1'),
+vi.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: { messageCreate: vi.fn().mockReturnValue(true) },
+  getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -114,7 +112,7 @@ jest.mock('drizzle-orm', () => ({
   asc: (a: unknown) => ({ __asc: a }),
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   conversations: {
     id: 'c_id',
     participant1: 'c_p1',
@@ -186,16 +184,16 @@ const MOCK_CONV = {
 // ---------------------------------------------------------------------------
 
 function makeChain(terminal: 'where' | 'offset' | 'limit', result: unknown[]) {
-  const terminalFn = jest.fn().mockResolvedValue(result);
+  const terminalFn = vi.fn().mockResolvedValue(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.leftJoin = jest.fn().mockReturnValue(chain);
-  chain.where = terminal === 'where' ? terminalFn : jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.limit = terminal === 'limit' ? terminalFn : jest.fn().mockReturnValue(chain);
-  chain.offset = terminal === 'offset' ? terminalFn : jest.fn().mockReturnValue(chain);
-  chain.as = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.leftJoin = vi.fn().mockReturnValue(chain);
+  chain.where = terminal === 'where' ? terminalFn : vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.limit = terminal === 'limit' ? terminalFn : vi.fn().mockReturnValue(chain);
+  chain.offset = terminal === 'offset' ? terminalFn : vi.fn().mockReturnValue(chain);
+  chain.as = vi.fn().mockReturnValue(chain);
   return chain;
 }
 
@@ -211,6 +209,8 @@ function makeRequest(method = 'GET', body?: unknown) {
 // Import under test (after mocks are set up)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
+import type { Mock } from 'vitest';
 import { GET, POST } from '../route';
 import { rateLimiters } from '@/lib/security/rate-limit';
 
@@ -219,7 +219,7 @@ import { rateLimiters } from '@/lib/security/rate-limit';
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockValues.mockResolvedValue([]);
   mockReturning.mockResolvedValue([]);
@@ -272,7 +272,7 @@ describe('POST /api/messages', () => {
   });
 
   it('returns 400 when rate limited', async () => {
-    (rateLimiters.messageCreate as jest.Mock).mockReturnValue(false);
+    (rateLimiters.messageCreate as Mock).mockReturnValue(false);
     mockValidateBody.mockReturnValue({
       success: true,
       data: {
@@ -289,7 +289,7 @@ describe('POST /api/messages', () => {
   });
 
   it('returns 200 with conversationId and messageId on success', async () => {
-    (rateLimiters.messageCreate as jest.Mock).mockReturnValue(true);
+    (rateLimiters.messageCreate as Mock).mockReturnValue(true);
     mockValidateBody.mockReturnValue({
       success: true,
       data: {
@@ -313,7 +313,7 @@ describe('POST /api/messages', () => {
   });
 
   it('email link points to /dashboard/messages?conversation=<id> (not the previous /messages/<id> which 404s)', async () => {
-    (rateLimiters.messageCreate as jest.Mock).mockReturnValue(true);
+    (rateLimiters.messageCreate as Mock).mockReturnValue(true);
     mockValidateBody.mockReturnValue({
       success: true,
       data: {

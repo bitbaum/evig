@@ -6,7 +6,7 @@
  */
 
 // Mock AUTH_CONFIG for password strength validation
-jest.mock('@/lib/auth/config', () => ({
+vi.mock('@/lib/auth/config', () => ({
   AUTH_CONFIG: {
     password: {
       minLength: 8,
@@ -20,6 +20,7 @@ jest.mock('@/lib/auth/config', () => ({
   },
 }));
 
+import type { Mock } from 'vitest';
 import {
   hashPassword,
   verifyPassword,

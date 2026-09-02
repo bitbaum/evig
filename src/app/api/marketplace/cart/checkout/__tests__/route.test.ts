@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/marketplace/cart/checkout — multi-item RevampIT cart checkout.
  *
@@ -16,13 +16,12 @@
 // Auth middleware mock
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request) =>
     mockAuth().then((session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       return (handler as (...a: unknown[]) => unknown)(req, session);
@@ -33,20 +32,19 @@ jest.mock('@/lib/api/middleware', () => ({
 // Config mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', SOLD: 'sold', RESERVED: 'reserved' },
   ORDER_STATUS: { PENDING_PAYMENT: 'pending_payment' },
 }));
 
-jest.mock('@/config/org', () => ({ ORG: { name: 'Revamp-IT' } }));
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
+vi.mock('@/config/org', () => ({ ORG: { name: 'Revamp-IT' } }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
 
 // ---------------------------------------------------------------------------
 // Helper mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -61,10 +59,10 @@ jest.mock('@/lib/api/helpers', () => {
 // Payrexx mock
 // ---------------------------------------------------------------------------
 
-const mockCreateGateway = jest.fn();
-const mockUnavailable = jest.fn();
+const mockCreateGateway = vi.fn();
+const mockUnavailable = vi.fn();
 
-jest.mock('@/lib/payments/payrexx-client', () => ({
+vi.mock('@/lib/payments/payrexx-client', () => ({
   PAYREXX_SETUP_MESSAGE: 'Zahlung ist nicht konfiguriert',
   isPayrexxCheckoutUnavailable: (...a: unknown[]) => mockUnavailable(...a),
   createGateway: (...a: unknown[]) => mockCreateGateway(...a),
@@ -74,23 +72,23 @@ jest.mock('@/lib/payments/payrexx-client', () => ({
 // RevampIT seller id mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
-  getRevampitSellerId: jest.fn().mockResolvedValue('revampit-seller'),
+vi.mock('@/lib/marketplace/publish-revampit-listing', () => ({
+  getRevampitSellerId: vi.fn().mockResolvedValue('revampit-seller'),
 }));
 
 // ---------------------------------------------------------------------------
 // Logger mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // drizzle-orm mock
 // ---------------------------------------------------------------------------
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   inArray: (a: unknown, b: unknown) => ({ __inArray: [a, b] }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -103,7 +101,7 @@ jest.mock('drizzle-orm', () => ({
 // Schema mock
 // ---------------------------------------------------------------------------
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   listings: {
     id: 'l_id',
     sellerId: 'l_sellerId',
@@ -120,15 +118,15 @@ jest.mock('@/db/schema', () => ({
 // db mock — transaction + execute + insert + update + delete
 // ---------------------------------------------------------------------------
 
-const mockExecute = jest.fn();
-const mockInsertValues = jest.fn();
-const mockTxUpdateWhere = jest.fn();
-const mockOuterUpdateWhere = jest.fn();
-const mockDeleteWhere = jest.fn();
+const mockExecute = vi.fn();
+const mockInsertValues = vi.fn();
+const mockTxUpdateWhere = vi.fn();
+const mockOuterUpdateWhere = vi.fn();
+const mockDeleteWhere = vi.fn();
 
 // One tx object reused across transaction calls.
 function makeTx() {
-  const insertReturning = jest.fn().mockResolvedValue([{ id: 'order-new' }]);
+  const insertReturning = vi.fn().mockResolvedValue([{ id: 'order-new' }]);
   return {
     execute: (...a: unknown[]) => mockExecute(...a),
     insert: () => ({
@@ -145,9 +143,9 @@ function makeTx() {
   };
 }
 
-const mockTransaction = jest.fn();
+const mockTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     transaction: (...a: unknown[]) => mockTransaction(...a),
     update: () => ({ set: () => ({ where: (...a: unknown[]) => mockOuterUpdateWhere(...a) }) }),
@@ -158,7 +156,7 @@ jest.mock('@/db', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -196,7 +194,7 @@ function makeRequest(body: unknown) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockUnavailable.mockReturnValue(false);
   mockCreateGateway.mockResolvedValue({ id: 9001, link: 'https://pay.example/abc' });

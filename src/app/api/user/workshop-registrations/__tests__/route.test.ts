@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/user/workshop-registrations
  *
@@ -20,26 +20,26 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockOrderBy = jest.fn();
-const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-const mockInnerJoin2 = jest.fn().mockReturnValue({ where: mockWhere });
-const mockInnerJoin1 = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin2 });
-const mockFrom = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin1 });
-const mockSelect = jest.fn().mockReturnValue({ from: mockFrom });
+const mockOrderBy = vi.fn();
+const mockWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+const mockInnerJoin2 = vi.fn().mockReturnValue({ where: mockWhere });
+const mockInnerJoin1 = vi.fn().mockReturnValue({ innerJoin: mockInnerJoin2 });
+const mockFrom = vi.fn().mockReturnValue({ innerJoin: mockInnerJoin1 });
+const mockSelect = vi.fn().mockReturnValue({ from: mockFrom });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockSelect.apply(null, args),
+    select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshopRegistrations: {
     id: 'wr_id',
     userId: 'wr_userId',
@@ -57,28 +57,25 @@ jest.mock('@/db/schema', () => ({
   workshops: { id: 'w_id', title: 'w_title', slug: 'w_slug' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   },
   apiUnauthorized: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 401 });
   },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
 }));
 
@@ -86,7 +83,7 @@ jest.mock('@/config/error-messages', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -111,7 +108,7 @@ const MOCK_REGISTRATIONS = [
 ];
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockSelect.mockReturnValue({ from: mockFrom });
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin1 });
@@ -167,7 +164,7 @@ describe('GET /api/user/workshop-registrations — authenticated', () => {
   it('filters by session user id (queries only current user)', async () => {
     await GET(makeRequest());
     // Verify eq was called with the user's id
-    const { eq } = await import('drizzle-orm');
+    const { eq } = (await import('drizzle-orm')) as any;
     expect(eq).toHaveBeenCalledWith(expect.anything(), 'user-1');
   });
 });

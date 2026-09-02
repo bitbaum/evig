@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/technicians (public)
  *
@@ -7,15 +7,15 @@
  *   GET - 200 with technician list, 200 empty list, 500 on DB error
  */
 
-const mockSelect = jest.fn();
+const mockSelect = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   repairerProfiles: {
     id: 'rp_id',
     userId: 'rp_userId',
@@ -48,7 +48,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -62,17 +62,16 @@ jest.mock('drizzle-orm', () => ({
   count: () => ({ __count: true }),
 }));
 
-jest.mock('@/config/repairer-status', () => ({
+vi.mock('@/config/repairer-status', () => ({
   REPAIRER_PROFILE_TIER: { COMMUNITY: 'community', PROFESSIONAL: 'professional' },
   REPAIRER_STATUS: { ACTIVE: 'active' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   getSkillIds: () => ['hardware', 'software', 'network'],
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccessCached: (data: unknown, _maxAge?: number, _stale?: number) =>
       NextResponse.json({ success: true, data }),
@@ -82,15 +81,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_TECHNICIAN = {
@@ -114,27 +113,27 @@ const MOCK_TECHNICIAN = {
 
 // Chain builder shared across tests
 function buildSelectChain(mainRows: unknown[], countRow: unknown) {
-  const mockOffset = jest.fn().mockResolvedValue(mainRows);
-  const mockLimit = jest.fn().mockReturnValue({ offset: mockOffset });
-  const mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit, offset: mockOffset });
-  const mockGroupBy = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-  const mockWhere = jest.fn().mockReturnValue({ groupBy: mockGroupBy, orderBy: mockOrderBy });
+  const mockOffset = vi.fn().mockResolvedValue(mainRows);
+  const mockLimit = vi.fn().mockReturnValue({ offset: mockOffset });
+  const mockOrderBy = vi.fn().mockReturnValue({ limit: mockLimit, offset: mockOffset });
+  const mockGroupBy = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+  const mockWhere = vi.fn().mockReturnValue({ groupBy: mockGroupBy, orderBy: mockOrderBy });
   // leftJoin is chainable (userProfiles then userSkills) → returns itself
-  const mockLeftJoin = jest.fn();
-  mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere, innerJoin: jest.fn() });
-  const mockInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere });
-  const mockFrom = jest
+  const mockLeftJoin = vi.fn();
+  mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere, innerJoin: vi.fn() });
+  const mockInnerJoin = vi.fn().mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere });
+  const mockFrom = vi
     .fn()
     .mockReturnValue({ innerJoin: mockInnerJoin, leftJoin: mockLeftJoin, where: mockWhere });
 
   // Count query chain: .from().innerJoin().leftJoin(userProfiles).leftJoin(userSkills).where() resolves to array
-  const mockCountWhere = jest.fn().mockResolvedValue([countRow]);
-  const mockCountLeftJoin = jest.fn();
+  const mockCountWhere = vi.fn().mockResolvedValue([countRow]);
+  const mockCountLeftJoin = vi.fn();
   mockCountLeftJoin.mockReturnValue({ leftJoin: mockCountLeftJoin, where: mockCountWhere });
-  const mockCountInnerJoin = jest
+  const mockCountInnerJoin = vi
     .fn()
     .mockReturnValue({ leftJoin: mockCountLeftJoin, where: mockCountWhere });
-  const mockCountFrom = jest.fn().mockReturnValue({
+  const mockCountFrom = vi.fn().mockReturnValue({
     innerJoin: mockCountInnerJoin,
     leftJoin: mockCountLeftJoin,
     where: mockCountWhere,
@@ -149,7 +148,7 @@ function buildSelectChain(mainRows: unknown[], countRow: unknown) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
 // ============================================================================

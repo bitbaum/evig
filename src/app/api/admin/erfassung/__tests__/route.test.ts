@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/admin/erfassung
  *
@@ -20,19 +20,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -40,17 +39,17 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockCreateErfassungProduct = jest.fn();
-const mockSyncToKivvi = jest.fn();
-const mockTransaction = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockWhere = jest.fn();
-const mockCatch = jest.fn();
+const mockCreateErfassungProduct = vi.fn();
+const mockSyncToKivvi = vi.fn();
+const mockTransaction = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockWhere = vi.fn();
+const mockCatch = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    transaction: (...args: unknown[]) => mockTransaction.apply(null, args),
+    transaction: (...args: unknown[]) => mockTransaction(...args),
     update: (...args: unknown[]) => {
       mockUpdate(...args);
       return { set: mockSet };
@@ -58,7 +57,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema/inventory', () => ({
+vi.mock('@/db/schema/inventory', () => ({
   inventoryItems: {
     id: 'ii_id',
     kivviInventoryItemId: 'ii_kivviId',
@@ -67,24 +66,24 @@ jest.mock('@/db/schema/inventory', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
 }));
 
-jest.mock('@/lib/erfassung/create-product', () => ({
-  createErfassungProduct: (...args: unknown[]) => mockCreateErfassungProduct.apply(null, args),
+vi.mock('@/lib/erfassung/create-product', () => ({
+  createErfassungProduct: (...args: unknown[]) => mockCreateErfassungProduct(...args),
 }));
 
-jest.mock('@/lib/kivvi/client', () => ({
-  syncToKivvi: (...args: unknown[]) => mockSyncToKivvi.apply(null, args),
+vi.mock('@/lib/kivvi/client', () => ({
+  syncToKivvi: (...args: unknown[]) => mockSyncToKivvi(...args),
   // Route maps zustand → Kivvi enum synchronously while building the sync
   // payload; without this stub it's undefined and throws before the response.
   mapConditionToKivvi: (condition?: string | null) => condition ?? 'fair',
 }));
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: jest.fn().mockReturnValue({
+vi.mock('@/lib/schemas', () => ({
+  validateBody: vi.fn().mockReturnValue({
     success: true,
     data: {
       action: 'draft',
@@ -97,8 +96,7 @@ jest.mock('@/lib/schemas', () => ({
   ErfassungCreateSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -106,15 +104,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -150,8 +148,8 @@ function makeRequest(
   });
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockTransaction.mockImplementation(async (cb: (tx: unknown) => unknown) => cb({}));
@@ -162,7 +160,7 @@ beforeEach(() => {
   mockWhere.mockReturnValue({ catch: mockCatch });
   mockCatch.mockReturnValue(undefined);
 
-  const schemas = require('@/lib/schemas');
+  const schemas = (await import('@/lib/schemas')) as any;
   schemas.validateBody.mockReturnValue({
     success: true,
     data: {
@@ -189,8 +187,7 @@ describe('POST /api/admin/erfassung — unauthenticated', () => {
 
 describe('POST /api/admin/erfassung — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const schemas = require('@/lib/schemas');
-    const { NextResponse } = jest.requireActual('next/server');
+    const schemas = (await import('@/lib/schemas')) as any;
     schemas.validateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(

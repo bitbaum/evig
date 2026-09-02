@@ -6,25 +6,26 @@
  */
 
 // Mock dependencies before imports
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: jest.fn(),
-    select: jest.fn(),
-    update: jest.fn(() => ({
-      set: jest.fn().mockReturnThis(),
-      where: jest.fn().mockResolvedValue([]),
+    execute: vi.fn(),
+    select: vi.fn(),
+    update: vi.fn((..._args: unknown[]) => ({
+      set: vi.fn().mockReturnThis(),
+      where: vi.fn().mockResolvedValue([]),
     })),
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
+import type { Mock } from 'vitest';
 import {
   checkRateLimit,
   resetRateLimit,
@@ -37,8 +38,8 @@ import {
   createRateLimitKey,
 } from '../rate-limiter';
 
-const mockDb = jest.requireMock('@/db').db as {
-  select: jest.Mock;
+const mockDb = (await import('@/db')).db as unknown as {
+  select: Mock;
 };
 
 // ============================================================================
@@ -243,9 +244,9 @@ describe('clearFailedAttempts', () => {
 
 describe('isAccountLockedDb', () => {
   function mockLockoutRows(rows: unknown[]) {
-    const limit = jest.fn().mockResolvedValue(rows);
-    const where = jest.fn(() => ({ limit }));
-    const from = jest.fn(() => ({ where }));
+    const limit = vi.fn().mockResolvedValue(rows);
+    const where = vi.fn((..._args: unknown[]) => ({ limit }));
+    const from = vi.fn((..._args: unknown[]) => ({ where }));
     mockDb.select.mockReturnValue({ from });
     return { from, where, limit };
   }

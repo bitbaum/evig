@@ -60,9 +60,9 @@ function makeStats(overrides: Partial<Stats> = {}): Stats {
   };
 }
 
-const onJump = jest.fn();
+const onJump = vi.fn();
 const t = makeStubTranslator();
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => vi.clearAllMocks());
 
 describe('Marketplace deriveHeroState', () => {
   it('URGENT wins when openReports > 0 (even if unverified also > 0)', () => {

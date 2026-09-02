@@ -1,19 +1,20 @@
+import type { Mock } from 'vitest';
 import { processProtocolTranscript } from '@/lib/ai/protocol-processing';
 
-jest.mock('@/lib/ai/providers', () => ({
-  callWithFallback: jest.fn(),
-  extractJson: jest.fn(),
-  buildFailureMessage: jest.fn(() => 'fallback used'),
+vi.mock('@/lib/ai/providers', () => ({
+  callWithFallback: vi.fn(),
+  extractJson: vi.fn(),
+  buildFailureMessage: vi.fn((..._args: unknown[]) => 'fallback used'),
 }));
 
-const { callWithFallback, extractJson } = jest.requireMock('@/lib/ai/providers') as {
-  callWithFallback: jest.Mock;
-  extractJson: jest.Mock;
+const { callWithFallback, extractJson } = (await import('@/lib/ai/providers')) as unknown as {
+  callWithFallback: Mock;
+  extractJson: Mock;
 };
 
 describe('processProtocolTranscript', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('returns explicit NO_PROVIDER failure when no provider responds', async () => {

@@ -24,20 +24,20 @@
 
 // ---- Mock declarations (hoisted) ----
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // Mock URL methods — JSDOM doesn't implement these; assign directly
-URL.createObjectURL = jest.fn().mockReturnValue('blob:mock-url');
-URL.revokeObjectURL = jest.fn();
+URL.createObjectURL = vi.fn().mockReturnValue('blob:mock-url');
+URL.revokeObjectURL = vi.fn();
 
 // MediaRecorder mock —  we need a class whose instances we can inspect
 type MockRecorderInstance = {
-  start: jest.Mock;
-  stop: jest.Mock;
-  pause: jest.Mock;
-  resume: jest.Mock;
+  start: Mock;
+  stop: Mock;
+  pause: Mock;
+  resume: Mock;
   ondataavailable: ((event: { data: { size: number } }) => void) | null;
   onstop: (() => void) | null;
   mimeType: string;
@@ -46,26 +46,26 @@ type MockRecorderInstance = {
 let mockMediaRecorder: MockRecorderInstance;
 
 class MockMediaRecorder {
-  start: jest.Mock;
-  stop: jest.Mock;
-  pause: jest.Mock;
-  resume: jest.Mock;
+  start: Mock;
+  stop: Mock;
+  pause: Mock;
+  resume: Mock;
   ondataavailable: ((event: { data: { size: number } }) => void) | null;
   onstop: (() => void) | null;
   mimeType: string;
 
   constructor(_stream: MediaStream, _options?: { mimeType?: string }) {
-    this.start = jest.fn();
-    this.stop = jest.fn();
-    this.pause = jest.fn();
-    this.resume = jest.fn();
+    this.start = vi.fn();
+    this.stop = vi.fn();
+    this.pause = vi.fn();
+    this.resume = vi.fn();
     this.ondataavailable = null;
     this.onstop = null;
     this.mimeType = 'audio/webm';
     mockMediaRecorder = this;
   }
 
-  static isTypeSupported = jest.fn().mockReturnValue(true);
+  static isTypeSupported = vi.fn().mockReturnValue(true);
 }
 
 Object.defineProperty(global, 'MediaRecorder', {
@@ -75,24 +75,25 @@ Object.defineProperty(global, 'MediaRecorder', {
 });
 
 // Mock stream / track
-const mockStopTrack = jest.fn();
+const mockStopTrack = vi.fn();
 const mockStream = {
-  getTracks: jest.fn().mockReturnValue([{ stop: mockStopTrack }]),
+  getTracks: vi.fn().mockReturnValue([{ stop: mockStopTrack }]),
 } as unknown as MediaStream;
 
 Object.defineProperty(navigator, 'mediaDevices', {
   configurable: true,
   value: {
-    getUserMedia: jest.fn().mockResolvedValue(mockStream),
+    getUserMedia: vi.fn().mockResolvedValue(mockStream),
   },
 });
 
-const mockGetUserMedia = navigator.mediaDevices.getUserMedia as jest.MockedFunction<
+const mockGetUserMedia = navigator.mediaDevices.getUserMedia as MockedFunction<
   typeof navigator.mediaDevices.getUserMedia
 >;
 
-// ---- Import under test (must be after jest.mock / global setup) ----
+// ---- Import under test (must be after vi.mock / global setup) ----
 
+import type { Mock, MockedFunction } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useVoiceRecording } from '../useVoiceRecording';
 
@@ -101,20 +102,20 @@ import { useVoiceRecording } from '../useVoiceRecording';
 // ============================================================================
 
 beforeEach(() => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   mockGetUserMedia.mockResolvedValue(mockStream);
   mockStopTrack.mockReset();
-  mockStream.getTracks = jest.fn().mockReturnValue([{ stop: mockStopTrack }]);
-  (URL.createObjectURL as jest.Mock).mockReturnValue('blob:mock-url'); // reset return value
-  (URL.revokeObjectURL as jest.Mock).mockClear();
+  mockStream.getTracks = vi.fn().mockReturnValue([{ stop: mockStopTrack }]);
+  (URL.createObjectURL as Mock).mockReturnValue('blob:mock-url'); // reset return value
+  (URL.revokeObjectURL as Mock).mockClear();
   MockMediaRecorder.isTypeSupported.mockReturnValue(true);
   // Reset instance ref so each test starts clean
   mockMediaRecorder = undefined as unknown as MockRecorderInstance;
 });
 
 afterEach(() => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 // ============================================================================
@@ -200,7 +201,7 @@ describe('startRecording — failure', () => {
 
   it('fires onError callback with the error message', async () => {
     mockGetUserMedia.mockRejectedValueOnce(new Error('Permission denied'));
-    const onError = jest.fn();
+    const onError = vi.fn();
 
     const { result } = renderHook(() => useVoiceRecording({ maxDuration: 120, onError }));
 
@@ -354,7 +355,7 @@ describe('discardRecording', () => {
   });
 
   it('clears audioUrl', async () => {
-    const onRecordingComplete = jest.fn();
+    const onRecordingComplete = vi.fn();
     const { result } = renderHook(() =>
       useVoiceRecording({ maxDuration: 120, onRecordingComplete }),
     );
@@ -383,7 +384,7 @@ describe('discardRecording', () => {
 
 describe('onstop handler', () => {
   it('fires onRecordingComplete callback with blob and duration', async () => {
-    const onRecordingComplete = jest.fn();
+    const onRecordingComplete = vi.fn();
     const { result } = renderHook(() =>
       useVoiceRecording({ maxDuration: 120, onRecordingComplete }),
     );
@@ -431,7 +432,7 @@ describe('timer', () => {
     });
 
     act(() => {
-      jest.advanceTimersByTime(500); // 5 × 100ms ticks
+      vi.advanceTimersByTime(500); // 5 × 100ms ticks
     });
 
     // Each tick adds 0.1, so 5 ticks ≈ 0.5 (floating point; check > 0)

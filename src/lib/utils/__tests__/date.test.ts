@@ -6,7 +6,7 @@
  * Uses fake timers to pin "now" for reproducible assertions.
  */
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 import { formatDeadline, todayLocalIso } from '../date';
 
@@ -14,11 +14,11 @@ import { formatDeadline, todayLocalIso } from '../date';
 const NOW = new Date('2026-01-15T12:00:00.000Z');
 
 beforeAll(() => {
-  jest.setSystemTime(NOW);
+  vi.setSystemTime(NOW);
 });
 
 afterAll(() => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 // ============================================================================

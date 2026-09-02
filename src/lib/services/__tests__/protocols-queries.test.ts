@@ -48,47 +48,45 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
-const mockTxExecute = jest.fn();
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) };
-const mockDbTransaction = jest
+const mockDbExecute = vi.fn();
+const mockTxExecute = vi.fn();
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute(...args) };
+const mockDbTransaction = vi
   .fn()
   .mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
+    transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
 }));
 
-jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' });
-  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
-  (sqlFn as unknown as Record<string, unknown>).join = jest
-    .fn()
-    .mockReturnValue({ __sql: 'joined' });
+vi.mock('drizzle-orm', async () => {
+  const sqlFn = vi.fn().mockReturnValue({ __sql: 'mocked' });
+  (sqlFn as unknown as Record<string, unknown>).raw = vi.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = vi.fn().mockReturnValue({ __sql: 'joined' });
   return {
-    ...jest.requireActual('drizzle-orm'),
+    ...(await vi.importActual('drizzle-orm')),
     sql: sqlFn,
-    getTableName: jest.fn().mockReturnValue('mock_table'),
+    getTableName: vi.fn().mockReturnValue('mock_table'),
   };
 });
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   meetingProtocols: { id: 'meetingProtocols' },
   protocolActionLinks: { id: 'protocolActionLinks' },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'users' },
 }));
 
-jest.mock('@/db/schema/tasks', () => ({
+vi.mock('@/db/schema/tasks', () => ({
   tasks: { id: 'tasks' },
 }));
 
-jest.mock('@/config/protocol-status', () => ({
+vi.mock('@/config/protocol-status', () => ({
   PROTOCOL_STATUS: {
     DRAFT: 'draft',
     PROCESSING: 'processing',
@@ -97,17 +95,17 @@ jest.mock('@/config/protocol-status', () => ({
   },
 }));
 
-const mockFireNotification = jest.fn().mockImplementation((fn: () => void) => {
+const mockFireNotification = vi.fn().mockImplementation((fn: () => void) => {
   fn();
 });
-const mockNotifyUsers = jest.fn().mockResolvedValue(undefined);
+const mockNotifyUsers = vi.fn().mockResolvedValue(undefined);
 
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: (...args: unknown[]) => mockNotifyUsers.apply(null, args),
-  fireNotification: (...args: unknown[]) => mockFireNotification.apply(null, args),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: (...args: unknown[]) => mockNotifyUsers(...args),
+  fireNotification: (...args: unknown[]) => mockFireNotification(...args),
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   RELATED_TYPES: {
     TASK: 'task',
     PROTOCOL: 'protocol',
@@ -118,8 +116,8 @@ jest.mock('@/config/notifications', () => ({
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -169,7 +167,7 @@ function makeProtocolRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Re-initialize transaction: clearAllMocks keeps implementations but we
   // want a fresh pass-through each test.
   mockDbTransaction.mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) =>

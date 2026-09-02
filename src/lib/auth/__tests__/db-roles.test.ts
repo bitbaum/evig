@@ -51,15 +51,15 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: {
     USER_ROLES: 'user_roles',
     PERMISSIONS: 'permissions',
@@ -72,9 +72,9 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', () => ({
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
@@ -174,7 +174,7 @@ function makeProfile() {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbExecute.mockResolvedValue({ rows: [] });
 });
 

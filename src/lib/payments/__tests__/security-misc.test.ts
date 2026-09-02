@@ -10,7 +10,7 @@
  */
 
 // Prevent the module-level setInterval from keeping Jest alive
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 import {
   PCI_COMPLIANCE,

@@ -1,33 +1,33 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET + POST /api/it-hilfe/requests/[id]/offers
  */
 
 // ── Auth mock ──────────────────────────────────────────────────────────────
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
 // ── DB mocks ───────────────────────────────────────────────────────────────
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockOrderBy = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockOrderBy = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
 
-jest.mock('@/db', () => {
+vi.mock('@/db', () => {
   const update = (...args: unknown[]) => {
     mockUpdate(...args);
     return { set: mockSet };
@@ -48,7 +48,7 @@ jest.mock('@/db', () => {
   };
 });
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   itHilfeRequests: {
     id: 'ihr_id',
     requesterId: 'ihr_requesterId',
@@ -83,7 +83,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -94,15 +94,14 @@ jest.mock('drizzle-orm', () => ({
 
 // ── Other mocks ────────────────────────────────────────────────────────────
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   CreateOfferSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -119,15 +118,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
   OFFER_STATUS: {
     PENDING: 'pending',
@@ -137,28 +136,28 @@ jest.mock('@/config/it-hilfe', () => ({
   },
 }));
 
-jest.mock('@/lib/it-hilfe/notifications', () => ({
-  sendItHilfeNotification: jest.fn().mockResolvedValue(undefined),
+vi.mock('@/lib/it-hilfe/notifications', () => ({
+  sendItHilfeNotification: vi.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: jest.fn().mockResolvedValue(undefined),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: vi.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  itHilfeNewOfferReceived: jest.fn().mockReturnValue({}),
+vi.mock('@/lib/email/templates/it-hilfe', () => ({
+  itHilfeNewOfferReceived: vi.fn().mockReturnValue({}),
 }));
 
-jest.mock('@/lib/security/rate-limit', () => ({
-  rateLimiters: { offerCreate: jest.fn().mockReturnValue(true) },
-  getClientIdentifier: jest.fn().mockReturnValue('127.0.0.1'),
+vi.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: { offerCreate: vi.fn().mockReturnValue(true) },
+  getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
 
@@ -176,7 +175,8 @@ const MOCK_SESSION = {
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -206,7 +206,7 @@ function buildSelectChain(rows: unknown[]) {
 
 describe('GET /api/it-hilfe/requests/[id]/offers', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('returns 401 when not authenticated', async () => {
@@ -233,8 +233,8 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
 
     // First select: ownership check
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([{ requesterId: 'user-1', status: 'open' }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([{ requesterId: 'user-1', status: 'open' }]),
       }),
     });
 
@@ -276,15 +276,15 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
 // ── POST Tests ─────────────────────────────────────────────────────────────
 
 describe('POST /api/it-hilfe/requests/[id]/offers', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+  beforeEach(async () => {
+    vi.clearAllMocks();
     mockUpdateWhere.mockResolvedValue(undefined);
     mockSet.mockReturnValue({ where: mockUpdateWhere });
     mockReturning.mockResolvedValue([{ id: 'new-offer-1' }]);
     mockValues.mockReturnValue({ returning: mockReturning });
     // Reset rate limiter to allow by default
-    const { rateLimiters } = jest.requireMock('@/lib/security/rate-limit') as {
-      rateLimiters: { offerCreate: jest.Mock };
+    const { rateLimiters } = (await import('@/lib/security/rate-limit')) as unknown as {
+      rateLimiters: { offerCreate: Mock };
     };
     rateLimiters.offerCreate.mockReturnValue(true);
   });
@@ -301,8 +301,8 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
 
   it('returns 400 when rate limited', async () => {
     mockAuth.mockResolvedValue(MOCK_SESSION);
-    const { rateLimiters } = jest.requireMock('@/lib/security/rate-limit') as {
-      rateLimiters: { offerCreate: jest.Mock };
+    const { rateLimiters } = (await import('@/lib/security/rate-limit')) as unknown as {
+      rateLimiters: { offerCreate: Mock };
     };
     rateLimiters.offerCreate.mockReturnValue(false);
 
@@ -381,9 +381,9 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
 
     // Request select (open, different owner)
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([
             {
               requesterId: 'other-user',
               status: 'open',
@@ -397,18 +397,17 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     });
     // Expiry check → not expired
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
     // Existing offer check → none
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
 
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValue({
       success: false,
       error: NextResponse.json({ success: false, error: 'Validation failed' }, { status: 400 }),
@@ -423,9 +422,9 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
 
     // 1. Request + user join
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([
             {
               requesterId: 'other-user',
               status: 'open',
@@ -439,20 +438,20 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     });
     // 2. Expiry check → not expired
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
     // 3. Existing offer check → none
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
     // 4. Technician profile check → active profile (registered technician)
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([{ id: 'rp-1' }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([{ id: 'rp-1' }]),
       }),
     });
 
@@ -482,9 +481,9 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
 
     // 1. Request + user join → open, not owner
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([
             {
               requesterId: 'other-user',
               status: 'open',
@@ -498,15 +497,15 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     });
     // 2. Expiry check → not expired
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
     });
     // 3. Existing offer check → none
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
     });
     // 4. Technician profile check → none (NOT registered as a technician)
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
     });
 
     mockValidateBody.mockReturnValue({
@@ -535,9 +534,9 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
 
     // 1. Request select — open, not owner
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([
             {
               requesterId: 'other-user',
               status: 'open',
@@ -551,24 +550,24 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     });
     // 2. Expiry check — not expired
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
     });
     // 3. Existing-offer check — WITHDRAWN row found
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([{ id: 'old-withdrawn-offer', status: 'withdrawn' }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([{ id: 'old-withdrawn-offer', status: 'withdrawn' }]),
       }),
     });
     // 4. Technician profile check — active profile (registered technician)
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([{ id: 'rp-1' }]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([{ id: 'rp-1' }]) }),
     });
 
     // The resurrect path uses .update().set().where().returning() — set up
     // a chain that supports it (overrides the default chain which has no
     // .returning()).
-    const resurrectReturning = jest.fn().mockResolvedValue([{ id: 'old-withdrawn-offer' }]);
-    const resurrectWhere = jest.fn().mockReturnValue({ returning: resurrectReturning });
+    const resurrectReturning = vi.fn().mockResolvedValue([{ id: 'old-withdrawn-offer' }]);
+    const resurrectWhere = vi.fn().mockReturnValue({ returning: resurrectReturning });
     // Subsequent calls (offerCount increment) use the default where→Promise pattern
     mockSet
       .mockReturnValueOnce({ where: resurrectWhere }) // First update call: resurrect
@@ -609,9 +608,9 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     mockAuth.mockResolvedValue(MOCK_SESSION);
 
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([
             {
               requesterId: 'other-user',
               status: 'open',
@@ -624,14 +623,14 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       }),
     });
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
     });
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
     });
     // Technician profile check → active profile (registered technician)
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([{ id: 'rp-1' }]) }),
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([{ id: 'rp-1' }]) }),
     });
 
     mockValidateBody.mockReturnValue({
@@ -654,8 +653,8 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       // Inspect the central notifyUsers call — acceptUrl is now carried in
       // metadata (the offers route post-QQ.4.3 routes through notifyUsers,
       // which dispatches to itHilfeNewOfferReceived via getEmailContent).
-      const notifMock = jest.requireMock('@/lib/services/notifications') as {
-        notifyUsers: jest.Mock;
+      const notifMock = (await import('@/lib/services/notifications')) as unknown as {
+        notifyUsers: Mock;
       };
       expect(notifMock.notifyUsers).toHaveBeenCalledTimes(1);
       const payload = notifMock.notifyUsers.mock.calls[0][1] as {
@@ -670,9 +669,9 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       const token = url.searchParams.get('token');
       expect(token).toBeTruthy();
 
-      const { verifyOfferAcceptToken } = jest.requireActual(
+      const { verifyOfferAcceptToken } = (await vi.importActual(
         '@/lib/it-hilfe/offer-accept-tokens',
-      ) as {
+      )) as {
         verifyOfferAcceptToken: (t: string) => { ok: boolean; offerId?: string; reason?: string };
       };
       const verifyResult = verifyOfferAcceptToken(token as string);

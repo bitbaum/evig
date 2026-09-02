@@ -18,9 +18,9 @@
  *   - covers intern and extern
  */
 
-jest.mock('lucide-react', () => {
+vi.mock('lucide-react', () => {
   const icon = (name: string) => ({ displayName: name });
-  return new Proxy({}, { get: (_t, prop) => icon(prop as string) });
+  return new Proxy({}, { get: (_t, prop) => icon(prop as string), has: () => true });
 });
 
 import {

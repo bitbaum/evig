@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET + PUT /api/user/technician-profile
  *
@@ -11,17 +11,16 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -29,16 +28,16 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockOnConflictDoUpdate = jest.fn();
-const mockDelete = jest.fn();
-const mockDeleteWhere = jest.fn();
-const mockInsert2 = jest.fn();
-const mockValues2 = jest.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockOnConflictDoUpdate = vi.fn();
+const mockDelete = vi.fn();
+const mockDeleteWhere = vi.fn();
+const mockInsert2 = vi.fn();
+const mockValues2 = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -52,14 +51,13 @@ jest.mock('@/db', () => ({
   },
 }));
 
-const mockValidateBody = jest.fn();
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+const mockValidateBody = vi.fn();
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   TechnicianProfileSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -70,27 +68,27 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/repairer-status', () => ({
+vi.mock('@/config/repairer-status', () => ({
   REPAIRER_STATUS: { ACTIVE: 'active' },
   REPAIRER_PROFILE_TIER: { COMMUNITY: 'community', PROFESSIONAL: 'professional' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   IT_SKILLS: {
     networking: [{ id: 'networking', label: 'Netzwerk' }],
     hardware: [{ id: 'hardware', label: 'Hardware' }],
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -98,7 +96,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   repairerProfiles: {
     id: 'rp_id',
     userId: 'rp_userId',
@@ -158,14 +156,14 @@ const MOCK_SKILL_ROW = { skillId: 'networking', categoryId: 'networking' };
 // ---------------------------------------------------------------------------
 
 function makeChain(terminal: 'where' | 'limit', result: unknown[]) {
-  const terminalFn = jest.fn().mockResolvedValue(result);
+  const terminalFn = vi.fn().mockResolvedValue(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.leftJoin = jest.fn().mockReturnValue(chain);
-  chain.where = terminal === 'where' ? terminalFn : jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.limit = terminal === 'limit' ? terminalFn : jest.fn().mockReturnValue(chain);
-  chain.as = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.leftJoin = vi.fn().mockReturnValue(chain);
+  chain.where = terminal === 'where' ? terminalFn : vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.limit = terminal === 'limit' ? terminalFn : vi.fn().mockReturnValue(chain);
+  chain.as = vi.fn().mockReturnValue(chain);
   return chain;
 }
 
@@ -181,6 +179,7 @@ function makeRequest(method = 'GET', body?: unknown) {
 // Import under test
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET, PUT } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -188,7 +187,7 @@ import { GET, PUT } from '../route';
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockDeleteWhere.mockResolvedValue([]);
   mockOnConflictDoUpdate.mockResolvedValue([]);
@@ -272,19 +271,21 @@ describe('PUT /api/user/technician-profile', () => {
     });
 
     // After delete, values is called for skill insert
-    const mockInsertSkillValues = jest.fn().mockResolvedValue([]);
+    const mockInsertSkillValues = vi.fn().mockResolvedValue([]);
     mockInsert.mockImplementation(() => undefined);
     mockValues.mockReturnValue({ onConflictDoUpdate: mockOnConflictDoUpdate });
     // Second insert (skills)
     let insertCount = 0;
-    jest.spyOn(require('@/db').db, 'insert').mockImplementation((...args: unknown[]) => {
-      insertCount++;
-      mockInsert(...args);
-      if (insertCount === 1) {
-        return { values: mockValues };
-      }
-      return { values: mockInsertSkillValues };
-    });
+    vi.spyOn((await import('@/db')).db as any, 'insert').mockImplementation(
+      (...args: unknown[]) => {
+        insertCount++;
+        mockInsert(...args);
+        if (insertCount === 1) {
+          return { values: mockValues };
+        }
+        return { values: mockInsertSkillValues };
+      },
+    );
 
     const res = await PUT(makeRequest('PUT', {}) as never);
     const body = await res.json();

@@ -2,13 +2,13 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { apiFetch } from '@/lib/api/client';
 import DecisionListClient from '../DecisionListClient';
 
-jest.mock('@/lib/api/client');
+vi.mock('@/lib/api/client');
 
-const mockedApiFetch = jest.mocked(apiFetch);
+const mockedApiFetch = vi.mocked(apiFetch);
 
 describe('DecisionListClient', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockedApiFetch
       .mockResolvedValueOnce({ success: false, error: 'Kaputt' })
       .mockResolvedValueOnce({

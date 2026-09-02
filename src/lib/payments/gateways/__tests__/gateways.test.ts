@@ -4,6 +4,7 @@
  * Taler/BTCPay adapters (mock paths + BTCPay HMAC verification).
  */
 
+import type { Mock } from 'vitest';
 import crypto from 'crypto';
 import { GATEWAY_STATUS } from '@/config/gateway-status';
 import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client';

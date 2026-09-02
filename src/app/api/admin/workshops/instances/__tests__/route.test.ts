@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/POST /api/admin/workshops/instances
  *
@@ -15,19 +15,18 @@
  *   - returns 200 on success
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -35,20 +34,20 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockGroupBy = jest.fn();
-const mockOrderBy = jest.fn();
-const mockLimit = jest.fn();
-const mockOffset = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockGroupBy = vi.fn();
+const mockOrderBy = vi.fn();
+const mockLimit = vi.fn();
+const mockOffset = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -61,7 +60,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshopInstances: {
     id: 'wi_id',
     workshopId: 'wi_workshopId',
@@ -79,7 +78,7 @@ jest.mock('@/db/schema', () => ({
   workshopRegistrations: { id: 'wr_id', workshopInstanceId: 'wr_instanceId', status: 'wr_status' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   gt: (a: unknown, b: unknown) => ({ __gt: [a, b] }),
@@ -89,36 +88,35 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/workshop-registration-status', () => ({
+vi.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: { CONFIRMED: 'confirmed', PENDING: 'pending' },
 }));
 
-jest.mock('@/config/workshops', () => ({
+vi.mock('@/config/workshops', () => ({
   WORKSHOP_INSTANCE_STATUS: { SCHEDULED: 'scheduled' },
 }));
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   ORG: { name: 'Revamp-IT' },
   BASE_REGION: { city: 'Zürich', country: 'Schweiz', region: 'ZH', full: 'Zürich, Schweiz' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
-    parsePagination: jest.fn().mockReturnValue({ limit: 20, offset: 0 }),
+    parsePagination: vi.fn().mockReturnValue({ limit: 20, offset: 0 }),
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 const MOCK_SESSION = {
@@ -149,11 +147,11 @@ function makeRequest(method = 'GET', body?: Record<string, unknown>) {
   });
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
-  const helpers = require('@/lib/api/helpers');
+  const helpers = (await import('@/lib/api/helpers')) as any;
   helpers.parsePagination.mockReturnValue({ limit: 20, offset: 0 });
 
   // Items query: from → innerJoin → leftJoin → where → groupBy → orderBy → limit → offset

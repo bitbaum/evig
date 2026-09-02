@@ -8,26 +8,26 @@
  * event shape.
  */
 
-const mockRunReviewTransition = jest.fn();
-jest.mock('@/lib/lifecycle/review-workflow', () => ({
+const mockRunReviewTransition = vi.fn();
+vi.mock('@/lib/lifecycle/review-workflow', () => ({
   runReviewTransition: (opts: unknown) => mockRunReviewTransition(opts),
 }));
 
-const mockQuery = jest.fn();
-jest.mock('@/lib/auth/db', () => ({
+const mockQuery = vi.fn();
+vi.mock('@/lib/auth/db', () => ({
   query: (...args: unknown[]) => mockQuery(...args),
 }));
 
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: jest.fn(),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: vi.fn(),
 }));
 
-jest.mock('@/lib/team/timecard-approvers', () => ({
-  getTimecardApproverIds: jest.fn().mockResolvedValue([]),
+vi.mock('@/lib/team/timecard-approvers', () => ({
+  getTimecardApproverIds: vi.fn().mockResolvedValue([]),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { warn: jest.fn(), error: jest.fn(), info: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
 import { reviewTimeOffRequest } from '../time-off';
@@ -46,7 +46,7 @@ const FULL_ROW = {
 
 describe('reviewTimeOffRequest (pilot A wiring)', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockQuery.mockResolvedValue({ rows: [FULL_ROW] });
   });
 

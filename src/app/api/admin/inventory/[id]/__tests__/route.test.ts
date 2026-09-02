@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/DELETE/PUT/PATCH /api/admin/inventory/[id]
  *
@@ -31,19 +31,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -57,28 +56,28 @@ jest.mock('@/lib/api/middleware', () => ({
 }));
 
 // Drizzle select chain
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoinWhere = jest.fn(); // terminal: after leftJoin
-const mockInnerJoinWhere = jest.fn(); // terminal: after innerJoin
-const mockSelectWhere = jest.fn(); // intermediate/terminal for no-join selects
-const mockSelectWhereLimit = jest.fn(); // terminal: after where in image query
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoinWhere = vi.fn(); // terminal: after leftJoin
+const mockInnerJoinWhere = vi.fn(); // terminal: after innerJoin
+const mockSelectWhere = vi.fn(); // intermediate/terminal for no-join selects
+const mockSelectWhereLimit = vi.fn(); // terminal: after where in image query
 
 // Drizzle delete chain
-const mockDelete = jest.fn();
-const mockDeleteWhere = jest.fn();
-const mockDeleteReturning = jest.fn();
-const mockTransaction = jest.fn();
+const mockDelete = vi.fn();
+const mockDeleteWhere = vi.fn();
+const mockDeleteReturning = vi.fn();
+const mockTransaction = vi.fn();
 
 // Drizzle update chain
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockUpdateReturning = jest.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockUpdateReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -96,7 +95,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   aiExtractedProducts: {
     id: 'aep_id',
     productName: 'aep_name',
@@ -134,7 +133,7 @@ jest.mock('@/db/schema', () => ({
   marketplaceListings: { id: 'ml_id', inventoryItemId: 'ml_inventoryItemId' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   and: (...args: unknown[]) => ({ __and: args }),
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -143,30 +142,29 @@ jest.mock('drizzle-orm', () => ({
   inArray: (col: unknown, arr: unknown) => ({ __inArray: [col, arr] }),
 }));
 
-jest.mock('@/config/intake-status', () => ({
+vi.mock('@/config/intake-status', () => ({
   INTAKE_STATUS: { PUBLISHED: 'published', DRAFT: 'draft' },
 }));
 
-const mockPublishProduct = jest.fn();
-const mockUnpublishProduct = jest.fn();
-const mockUpdateProductImage = jest.fn();
+const mockPublishProduct = vi.fn();
+const mockUnpublishProduct = vi.fn();
+const mockUpdateProductImage = vi.fn();
 
-jest.mock('@/lib/admin/inventory-actions', () => ({
-  publishProduct: (...args: unknown[]) => mockPublishProduct.apply(null, args),
-  unpublishProduct: (...args: unknown[]) => mockUnpublishProduct.apply(null, args),
-  updateProductImage: (...args: unknown[]) => mockUpdateProductImage.apply(null, args),
+vi.mock('@/lib/admin/inventory-actions', () => ({
+  publishProduct: (...args: unknown[]) => mockPublishProduct(...args),
+  unpublishProduct: (...args: unknown[]) => mockUnpublishProduct(...args),
+  updateProductImage: (...args: unknown[]) => mockUpdateProductImage(...args),
 }));
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   InventoryUpdateSchema: {},
   InventoryPatchSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -178,15 +176,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, DELETE, PUT, PATCH } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -228,7 +226,7 @@ function makeContext(id = 'prod-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // SELECT chain:
@@ -267,8 +265,8 @@ beforeEach(() => {
       mockSelect(...args);
       // Inside the transaction, tx.select(...).from(inventoryItems).where(...)
       // should resolve to [] by default (no marketplace listings to delete).
-      const from = jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      const from = vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       });
       return { from };
     };
@@ -361,13 +359,13 @@ describe('DELETE /api/admin/inventory/[id] — authenticated', () => {
     // an aiExtractedProducts row, unrecoverable without manual SQL.
     // Regression: assert db.transaction is called and all tx.delete invocations
     // route through one shared transaction context (not the top-level db.delete).
-    const txDelete = jest.fn().mockReturnValue({
-      where: jest.fn().mockReturnValue({
-        returning: jest.fn().mockResolvedValue([{ id: 'prod-1', itemUuid: 'uuid-1' }]),
+    const txDelete = vi.fn().mockReturnValue({
+      where: vi.fn().mockReturnValue({
+        returning: vi.fn().mockResolvedValue([{ id: 'prod-1', itemUuid: 'uuid-1' }]),
       }),
     });
-    const txSelect = jest.fn().mockReturnValue({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+    const txSelect = vi.fn().mockReturnValue({
+      from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
     });
     mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => Promise<unknown>) =>
       fn({ delete: txDelete, select: txSelect }),
@@ -414,7 +412,6 @@ describe('PUT /api/admin/inventory/[id] — unauthenticated', () => {
 
 describe('PUT /api/admin/inventory/[id] — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(
@@ -461,7 +458,6 @@ describe('PATCH /api/admin/inventory/[id] — unauthenticated', () => {
 
 describe('PATCH /api/admin/inventory/[id] — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for PATCH /api/task-requests/[id]
  *
@@ -20,19 +20,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params
@@ -45,8 +44,7 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -62,11 +60,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   taskRequests: {
     id: 'tr_id',
     taskId: 'tr_tid',
@@ -80,31 +78,31 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  and: jest.fn(),
-  ne: jest.fn(),
-  sql: Object.assign(jest.fn().mockReturnValue({}), { raw: jest.fn().mockReturnValue({}) }),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  and: vi.fn(),
+  ne: vi.fn(),
+  sql: Object.assign(vi.fn().mockReturnValue({}), { raw: vi.fn().mockReturnValue({}) }),
 }));
 
-jest.mock('@/config/tasks', () => ({
+vi.mock('@/config/tasks', () => ({
   TASK_STATUSES: { IN_PROGRESS: 'in_progress' },
   REQUEST_STATUSES: { PENDING: 'pending', ACCEPTED: 'accepted', DECLINED: 'declined' },
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   NOTIFICATION_TYPES: { TASK_REQUEST_RESPONSE: 'task_request_response' },
   RELATED_TYPES: { TASK: 'task' },
 }));
 
-const mockCreateNotification = jest.fn();
-const mockFireNotification = jest.fn();
-jest.mock('@/lib/services/notifications', () => ({
-  createNotification: (...args: unknown[]) => mockCreateNotification.apply(null, args),
-  fireNotification: (...args: unknown[]) => mockFireNotification.apply(null, args),
+const mockCreateNotification = vi.fn();
+const mockFireNotification = vi.fn();
+vi.mock('@/lib/services/notifications', () => ({
+  createNotification: (...args: unknown[]) => mockCreateNotification(...args),
+  fireNotification: (...args: unknown[]) => mockFireNotification(...args),
 }));
 
-jest.mock('@/lib/schemas/tasks', () => ({
+vi.mock('@/lib/schemas/tasks', () => ({
   requestResponseSchema: {
     safeParse: (b: unknown) => {
       const body = b as Record<string, unknown>;
@@ -122,10 +120,10 @@ jest.mock('@/lib/schemas/tasks', () => ({
   },
 }));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(),
-    update: jest.fn(),
+    select: vi.fn(),
+    update: vi.fn(),
   },
 }));
 
@@ -134,26 +132,26 @@ jest.mock('@/db', () => ({
 // ---------------------------------------------------------------------------
 
 function makeSelectChain(value: unknown[]) {
-  const c: Record<string, jest.Mock> = {};
+  const c: Record<string, Mock> = {};
   ['from', 'leftJoin'].forEach((m) => {
-    c[m] = jest.fn().mockReturnValue(c);
+    c[m] = vi.fn().mockReturnValue(c);
   });
-  c.where = jest.fn().mockResolvedValue(value);
+  c.where = vi.fn().mockResolvedValue(value);
   return c;
 }
 
 function makeUpdateReturningChain(returnValue: unknown[]) {
-  const c: Record<string, jest.Mock> = {};
-  c.set = jest.fn().mockReturnValue(c);
-  c.where = jest.fn().mockReturnValue(c);
-  c.returning = jest.fn().mockResolvedValue(returnValue);
+  const c: Record<string, Mock> = {};
+  c.set = vi.fn().mockReturnValue(c);
+  c.where = vi.fn().mockReturnValue(c);
+  c.returning = vi.fn().mockResolvedValue(returnValue);
   return c;
 }
 
 function makeUpdateWhereChain() {
-  const c: Record<string, jest.Mock> = {};
-  c.set = jest.fn().mockReturnValue(c);
-  c.where = jest.fn().mockResolvedValue(undefined);
+  const c: Record<string, Mock> = {};
+  c.set = vi.fn().mockReturnValue(c);
+  c.where = vi.fn().mockResolvedValue(undefined);
   return c;
 }
 
@@ -161,7 +159,8 @@ function makeUpdateWhereChain() {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { PATCH } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -219,7 +218,7 @@ function makePatchRequest(id = 'req-1', body?: Record<string, unknown>) {
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockCreateNotification.mockResolvedValue({ id: 'notif-1' });
   mockFireNotification.mockReturnValue(undefined);
@@ -239,7 +238,7 @@ describe('PATCH /api/task-requests/[id] — unauthenticated', () => {
 
 describe('PATCH /api/task-requests/[id] — validation', () => {
   it('returns 400 when status is missing', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select.mockReturnValueOnce(makeSelectChain([MOCK_TASK_REQUEST]));
 
     const response = await PATCH(makePatchRequest('req-1', {}), makeContext());
@@ -249,7 +248,7 @@ describe('PATCH /api/task-requests/[id] — validation', () => {
 
 describe('PATCH /api/task-requests/[id] — not found', () => {
   it('returns 404 when request does not exist', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select.mockReturnValueOnce(makeSelectChain([]));
 
     const response = await PATCH(makePatchRequest('req-1', { status: 'accepted' }), makeContext());
@@ -259,7 +258,7 @@ describe('PATCH /api/task-requests/[id] — not found', () => {
 
 describe('PATCH /api/task-requests/[id] — already answered', () => {
   it('returns 400 when request is not pending', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select.mockReturnValueOnce(
       makeSelectChain([
         {
@@ -276,7 +275,7 @@ describe('PATCH /api/task-requests/[id] — already answered', () => {
 
 describe('PATCH /api/task-requests/[id] — own request', () => {
   it('returns 400 when user tries to answer their own request', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     // requestedBy === session.user.id (user-1)
     mockDb.select.mockReturnValueOnce(
       makeSelectChain([
@@ -294,7 +293,7 @@ describe('PATCH /api/task-requests/[id] — own request', () => {
 
 describe('PATCH /api/task-requests/[id] — accept broadcast request', () => {
   it('returns 200 and fires notification', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     // Select: fetch request
     mockDb.select.mockReturnValueOnce(makeSelectChain([MOCK_TASK_REQUEST]));
     // Update 1: update request status (with returning)
@@ -316,7 +315,7 @@ describe('PATCH /api/task-requests/[id] — accept broadcast request', () => {
 
 describe('PATCH /api/task-requests/[id] — decline request', () => {
   it('returns 200 on decline', async () => {
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     // Select: fetch request
     mockDb.select.mockReturnValueOnce(makeSelectChain([MOCK_TASK_REQUEST]));
     // Update: update request status to declined (with returning)

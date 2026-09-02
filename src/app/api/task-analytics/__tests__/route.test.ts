@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/task-analytics
  *
@@ -17,19 +17,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: unknown) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown, c: unknown) => unknown)(req, session, context);
@@ -37,8 +36,7 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -49,11 +47,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   tasks: {
     id: 't_id',
     isArchived: 't_ia',
@@ -74,12 +72,12 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email', isStaff: 'u_staff' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  sql: Object.assign(jest.fn().mockReturnValue({}), { raw: jest.fn().mockReturnValue({}) }),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  sql: Object.assign(vi.fn().mockReturnValue({}), { raw: vi.fn().mockReturnValue({}) }),
 }));
 
-jest.mock('@/config/tasks', () => ({
+vi.mock('@/config/tasks', () => ({
   TASK_STATUSES: {
     NEEDS_ATTENTION: 'needs_attention',
     REQUESTED: 'requested',
@@ -88,8 +86,8 @@ jest.mock('@/config/tasks', () => ({
   REQUEST_STATUSES: { PENDING: 'pending' },
 }));
 
-jest.mock('@/db', () => ({
-  db: { select: jest.fn() },
+vi.mock('@/db', () => ({
+  db: { select: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -98,11 +96,11 @@ jest.mock('@/db', () => ({
 
 function makeChain(terminalMethod: string, value: unknown) {
   const methods = ['from', 'leftJoin', 'where', 'groupBy', 'having', 'orderBy'];
-  const c: Record<string, jest.Mock> = {};
+  const c: Record<string, Mock> = {};
   methods.forEach((m) => {
-    c[m] = jest.fn().mockReturnValue(c);
+    c[m] = vi.fn().mockReturnValue(c);
   });
-  c[terminalMethod] = jest.fn().mockResolvedValue(value);
+  c[terminalMethod] = vi.fn().mockResolvedValue(value);
   return c;
 }
 
@@ -110,7 +108,8 @@ function makeChain(terminalMethod: string, value: unknown) {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -158,11 +157,11 @@ function makeGetRequest(params: Record<string, string> = {}) {
 // beforeEach
 // ---------------------------------------------------------------------------
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
-  const mockDb = require('@/db').db;
+  const mockDb = (await import('@/db')).db as any;
   mockDb.select
     .mockReturnValueOnce(makeChain('from', [MOCK_STATS])) // 1. overall stats
     .mockReturnValueOnce(makeChain('where', [MOCK_COMPLETIONS])) // 2. completions timeframe
@@ -226,7 +225,7 @@ describe('GET /api/task-analytics — authenticated', () => {
 describe('GET /api/task-analytics — custom days param', () => {
   it('uses custom days when provided', async () => {
     // Re-queue all 8 chains for the new call
-    const mockDb = require('@/db').db;
+    const mockDb = (await import('@/db')).db as any;
     mockDb.select
       .mockReturnValueOnce(makeChain('from', [MOCK_STATS]))
       .mockReturnValueOnce(makeChain('where', [MOCK_COMPLETIONS]))

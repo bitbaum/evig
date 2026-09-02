@@ -19,6 +19,7 @@
  *     accountName + importedAt + sourceFile so the dashboard can drill down
  */
 
+import type { Mock } from 'vitest';
 import { promises as fs } from 'fs';
 
 import {
@@ -31,13 +32,16 @@ import {
   type SummaryData,
 } from '../financial-loader';
 
-jest.mock('fs', () => ({
-  promises: {
-    readFile: jest.fn(),
-  },
-}));
+vi.mock('fs', () => {
+  const fsMock = {
+    promises: {
+      readFile: vi.fn(),
+    },
+  };
+  return { ...fsMock, default: fsMock };
+});
 
-const mockReadFile = fs.readFile as jest.Mock;
+const mockReadFile = fs.readFile as Mock;
 
 beforeEach(() => {
   mockReadFile.mockReset();

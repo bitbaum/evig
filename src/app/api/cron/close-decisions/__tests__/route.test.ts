@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/cron/close-decisions
  *
@@ -7,19 +7,19 @@
  *   GET - 401 (wrong/missing secret), 200 (decisions closed)
  */
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockExecute = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     execute: (...args: unknown[]) => mockExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   decisions: {
     id: 'd_id',
     title: 'd_title',
@@ -31,7 +31,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -41,40 +41,40 @@ jest.mock('drizzle-orm', () => ({
   isNotNull: (a: unknown) => ({ __isNotNull: a }),
 }));
 
-const mockTransitionDecision = jest.fn();
+const mockTransitionDecision = vi.fn();
 
-jest.mock('@/lib/services/decisions', () => ({
+vi.mock('@/lib/services/decisions', () => ({
   transitionDecision: (...args: unknown[]) => mockTransitionDecision(...args),
 }));
 
-const mockNotifyAllStaff = jest.fn();
-const mockNotifyUsers = jest.fn();
+const mockNotifyAllStaff = vi.fn();
+const mockNotifyUsers = vi.fn();
 
-jest.mock('@/lib/services/notifications', () => ({
+vi.mock('@/lib/services/notifications', () => ({
   notifyAllStaff: (...args: unknown[]) => mockNotifyAllStaff(...args),
   notifyUsers: (...args: unknown[]) => mockNotifyUsers(...args),
 }));
 
-const mockResolveEligibleUserIds = jest.fn();
+const mockResolveEligibleUserIds = vi.fn();
 
-jest.mock('@/lib/services/decisions-voting', () => ({
+vi.mock('@/lib/services/decisions-voting', () => ({
   resolveEligibleUserIds: (...args: unknown[]) => mockResolveEligibleUserIds(...args),
 }));
 
-jest.mock('@/lib/services/decisions-crud', () => ({
+vi.mock('@/lib/services/decisions-crud', () => ({
   asArray: <T>(value: unknown, fallback: T[]) => (Array.isArray(value) ? value : fallback),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/decisions', () => ({
+vi.mock('@/config/decisions', () => ({
   DECISION_STATUS: { VOTING: 'voting', CLOSED: 'closed' },
   PARTICIPANT_SCOPE_DEFAULT: 'all_staff',
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   NOTIFICATION_TYPES: {
     DECISION_CLOSED: 'decision_closed',
     DECISION_DEADLINE: 'decision_deadline',
@@ -82,7 +82,7 @@ jest.mock('@/config/notifications', () => ({
   RELATED_TYPES: { DECISION: 'decision' },
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: { DECISION_VOTES: 'decision_votes' },
 }));
 
@@ -114,7 +114,7 @@ function makeRequest(
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   // Configured, because an unset secret now denies every request —
   // these routes are no longer reachable without one.
   process.env.CRON_SECRET = 'test-cron-secret';
@@ -126,8 +126,8 @@ beforeEach(() => {
 
   // Default: no upcoming decisions, no expired decisions
   mockSelect.mockReturnValue({
-    from: jest.fn().mockReturnValue({
-      where: jest.fn().mockResolvedValue([]),
+    from: vi.fn().mockReturnValue({
+      where: vi.fn().mockResolvedValue([]),
     }),
   });
 });
@@ -175,14 +175,14 @@ describe('GET /api/cron/close-decisions — behavior', () => {
   it('closes expired decisions and returns correct counts', async () => {
     // First select: upcoming decisions (for deadline reminders)
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
     // Second select: expired decisions
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([MOCK_EXPIRED_DECISION]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([MOCK_EXPIRED_DECISION]),
       }),
     });
     mockTransitionDecision.mockResolvedValueOnce({ id: 'decision-1', status: 'closed' });
@@ -204,14 +204,14 @@ describe('GET /api/cron/close-decisions — behavior', () => {
   it('records errors when transition fails', async () => {
     // First select: no upcoming
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
     // Second select: one expired decision
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([MOCK_EXPIRED_DECISION]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([MOCK_EXPIRED_DECISION]),
       }),
     });
     // Transition returns an error shape
@@ -227,16 +227,16 @@ describe('GET /api/cron/close-decisions — behavior', () => {
   it('sends deadline reminders for decisions expiring in ~24h', async () => {
     // First select: upcoming decision for reminder
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([MOCK_UPCOMING_DECISION]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([MOCK_UPCOMING_DECISION]),
       }),
     });
     // db.execute for vote check
     mockExecute.mockResolvedValueOnce({ rows: [{ user_id: 'user-1' }] });
     // Second select: no expired decisions
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([]),
       }),
     });
 

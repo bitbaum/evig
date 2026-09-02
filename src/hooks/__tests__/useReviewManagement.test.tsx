@@ -22,34 +22,34 @@
  *   - getUserVoteForReview lookup
  */
 
-const mockApiFetch = jest.fn();
-const mockToastSuccess = jest.fn();
-const mockToastError = jest.fn();
-const mockRedirect = jest.fn();
-const mockLoggerWarn = jest.fn();
-const mockLoggerError = jest.fn();
+const mockApiFetch = vi.fn();
+const mockToastSuccess = vi.fn();
+const mockToastError = vi.fn();
+const mockRedirect = vi.fn();
+const mockLoggerWarn = vi.fn();
+const mockLoggerError = vi.fn();
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
 }));
 
-jest.mock('sonner', () => ({
+vi.mock('sonner', () => ({
   toast: {
-    success: (...args: unknown[]) => mockToastSuccess.apply(null, args),
-    error: (...args: unknown[]) => mockToastError.apply(null, args),
+    success: (...args: unknown[]) => mockToastSuccess(...args),
+    error: (...args: unknown[]) => mockToastError(...args),
   },
 }));
 
-jest.mock('next/navigation', () => ({
-  redirect: (...args: unknown[]) => mockRedirect.apply(null, args),
+vi.mock('next/navigation', () => ({
+  redirect: (...args: unknown[]) => mockRedirect(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    info: jest.fn(),
-    warn: (...args: unknown[]) => mockLoggerWarn.apply(null, args),
-    error: (...args: unknown[]) => mockLoggerError.apply(null, args),
-    debug: jest.fn(),
+    info: vi.fn(),
+    warn: (...args: unknown[]) => mockLoggerWarn(...args),
+    error: (...args: unknown[]) => mockLoggerError(...args),
+    debug: vi.fn(),
   },
 }));
 
@@ -332,7 +332,7 @@ describe('handleSaveEdit', () => {
 describe('handleDeleteReview', () => {
   it('skips DELETE when window.confirm returns false', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } });
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
 
     const { result } = renderReviews('authenticated');
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -352,7 +352,7 @@ describe('handleDeleteReview', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: true })
       .mockResolvedValueOnce({ success: true, data: { reviews: [] } });
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     const { result } = renderReviews('authenticated');
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -373,7 +373,7 @@ describe('handleDeleteReview', () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: false, error: 'cannot delete' });
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     const { result } = renderReviews('authenticated');
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -485,12 +485,12 @@ describe('handleVote', () => {
 
 describe('canEditReview', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2026-01-15T12:00:00Z'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-15T12:00:00Z'));
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('returns true for a review created today', () => {

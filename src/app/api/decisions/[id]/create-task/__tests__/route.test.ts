@@ -1,22 +1,21 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/decisions/[id]/create-task
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (_sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof _sectionOrHandler === 'function' ? _sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -29,18 +28,18 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockGetDbUserId = jest.fn();
-jest.mock('@/lib/api/task-helpers', () => ({
-  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
+const mockGetDbUserId = vi.fn();
+vi.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
 }));
 
-const mockCreateFollowUpTaskFromDecision = jest.fn();
-jest.mock('@/lib/services/protocol-decision-tasks', () => ({
+const mockCreateFollowUpTaskFromDecision = vi.fn();
+vi.mock('@/lib/services/protocol-decision-tasks', () => ({
   createFollowUpTaskFromDecision: (...args: unknown[]) =>
-    mockCreateFollowUpTaskFromDecision.apply(null, args),
+    mockCreateFollowUpTaskFromDecision(...args),
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const SESSION = { user: { id: 'user-1', email: 'admin@revampit.ch' } };
@@ -51,7 +50,7 @@ function makeContext(id = 'decision-1') {
 
 describe('POST /api/decisions/[id]/create-task — unauthenticated', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockAuth.mockResolvedValue(null);
   });
 
@@ -69,7 +68,7 @@ describe('POST /api/decisions/[id]/create-task — unauthenticated', () => {
 
 describe('POST /api/decisions/[id]/create-task — success', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockAuth.mockResolvedValue(SESSION);
     mockGetDbUserId.mockResolvedValue({ dbUserId: 'db-user-1' });
     mockCreateFollowUpTaskFromDecision.mockResolvedValue({

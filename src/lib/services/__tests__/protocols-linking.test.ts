@@ -28,55 +28,54 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
-const mockTxExecute = jest.fn();
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) };
-const mockDbTransaction = jest
+const mockDbExecute = vi.fn();
+const mockTxExecute = vi.fn();
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute(...args) };
+const mockDbTransaction = vi
   .fn()
   .mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
+    transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
 }));
 
-jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' });
-  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
-  (sqlFn as unknown as Record<string, unknown>).join = jest
-    .fn()
-    .mockReturnValue({ __sql: 'joined' });
+vi.mock('drizzle-orm', async () => {
+  const sqlFn = vi.fn().mockReturnValue({ __sql: 'mocked' });
+  (sqlFn as unknown as Record<string, unknown>).raw = vi.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = vi.fn().mockReturnValue({ __sql: 'joined' });
   return {
-    ...jest.requireActual('drizzle-orm'),
+    ...(await vi.importActual('drizzle-orm')),
     sql: sqlFn,
-    getTableName: jest.fn().mockReturnValue('mock_table'),
+    getTableName: vi.fn().mockReturnValue('mock_table'),
   };
 });
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   protocolActionLinks: { id: 'protocolActionLinks' },
   tasks: { id: 'tasks' },
   decisions: { id: 'decisions' },
 }));
 
-jest.mock('@/config/decisions', () => ({
+vi.mock('@/config/decisions', () => ({
   DECISION_STATUS: { DRAFT: 'draft', DISCUSSION: 'discussion' },
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   RELATED_TYPES: { TASK: 'task', DECISION: 'decision', PROTOCOL: 'protocol' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   getActionLinks,
   linkActionItemToTask,
@@ -110,7 +109,7 @@ function makeActionLinkRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbTransaction.mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) =>
     fn(mockTx),
   );
@@ -203,7 +202,7 @@ describe('linkActionItemToTask', () => {
     );
 
     // Verify sql was called with the title value (first arg is the template literal)
-    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls;
+    const sqlCalls = ((await import('drizzle-orm')).sql as unknown as Mock).mock.calls;
     const callsWithTitle = sqlCalls.filter((call: unknown[]) => call.includes('Laptop reparieren'));
     expect(callsWithTitle.length).toBeGreaterThan(0);
   });
@@ -220,7 +219,7 @@ describe('linkActionItemToTask', () => {
       CREATOR_ID,
     );
 
-    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls;
+    const sqlCalls = ((await import('drizzle-orm')).sql as unknown as Mock).mock.calls;
     const callsWithAssignee = sqlCalls.filter((call: unknown[]) => call.includes('user-assigned'));
     expect(callsWithAssignee.length).toBeGreaterThan(0);
   });
@@ -274,7 +273,7 @@ describe('linkActionItemToDecision', () => {
       CREATOR_ID,
     );
 
-    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls;
+    const sqlCalls = ((await import('drizzle-orm')).sql as unknown as Mock).mock.calls;
     const callsWithDraft = sqlCalls.filter((call: unknown[]) =>
       call.includes(DECISION_STATUS.DRAFT),
     );

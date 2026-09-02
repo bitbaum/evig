@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/admin/erfassung/bulk-upload
  *
@@ -7,19 +7,18 @@
  *   POST - 401, 400 (no file), 400 (wrong type), 400 (empty), 400 (too many products), 200
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -27,24 +26,23 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockParseCSV = jest.fn();
-const mockParseExcel = jest.fn();
+const mockParseCSV = vi.fn();
+const mockParseExcel = vi.fn();
 
-jest.mock('@/lib/erfassung/file-parser', () => ({
-  parseCSV: (...args: unknown[]) => mockParseCSV.apply(null, args),
-  parseExcel: (...args: unknown[]) => mockParseExcel.apply(null, args),
+vi.mock('@/lib/erfassung/file-parser', () => ({
+  parseCSV: (...args: unknown[]) => mockParseCSV(...args),
+  parseExcel: (...args: unknown[]) => mockParseExcel(...args),
 }));
 
-jest.mock('@/config/erfassung', () => ({
+vi.mock('@/config/erfassung', () => ({
   BULK_LIMITS: { maxProducts: 500 },
 }));
 
-jest.mock('@/config/limits', () => ({
+vi.mock('@/config/limits', () => ({
   FILE_SIZE_LIMITS: { CSV_MAX: 10 * 1024 * 1024 },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -54,11 +52,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -88,7 +86,7 @@ function makeCsvFile(content: string, name = 'products.csv', size?: number) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockParseCSV.mockReturnValue({
     products: [{ title: 'Laptop', price: '100' }],

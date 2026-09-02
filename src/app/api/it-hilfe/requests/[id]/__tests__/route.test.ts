@@ -1,29 +1,29 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET + PUT /api/it-hilfe/requests/[id]
  */
 
 // ── Auth mocks ─────────────────────────────────────────────────────────────
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
 // ── DB mocks ───────────────────────────────────────────────────────────────
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -33,7 +33,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   itHilfeRequests: {
     id: 'ihr_id',
     requesterId: 'ihr_requesterId',
@@ -78,7 +78,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm/pg-core', () => ({
+vi.mock('drizzle-orm/pg-core', () => ({
   // PPP.2 introduced helperUser + helperProfile aliases; widen the mock
   // so any column the route reads through an alias resolves to a stable
   // placeholder string instead of undefined.
@@ -92,7 +92,7 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -102,26 +102,25 @@ jest.mock('drizzle-orm', () => ({
 
 // ── Other mocks ────────────────────────────────────────────────────────────
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   UpdateITHilfeRequestSchema: {},
 }));
 
-jest.mock('@/lib/it-hilfe/request-mapper', () => ({
-  mapRequestDetailRow: jest.fn((row: Record<string, unknown>, isOwner: boolean) => ({
+vi.mock('@/lib/it-hilfe/request-mapper', () => ({
+  mapRequestDetailRow: vi.fn((row: Record<string, unknown>, isOwner: boolean) => ({
     ...row,
     isOwner,
   })),
 }));
 
-jest.mock('@/lib/it-hilfe/notifications', () => ({
-  sendItHilfeNotification: jest.fn().mockResolvedValue(undefined),
+vi.mock('@/lib/it-hilfe/notifications', () => ({
+  sendItHilfeNotification: vi.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -138,18 +137,18 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
   VALID_REQUEST_TRANSITIONS: { open: ['cancelled'] },
-  deriveBudgetType: jest.fn().mockReturnValue('free'),
+  deriveBudgetType: vi.fn().mockReturnValue('free'),
 }));
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
@@ -179,7 +178,7 @@ const MOCK_REQUEST_ROW = {
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, PUT } from '../route';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -214,7 +213,7 @@ function setupSingleSelectChain(row: unknown | null) {
 
 describe('GET /api/it-hilfe/requests/[id]', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('returns 400 for invalid UUID', async () => {
@@ -247,7 +246,7 @@ describe('GET /api/it-hilfe/requests/[id]', () => {
 
 describe('PUT /api/it-hilfe/requests/[id]', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUpdateWhere.mockResolvedValue(undefined);
     mockSet.mockReturnValue({ where: mockUpdateWhere });
   });
@@ -296,7 +295,6 @@ describe('PUT /api/it-hilfe/requests/[id]', () => {
     mockFrom.mockReturnValue({ where: mockWhere });
     mockSelect.mockReturnValue({ from: mockFrom });
 
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValue({
       success: false,
       error: NextResponse.json({ success: false, error: 'Invalid' }, { status: 400 }),

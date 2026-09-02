@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 
 /**
@@ -17,17 +17,20 @@
  *   getReadingTime(content) — Math.ceil(words / 200)
  */
 
-const mockExistsSync = jest.fn();
-const mockReadFileSync = jest.fn();
-const mockReaddirSync = jest.fn();
-const mockStatSync = jest.fn();
+const mockExistsSync = vi.fn();
+const mockReadFileSync = vi.fn();
+const mockReaddirSync = vi.fn();
+const mockStatSync = vi.fn();
 
-jest.mock('fs', () => ({
-  existsSync: (...args: unknown[]) => mockExistsSync.apply(null, args),
-  readFileSync: (...args: unknown[]) => mockReadFileSync.apply(null, args),
-  readdirSync: (...args: unknown[]) => mockReaddirSync.apply(null, args),
-  statSync: (...args: unknown[]) => mockStatSync.apply(null, args),
-}));
+vi.mock('fs', () => {
+  const fsMock = {
+    existsSync: (...args: unknown[]) => mockExistsSync(...args),
+    readFileSync: (...args: unknown[]) => mockReadFileSync(...args),
+    readdirSync: (...args: unknown[]) => mockReaddirSync(...args),
+    statSync: (...args: unknown[]) => mockStatSync(...args),
+  };
+  return { ...fsMock, default: fsMock };
+});
 
 import { getAllPosts, getPostBySlug } from '../blog';
 import { getReadingTime } from '../blog-utils';

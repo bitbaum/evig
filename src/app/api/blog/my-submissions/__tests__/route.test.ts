@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/blog/my-submissions
  *
@@ -23,26 +23,26 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
 // Drizzle chain: select().from().leftJoin().where().orderBy()
-const mockOrderBy = jest.fn();
-const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-const mockLeftJoin = jest.fn().mockReturnValue({ where: mockWhere });
-const mockFrom = jest.fn().mockReturnValue({ leftJoin: mockLeftJoin });
-const mockSelect = jest.fn().mockReturnValue({ from: mockFrom });
+const mockOrderBy = vi.fn();
+const mockWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+const mockLeftJoin = vi.fn().mockReturnValue({ where: mockWhere });
+const mockFrom = vi.fn().mockReturnValue({ leftJoin: mockLeftJoin });
+const mockSelect = vi.fn().mockReturnValue({ from: mockFrom });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockSelect.apply(null, args),
+    select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   blogSubmissions: {
     id: 'bs_id',
     userId: 'bs_userId',
@@ -61,13 +61,13 @@ jest.mock('@/db/schema', () => ({
   blogPosts: { id: 'bp_id', slug: 'bp_slug' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
 }));
 
-jest.mock('@/config/approval-status', () => ({
+vi.mock('@/config/approval-status', () => ({
   APPROVAL_STATUS: {
     PENDING: 'pending',
     APPROVED: 'approved',
@@ -75,24 +75,21 @@ jest.mock('@/config/approval-status', () => ({
     REJECTED: 'rejected',
     REQUIRES_CHANGES: 'requires_changes',
   },
-  getApprovalStatusLabel: jest.fn((status: string) => `Label: ${status}`),
+  getApprovalStatusLabel: vi.fn((status: string) => `Label: ${status}`),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
   apiUnauthorized: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 401 });
   },
 }));
@@ -101,7 +98,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -158,7 +155,7 @@ function makeRequest() {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockSelect.mockReturnValue({ from: mockFrom });
   mockFrom.mockReturnValue({ leftJoin: mockLeftJoin });
@@ -192,7 +189,7 @@ describe('GET /api/blog/my-submissions — authenticated', () => {
   });
 
   it('adds statusLabel to each submission', async () => {
-    const { getApprovalStatusLabel } = await import('@/config/approval-status');
+    const { getApprovalStatusLabel } = (await import('@/config/approval-status')) as any;
     const response = await GET(makeRequest());
     const body = await response.json();
     expect(body.data.submissions[0].statusLabel).toBe('Label: pending');
@@ -243,7 +240,7 @@ describe('GET /api/blog/my-submissions — authenticated', () => {
 
   it('queries by current user id', async () => {
     await GET(makeRequest());
-    const { eq } = await import('drizzle-orm');
+    const { eq } = (await import('drizzle-orm')) as any;
     expect(eq).toHaveBeenCalledWith(expect.anything(), 'user-blog');
   });
 

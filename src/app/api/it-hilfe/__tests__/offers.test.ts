@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for IT-Hilfe offers API routes
  *
@@ -10,21 +10,21 @@
 
 // Mock Drizzle db for the offers route (GET + POST)
 const mockSelectChain = {
-  from: jest.fn().mockReturnThis(),
-  where: jest.fn().mockReturnThis(),
-  orderBy: jest.fn().mockReturnThis(),
-  limit: jest.fn().mockReturnThis(),
-  offset: jest.fn().mockReturnThis(),
-  innerJoin: jest.fn().mockReturnThis(),
-  leftJoin: jest.fn().mockReturnThis(),
+  from: vi.fn().mockReturnThis(),
+  where: vi.fn().mockReturnThis(),
+  orderBy: vi.fn().mockReturnThis(),
+  limit: vi.fn().mockReturnThis(),
+  offset: vi.fn().mockReturnThis(),
+  innerJoin: vi.fn().mockReturnThis(),
+  leftJoin: vi.fn().mockReturnThis(),
 };
 const mockInsertChain = {
-  values: jest.fn().mockReturnThis(),
-  returning: jest.fn().mockResolvedValue([]),
+  values: vi.fn().mockReturnThis(),
+  returning: vi.fn().mockResolvedValue([]),
 };
 const mockUpdateChain = {
-  set: jest.fn().mockReturnThis(),
-  where: jest.fn().mockResolvedValue([]),
+  set: vi.fn().mockReturnThis(),
+  where: vi.fn().mockResolvedValue([]),
 };
 
 // db.transaction mock: the POST route inserts the offer AND bumps offerCount
@@ -32,62 +32,67 @@ const mockUpdateChain = {
 // the withdraw race-recheck). tx.insert delegates to the shared mockInsertChain
 // so individual tests configure the returned offer via
 // mockInsertChain.returning.mockResolvedValueOnce(...).
-// Individual tests can override via jest.requireMock('@/db').db.transaction.
-const mockDbTransaction = jest.fn(async (fn: (tx: unknown) => unknown) => {
-  const txUpdate = jest.fn(() => ({
-    set: jest.fn(() => ({ where: jest.fn().mockResolvedValue(undefined) })),
+// Individual tests can override via (await import('@/db')).db.transaction.
+const mockDbTransaction = vi.fn(async (fn: (tx: unknown) => unknown) => {
+  const txUpdate = vi.fn((..._args: unknown[]) => ({
+    set: vi.fn((..._args: unknown[]) => ({ where: vi.fn().mockResolvedValue(undefined) })),
   }));
-  const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'pending' }] });
-  return fn({ insert: jest.fn(() => mockInsertChain), update: txUpdate, execute: txExecute });
+  const txExecute = vi.fn().mockResolvedValue({ rows: [{ status: 'pending' }] });
+  return fn({
+    insert: vi.fn((..._args: unknown[]) => mockInsertChain),
+    update: txUpdate,
+    execute: txExecute,
+  });
 });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(() => mockSelectChain),
-    insert: jest.fn(() => mockInsertChain),
-    update: jest.fn(() => mockUpdateChain),
+    select: vi.fn((..._args: unknown[]) => mockSelectChain),
+    insert: vi.fn((..._args: unknown[]) => mockInsertChain),
+    update: vi.fn((..._args: unknown[]) => mockUpdateChain),
     transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args as never),
   },
 }));
 
 // DELETE route also uses Drizzle now (no raw SQL mock needed)
 
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('@/auth', () => ({
-  auth: jest.fn(),
+vi.mock('@/auth', () => ({
+  auth: vi.fn(),
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  itHilfeNewOfferReceived: jest.fn().mockReturnValue({ subject: '', html: '' }),
+vi.mock('@/lib/email/templates/it-hilfe', () => ({
+  itHilfeNewOfferReceived: vi.fn().mockReturnValue({ subject: '', html: '' }),
 }));
 
-jest.mock('@/lib/security/rate-limit', () => ({
+vi.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: {
-    offerCreate: jest.fn().mockReturnValue(true),
+    offerCreate: vi.fn().mockReturnValue(true),
   },
 }));
 
-jest.mock('@/lib/it-hilfe/notifications', () => ({
-  sendItHilfeNotification: jest.fn(),
+vi.mock('@/lib/it-hilfe/notifications', () => ({
+  sendItHilfeNotification: vi.fn(),
 }));
 
+import type { Mock, Mocked, MockedFunction } from 'vitest';
 import { NextRequest } from 'next/server';
 import { auth } from '@/auth';
 import { db } from '@/db';
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
-const mockDb = db as jest.Mocked<typeof db>;
+const mockAuth = auth as MockedFunction<typeof auth>;
+const mockDb = db as Mocked<typeof db>;
 
 function makeRequest(url: string, init?: RequestInit) {
   return new NextRequest(new URL(url, 'http://localhost:3001'), init as never);
@@ -102,12 +107,12 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
   let GET: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/offers/route');
+    const mod = (await import('../../it-hilfe/requests/[id]/offers/route')) as any;
     GET = mod.GET;
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) });
@@ -228,12 +233,12 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
   let POST: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/offers/route');
+    const mod = (await import('../../it-hilfe/requests/[id]/offers/route')) as any;
     POST = mod.POST;
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) });
@@ -488,12 +493,12 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
   ) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/offers/[offerId]/route');
+    const mod = (await import('../../it-hilfe/requests/[id]/offers/[offerId]/route')) as any;
     DELETE = mod.DELETE;
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const makeCtx = (id: string, offerId: string) => ({ params: Promise.resolve({ id, offerId }) });

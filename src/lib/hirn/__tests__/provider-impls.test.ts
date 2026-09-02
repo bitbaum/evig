@@ -75,11 +75,11 @@ function abortError() {
 // Mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   OLLAMA_URL: 'http://localhost:11434',
   APP_URL: 'http://localhost:3000',
 }));
@@ -88,6 +88,7 @@ jest.mock('@/config/urls', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { GroqProvider } from '../providers/groq';
 import { OllamaProvider } from '../providers/ollama';
 import { OpenRouterProvider } from '../providers/openrouter';
@@ -117,7 +118,7 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Each test passes apiKey explicitly — prevent env vars from leaking in
   delete process.env.GROQ_API_KEY;
   delete process.env.OPENROUTER_API_KEY;
@@ -137,7 +138,7 @@ describe('GroqProvider — chat', () => {
   });
 
   it('returns content and usage on success', async () => {
-    global.fetch = jest.fn().mockReturnValue(
+    global.fetch = vi.fn().mockReturnValue(
       okResponse({
         choices: [{ message: { content: 'Guten Tag!' } }],
         usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 },
@@ -155,7 +156,7 @@ describe('GroqProvider — chat', () => {
   });
 
   it('returns empty string when choices is missing content', async () => {
-    global.fetch = jest.fn().mockReturnValue(okResponse({ choices: [] }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ choices: [] }));
 
     const provider = new GroqProvider({ apiKey: 'gsk_test' });
     const result = await provider.chat({ messages: MESSAGES });
@@ -164,7 +165,7 @@ describe('GroqProvider — chat', () => {
   });
 
   it('throws on non-ok HTTP response', async () => {
-    global.fetch = jest.fn().mockReturnValue(errorResponse(401, 'Unauthorized'));
+    global.fetch = vi.fn().mockReturnValue(errorResponse(401, 'Unauthorized'));
 
     const provider = new GroqProvider({ apiKey: 'gsk_bad' });
 
@@ -172,7 +173,7 @@ describe('GroqProvider — chat', () => {
   });
 
   it('throws descriptive timeout message on AbortError', async () => {
-    global.fetch = jest.fn().mockReturnValue(abortError());
+    global.fetch = vi.fn().mockReturnValue(abortError());
 
     const provider = new GroqProvider({ apiKey: 'gsk_test' });
 
@@ -194,7 +195,7 @@ describe('GroqProvider — embed', () => {
 
 describe('GroqProvider — isAvailable', () => {
   it('returns false immediately when no API key (no fetch)', async () => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
 
     const provider = new GroqProvider({ apiKey: '' });
     const result = await provider.isAvailable();
@@ -204,7 +205,7 @@ describe('GroqProvider — isAvailable', () => {
   });
 
   it('returns true when /models responds ok', async () => {
-    global.fetch = jest.fn().mockReturnValue(okResponse({ data: [] }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ data: [] }));
 
     const provider = new GroqProvider({ apiKey: 'gsk_test' });
     const result = await provider.isAvailable();
@@ -213,7 +214,7 @@ describe('GroqProvider — isAvailable', () => {
   });
 
   it('returns false on network error', async () => {
-    global.fetch = jest.fn().mockReturnValue(Promise.reject(new Error('ECONNREFUSED')));
+    global.fetch = vi.fn().mockReturnValue(Promise.reject(new Error('ECONNREFUSED')));
 
     const provider = new GroqProvider({ apiKey: 'gsk_test' });
     const result = await provider.isAvailable();
@@ -228,7 +229,7 @@ describe('GroqProvider — isAvailable', () => {
 
 describe('OllamaProvider — chat', () => {
   it('reads content from data.message.content', async () => {
-    global.fetch = jest
+    global.fetch = vi
       .fn()
       .mockReturnValue(okResponse({ message: { content: 'Hallo von Ollama' } }));
 
@@ -240,7 +241,7 @@ describe('OllamaProvider — chat', () => {
   });
 
   it('includes usage when eval_count is present', async () => {
-    global.fetch = jest.fn().mockReturnValue(
+    global.fetch = vi.fn().mockReturnValue(
       okResponse({
         message: { content: 'Text' },
         eval_count: 42,
@@ -257,7 +258,7 @@ describe('OllamaProvider — chat', () => {
   });
 
   it('omits usage when eval_count is absent', async () => {
-    global.fetch = jest.fn().mockReturnValue(okResponse({ message: { content: 'Text' } }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ message: { content: 'Text' } }));
 
     const provider = new OllamaProvider();
     const result = await provider.chat({ messages: MESSAGES });
@@ -266,7 +267,7 @@ describe('OllamaProvider — chat', () => {
   });
 
   it('throws on non-ok HTTP response', async () => {
-    global.fetch = jest.fn().mockReturnValue(errorResponse(503, 'Service unavailable'));
+    global.fetch = vi.fn().mockReturnValue(errorResponse(503, 'Service unavailable'));
 
     const provider = new OllamaProvider();
 
@@ -274,7 +275,7 @@ describe('OllamaProvider — chat', () => {
   });
 
   it('throws descriptive timeout message on AbortError', async () => {
-    global.fetch = jest.fn().mockReturnValue(abortError());
+    global.fetch = vi.fn().mockReturnValue(abortError());
 
     const provider = new OllamaProvider();
 
@@ -286,7 +287,7 @@ describe('OllamaProvider — chat', () => {
 
 describe('OllamaProvider — embed', () => {
   it('returns embeddings array for single input', async () => {
-    global.fetch = jest.fn().mockReturnValue(okResponse({ embedding: [0.1, 0.2, 0.3] }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ embedding: [0.1, 0.2, 0.3] }));
 
     const provider = new OllamaProvider();
     const result = await provider.embed({ input: 'test text' });
@@ -298,7 +299,7 @@ describe('OllamaProvider — embed', () => {
   });
 
   it('makes one fetch per input for multiple inputs', async () => {
-    global.fetch = jest
+    global.fetch = vi
       .fn()
       .mockReturnValueOnce(okResponse({ embedding: [0.1, 0.2] }))
       .mockReturnValueOnce(okResponse({ embedding: [0.3, 0.4] }));
@@ -311,7 +312,7 @@ describe('OllamaProvider — embed', () => {
   });
 
   it('throws on non-ok HTTP response', async () => {
-    global.fetch = jest.fn().mockReturnValue(errorResponse(404, 'model not found'));
+    global.fetch = vi.fn().mockReturnValue(errorResponse(404, 'model not found'));
 
     const provider = new OllamaProvider();
 
@@ -319,7 +320,7 @@ describe('OllamaProvider — embed', () => {
   });
 
   it('throws when response has no embedding array', async () => {
-    global.fetch = jest.fn().mockReturnValue(okResponse({ embedding: null }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ embedding: null }));
 
     const provider = new OllamaProvider();
 
@@ -331,18 +332,18 @@ describe('OllamaProvider — embed', () => {
 
 describe('OllamaProvider — isAvailable', () => {
   it('returns true when /api/tags responds ok', async () => {
-    global.fetch = jest.fn().mockReturnValue(okResponse({ models: [] }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ models: [] }));
 
     const provider = new OllamaProvider();
     const result = await provider.isAvailable();
 
     expect(result).toBe(true);
-    const url = (global.fetch as jest.Mock).mock.calls[0][0] as string;
+    const url = (global.fetch as Mock).mock.calls[0][0] as string;
     expect(url).toContain('/api/tags');
   });
 
   it('returns false on network error', async () => {
-    global.fetch = jest.fn().mockReturnValue(Promise.reject(new Error('ECONNREFUSED')));
+    global.fetch = vi.fn().mockReturnValue(Promise.reject(new Error('ECONNREFUSED')));
 
     const provider = new OllamaProvider();
     const result = await provider.isAvailable();
@@ -353,7 +354,7 @@ describe('OllamaProvider — isAvailable', () => {
 
 describe('OllamaProvider — listModels', () => {
   it('returns array of model names', async () => {
-    global.fetch = jest
+    global.fetch = vi
       .fn()
       .mockReturnValue(
         okResponse({ models: [{ name: 'llama3.2' }, { name: 'nomic-embed-text' }] }),
@@ -366,7 +367,7 @@ describe('OllamaProvider — listModels', () => {
   });
 
   it('throws when response is not ok', async () => {
-    global.fetch = jest.fn().mockReturnValue(errorResponse(500));
+    global.fetch = vi.fn().mockReturnValue(errorResponse(500));
 
     const provider = new OllamaProvider();
 
@@ -388,7 +389,7 @@ describe('OpenRouterProvider — chat', () => {
   });
 
   it('returns content on success', async () => {
-    global.fetch = jest.fn().mockReturnValue(
+    global.fetch = vi.fn().mockReturnValue(
       okResponse({
         choices: [{ message: { content: 'Antwort von OpenRouter' } }],
         usage: { prompt_tokens: 8, completion_tokens: 12, total_tokens: 20 },
@@ -404,21 +405,19 @@ describe('OpenRouterProvider — chat', () => {
   });
 
   it('includes HTTP-Referer and X-Title headers', async () => {
-    global.fetch = jest
-      .fn()
-      .mockReturnValue(okResponse({ choices: [{ message: { content: '' } }] }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ choices: [{ message: { content: '' } }] }));
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
     await provider.chat({ messages: MESSAGES });
 
-    const init = (global.fetch as jest.Mock).mock.calls[0][1] as RequestInit;
+    const init = (global.fetch as Mock).mock.calls[0][1] as RequestInit;
     const headers = init.headers as Record<string, string>;
     expect(headers['HTTP-Referer']).toBe('http://localhost:3000');
     expect(headers['X-Title']).toBe('evig Hirn');
   });
 
   it('throws on non-ok HTTP response', async () => {
-    global.fetch = jest.fn().mockReturnValue(errorResponse(429, 'Rate limit exceeded'));
+    global.fetch = vi.fn().mockReturnValue(errorResponse(429, 'Rate limit exceeded'));
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
 
@@ -428,7 +427,7 @@ describe('OpenRouterProvider — chat', () => {
   });
 
   it('throws descriptive timeout message on AbortError', async () => {
-    global.fetch = jest.fn().mockReturnValue(abortError());
+    global.fetch = vi.fn().mockReturnValue(abortError());
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
 
@@ -450,7 +449,7 @@ describe('OpenRouterProvider — embed', () => {
 
 describe('OpenRouterProvider — isAvailable', () => {
   it('returns false immediately when no API key (no fetch)', async () => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
 
     const provider = new OpenRouterProvider({ apiKey: '' });
     const result = await provider.isAvailable();
@@ -460,7 +459,7 @@ describe('OpenRouterProvider — isAvailable', () => {
   });
 
   it('returns true when /models responds ok', async () => {
-    global.fetch = jest.fn().mockReturnValue(okResponse({ data: [] }));
+    global.fetch = vi.fn().mockReturnValue(okResponse({ data: [] }));
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
     const result = await provider.isAvailable();
@@ -469,7 +468,7 @@ describe('OpenRouterProvider — isAvailable', () => {
   });
 
   it('returns false on network error', async () => {
-    global.fetch = jest.fn().mockReturnValue(Promise.reject(new Error('ECONNREFUSED')));
+    global.fetch = vi.fn().mockReturnValue(Promise.reject(new Error('ECONNREFUSED')));
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
     const result = await provider.isAvailable();

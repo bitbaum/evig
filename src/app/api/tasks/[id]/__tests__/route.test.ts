@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/PATCH/DELETE /api/tasks/[id]
  *
@@ -29,19 +29,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         if (context?.params) {
@@ -58,7 +57,7 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-jest.mock('drizzle-orm/pg-core', () => ({
+vi.mock('drizzle-orm/pg-core', () => ({
   alias: (_t: unknown, name: string) => ({
     id: `${name}_id`,
     name: `${name}_name`,
@@ -66,7 +65,7 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   tasks: {
     id: 't_id',
     title: 't_title',
@@ -113,23 +112,23 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn(),
-  and: jest.fn(),
-  sql: Object.assign(jest.fn().mockReturnValue({}), { raw: jest.fn().mockReturnValue({}) }),
-  desc: jest.fn(),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn(),
+  and: vi.fn(),
+  sql: Object.assign(vi.fn().mockReturnValue({}), { raw: vi.fn().mockReturnValue({}) }),
+  desc: vi.fn(),
 }));
 
-jest.mock('@/config/tasks', () => ({
+vi.mock('@/config/tasks', () => ({
   REQUEST_STATUSES: { PENDING: 'pending' },
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   RELATED_TYPES: { TASK: 'task' },
   NOTIFICATION_TYPES: { TASK_ASSIGNED: 'task_assigned' },
 }));
 
-jest.mock('@/lib/schemas/tasks', () => ({
+vi.mock('@/lib/schemas/tasks', () => ({
   updateTaskSchema: {
     safeParse: (b: unknown) => {
       const body = b as Record<string, unknown>;
@@ -141,18 +140,17 @@ jest.mock('@/lib/schemas/tasks', () => ({
   },
 }));
 
-const mockNotifyUsers = jest.fn();
+const mockNotifyUsers = vi.fn();
 
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: (...args: unknown[]) => mockNotifyUsers.apply(null, args),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: (...args: unknown[]) => mockNotifyUsers(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -177,19 +175,19 @@ jest.mock('@/lib/api/helpers', () => {
  * Each chain instance is independent so Promise.all gets distinct chains.
  */
 function makeChain(terminal: 'where' | 'orderBy' | 'limit', value: unknown[]) {
-  const c: Record<string, jest.Mock> = {};
+  const c: Record<string, Mock> = {};
   ['from', 'leftJoin', 'where', 'orderBy', 'limit', 'groupBy'].forEach((m) => {
-    c[m] = jest.fn().mockReturnValue(c);
+    c[m] = vi.fn().mockReturnValue(c);
   });
-  c[terminal] = jest.fn().mockResolvedValue(value);
+  c[terminal] = vi.fn().mockResolvedValue(value);
   return c;
 }
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(),
-    insert: jest.fn(),
-    update: jest.fn(),
+    select: vi.fn(),
+    insert: vi.fn(),
+    update: vi.fn(),
   },
 }));
 
@@ -197,7 +195,8 @@ jest.mock('@/db', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, PATCH, DELETE } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -245,7 +244,7 @@ function makeContext(id = 'task-1') {
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockNotifyUsers.mockResolvedValue(undefined);
 });
@@ -264,7 +263,7 @@ describe('GET /api/tasks/[id] — unauthenticated', () => {
 
 describe('GET /api/tasks/[id] — authenticated', () => {
   it('returns 200 with task, completions, flags, and requests', async () => {
-    const dbMod = require('@/db');
+    const dbMod = (await import('@/db')) as any;
     dbMod.db.select
       .mockReturnValueOnce(makeChain('where', [MOCK_TASK])) // task details
       .mockReturnValueOnce(makeChain('limit', [])) // completions
@@ -282,7 +281,7 @@ describe('GET /api/tasks/[id] — authenticated', () => {
   });
 
   it('returns 404 when task rows are empty', async () => {
-    const dbMod = require('@/db');
+    const dbMod = (await import('@/db')) as any;
     dbMod.db.select
       .mockReturnValueOnce(makeChain('where', [])) // task not found
       .mockReturnValueOnce(makeChain('limit', []))
@@ -315,13 +314,13 @@ describe('PATCH /api/tasks/[id] — validation', () => {
 
 describe('PATCH /api/tasks/[id] — not found', () => {
   it('returns 404 when task does not exist', async () => {
-    const dbMod = require('@/db');
+    const dbMod = (await import('@/db')) as any;
     // select for existence check returns empty
-    const existenceChain: Record<string, jest.Mock> = {};
+    const existenceChain: Record<string, Mock> = {};
     ['from', 'leftJoin', 'where', 'orderBy', 'limit', 'groupBy'].forEach((m) => {
-      existenceChain[m] = jest.fn().mockReturnValue(existenceChain);
+      existenceChain[m] = vi.fn().mockReturnValue(existenceChain);
     });
-    existenceChain.where = jest.fn().mockResolvedValue([]);
+    existenceChain.where = vi.fn().mockResolvedValue([]);
     dbMod.db.select.mockReturnValue(existenceChain);
 
     const response = await PATCH(makeRequest('PATCH', { title: 'Updated' }), makeContext());
@@ -331,23 +330,23 @@ describe('PATCH /api/tasks/[id] — not found', () => {
 
 describe('PATCH /api/tasks/[id] — success', () => {
   it('returns 200 with updated task', async () => {
-    const dbMod = require('@/db');
+    const dbMod = (await import('@/db')) as any;
 
     // select for existence check
-    const existenceChain: Record<string, jest.Mock> = {};
+    const existenceChain: Record<string, Mock> = {};
     ['from', 'leftJoin', 'where', 'orderBy', 'limit', 'groupBy'].forEach((m) => {
-      existenceChain[m] = jest.fn().mockReturnValue(existenceChain);
+      existenceChain[m] = vi.fn().mockReturnValue(existenceChain);
     });
-    existenceChain.where = jest
+    existenceChain.where = vi
       .fn()
       .mockResolvedValue([{ id: 'task-1', title: 'Old title', assignedTo: null }]);
     dbMod.db.select.mockReturnValue(existenceChain);
 
     // update returning
-    const mockReturning = jest.fn().mockResolvedValue([MOCK_TASK]);
-    const mockWhere = jest.fn().mockReturnValue({ returning: mockReturning });
-    const mockSet = jest.fn().mockReturnValue({ where: mockWhere });
-    dbMod.db.update = jest.fn().mockReturnValue({ set: mockSet });
+    const mockReturning = vi.fn().mockResolvedValue([MOCK_TASK]);
+    const mockWhere = vi.fn().mockReturnValue({ returning: mockReturning });
+    const mockSet = vi.fn().mockReturnValue({ where: mockWhere });
+    dbMod.db.update = vi.fn().mockReturnValue({ set: mockSet });
 
     const response = await PATCH(makeRequest('PATCH', { title: 'Updated' }), makeContext());
     expect(response.status).toBe(200);
@@ -371,11 +370,11 @@ describe('DELETE /api/tasks/[id] — unauthenticated', () => {
 
 describe('DELETE /api/tasks/[id] — not found', () => {
   it('returns 404 when no rows returned from update', async () => {
-    const dbMod = require('@/db');
-    const mockReturning = jest.fn().mockResolvedValue([]);
-    const mockWhere = jest.fn().mockReturnValue({ returning: mockReturning });
-    const mockSet = jest.fn().mockReturnValue({ where: mockWhere });
-    dbMod.db.update = jest.fn().mockReturnValue({ set: mockSet });
+    const dbMod = (await import('@/db')) as any;
+    const mockReturning = vi.fn().mockResolvedValue([]);
+    const mockWhere = vi.fn().mockReturnValue({ returning: mockReturning });
+    const mockSet = vi.fn().mockReturnValue({ where: mockWhere });
+    dbMod.db.update = vi.fn().mockReturnValue({ set: mockSet });
 
     const response = await DELETE(makeRequest('DELETE'), makeContext());
     expect(response.status).toBe(404);
@@ -384,11 +383,11 @@ describe('DELETE /api/tasks/[id] — not found', () => {
 
 describe('DELETE /api/tasks/[id] — success', () => {
   it('returns 200 with archived: true', async () => {
-    const dbMod = require('@/db');
-    const mockReturning = jest.fn().mockResolvedValue([{ id: 'task-1' }]);
-    const mockWhere = jest.fn().mockReturnValue({ returning: mockReturning });
-    const mockSet = jest.fn().mockReturnValue({ where: mockWhere });
-    dbMod.db.update = jest.fn().mockReturnValue({ set: mockSet });
+    const dbMod = (await import('@/db')) as any;
+    const mockReturning = vi.fn().mockResolvedValue([{ id: 'task-1' }]);
+    const mockWhere = vi.fn().mockReturnValue({ returning: mockReturning });
+    const mockSet = vi.fn().mockReturnValue({ where: mockWhere });
+    dbMod.db.update = vi.fn().mockReturnValue({ set: mockSet });
 
     const response = await DELETE(makeRequest('DELETE'), makeContext());
     expect(response.status).toBe(200);

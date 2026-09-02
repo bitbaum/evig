@@ -26,8 +26,8 @@
  *   - returns empty array for unknown category
  */
 
-jest.mock('@/lib/marketplace/spec-utils', () => ({
-  normalizeSpecValue: jest.fn(),
+vi.mock('@/lib/marketplace/spec-utils', () => ({
+  normalizeSpecValue: vi.fn(),
 }));
 
 import {

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/it-hilfe/requests/[id]/conversation (pre-acceptance chat).
  * Locked behaviours:
@@ -8,29 +8,28 @@
  *  - technician (non-owner) → requester: 200 on OPEN, 403 when not open
  */
 
-const mockAuth = jest.fn();
-const mockFindOrCreate = jest.fn();
-const mockSelect = jest.fn();
+const mockAuth = vi.fn();
+const mockFindOrCreate = vi.fn();
+const mockSelect = vi.fn();
 
-jest.mock('@/auth', () => ({ auth: (...a: unknown[]) => mockAuth(...a) }));
-jest.mock('@/lib/security/rate-limit', () => ({ rateLimiters: { messageCreate: () => true } }));
-jest.mock('@/lib/it-hilfe/conversation', () => ({
+vi.mock('@/auth', () => ({ auth: (...a: unknown[]) => mockAuth(...a) }));
+vi.mock('@/lib/security/rate-limit', () => ({ rateLimiters: { messageCreate: () => true } }));
+vi.mock('@/lib/it-hilfe/conversation', () => ({
   findOrCreateItHilfeConversation: (...a: unknown[]) => mockFindOrCreate(...a),
 }));
-jest.mock('@/db', () => ({ db: { select: (...a: unknown[]) => mockSelect(...a) } }));
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db', () => ({ db: { select: (...a: unknown[]) => mockSelect(...a) } }));
+vi.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'r_id', requesterId: 'r_requester', title: 'r_title', status: 'r_status' },
   itHilfeOffers: { id: 'o_id', requestId: 'o_req', helperId: 'o_helper' },
 }));
-jest.mock('@/config/error-messages', () => ({ ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized' } }));
-jest.mock('@/config/it-hilfe', () => ({ REQUEST_STATUS: { OPEN: 'open' } }));
-jest.mock('@/lib/logger', () => ({ logger: { error: jest.fn() } }));
-jest.mock('drizzle-orm', () => ({
+vi.mock('@/config/error-messages', () => ({ ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized' } }));
+vi.mock('@/config/it-hilfe', () => ({ REQUEST_STATUS: { OPEN: 'open' } }));
+vi.mock('@/lib/logger', () => ({ logger: { error: vi.fn() } }));
+vi.mock('drizzle-orm', () => ({
   eq: (...a: unknown[]) => ({ eq: a }),
   and: (...a: unknown[]) => ({ and: a }),
 }));
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (_e: unknown, msg: string, status = 500) =>
@@ -46,7 +45,7 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const REQUESTER = 'req-user';
@@ -66,7 +65,7 @@ function makeReq(body: unknown) {
 const ctx = { params: Promise.resolve({ id: 'r1' }) };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockFindOrCreate.mockResolvedValue('conv-1');
 });
 

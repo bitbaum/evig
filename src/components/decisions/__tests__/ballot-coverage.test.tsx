@@ -20,16 +20,16 @@ import PublicVoteClient from '../../../app/vote/[id]/PublicVoteClient';
 
 // Spread the real module — replacing it wholesale breaks defineRouting, which
 // button.tsx pulls in transitively via src/i18n/navigation.
-jest.mock('next-intl', () => ({
-  ...jest.requireActual('next-intl'),
+vi.mock('next-intl', async () => ({
+  ...(await vi.importActual('next-intl')),
   useTranslations: () => (key: string) => key,
 }));
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: jest.fn(async () => ({ success: true, data: {} })),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: vi.fn(async () => ({ success: true, data: {} })),
 }));
 
-jest.mock('@/components/decisions/VoteAIAdvisor', () => ({
+vi.mock('@/components/decisions/VoteAIAdvisor', () => ({
   VoteAIAdvisor: () => null,
 }));
 

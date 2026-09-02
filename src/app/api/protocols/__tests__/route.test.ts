@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/protocols and POST /api/protocols
  *
@@ -22,35 +22,34 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (handler: (req: Request, session: unknown) => unknown) => (req: Request) =>
     mockAuth().then((session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       return handler(req, session);
     }),
 }));
 
-const mockGetDbUserId = jest.fn();
+const mockGetDbUserId = vi.fn();
 
-jest.mock('@/lib/api/task-helpers', () => ({
-  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
+vi.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
 }));
 
-jest.mock('@/lib/permissions', () => ({
-  isSuperAdmin: jest.fn().mockReturnValue(false),
+vi.mock('@/lib/permissions', () => ({
+  isSuperAdmin: vi.fn().mockReturnValue(false),
 }));
 
-jest.mock('@/lib/schemas/protocols', () => ({
-  // Static so it survives jest.resetAllMocks()
+vi.mock('@/lib/schemas/protocols', () => ({
+  // Static so it survives vi.resetAllMocks()
   createProtocolSchema: {
     safeParse: (body: unknown) => {
       const b = body as Record<string, unknown>;
@@ -75,16 +74,15 @@ jest.mock('@/lib/schemas/protocols', () => ({
   },
 }));
 
-const mockGetProtocols = jest.fn();
-const mockCreateProtocol = jest.fn();
+const mockGetProtocols = vi.fn();
+const mockCreateProtocol = vi.fn();
 
-jest.mock('@/lib/services/protocols', () => ({
-  getProtocols: (...args: unknown[]) => mockGetProtocols.apply(null, args),
-  createProtocol: (...args: unknown[]) => mockCreateProtocol.apply(null, args),
+vi.mock('@/lib/services/protocols', () => ({
+  getProtocols: (...args: unknown[]) => mockGetProtocols(...args),
+  createProtocol: (...args: unknown[]) => mockCreateProtocol(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -98,15 +96,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -153,15 +151,15 @@ function makePostRequest(body: Record<string, unknown> = {}) {
   });
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(makeSession());
   mockGetDbUserId.mockResolvedValue({ dbUserId: 'db-user-1' });
   mockGetProtocols.mockResolvedValue(MOCK_PROTOCOLS);
   mockCreateProtocol.mockResolvedValue(MOCK_CREATED);
 
   // Re-apply isSuperAdmin default after resetAllMocks
-  const permissions = require('@/lib/permissions');
+  const permissions = (await import('@/lib/permissions')) as any;
   permissions.isSuperAdmin.mockReturnValue(false);
 });
 
@@ -202,7 +200,7 @@ describe('GET /api/protocols — authenticated', () => {
 
   it('passes isAdmin=true for super admin user', async () => {
     mockAuth.mockResolvedValueOnce(makeSession(true));
-    const permissions = require('@/lib/permissions');
+    const permissions = (await import('@/lib/permissions')) as any;
     permissions.isSuperAdmin.mockReturnValue(true);
     await GET(makeGetRequest());
     expect(mockGetProtocols).toHaveBeenCalledWith('db-user-1', true, expect.any(Object));

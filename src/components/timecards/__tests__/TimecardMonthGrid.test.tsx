@@ -19,10 +19,10 @@ import { TimecardMonthGrid } from '../TimecardMonthGrid';
 const DATES = ['2026-06-01', '2026-06-02', '2026-06-03', '2026-06-04', '2026-06-05'];
 
 function setup(props: Partial<React.ComponentProps<typeof TimecardMonthGrid>> = {}) {
-  const onDaySelect = jest.fn();
-  const onWeekdaySelect = jest.fn();
-  const onClearSelected = jest.fn();
-  const onEditDay = jest.fn();
+  const onDaySelect = vi.fn();
+  const onWeekdaySelect = vi.fn();
+  const onClearSelected = vi.fn();
+  const onEditDay = vi.fn();
   const { container } = render(
     <TimecardMonthGrid
       visibleDates={DATES}
@@ -160,18 +160,18 @@ describe('TimecardMonthGrid selection', () => {
     });
 
     it('long-press starts an ADD paint; moves hit-test the finger position', () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       try {
         const { onDaySelect, dayCells, container } = setup();
         fireEvent.pointerDown(dayCells[1], { pointerType: 'touch', clientX: 10, clientY: 10 });
         act(() => {
-          jest.advanceTimersByTime(400); // long-press fires → paint locked
+          vi.advanceTimersByTime(400); // long-press fires → paint locked
         });
         expect(onDaySelect).toHaveBeenLastCalledWith('2026-06-02', 'add');
 
         // Touch moves fire on the origin element (implicit capture) and are
         // hit-tested via elementFromPoint on the container.
-        document.elementFromPoint = jest.fn(() => dayCells[2]);
+        document.elementFromPoint = vi.fn((..._args: unknown[]) => dayCells[2]);
         fireEvent.pointerMove(container.firstChild as Element, {
           pointerType: 'touch',
           clientX: 60,
@@ -183,14 +183,14 @@ describe('TimecardMonthGrid selection', () => {
         fireEvent.click(dayCells[1]); // trailing click after a paint — swallowed
         expect(onDaySelect).toHaveBeenCalledTimes(2);
       } finally {
-        jest.useRealTimers();
+        vi.useRealTimers();
       }
     });
 
     it('a mostly-horizontal swipe starts painting without the long press', () => {
       const { onDaySelect, dayCells, container } = setup();
       fireEvent.pointerDown(dayCells[1], { pointerType: 'touch', clientX: 10, clientY: 10 });
-      document.elementFromPoint = jest.fn(() => dayCells[3]);
+      document.elementFromPoint = vi.fn((..._args: unknown[]) => dayCells[3]);
       fireEvent.pointerMove(container.firstChild as Element, {
         pointerType: 'touch',
         clientX: 40, // dx 30 > slop, clearly horizontal
@@ -215,16 +215,16 @@ describe('TimecardMonthGrid selection', () => {
     });
 
     it('long-press on an already selected day paints REMOVE', () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       try {
         const { onDaySelect, dayCells } = setup({ selectedDates: ['2026-06-02', '2026-06-03'] });
         fireEvent.pointerDown(dayCells[1], { pointerType: 'touch', clientX: 10, clientY: 10 });
         act(() => {
-          jest.advanceTimersByTime(400);
+          vi.advanceTimersByTime(400);
         });
         expect(onDaySelect).toHaveBeenLastCalledWith('2026-06-02', 'remove');
       } finally {
-        jest.useRealTimers();
+        vi.useRealTimers();
       }
     });
   });

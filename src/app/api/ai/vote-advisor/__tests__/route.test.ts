@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/ai/vote-advisor
  *
@@ -10,12 +10,12 @@
  * No auth required — public endpoint.
  */
 
-const mockCallWithFallback = jest.fn();
-jest.mock('@/lib/ai/providers', () => ({
+const mockCallWithFallback = vi.fn();
+vi.mock('@/lib/ai/providers', () => ({
   callWithFallback: (...args: unknown[]) => mockCallWithFallback(...args),
 }));
 
-jest.mock('@/lib/ai/config/prompts', () => ({
+vi.mock('@/lib/ai/config/prompts', () => ({
   VOTING_ADVISOR_PROMPTS: {
     system: 'You are a voting advisor.',
     advise:
@@ -31,8 +31,7 @@ jest.mock('@/lib/ai/config/prompts', () => ({
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -48,9 +47,9 @@ jest.mock('@/lib/api/helpers', () => {
 // Rate limiters use real module-level LRU state that persists across tests in
 // the suite — without mocking, the per-IP limit (5/hour) trips after a handful
 // of cases and short-circuits the route. Mock them to always allow.
-const mockVoteAdvisorIp = jest.fn((..._args: unknown[]) => true);
-const mockVoteAdvisorGlobal = jest.fn((..._args: unknown[]) => true);
-jest.mock('@/lib/security/rate-limit', () => ({
+const mockVoteAdvisorIp = vi.fn((..._args: unknown[]) => true);
+const mockVoteAdvisorGlobal = vi.fn((..._args: unknown[]) => true);
+vi.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: {
     voteAdvisorIp: (...args: unknown[]) => mockVoteAdvisorIp(...args),
     voteAdvisorGlobal: (...args: unknown[]) => mockVoteAdvisorGlobal(...args),
@@ -58,15 +57,16 @@ jest.mock('@/lib/security/rate-limit', () => ({
   getClientIdentifier: () => 'test-client',
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INVALID_REQUEST: 'Ungültige Anfrage' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_AI_RESULT = {
@@ -90,7 +90,7 @@ function makeRequest(body: unknown) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockCallWithFallback.mockResolvedValue(MOCK_AI_RESULT);
   mockVoteAdvisorIp.mockReturnValue(true);
   mockVoteAdvisorGlobal.mockReturnValue(true);

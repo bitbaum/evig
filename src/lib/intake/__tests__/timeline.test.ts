@@ -21,9 +21,9 @@
 function makeChain(result: unknown = undefined) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.update = jest.fn().mockReturnValue(chain);
-  chain.set = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
+  chain.update = vi.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -34,37 +34,38 @@ function makeChain(result: unknown = undefined) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbUpdate = jest.fn(() => makeChain());
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeChain());
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
   },
 }));
 
-jest.mock('@/db/schema/inventory', () => ({
+vi.mock('@/db/schema/inventory', () => ({
   inventoryItems: {
     id: 'ii_id',
     intakeEvents: 'ii_intakeEvents',
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { appendIntakeEvent } from '../timeline';
 
 // ---------------------------------------------------------------------------
@@ -79,7 +80,7 @@ const BASE_EVENT = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbUpdate.mockImplementation(() => makeChain());
 });
 
@@ -95,16 +96,16 @@ describe('appendIntakeEvent', () => {
   });
 
   it('passes the inventory ID to eq for WHERE clause', async () => {
-    const { eq } = jest.requireMock('drizzle-orm') as { eq: jest.Mock };
+    const { eq } = (await import('drizzle-orm')) as unknown as { eq: Mock };
 
     await appendIntakeEvent('inv-abc', BASE_EVENT);
 
-    const call = eq.mock.calls.find(([, v]: [unknown, string]) => v === 'inv-abc');
+    const call = eq.mock.calls.find((c: unknown[]) => c[1] === 'inv-abc');
     expect(call).toBeDefined();
   });
 
   it('adds ISO timestamp when event has no timestamp', async () => {
-    const { sql } = jest.requireMock('drizzle-orm') as { sql: jest.Mock };
+    const { sql } = (await import('drizzle-orm')) as unknown as { sql: Mock };
     const before = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
     await appendIntakeEvent('inv-1', { ...BASE_EVENT, timestamp: undefined });
@@ -116,7 +117,7 @@ describe('appendIntakeEvent', () => {
   });
 
   it('preserves provided timestamp when present', async () => {
-    const { sql } = jest.requireMock('drizzle-orm') as { sql: jest.Mock };
+    const { sql } = (await import('drizzle-orm')) as unknown as { sql: Mock };
     const fixedTs = '2026-01-15T10:00:00.000Z';
 
     await appendIntakeEvent('inv-1', { ...BASE_EVENT, timestamp: fixedTs });
@@ -144,7 +145,7 @@ describe('appendIntakeEvent', () => {
   });
 
   it('uses a supplied transaction executor for atomic audit writes', async () => {
-    const update = jest.fn().mockImplementation(() => makeChain());
+    const update = vi.fn().mockImplementation(() => makeChain());
 
     await appendIntakeEvent('inv-1', BASE_EVENT, {
       executor: { update } as never,
@@ -156,7 +157,7 @@ describe('appendIntakeEvent', () => {
   });
 
   it('rethrows required audit failures so the caller can roll back', async () => {
-    const update = jest.fn(() => {
+    const update = vi.fn((..._args: unknown[]) => {
       throw new Error('transaction update failed');
     });
 

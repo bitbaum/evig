@@ -36,9 +36,9 @@
 function makeInsertChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
-  chain.onConflictDoNothing = jest.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
+  chain.onConflictDoNothing = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -48,9 +48,9 @@ function makeInsertChain(result: unknown = []) {
 function makeSelectChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -61,15 +61,15 @@ function makeSelectChain(result: unknown = []) {
 // DB mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema/inventory', () => ({
+vi.mock('@/db/schema/inventory', () => ({
   aiExtractedProducts: { id: 'aep_id', slug: 'aep_slug' },
   inventoryItems: { id: 'ii_id' },
   customerProfiles: { id: 'cp_id', slug: 'cp_slug' },
@@ -78,24 +78,24 @@ jest.mock('@/db/schema/inventory', () => ({
   productImages: { id: 'pi_id', productId: 'pi_productId' },
 }));
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   donations: { id: 'd_id' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  getTableName: jest.fn().mockReturnValue('ai_extracted_products'),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  getTableName: vi.fn().mockReturnValue('ai_extracted_products'),
 }));
 
 // ---------------------------------------------------------------------------
 // Config + util mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('@/config/marketplace-status', () => ({
+vi.mock('@/config/marketplace-status', () => ({
   PRODUCT_STATUS: { PENDING_REVIEW: 'pending_review', APPROVED: 'approved' },
   MARKETPLACE_STATUS: { PUBLISHED: 'published', DRAFT: 'draft' },
   INVENTORY_ITEM_STATUS: { AVAILABLE: 'available' },
@@ -104,25 +104,25 @@ jest.mock('@/config/marketplace-status', () => ({
 // Keep the real pure config (INTAKE_TIERS, emptyChecklistItemState,
 // requiresQualityControl over the real CHECKLIST_ITEMS) — only pin the
 // device checklist to a stable two-item list.
-jest.mock('@/config/intake-checklist', () => ({
-  ...jest.requireActual('@/config/intake-checklist'),
-  getChecklistForDevice: jest.fn().mockReturnValue([{ id: 'check-1' }, { id: 'check-2' }]),
+vi.mock('@/config/intake-checklist', async () => ({
+  ...(await vi.importActual('@/config/intake-checklist')),
+  getChecklistForDevice: vi.fn().mockReturnValue([{ id: 'check-1' }, { id: 'check-2' }]),
 }));
 
-jest.mock('@/config/donations', () => ({
+vi.mock('@/config/donations', () => ({
   DONATION_STATUSES: { RECORDED: 'recorded' },
 }));
 
-const mockUploadImage = jest.fn().mockResolvedValue({ success: false, error: 'disabled' });
-const mockGenerateImageFilename = jest.fn().mockReturnValue('I-260427-0001.jpg');
+const mockUploadImage = vi.fn().mockResolvedValue({ success: false, error: 'disabled' });
+const mockGenerateImageFilename = vi.fn().mockReturnValue('I-260427-0001.jpg');
 
-jest.mock('@/lib/storage/image-upload', () => ({
-  uploadImage: (...args: unknown[]) => mockUploadImage.apply(null, args),
-  generateImageFilename: (...args: unknown[]) => mockGenerateImageFilename.apply(null, args),
+vi.mock('@/lib/storage/image-upload', () => ({
+  uploadImage: (...args: unknown[]) => mockUploadImage(...args),
+  generateImageFilename: (...args: unknown[]) => mockGenerateImageFilename(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // publishRevampitListing is the unified-marketplace publish helper. create-product
@@ -130,16 +130,17 @@ jest.mock('@/lib/logger', () => ({
 // marketplace_listings insert). Its own DB chains are covered by its own tests;
 // here we only assert that create-product calls it for publish and skips it when
 // checklist-gated, so a no-op spy is the correct seam.
-const mockPublishRevampitListing = jest.fn().mockResolvedValue('listing-1');
+const mockPublishRevampitListing = vi.fn().mockResolvedValue('listing-1');
 
-jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
-  publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing.apply(null, args),
+vi.mock('@/lib/marketplace/publish-revampit-listing', () => ({
+  publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing(...args),
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { generateItemUUID, createErfassungProduct } from '../create-product';
 import type { ErfassungPayload } from '@/types/erfassung';
 
@@ -147,14 +148,14 @@ import type { ErfassungPayload } from '@/types/erfassung';
 // Transaction mock
 // ---------------------------------------------------------------------------
 
-const mockTxExecute = jest.fn();
-const mockTxInsert = jest.fn();
-const mockTxSelect = jest.fn();
+const mockTxExecute = vi.fn();
+const mockTxInsert = vi.fn();
+const mockTxSelect = vi.fn();
 
 const mockTx = {
-  execute: (...args: unknown[]) => mockTxExecute.apply(null, args),
-  insert: (...args: unknown[]) => mockTxInsert.apply(null, args),
-  select: (...args: unknown[]) => mockTxSelect.apply(null, args),
+  execute: (...args: unknown[]) => mockTxExecute(...args),
+  insert: (...args: unknown[]) => mockTxInsert(...args),
+  select: (...args: unknown[]) => mockTxSelect(...args),
 };
 
 // ---------------------------------------------------------------------------
@@ -185,7 +186,7 @@ function setupMinimalDraft(productId = 'product-1', inventoryId = 'inventory-1')
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbExecute.mockResolvedValue({ rows: [{ count: '0' }] });
   mockTxExecute.mockResolvedValue({ rows: [{ count: '0' }] });
   mockTxInsert.mockReturnValue(makeInsertChain([]));
@@ -227,7 +228,7 @@ describe('generateItemUUID', () => {
 
   it('works with PoolClient executor (client.query path)', async () => {
     const mockPoolClient = {
-      query: jest.fn().mockResolvedValueOnce({ rows: [{ count: '9' }] }),
+      query: vi.fn().mockResolvedValueOnce({ rows: [{ count: '9' }] }),
       // PoolClient does NOT have .insert — isPoolClient check relies on this
     };
 

@@ -29,7 +29,7 @@ import { uiEvents } from '../ui/uiEvents';
 
 describe('uiEvents.on / emit', () => {
   it('calls handler when matching event is emitted', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     uiEvents.on('openChat', handler);
     uiEvents.emit('openChat');
     expect(handler).toHaveBeenCalledTimes(1);
@@ -39,14 +39,14 @@ describe('uiEvents.on / emit', () => {
   });
 
   it('does NOT call handler for a different event', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     uiEvents.on('openChat', handler);
     uiEvents.emit('closeChat');
     expect(handler).not.toHaveBeenCalled();
   });
 
   it('calls handler multiple times when event is emitted multiple times', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     uiEvents.on('openSuggestion', handler);
     uiEvents.emit('openSuggestion');
     uiEvents.emit('openSuggestion');
@@ -67,7 +67,7 @@ describe('uiEvents.on / emit', () => {
 
 describe('uiEvents unsubscribe', () => {
   it('unsubscribing stops handler from receiving future events', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const unsubscribe = uiEvents.on('closeChat', handler);
 
     uiEvents.emit('closeChat');
@@ -79,8 +79,8 @@ describe('uiEvents unsubscribe', () => {
   });
 
   it('other handlers survive unsubscribe of one', () => {
-    const handler1 = jest.fn();
-    const handler2 = jest.fn();
+    const handler1 = vi.fn();
+    const handler2 = vi.fn();
     const unsub1 = uiEvents.on('closeSuggestion', handler1);
     uiEvents.on('closeSuggestion', handler2);
 
@@ -98,9 +98,9 @@ describe('uiEvents unsubscribe', () => {
 
 describe('uiEvents — multiple subscribers', () => {
   it('all registered handlers are called on emit', () => {
-    const h1 = jest.fn();
-    const h2 = jest.fn();
-    const h3 = jest.fn();
+    const h1 = vi.fn();
+    const h2 = vi.fn();
+    const h3 = vi.fn();
     const u1 = uiEvents.on('openChat', h1);
     const u2 = uiEvents.on('openChat', h2);
     const u3 = uiEvents.on('openChat', h3);

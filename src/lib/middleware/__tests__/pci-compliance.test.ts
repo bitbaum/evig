@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 
 /**
@@ -25,7 +25,7 @@
 // Mocks (factories are hoisted; everything referenced inside must be inline)
 // ============================================================================
 
-jest.mock('@/lib/payments/security', () => {
+vi.mock('@/lib/payments/security', () => {
   const SECURITY_HEADERS = {
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
     'X-Content-Type-Options': 'nosniff',
@@ -37,17 +37,18 @@ jest.mock('@/lib/payments/security', () => {
   };
   return {
     PCI_COMPLIANCE: { SECURITY_HEADERS },
-    paymentRateLimiter: { isAllowed: jest.fn() },
-    isSecureRequest: jest.fn(),
-    createAuditLog: jest.fn(),
-    validatePaymentData: jest.fn(),
+    paymentRateLimiter: { isAllowed: vi.fn() },
+    isSecureRequest: vi.fn(),
+    createAuditLog: vi.fn(),
+    validatePaymentData: vi.fn(),
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
+import type { Mock } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   withPCICompliance,
@@ -64,10 +65,10 @@ import {
 } from '@/lib/payments/security';
 
 const mockSecurityHeaders = PCI_COMPLIANCE.SECURITY_HEADERS;
-const mockIsAllowed = paymentRateLimiter.isAllowed as jest.Mock;
-const mockIsSecureRequest = isSecureRequest as unknown as jest.Mock;
-const mockCreateAuditLog = createAuditLog as unknown as jest.Mock;
-const mockValidatePaymentData = validatePaymentData as unknown as jest.Mock;
+const mockIsAllowed = paymentRateLimiter.isAllowed as Mock;
+const mockIsSecureRequest = isSecureRequest as unknown as Mock;
+const mockCreateAuditLog = createAuditLog as unknown as Mock;
+const mockValidatePaymentData = validatePaymentData as unknown as Mock;
 
 // ============================================================================
 // Helpers
@@ -91,7 +92,7 @@ function makeRequest(init?: {
 const ORIGINAL_NODE_ENV = process.env.NODE_ENV;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Default to allowed + secure + valid
   mockIsAllowed.mockReturnValue(true);
   mockIsSecureRequest.mockReturnValue(true);
@@ -111,7 +112,7 @@ afterAll(() => {
 
 describe('withPCICompliance', () => {
   it('stamps every PCI security header on the wrapped response', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     const wrapped = withPCICompliance(handler);
 
     const res = await wrapped(makeRequest());
@@ -122,7 +123,7 @@ describe('withPCICompliance', () => {
   });
 
   it('stamps payment-specific cache-busting headers (no-cache, Pragma, Expires=0)', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     const res = await withPCICompliance(handler)(makeRequest());
 
     expect(res.headers.get('X-Payment-Endpoint')).toBe('true');
@@ -132,7 +133,7 @@ describe('withPCICompliance', () => {
   });
 
   it('returns 500 envelope when the wrapped handler throws', async () => {
-    const handler = jest.fn().mockRejectedValue(new Error('boom'));
+    const handler = vi.fn().mockRejectedValue(new Error('boom'));
     const res = await withPCICompliance(handler)(makeRequest());
 
     expect(res.status).toBe(500);
@@ -140,7 +141,7 @@ describe('withPCICompliance', () => {
   });
 
   it('forwards both request and context to the wrapped handler', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     const ctx = { params: Promise.resolve({ id: 'p1' }) };
     const req = makeRequest();
 
@@ -152,7 +153,7 @@ describe('withPCICompliance', () => {
     // Defensive: handler returning something else (e.g. plain Response)
     // should not crash; headers are only set if instanceof NextResponse
     const plain = new Response('raw', { status: 200 });
-    const handler = jest.fn().mockResolvedValue(plain);
+    const handler = vi.fn().mockResolvedValue(plain);
     const res = await withPCICompliance(handler)(makeRequest());
 
     expect(res).toBe(plain);
@@ -167,7 +168,7 @@ describe('withPCICompliance', () => {
 describe('withPaymentSecurity — rate limiting', () => {
   it('returns 429 when rate limiter rejects the client', async () => {
     mockIsAllowed.mockReturnValue(false);
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     const res = await withPaymentSecurity(handler)(
       makeRequest({ headers: { 'x-forwarded-for': '1.2.3.4' } }),
@@ -179,7 +180,7 @@ describe('withPaymentSecurity — rate limiting', () => {
   });
 
   it('uses x-forwarded-for as the client identifier (load-balancer aware)', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler)(
       makeRequest({ headers: { 'x-forwarded-for': '203.0.113.1' } }),
     );
@@ -192,7 +193,7 @@ describe('withPaymentSecurity — rate limiting', () => {
   });
 
   it('falls back to x-real-ip when x-forwarded-for is missing', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler)(makeRequest({ headers: { 'x-real-ip': '198.51.100.1' } }));
 
     expect(mockIsAllowed).toHaveBeenCalledWith(
@@ -203,14 +204,14 @@ describe('withPaymentSecurity — rate limiting', () => {
   });
 
   it('falls back to "unknown" when no IP headers are present', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler)(makeRequest());
 
     expect(mockIsAllowed).toHaveBeenCalledWith('unknown', expect.any(Number), expect.any(Number));
   });
 
   it('uses the rate-limit options when provided', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler, {
       rateLimit: { maxAttempts: 3, windowMs: 1000 },
     })(makeRequest());
@@ -219,7 +220,7 @@ describe('withPaymentSecurity — rate limiting', () => {
   });
 
   it('falls back to defaults (10 attempts, 60s) when no options', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler)(makeRequest());
 
     expect(mockIsAllowed).toHaveBeenCalledWith('unknown', 10, 60000);
@@ -229,7 +230,7 @@ describe('withPaymentSecurity — rate limiting', () => {
 describe('withPaymentSecurity — HTTPS gate', () => {
   it('returns 403 when request is not secure and NODE_ENV !== "development"', async () => {
     mockIsSecureRequest.mockReturnValue(false);
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     const res = await withPaymentSecurity(handler)(makeRequest());
 
@@ -241,7 +242,7 @@ describe('withPaymentSecurity — HTTPS gate', () => {
   it('allows insecure requests in development mode', async () => {
     (process.env as Record<string, string>).NODE_ENV = 'development';
     mockIsSecureRequest.mockReturnValue(false);
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     const res = await withPaymentSecurity(handler)(makeRequest());
 
@@ -251,7 +252,7 @@ describe('withPaymentSecurity — HTTPS gate', () => {
 
   it('skips HTTPS check when requireHttps=false even in production', async () => {
     mockIsSecureRequest.mockReturnValue(false);
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     const res = await withPaymentSecurity(handler, { requireHttps: false })(makeRequest());
 
@@ -262,7 +263,7 @@ describe('withPaymentSecurity — HTTPS gate', () => {
 
 describe('withPaymentSecurity — audit logging', () => {
   it('emits an audit log on every accepted request (default)', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler)(
       makeRequest({
         method: 'POST',
@@ -290,14 +291,14 @@ describe('withPaymentSecurity — audit logging', () => {
   });
 
   it('does NOT emit audit log when auditLog=false', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler, { auditLog: false })(makeRequest());
 
     expect(mockCreateAuditLog).not.toHaveBeenCalled();
   });
 
   it('logs a security incident when the chain throws (caught at outer level)', async () => {
-    const handler = jest.fn().mockRejectedValue(new Error('inner crash'));
+    const handler = vi.fn().mockRejectedValue(new Error('inner crash'));
     const res = await withPaymentSecurity(handler)(makeRequest());
 
     // The chain delegates to withPCICompliance which catches and returns 500.
@@ -309,7 +310,7 @@ describe('withPaymentSecurity — audit logging', () => {
 
 describe('withPaymentSecurity — composition with withPCICompliance', () => {
   it('forwards through to PCI compliance so headers + cache-busting are present', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     const res = await withPaymentSecurity(handler)(makeRequest());
 
     expect(res.status).toBe(200);
@@ -327,7 +328,7 @@ describe('withPaymentSecurity — composition with withPCICompliance', () => {
 describe('withPaymentValidation', () => {
   it('passes through to handler when validation succeeds', async () => {
     mockValidatePaymentData.mockReturnValue({ isValid: true, errors: [] });
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     const res = await withPaymentValidation(handler)(
       makeRequest({ body: { amount: 5000, currency: 'CHF' } }),
@@ -342,7 +343,7 @@ describe('withPaymentValidation', () => {
       isValid: false,
       errors: ['amount must be positive', 'currency required'],
     });
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     const res = await withPaymentValidation(handler)(makeRequest({ body: { amount: -1 } }));
 
@@ -356,7 +357,7 @@ describe('withPaymentValidation', () => {
 
   it('attaches paymentValidation to the request for handler access', async () => {
     mockValidatePaymentData.mockReturnValue({ isValid: true, errors: [] });
-    const handler = jest.fn().mockImplementation((req: unknown) => {
+    const handler = vi.fn().mockImplementation((req: unknown) => {
       // The wrapper attaches `.paymentValidation` to the request so the
       // handler can access the validation result without re-parsing
       const r = req as { paymentValidation?: { isValid: boolean; errors: string[] } };
@@ -369,7 +370,7 @@ describe('withPaymentValidation', () => {
   });
 
   it('returns 400 envelope when JSON parsing throws (malformed body)', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     // Build a request with invalid JSON body
     const req = new NextRequest('https://example.test/api/payments/test', {
       method: 'POST',
@@ -385,7 +386,7 @@ describe('withPaymentValidation', () => {
 
   it('passes the parsed body to validatePaymentData', async () => {
     mockValidatePaymentData.mockReturnValue({ isValid: true, errors: [] });
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     await withPaymentValidation(handler)(
       makeRequest({ body: { amount: 5000, currency: 'CHF', orderId: 'o-1' } }),
@@ -405,7 +406,7 @@ describe('withPaymentValidation', () => {
 
 describe('withSecurePayment', () => {
   it('passes a secure, valid, allowed request all the way through with PCI headers', async () => {
-    const handler = jest.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
 
     const res = await withSecurePayment(handler)(
       makeRequest({
@@ -421,7 +422,7 @@ describe('withSecurePayment', () => {
 
   it('rate-limit fires first (429 before validation runs)', async () => {
     mockIsAllowed.mockReturnValue(false);
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const res = await withSecurePayment(handler)(
       makeRequest({ body: { amount: -1 } }), // would fail validation too
@@ -434,7 +435,7 @@ describe('withSecurePayment', () => {
 
   it('HTTPS gate fires before validation (403 before parsing)', async () => {
     mockIsSecureRequest.mockReturnValue(false);
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const res = await withSecurePayment(handler)(makeRequest({ body: { amount: -1 } }));
 
@@ -448,7 +449,7 @@ describe('withSecurePayment', () => {
       isValid: false,
       errors: ['amount must be positive'],
     });
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const res = await withSecurePayment(handler)(makeRequest({ body: { amount: -1 } }));
 

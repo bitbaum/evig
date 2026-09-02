@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/admin/payments/dashboard
  *
@@ -7,19 +7,18 @@
  *   GET - 401, 200 (8 parallel db.execute calls)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -27,15 +26,15 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockDbExecute = jest.fn();
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema/payments', () => ({
+vi.mock('@/db/schema/payments', () => ({
   paymentTransactions: {},
   paymentProviders: {},
   escrowAccounts: {},
@@ -43,29 +42,28 @@ jest.mock('@/db/schema/payments', () => ({
   paymentDisputes: {},
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: {},
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
   getTableName: () => 'mock_table',
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: { SUCCEEDED: 'succeeded', FAILED: 'failed' },
   ESCROW_STATUS: { ACTIVE: 'active', RELEASED: 'released' },
   PAYMENT_DISPUTE_STATUS: { OPENED: 'opened', LOST: 'lost' },
 }));
 
-jest.mock('@/config/refund', () => ({
+vi.mock('@/config/refund', () => ({
   REFUND_STATUS: { COMPLETED: 'completed', REQUESTED: 'requested', PROCESSING: 'processing' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -73,11 +71,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_SESSION = {
@@ -128,7 +126,7 @@ function makeRequest(params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // 8 parallel db.execute calls

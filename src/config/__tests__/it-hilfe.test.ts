@@ -42,17 +42,17 @@
  *   - returns "bis CHF X" for positive amount without tier
  */
 
-jest.mock('lucide-react', () => {
+vi.mock('lucide-react', () => {
   const icon = (name: string) => ({ displayName: name });
-  return new Proxy({}, { get: (_t, prop) => icon(prop as string) });
+  return new Proxy({}, { get: (_t, prop) => icon(prop as string), has: () => true });
 });
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   ORG: { name: 'Revamp-IT' },
   CONTACT: { email: 'test@revamp-it.ch' },
 }));
 
-jest.mock('@/config/swiss-cantons', () => ({
+vi.mock('@/config/swiss-cantons', () => ({
   SWISS_CANTONS: [],
 }));
 

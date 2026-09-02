@@ -22,14 +22,14 @@
  *   - startCamera / stopCamera / capturePhoto (MediaStream + canvas)
  */
 
-const mockApiFetch = jest.fn();
+const mockApiFetch = vi.fn();
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 import { renderHook, act, waitFor } from '@testing-library/react';
@@ -190,7 +190,7 @@ describe('analyzeImage — happy path', () => {
   });
 
   it('fires onAnalyzed callback with analysis + sustainability', async () => {
-    const onAnalyzed = jest.fn();
+    const onAnalyzed = vi.fn();
     mockApiFetch.mockResolvedValueOnce({
       success: true,
       data: {
@@ -292,7 +292,7 @@ describe('analyzeImage — failure paths', () => {
   });
 
   it('does NOT fire onAnalyzed callback on failure', async () => {
-    const onAnalyzed = jest.fn();
+    const onAnalyzed = vi.fn();
     mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' });
 
     const { result } = renderHook(() => useAIProductAnalysis({ onAnalyzed }));

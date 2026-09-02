@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for PATCH /api/me/preferences
  *
@@ -21,55 +21,51 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockWhere = jest.fn().mockResolvedValue([]);
-const mockSet = jest.fn().mockReturnValue({ where: mockWhere });
-const mockUpdate = jest.fn().mockReturnValue({ set: mockSet });
+const mockWhere = vi.fn().mockResolvedValue([]);
+const mockSet = vi.fn().mockReturnValue({ where: mockWhere });
+const mockUpdate = vi.fn().mockReturnValue({ set: mockSet });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    update: (...args: unknown[]) => mockUpdate.apply(null, args),
+    update: (...args: unknown[]) => mockUpdate(...args),
   },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'users_id', dashboardMode: 'users_dashboardMode' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown, status = 200) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data }, { status });
   },
   apiBadRequest: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 400 });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
   apiUnauthorized: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 401 });
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
 }));
 
@@ -77,7 +73,7 @@ jest.mock('@/config/error-messages', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PATCH } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -97,7 +93,7 @@ const MOCK_SESSION = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockUpdate.mockReturnValue({ set: mockSet });
   mockSet.mockReturnValue({ where: mockWhere });
@@ -152,7 +148,7 @@ describe('PATCH /api/me/preferences — valid input', () => {
 
   it('calls db.update filtered by the session user id', async () => {
     await PATCH(makeRequest({ dashboardMode: 'coordinator' }));
-    const { eq } = await import('drizzle-orm');
+    const { eq } = (await import('drizzle-orm')) as any;
     expect(eq).toHaveBeenCalledWith(expect.anything(), 'user-42');
   });
 

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/decisions/[id]/transition
  *
@@ -25,19 +25,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -50,26 +49,26 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockGetDbUserId = jest.fn();
+const mockGetDbUserId = vi.fn();
 
-jest.mock('@/lib/api/task-helpers', () => ({
-  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
+vi.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
 }));
 
-const mockTransitionDecision = jest.fn();
+const mockTransitionDecision = vi.fn();
 
-jest.mock('@/lib/services/decisions', () => ({
-  transitionDecision: (...args: unknown[]) => mockTransitionDecision.apply(null, args),
+vi.mock('@/lib/services/decisions', () => ({
+  transitionDecision: (...args: unknown[]) => mockTransitionDecision(...args),
 }));
 
-const mockNotifyAllStaff = jest.fn().mockResolvedValue(undefined);
+const mockNotifyAllStaff = vi.fn().mockResolvedValue(undefined);
 
-jest.mock('@/lib/services/notifications', () => ({
-  notifyAllStaff: (...args: unknown[]) => mockNotifyAllStaff.apply(null, args),
+vi.mock('@/lib/services/notifications', () => ({
+  notifyAllStaff: (...args: unknown[]) => mockNotifyAllStaff(...args),
 }));
 
-jest.mock('@/lib/schemas/decisions', () => ({
-  // Static (not jest.fn) so it survives jest.resetAllMocks() without re-setup
+vi.mock('@/lib/schemas/decisions', () => ({
+  // Static (not vi.fn) so it survives vi.resetAllMocks() without re-setup
   transitionDecisionSchema: {
     safeParse: (body: unknown) => {
       const b = body as Record<string, unknown>;
@@ -83,7 +82,7 @@ jest.mock('@/lib/schemas/decisions', () => ({
   },
 }));
 
-jest.mock('@/config/decisions', () => ({
+vi.mock('@/config/decisions', () => ({
   DECISION_STATUS: {
     DRAFT: 'draft',
     DISCUSSION: 'discussion',
@@ -93,12 +92,12 @@ jest.mock('@/config/decisions', () => ({
   },
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   NOTIFICATION_TYPES: { DECISION_VOTING: 'decision_voting', DECISION_CLOSED: 'decision_closed' },
   RELATED_TYPES: { DECISION: 'decision' },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     INTERNAL_SERVER_ERROR: 'Internal server error',
     ALL_FIELDS_REQUIRED: 'All fields required',
@@ -106,12 +105,11 @@ jest.mock('@/config/error-messages', () => ({
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -127,7 +125,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -161,7 +159,7 @@ function makeContext(id = 'dec-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockGetDbUserId.mockResolvedValue({ dbUserId: 'db-admin-1' });
   mockTransitionDecision.mockResolvedValue({ decision: MOCK_DECISION });

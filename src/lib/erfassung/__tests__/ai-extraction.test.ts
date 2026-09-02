@@ -26,45 +26,45 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockCallWithFallback = jest.fn();
-const mockCallVisionWithFallback = jest.fn();
+const mockCallWithFallback = vi.fn();
+const mockCallVisionWithFallback = vi.fn();
 
-jest.mock('@/lib/ai/providers', () => ({
-  callWithFallback: (...args: unknown[]) => mockCallWithFallback.apply(null, args),
-  callVisionWithFallback: (...args: unknown[]) => mockCallVisionWithFallback.apply(null, args),
+vi.mock('@/lib/ai/providers', () => ({
+  callWithFallback: (...args: unknown[]) => mockCallWithFallback(...args),
+  callVisionWithFallback: (...args: unknown[]) => mockCallVisionWithFallback(...args),
 }));
 
-const mockFillPromptTemplate = jest.fn((template: string) => `PROMPT:${template}`);
+const mockFillPromptTemplate = vi.fn((...args: unknown[]) => `PROMPT:${args[0]}`);
 
 // ERFASSUNG_PROMPTS is evaluated at module load time (module-level const), so
 // it must be inlined in the factory — cannot reference a const from TDZ here.
-jest.mock('@/lib/ai/config/prompts', () => ({
+vi.mock('@/lib/ai/config/prompts', () => ({
   ERFASSUNG_PROMPTS: {
     system: 'You are an extractor.',
     extract: 'Extract: {text}',
     schema: '{"produktname":"","hersteller":""}',
   },
-  fillPromptTemplate: (...args: unknown[]) => mockFillPromptTemplate.apply(null, args),
+  fillPromptTemplate: (...args: unknown[]) => mockFillPromptTemplate(...args),
 }));
 
-const mockCalculateFieldConfidence = jest.fn();
-const mockFastParseProductText = jest.fn();
+const mockCalculateFieldConfidence = vi.fn();
+const mockFastParseProductText = vi.fn();
 
-jest.mock('../ai-field-mapping', () => ({
-  calculateFieldConfidence: (...args: unknown[]) => mockCalculateFieldConfidence.apply(null, args),
-  generateVerificationSources: jest.fn().mockReturnValue([]),
+vi.mock('../ai-field-mapping', () => ({
+  calculateFieldConfidence: (...args: unknown[]) => mockCalculateFieldConfidence(...args),
+  generateVerificationSources: vi.fn().mockReturnValue([]),
 }));
 
-jest.mock('../ai-classification', () => ({
-  fastParseProductText: (...args: unknown[]) => mockFastParseProductText.apply(null, args),
+vi.mock('../ai-classification', () => ({
+  fastParseProductText: (...args: unknown[]) => mockFastParseProductText(...args),
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   OLLAMA_URL: 'http://ollama.test:11434',
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -111,8 +111,8 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  jest.clearAllMocks();
-  global.fetch = jest.fn();
+  vi.clearAllMocks();
+  global.fetch = vi.fn();
   setupFieldConfidence();
   mockFastParseProductText.mockReturnValue({
     produktname: 'ThinkPad T480',

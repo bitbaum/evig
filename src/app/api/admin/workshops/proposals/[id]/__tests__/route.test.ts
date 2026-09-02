@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/PATCH /api/admin/workshops/proposals/[id]
  *
@@ -18,19 +18,18 @@
  *   - returns 200 on success
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -43,19 +42,19 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockLeftJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockReturning = jest.fn();
-const mockCreateEditSnapshot = jest.fn();
-const mockAppendEditHistory = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockLeftJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockReturning = vi.fn();
+const mockCreateEditSnapshot = vi.fn();
+const mockAppendEditHistory = vi.fn();
 
 // alias called at module init
-jest.mock('drizzle-orm/pg-core', () => ({
+vi.mock('drizzle-orm/pg-core', () => ({
   alias: (_table: unknown, name: string) => ({
     id: `${name}_id`,
     name: `${name}_name`,
@@ -63,7 +62,7 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => {
       mockSelect(...args);
@@ -76,7 +75,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshopProposals: {
     id: 'wp_id',
     userId: 'wp_userId',
@@ -90,31 +89,30 @@ jest.mock('@/db/schema', () => ({
   workshops: { id: 'w_id', title: 'w_title', proposalId: 'w_proposalId' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
     WORKSHOP_PROPOSAL_NOT_FOUND: 'Workshop-Vorschlag nicht gefunden',
   },
 }));
 
-jest.mock('@/config/approval-status', () => ({
+vi.mock('@/config/approval-status', () => ({
   APPROVAL_STATUS: { PENDING: 'pending', APPROVED: 'approved' },
 }));
 
-jest.mock('@/lib/admin/edit-utils', () => ({
-  createEditSnapshot: (...args: unknown[]) => mockCreateEditSnapshot.apply(null, args),
-  appendEditHistory: (...args: unknown[]) => mockAppendEditHistory.apply(null, args),
+vi.mock('@/lib/admin/edit-utils', () => ({
+  createEditSnapshot: (...args: unknown[]) => mockCreateEditSnapshot(...args),
+  appendEditHistory: (...args: unknown[]) => mockAppendEditHistory(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -126,14 +124,14 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // WorkshopProposal type import
-jest.mock('@/components/workshops/types', () => ({}));
+vi.mock('@/components/workshops/types', () => ({}));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, PATCH } from '../route';
 
 const MOCK_SESSION = {
@@ -169,12 +167,12 @@ function makeQueryResult(rows: unknown[]) {
       Promise.resolve(rows).then(resolve, reject),
     catch: (reject: (e: unknown) => unknown) => Promise.resolve(rows).catch(reject),
     finally: (fn: () => void) => Promise.resolve(rows).finally(fn),
-    limit: jest.fn(() => Promise.resolve(rows.slice(0, 1))),
+    limit: vi.fn((..._args: unknown[]) => Promise.resolve(rows.slice(0, 1))),
   };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockFrom.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere });

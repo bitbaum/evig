@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/blog/categories
  *
@@ -19,17 +19,17 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockOrderBy = jest.fn();
-const mockFrom = jest.fn(() => ({ orderBy: mockOrderBy }));
-const mockSelect = jest.fn(() => ({ from: mockFrom }));
+const mockOrderBy = vi.fn();
+const mockFrom = vi.fn((..._args: unknown[]) => ({ orderBy: mockOrderBy }));
+const mockSelect = vi.fn((..._args: unknown[]) => ({ from: mockFrom }));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockSelect.apply(null, args),
+    select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   blogCategories: {
     id: 'id',
     slug: 'slug',
@@ -40,22 +40,20 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  asc: jest.fn((col) => ({ __asc: col })),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  asc: vi.fn((col) => ({ __asc: col })),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccessCached: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   },
 }));
@@ -64,6 +62,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -88,7 +87,7 @@ const SAMPLE_CATEGORIES = [
 ];
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockFrom.mockReturnValue({ orderBy: mockOrderBy });
   mockSelect.mockReturnValue({ from: mockFrom });
   mockOrderBy.mockResolvedValue(SAMPLE_CATEGORIES);

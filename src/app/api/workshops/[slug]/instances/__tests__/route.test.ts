@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/workshops/[slug]/instances (public)
  *
@@ -7,15 +7,15 @@
  *   GET - 200 with instances list, 200 empty list, 404 (workshop not found)
  */
 
-const mockSelect = jest.fn();
+const mockSelect = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshops: {
     id: 'ws_id',
     slug: 'ws_slug',
@@ -36,7 +36,7 @@ jest.mock('@/db/schema', () => ({
   workshopRegistrations: { id: 'wr_id', workshopInstanceId: 'wr_workshopInstanceId' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   asc: (a: unknown) => ({ __asc: a }),
@@ -45,8 +45,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccessCached: (data: unknown, _maxAge?: number, _stale?: number) =>
       NextResponse.json({ success: true, data }),
@@ -57,7 +56,7 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_INSTANCE = {
@@ -76,23 +75,23 @@ const MOCK_INSTANCE = {
 
 // Build a full instance query chain: innerJoin → leftJoin → groupBy → orderBy
 function makeInstancesChain(rows: unknown[]) {
-  const orderBy = jest.fn().mockResolvedValue(rows);
-  const groupBy = jest.fn().mockReturnValue({ orderBy });
-  const leftJoin = jest.fn().mockReturnValue({ groupBy });
-  const innerJoin = jest.fn().mockReturnValue({ leftJoin });
-  const from = jest.fn().mockReturnValue({ innerJoin });
+  const orderBy = vi.fn().mockResolvedValue(rows);
+  const groupBy = vi.fn().mockReturnValue({ orderBy });
+  const leftJoin = vi.fn().mockReturnValue({ groupBy });
+  const innerJoin = vi.fn().mockReturnValue({ leftJoin });
+  const from = vi.fn().mockReturnValue({ innerJoin });
   return { from };
 }
 
 // Build a workshop existence check chain: where (resolves to array)
 function makeWorkshopCheckChain(workshop: unknown) {
-  const where = jest.fn().mockResolvedValue(workshop ? [workshop] : []);
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockResolvedValue(workshop ? [workshop] : []);
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
 // ============================================================================

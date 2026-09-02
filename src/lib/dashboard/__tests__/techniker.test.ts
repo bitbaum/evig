@@ -36,13 +36,13 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockQuery = jest.fn();
+const mockQuery = vi.fn();
 
-jest.mock('@/lib/auth/db', () => ({
-  query: (...args: unknown[]) => mockQuery.apply(null, args),
+vi.mock('@/lib/auth/db', () => ({
+  query: (...args: unknown[]) => mockQuery(...args),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: {
     REPAIRER_PROFILES: 'repairer_profiles',
     IT_HILFE_OFFERS: 'it_hilfe_offers',
@@ -51,13 +51,13 @@ jest.mock('@/config/database', () => ({
   },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', COMPLETED: 'completed' },
   OFFER_STATUS: { PENDING: 'pending', ACCEPTED: 'accepted' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -121,7 +121,7 @@ function makeOfferRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 // ============================================================================
@@ -197,7 +197,7 @@ describe('getTechnicianProfile', () => {
     const result = await getTechnicianProfile(USER_ID);
 
     expect(result).toBeNull();
-    const { logger } = jest.requireMock('@/lib/logger');
+    const { logger } = (await import('@/lib/logger')) as any;
     expect(logger.error).toHaveBeenCalledTimes(1);
   });
 });
@@ -359,7 +359,7 @@ describe('getMyOffers', () => {
     const result = await getMyOffers(USER_ID);
 
     expect(result).toEqual([]);
-    const { logger } = jest.requireMock('@/lib/logger');
+    const { logger } = (await import('@/lib/logger')) as any;
     expect(logger.error).toHaveBeenCalledTimes(1);
   });
 });

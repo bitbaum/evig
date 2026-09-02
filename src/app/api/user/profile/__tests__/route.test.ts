@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET + PUT /api/user/profile
  *
@@ -12,17 +12,16 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -30,14 +29,13 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockValidateBody = jest.fn();
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+const mockValidateBody = vi.fn();
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   UpdateProfileSchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -48,9 +46,9 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-const mockGetOrCreateProfile = jest.fn();
-const mockUpdateProfile = jest.fn();
-jest.mock('@/lib/auth/db-users', () => ({
+const mockGetOrCreateProfile = vi.fn();
+const mockUpdateProfile = vi.fn();
+vi.mock('@/lib/auth/db-users', () => ({
   getOrCreateProfile: (...args: unknown[]) => mockGetOrCreateProfile(...args),
   updateProfile: (...args: unknown[]) => mockUpdateProfile(...args),
 }));
@@ -88,10 +86,11 @@ function makeRequest(method = 'GET', body?: unknown) {
   });
 }
 
+import { NextResponse } from 'next/server';
 import { GET, PUT } from '../route';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockGetOrCreateProfile.mockResolvedValue(MOCK_PROFILE);
   mockUpdateProfile.mockResolvedValue(MOCK_PROFILE);

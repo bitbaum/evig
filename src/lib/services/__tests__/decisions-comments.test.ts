@@ -35,33 +35,31 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' });
-  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
-  (sqlFn as unknown as Record<string, unknown>).join = jest
-    .fn()
-    .mockReturnValue({ __sql: 'joined' });
+vi.mock('drizzle-orm', async () => {
+  const sqlFn = vi.fn().mockReturnValue({ __sql: 'mocked' });
+  (sqlFn as unknown as Record<string, unknown>).raw = vi.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = vi.fn().mockReturnValue({ __sql: 'joined' });
   return {
-    ...jest.requireActual('drizzle-orm'),
+    ...(await vi.importActual('drizzle-orm')),
     sql: sqlFn,
-    getTableName: jest.fn().mockReturnValue('mock_table'),
+    getTableName: vi.fn().mockReturnValue('mock_table'),
   };
 });
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   decisions: { id: 'decisions' },
   decisionComments: { id: 'decisionComments' },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'users' },
 }));
 
@@ -99,7 +97,7 @@ function makeCommentRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 // ============================================================================

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/payments/payrexx-webhook
  *
@@ -10,14 +10,13 @@
  * Dev mode (NODE_ENV=development, no PAYREXX_INSTANCE) skips signature verification.
  */
 
-jest.mock('@/lib/services/payment-webhook', () => ({
-  lookupPaymentByReferenceId: jest.fn(),
-  handleMarketplacePayment: jest.fn(),
-  handleGenericPayment: jest.fn(),
+vi.mock('@/lib/services/payment-webhook', () => ({
+  lookupPaymentByReferenceId: vi.fn(),
+  handleMarketplacePayment: vi.fn(),
+  handleGenericPayment: vi.fn(),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -32,11 +31,12 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import type { MockedFunction } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 import {
   lookupPaymentByReferenceId,
@@ -44,13 +44,11 @@ import {
   handleGenericPayment,
 } from '@/lib/services/payment-webhook';
 
-const mockLookup = lookupPaymentByReferenceId as jest.MockedFunction<
-  typeof lookupPaymentByReferenceId
->;
-const mockHandleMarketplace = handleMarketplacePayment as jest.MockedFunction<
+const mockLookup = lookupPaymentByReferenceId as MockedFunction<typeof lookupPaymentByReferenceId>;
+const mockHandleMarketplace = handleMarketplacePayment as MockedFunction<
   typeof handleMarketplacePayment
 >;
-const mockHandleGeneric = handleGenericPayment as jest.MockedFunction<typeof handleGenericPayment>;
+const mockHandleGeneric = handleGenericPayment as MockedFunction<typeof handleGenericPayment>;
 
 const MOCK_ORDER = { id: 'order-1', referenceId: 'ref-abc', status: 'pending' };
 const MOCK_TX = { id: 'tx-1', referenceId: 'ref-abc', status: 'pending' };
@@ -64,7 +62,7 @@ function makeWebhookRequest(body: unknown, headers: Record<string, string> = {})
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   // Dev mode: skip signature verification
   (process.env as { NODE_ENV: string }).NODE_ENV = 'development';
   delete process.env.PAYREXX_INSTANCE;

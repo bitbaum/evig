@@ -8,9 +8,10 @@
  * either direction.
  */
 
+import type { Mock } from 'vitest';
 import { apiFetch } from '../client';
 
-const mockFetch = global.fetch as jest.Mock;
+const mockFetch = global.fetch as Mock;
 
 beforeEach(() => {
   mockFetch.mockReset();

@@ -32,7 +32,7 @@
 // ---------------------------------------------------------------------------
 
 const originalFetch = global.fetch;
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 
 beforeAll(() => {
   global.fetch = mockFetch;
@@ -45,7 +45,7 @@ function mockFetchResponse(data: unknown, ok = true, status = 200) {
   mockFetch.mockResolvedValueOnce({
     ok,
     status,
-    json: jest
+    json: vi
       .fn()
       .mockResolvedValue(
         ok ? { success: true, data } : { success: false, error: `Mock error ${status}` },
@@ -84,7 +84,7 @@ const ENV_URL = 'https://kivvi.example.com';
 const ENV_TOKEN = 'kv_test_token_12345';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   process.env.KIVVI_API_URL = ENV_URL;
   process.env.KIVVI_API_TOKEN = ENV_TOKEN;
   delete process.env.KIVVI_DEFAULT_WAREHOUSE_ID;
@@ -100,6 +100,7 @@ afterEach(() => {
 // Imports (after mock and env setup — must come after global.fetch assignment)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   createKivviInventoryItem,
   updateKivviInventoryItem,
@@ -160,7 +161,7 @@ describe('kivviFetch — HTTP behavior', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
-      json: jest.fn().mockResolvedValue({ success: false, error: 'Item not found' }),
+      json: vi.fn().mockResolvedValue({ success: false, error: 'Item not found' }),
     });
 
     await expect(createKivviInventoryItem({ description: 'x' })).rejects.toThrow(
@@ -172,7 +173,7 @@ describe('kivviFetch — HTTP behavior', () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 422,
-      json: jest.fn().mockResolvedValue({ success: false }),
+      json: vi.fn().mockResolvedValue({ success: false }),
     });
 
     await expect(createKivviInventoryItem({ description: 'x' })).rejects.toThrow('422');
@@ -411,7 +412,7 @@ describe('syncToKivvi', () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
-      json: jest.fn().mockResolvedValue({ success: false, error: 'Internal server error' }),
+      json: vi.fn().mockResolvedValue({ success: false, error: 'Internal server error' }),
     });
 
     const result = await syncToKivvi({ description: 'Laptop' });
@@ -435,7 +436,7 @@ describe('recordKivviAgencySale', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
-      json: jest.fn().mockResolvedValue({
+      json: vi.fn().mockResolvedValue({
         success: true,
         data: {
           journalEntryId: 'je-1',
@@ -473,7 +474,7 @@ describe('recordKivviPayout', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
-      json: jest.fn().mockResolvedValue({
+      json: vi.fn().mockResolvedValue({
         success: true,
         data: {
           journalEntryId: 'je-2',

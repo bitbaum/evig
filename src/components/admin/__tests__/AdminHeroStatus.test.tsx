@@ -49,7 +49,7 @@ describe('AdminHeroStatus', () => {
   });
 
   it('renders an onClick CTA and dispatches click', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(
       <AdminHeroStatus
         tone="urgent"

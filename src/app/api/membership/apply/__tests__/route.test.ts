@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/membership/apply (public, optional auth)
  *
@@ -8,33 +8,33 @@
  *          200 (success anonymous), 200 (success logged in)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockCheckRateLimit = jest.fn();
-const mockGetClientIp = jest.fn();
+const mockCheckRateLimit = vi.fn();
+const mockGetClientIp = vi.fn();
 
-jest.mock('@/lib/auth/rate-limiter', () => ({
+vi.mock('@/lib/auth/rate-limiter', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
   getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
 }));
 
-const mockSendCustomEmail = jest.fn();
+const mockSendCustomEmail = vi.fn();
 
-jest.mock('@/lib/email', () => ({
+vi.mock('@/lib/email', () => ({
   sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
 }));
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   BANK: { iban: 'CH00 0000 0000 0000 0000 0', name: 'Test Bank', accountHolder: 'RevampIT' },
   MEMBERSHIP: { fees: { regular: 60, reduced: 30 } },
   ORG: { name: 'RevampIT', legalName: 'RevampIT' },
 }));
 
-jest.mock('@/config/membership-status', () => ({
+vi.mock('@/config/membership-status', () => ({
   MEMBERSHIP_APPLICATION_STATUS: { APPROVED: 'approved', PENDING: 'pending', REJECTED: 'rejected' },
 }));
 
@@ -44,19 +44,19 @@ jest.mock('@/config/membership-status', () => ({
 // for the SELECT FOR UPDATE row lock. The mocks below model the tx variants;
 // the original `db.*` stubs are kept (unused) so the wider import surface
 // doesn't change.
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockFor = jest.fn();
-const mockLimit = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockTransaction = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockFor = vi.fn();
+const mockLimit = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -71,7 +71,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   users: {
     id: 'u_id',
     isMember: 'u_isMember',
@@ -93,7 +93,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -101,12 +101,11 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/utils/escape-html', () => ({
+vi.mock('@/lib/utils/escape-html', () => ({
   escapeHtml: (s: string) => s,
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -119,11 +118,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const VALID_BODY = {
@@ -136,7 +135,7 @@ const VALID_BODY = {
 };
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 
   mockAuth.mockResolvedValue(null); // anonymous by default
   mockGetClientIp.mockReturnValue('127.0.0.1');
@@ -157,7 +156,7 @@ beforeEach(() => {
   mockValues.mockReturnValue({ returning: mockReturning });
 
   // Default update chain: tx.update().set().where()
-  const mockUpdateWhere = jest.fn().mockResolvedValue(undefined);
+  const mockUpdateWhere = vi.fn().mockResolvedValue(undefined);
   mockSet.mockReturnValue({ where: mockUpdateWhere });
 
   // Route runs everything inside db.transaction(cb). Invoke cb with a tx

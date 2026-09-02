@@ -32,13 +32,13 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -49,21 +49,21 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbInsert = jest.fn(() => makeChain([]));
-const mockDbDelete = jest.fn(() => makeChain([]));
-const mockDbExecute = jest.fn();
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbDelete = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbExecute = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
-    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
+    delete: (...args: unknown[]) => mockDbDelete(...args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   hirnChatHistory: {
     id: 'hch_id',
     sessionId: 'hch_sessionId',
@@ -76,54 +76,55 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  or: jest.fn().mockReturnValue({ __or: true }),
-  asc: jest.fn().mockReturnValue({ __asc: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
-  isNull: jest.fn().mockReturnValue({ __isNull: true }),
-  count: jest.fn().mockReturnValue({ __count: 0 }),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  or: vi.fn().mockReturnValue({ __or: true }),
+  asc: vi.fn().mockReturnValue({ __asc: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
+  isNull: vi.fn().mockReturnValue({ __isNull: true }),
+  count: vi.fn().mockReturnValue({ __count: 0 }),
 }));
 
 // mockGetChatResponse is declared here but only initialized after imports
-// run; the closure in jest.mock captures it by reference so it's available
+// run; the closure in vi.mock captures it by reference so it's available
 // when tests execute.
-const mockGetChatResponse = jest.fn();
+const mockGetChatResponse = vi.fn();
 
-jest.mock('../providers', () => ({
+vi.mock('../providers', () => ({
   // Wrapper captures mockGetChatResponse by reference (not by value), so it
   // resolves correctly when tests run (after module-level init). chat.ts
   // calls getChatResponse (provider selection + generation + health
   // recording in one step) rather than getDefaultChatProvider directly.
-  getChatResponse: (...args: unknown[]) => mockGetChatResponse.apply(null, args),
+  getChatResponse: (...args: unknown[]) => mockGetChatResponse(...args),
 }));
 
-jest.mock('../system-prompt', () => ({
+vi.mock('../system-prompt', () => ({
   SYSTEM_PROMPT: 'You are a helpful assistant.',
 }));
 
-jest.mock('../action-cockpit', () => ({
-  parseActionEnvelope: jest.fn().mockReturnValue({ actions: [], parsingError: null }),
-  stripActionBlock: jest.fn().mockImplementation((content: string) => content),
+vi.mock('../action-cockpit', () => ({
+  parseActionEnvelope: vi.fn().mockReturnValue({ actions: [], parsingError: null }),
+  stripActionBlock: vi.fn().mockImplementation((content: string) => content),
 }));
 
-jest.mock('@/config/api-defaults', () => ({
+vi.mock('@/config/api-defaults', () => ({
   API_DEFAULTS: { CHAT_HISTORY_LIMIT: 50 },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { chat, getChatHistory, getUserSessions, deleteSession, clearUserHistory } from '../chat';
 import { parseActionEnvelope, stripActionBlock } from '../action-cockpit';
 
@@ -147,7 +148,7 @@ function makeHistoryRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockDbInsert.mockImplementation(() => makeChain([]));
   mockDbDelete.mockImplementation(() => makeChain([]));
@@ -158,8 +159,8 @@ beforeEach(() => {
     model: 'groq:llama-3.3-70b',
     usage: { promptTokens: 100, completionTokens: 50, totalTokens: 150 },
   });
-  (parseActionEnvelope as jest.Mock).mockReturnValue({ actions: [], parsingError: null });
-  (stripActionBlock as jest.Mock).mockImplementation((c: string) => c);
+  (parseActionEnvelope as Mock).mockReturnValue({ actions: [], parsingError: null });
+  (stripActionBlock as Mock).mockImplementation((c: string) => c);
 });
 
 // ============================================================================
@@ -190,7 +191,7 @@ describe('chat', () => {
 
   it('returns cleaned content with stripped action block', async () => {
     mockDbSelect.mockImplementationOnce(() => makeChain([]));
-    (stripActionBlock as jest.Mock).mockReturnValueOnce('Bereinigte Antwort');
+    (stripActionBlock as Mock).mockReturnValueOnce('Bereinigte Antwort');
 
     const result = await chat('Frage', { sessionId: SESSION_ID });
 
@@ -199,7 +200,7 @@ describe('chat', () => {
 
   it('returns parsed action cards from response', async () => {
     mockDbSelect.mockImplementationOnce(() => makeChain([]));
-    (parseActionEnvelope as jest.Mock).mockReturnValueOnce({
+    (parseActionEnvelope as Mock).mockReturnValueOnce({
       actions: [{ type: 'create_task', title: 'Akku prüfen' }],
       parsingError: null,
     });

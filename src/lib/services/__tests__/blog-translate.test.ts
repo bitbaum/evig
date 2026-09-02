@@ -8,21 +8,21 @@
  * fences the model might wrap around the body are stripped.
  */
 
-const mockCall = jest.fn();
-const mockExtractJson = jest.fn();
+const mockCall = vi.fn();
+const mockExtractJson = vi.fn();
 
-jest.mock('@/lib/ai/providers', () => ({
+vi.mock('@/lib/ai/providers', () => ({
   callWithFallback: (...args: unknown[]) => mockCall(...args),
   extractJson: (...args: unknown[]) => mockExtractJson(...args),
 }));
-jest.mock('@/lib/logger', () => ({
-  logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() },
 }));
 
 import { translateBlogPost } from '../blog-translate';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockExtractJson.mockReturnValue({ title: 'Titre', excerpt: 'Extrait' });
 });
 

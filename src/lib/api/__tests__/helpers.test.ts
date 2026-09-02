@@ -9,22 +9,23 @@
 
 // helpers.ts imports NextRequest/NextResponse from next/server.
 // Mock the module so Jest doesn't need the browser/edge Request global.
-jest.mock('next/server', () => ({
+vi.mock('next/server', () => ({
   NextRequest: class {},
   NextResponse: {
-    json: jest.fn(),
+    json: vi.fn(),
   },
 }));
 
 // Also mock logger so apiError tests don't require the full logger setup.
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    error: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
   },
 }));
 
+import type { Mock } from 'vitest';
 import { parsePagination } from '../helpers';
 import { API_DEFAULTS } from '@/config/api-defaults';
 

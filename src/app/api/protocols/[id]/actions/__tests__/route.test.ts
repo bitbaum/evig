@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/POST /api/protocols/[id]/actions
  *
@@ -26,19 +26,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin:
     (handler: (req: Request, session: unknown, ctx: unknown) => unknown) =>
     (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -46,14 +45,13 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }));
 
-const mockGetDbUserId = jest.fn();
+const mockGetDbUserId = vi.fn();
 
-jest.mock('@/lib/api/task-helpers', () => ({
-  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
+vi.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -66,12 +64,12 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-// Schema mock — static, survives jest.resetAllMocks()
-jest.mock('@/lib/schemas/protocols', () => ({
+// Schema mock — static, survives vi.resetAllMocks()
+vi.mock('@/lib/schemas/protocols', () => ({
   linkActionSchema: {
     safeParse: (b: unknown) => {
       const body = b as Record<string, unknown>;
@@ -83,21 +81,21 @@ jest.mock('@/lib/schemas/protocols', () => ({
   },
 }));
 
-const mockGetActionLinks = jest.fn();
-const mockLinkActionItemToTask = jest.fn();
-const mockLinkActionItemToDecision = jest.fn();
+const mockGetActionLinks = vi.fn();
+const mockLinkActionItemToTask = vi.fn();
+const mockLinkActionItemToDecision = vi.fn();
 
-jest.mock('@/lib/services/protocols', () => ({
-  getActionLinks: (...args: unknown[]) => mockGetActionLinks.apply(null, args),
-  linkActionItemToTask: (...args: unknown[]) => mockLinkActionItemToTask.apply(null, args),
-  linkActionItemToDecision: (...args: unknown[]) => mockLinkActionItemToDecision.apply(null, args),
+vi.mock('@/lib/services/protocols', () => ({
+  getActionLinks: (...args: unknown[]) => mockGetActionLinks(...args),
+  linkActionItemToTask: (...args: unknown[]) => mockLinkActionItemToTask(...args),
+  linkActionItemToDecision: (...args: unknown[]) => mockLinkActionItemToDecision(...args),
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -138,7 +136,7 @@ function makeContext(id = 'proto-1') {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockGetDbUserId.mockResolvedValue({ dbUserId: 'db-user-1' });
   mockGetActionLinks.mockResolvedValue(MOCK_LINKS);

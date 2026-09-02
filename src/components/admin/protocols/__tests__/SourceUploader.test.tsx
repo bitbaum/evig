@@ -29,7 +29,7 @@ describe('SourceUploader', () => {
   });
 
   it('accepts an audio file via drop, emits onChange with audio set', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByLabelText } = render(<SourceUploader value={empty} onChange={onChange} />);
     const dropZone = getByLabelText(/Dateien hier ablegen/);
     const audio = makeFile('meeting.mp3', 1024, 'audio/mpeg');
@@ -40,7 +40,7 @@ describe('SourceUploader', () => {
   });
 
   it('accepts a text file via drop, emits onChange with text in array', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByLabelText } = render(<SourceUploader value={empty} onChange={onChange} />);
     const text = makeFile('notes.txt', 512, 'text/plain');
 
@@ -50,7 +50,7 @@ describe('SourceUploader', () => {
   });
 
   it('drops audio + text in one go — both end up in next value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByLabelText } = render(<SourceUploader value={empty} onChange={onChange} />);
     const audio = makeFile('rec.m4a', 2048, 'audio/mp4');
     const text = makeFile('agenda.md', 256, 'text/markdown');
@@ -63,8 +63,8 @@ describe('SourceUploader', () => {
   });
 
   it('rejects unsupported file type and calls onError', () => {
-    const onChange = jest.fn();
-    const onError = jest.fn();
+    const onChange = vi.fn();
+    const onError = vi.fn();
     const { getByLabelText } = render(
       <SourceUploader value={empty} onChange={onChange} onError={onError} />,
     );
@@ -80,8 +80,8 @@ describe('SourceUploader', () => {
   });
 
   it('rejects oversized text file via validator', () => {
-    const onChange = jest.fn();
-    const onError = jest.fn();
+    const onChange = vi.fn();
+    const onError = vi.fn();
     const { getByLabelText } = render(
       <SourceUploader value={empty} onChange={onChange} onError={onError} />,
     );
@@ -96,7 +96,7 @@ describe('SourceUploader', () => {
   });
 
   it('new audio replaces previous audio (single-audio invariant)', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const first = makeFile('first.mp3', 1024, 'audio/mpeg');
     const second = makeFile('second.mp3', 2048, 'audio/mpeg');
     const { getByLabelText } = render(
@@ -111,7 +111,7 @@ describe('SourceUploader', () => {
   });
 
   it('text files accumulate', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const existing = makeFile('a.txt', 100, 'text/plain');
     const fresh = makeFile('b.txt', 200, 'text/plain');
     const { getByLabelText } = render(
@@ -126,7 +126,7 @@ describe('SourceUploader', () => {
   });
 
   it('does NOT add a duplicate text file (same name + size)', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const existing = makeFile('a.txt', 100, 'text/plain');
     const dupe = makeFile('a.txt', 100, 'text/plain');
     const { getByLabelText } = render(
@@ -141,7 +141,7 @@ describe('SourceUploader', () => {
   });
 
   it('renders audio chip and emits empty audio when removed', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const audio = makeFile('rec.wav', 1024, 'audio/wav');
     const { getByLabelText } = render(
       <SourceUploader value={{ audio, textFiles: [] }} onChange={onChange} />,
@@ -152,7 +152,7 @@ describe('SourceUploader', () => {
   });
 
   it('renders text chip and emits filtered list when removed', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const a = makeFile('a.txt', 100, 'text/plain');
     const b = makeFile('b.txt', 200, 'text/plain');
     const { getByLabelText } = render(
@@ -164,7 +164,7 @@ describe('SourceUploader', () => {
   });
 
   it('does not respond to drops when disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByLabelText } = render(
       <SourceUploader value={empty} onChange={onChange} disabled />,
     );

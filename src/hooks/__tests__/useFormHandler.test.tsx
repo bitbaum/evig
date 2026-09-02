@@ -21,16 +21,16 @@
  *   - isSubmitting true during async, false after (success or failure)
  */
 
-const mockRouterPush = jest.fn();
-const mockRouterRefresh = jest.fn();
-const mockApiFetch = jest.fn();
+const mockRouterPush = vi.fn();
+const mockRouterRefresh = vi.fn();
+const mockApiFetch = vi.fn();
 
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: mockRouterPush, refresh: mockRouterRefresh }),
 }));
 
-jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
+vi.mock('@/lib/api/client', () => ({
+  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
 }));
 
 import { renderHook, act, waitFor } from '@testing-library/react';
@@ -259,7 +259,7 @@ describe('handleSubmit — edit mode', () => {
 
 describe('handleSubmit — validation', () => {
   it('runs validate before apiFetch and short-circuits on error', async () => {
-    const validate = jest.fn().mockReturnValue('Name ist erforderlich');
+    const validate = vi.fn().mockReturnValue('Name ist erforderlich');
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -279,7 +279,7 @@ describe('handleSubmit — validation', () => {
   });
 
   it('proceeds with apiFetch when validate returns null', async () => {
-    const validate = jest.fn().mockReturnValue(null);
+    const validate = vi.fn().mockReturnValue(null);
     mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
@@ -353,7 +353,7 @@ describe('handleSubmit — transformBeforeSubmit', () => {
 describe('handleSubmit — preventDefault', () => {
   it('calls preventDefault when a form event is passed', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true });
-    const preventDefault = jest.fn();
+    const preventDefault = vi.fn();
     const fakeEvent = { preventDefault } as unknown as React.FormEvent;
 
     const { result } = renderHook(() =>
@@ -451,7 +451,7 @@ describe('handleSubmit — failure', () => {
 
 describe('handleSubmit — onSuccess callback', () => {
   it('invokes onSuccess with response data', async () => {
-    const onSuccess = jest.fn();
+    const onSuccess = vi.fn();
     mockApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'new-1' } });
 
     const { result } = renderHook(() =>
@@ -470,7 +470,7 @@ describe('handleSubmit — onSuccess callback', () => {
   });
 
   it('does NOT invoke onSuccess when apiFetch fails', async () => {
-    const onSuccess = jest.fn();
+    const onSuccess = vi.fn();
     mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' });
 
     const { result } = renderHook(() =>
@@ -496,7 +496,7 @@ describe('handleSubmit — onSuccess callback', () => {
 describe('handleSubmit — redirect', () => {
   it('does NOT redirect when redirectTo is omitted', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true });
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
@@ -506,14 +506,14 @@ describe('handleSubmit — redirect', () => {
       await result.current.handleSubmit();
     });
 
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(mockRouterPush).not.toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('redirects to redirectTo after redirectDelay (default 1000ms)', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true });
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -531,17 +531,17 @@ describe('handleSubmit — redirect', () => {
     expect(mockRouterPush).not.toHaveBeenCalled();
 
     act(() => {
-      jest.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1000);
     });
 
     expect(mockRouterPush).toHaveBeenCalledWith('/admin/services');
     expect(mockRouterRefresh).toHaveBeenCalledTimes(1);
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('honors custom redirectDelay', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true });
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -557,20 +557,20 @@ describe('handleSubmit — redirect', () => {
     });
 
     act(() => {
-      jest.advanceTimersByTime(2999);
+      vi.advanceTimersByTime(2999);
     });
     expect(mockRouterPush).not.toHaveBeenCalled();
 
     act(() => {
-      jest.advanceTimersByTime(1);
+      vi.advanceTimersByTime(1);
     });
     expect(mockRouterPush).toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('does NOT redirect on failure', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' });
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -584,9 +584,9 @@ describe('handleSubmit — redirect', () => {
       await result.current.handleSubmit();
     });
 
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(mockRouterPush).not.toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });
 

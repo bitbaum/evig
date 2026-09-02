@@ -1,10 +1,10 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 import { requireCronAuth } from '@/lib/api/cron-auth';
 
-jest.mock('@/lib/logger', () => ({
-  logger: { error: jest.fn(), warn: jest.fn(), info: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { error: vi.fn(), warn: vi.fn(), info: vi.fn() },
 }));
 
 const req = (authorization?: string) =>

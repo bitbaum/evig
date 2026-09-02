@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Unit tests for intake-checklist.ts pure functions:
  *   - getChecklistForDevice   (tier + device-category filtering)

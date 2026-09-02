@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/sellers/me and PATCH /api/sellers/me
  *
@@ -27,17 +27,16 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: (req: Request, session: unknown) => unknown) => (req: Request) =>
     mockAuth().then((session: unknown) => {
       if (!session || !(session as { user?: unknown }).user) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       return handler(req, session);
@@ -46,33 +45,33 @@ jest.mock('@/lib/api/middleware', () => ({
 
 // Select chain: select().from().where()  AND  select().from().leftJoin().where()
 // (GET + PATCH re-read join user_profiles; the PATCH exists-check does not.)
-const mockSelectWhere = jest.fn();
-const mockSelectLeftJoin = jest.fn().mockReturnValue({ where: mockSelectWhere });
-const mockSelectFrom = jest
+const mockSelectWhere = vi.fn();
+const mockSelectLeftJoin = vi.fn().mockReturnValue({ where: mockSelectWhere });
+const mockSelectFrom = vi
   .fn()
   .mockReturnValue({ where: mockSelectWhere, leftJoin: mockSelectLeftJoin });
-const mockSelect = jest.fn().mockReturnValue({ from: mockSelectFrom });
+const mockSelect = vi.fn().mockReturnValue({ from: mockSelectFrom });
 
 // Update chain: update().set().where()  (no returning — identity lives on
 // user_profiles now, so the response is re-selected via the join above).
-const mockUpdateWhere = jest.fn();
-const mockSet = jest.fn().mockReturnValue({ where: mockUpdateWhere });
-const mockUpdate = jest.fn().mockReturnValue({ set: mockSet });
+const mockUpdateWhere = vi.fn();
+const mockSet = vi.fn().mockReturnValue({ where: mockUpdateWhere });
+const mockUpdate = vi.fn().mockReturnValue({ set: mockSet });
 
 // Insert chain: insert().values().onConflictDoUpdate()  (identity upsert)
-const mockOnConflict = jest.fn();
-const mockValues = jest.fn().mockReturnValue({ onConflictDoUpdate: mockOnConflict });
-const mockInsert = jest.fn().mockReturnValue({ values: mockValues });
+const mockOnConflict = vi.fn();
+const mockValues = vi.fn().mockReturnValue({ onConflictDoUpdate: mockOnConflict });
+const mockInsert = vi.fn().mockReturnValue({ values: mockValues });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockSelect.apply(null, args),
-    update: (...args: unknown[]) => mockUpdate.apply(null, args),
-    insert: (...args: unknown[]) => mockInsert.apply(null, args),
+    select: (...args: unknown[]) => mockSelect(...args),
+    update: (...args: unknown[]) => mockUpdate(...args),
+    insert: (...args: unknown[]) => mockInsert(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   sellerProfiles: {
     id: 'sp_id',
     userId: 'sp_userId',
@@ -98,18 +97,17 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'sql' }), { raw: jest.fn() }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'sql' }), { raw: vi.fn() }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -121,7 +119,7 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/services/seller-service', () => ({
+vi.mock('@/lib/services/seller-service', () => ({
   sellerProfileCoreFields: {
     id: 'sp_id',
     user_id: 'sp_userId',
@@ -143,7 +141,7 @@ jest.mock('@/lib/services/seller-service', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, PATCH } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -192,7 +190,7 @@ function makePatchRequest(body: Record<string, unknown> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: select (both plain and joined) returns profile

@@ -25,22 +25,22 @@
 function makeSelectChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
   return chain;
 }
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    selectDistinctOn: jest.fn(() => makeSelectChain([])),
+    selectDistinctOn: vi.fn((..._args: unknown[]) => makeSelectChain([])),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   hirnProviderSettings: {
     provider: 'hp_p',
     isEnabled: 'hp_ie',
@@ -51,24 +51,25 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn().mockReturnValue({}),
-  desc: jest.fn().mockReturnValue({}),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn().mockReturnValue({}),
+  desc: vi.fn().mockReturnValue({}),
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   OLLAMA_URL: 'http://ollama.test:11434',
   APP_URL: 'http://localhost:3000',
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import { callWithFallback, __resetProviderCache } from '../providers';
 
 // ---------------------------------------------------------------------------
@@ -124,7 +125,7 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   __resetProviderCache();
 
   // Set API keys via env vars (DB returns empty → env fallback)
@@ -132,7 +133,7 @@ beforeEach(() => {
   process.env.OPENROUTER_API_KEY = 'or-test-key';
   process.env.OLLAMA_MODEL = 'llama3.2';
 
-  global.fetch = jest.fn();
+  global.fetch = vi.fn();
 });
 
 afterEach(() => {
@@ -147,7 +148,7 @@ afterEach(() => {
 
 describe('callWithFallback — Groq succeeds', () => {
   it('returns Groq result with no failed providers', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce(okResponse('Groq-Antwort'));
+    (global.fetch as Mock).mockResolvedValueOnce(okResponse('Groq-Antwort'));
 
     const result = await callWithFallback(opts);
 
@@ -159,7 +160,7 @@ describe('callWithFallback — Groq succeeds', () => {
   });
 
   it('calls fetch exactly once when Groq succeeds', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce(okResponse('ok'));
+    (global.fetch as Mock).mockResolvedValueOnce(okResponse('ok'));
 
     await callWithFallback(opts);
 
@@ -173,7 +174,7 @@ describe('callWithFallback — Groq succeeds', () => {
 
 describe('callWithFallback — Groq 401 → OpenRouter', () => {
   it('falls through to OpenRouter on Groq 401 and records the failure', async () => {
-    (global.fetch as jest.Mock)
+    (global.fetch as Mock)
       .mockResolvedValueOnce(errorResponse(401)) // Groq auth failure
       .mockResolvedValueOnce(okResponse('OR-Antwort')); // OpenRouter success
 
@@ -187,7 +188,7 @@ describe('callWithFallback — Groq 401 → OpenRouter', () => {
   });
 
   it('falls through to OpenRouter on Groq 429 (rate limit)', async () => {
-    (global.fetch as jest.Mock)
+    (global.fetch as Mock)
       .mockResolvedValueOnce(errorResponse(429))
       .mockResolvedValueOnce(okResponse('OR-Antwort'));
 
@@ -200,7 +201,7 @@ describe('callWithFallback — Groq 401 → OpenRouter', () => {
   it('falls through to OpenRouter on Groq timeout', async () => {
     const abortError = new Error('The operation was aborted.');
     abortError.name = 'AbortError';
-    (global.fetch as jest.Mock)
+    (global.fetch as Mock)
       .mockRejectedValueOnce(abortError)
       .mockResolvedValueOnce(okResponse('OR-Antwort'));
 
@@ -220,7 +221,7 @@ describe('callWithFallback — missing API keys', () => {
     delete process.env.GROQ_API_KEY;
     __resetProviderCache();
 
-    (global.fetch as jest.Mock).mockResolvedValueOnce(okResponse('OR-Antwort'));
+    (global.fetch as Mock).mockResolvedValueOnce(okResponse('OR-Antwort'));
 
     const result = await callWithFallback(opts);
 
@@ -238,7 +239,7 @@ describe('callWithFallback — missing API keys', () => {
 
 describe('callWithFallback — falls through to Ollama', () => {
   it('uses Ollama when both cloud providers fail', async () => {
-    (global.fetch as jest.Mock)
+    (global.fetch as Mock)
       .mockResolvedValueOnce(errorResponse(401)) // Groq
       .mockResolvedValueOnce(errorResponse(429)) // OpenRouter
       .mockResolvedValueOnce(ollamaOkResponse('Ollama!')); // Ollama
@@ -257,7 +258,7 @@ describe('callWithFallback — falls through to Ollama', () => {
 
 describe('callWithFallback — all fail', () => {
   it('returns null when all providers fail', async () => {
-    (global.fetch as jest.Mock)
+    (global.fetch as Mock)
       .mockResolvedValueOnce(errorResponse(500)) // Groq
       .mockResolvedValueOnce(errorResponse(500)) // OpenRouter
       .mockResolvedValueOnce(errorResponse(500)); // Ollama
@@ -273,7 +274,7 @@ describe('callWithFallback — all fail', () => {
     __resetProviderCache();
 
     // Ollama is enabled but returns an error
-    (global.fetch as jest.Mock).mockResolvedValueOnce(errorResponse(503));
+    (global.fetch as Mock).mockResolvedValueOnce(errorResponse(503));
 
     const result = await callWithFallback(opts);
 

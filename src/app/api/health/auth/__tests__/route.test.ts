@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/health/auth
  *
@@ -25,28 +25,27 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockExecute = jest.fn().mockResolvedValue([]);
+const mockExecute = vi.fn().mockResolvedValue([]);
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockExecute.apply(null, args),
+    execute: (...args: unknown[]) => mockExecute(...args),
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'SELECT 1' }), { raw: jest.fn() }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'SELECT 1' }), { raw: vi.fn() }),
 }));
 
-const mockGetAuthSecret = jest.fn().mockReturnValue('a-valid-secret-longer-than-16-chars');
+const mockGetAuthSecret = vi.fn().mockReturnValue('a-valid-secret-longer-than-16-chars');
 
-jest.mock('@/lib/auth/config', () => ({
-  getAuthSecret: (...args: unknown[]) => mockGetAuthSecret.apply(null, args),
+vi.mock('@/lib/auth/config', () => ({
+  getAuthSecret: (...args: unknown[]) => mockGetAuthSecret(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccess: (data: unknown, status: number) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data }, { status });
   },
 }));
@@ -55,6 +54,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -62,7 +62,7 @@ import { GET } from '../route';
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockGetAuthSecret.mockReturnValue('a-valid-secret-that-is-long-enough');
   mockExecute.mockResolvedValue([]);
 });

@@ -36,43 +36,43 @@
 // Provider class mocks
 // Closures capture mock fns by reference (not value) so they resolve at
 // call time — avoids TDZ errors that occur when factories reference
-// const variables as values during jest.mock hoisting.
+// const variables as values during vi.mock hoisting.
 // ---------------------------------------------------------------------------
 
-const mockOllamaIsAvailable = jest.fn();
-const mockOllamaEmbed = jest.fn();
+const mockOllamaIsAvailable = vi.fn();
+const mockOllamaEmbed = vi.fn();
 
-jest.mock('../providers/ollama', () => ({
+vi.mock('../providers/ollama', () => ({
   OllamaProvider: function (_config?: unknown) {
     return {
       isAvailable: (...a: unknown[]) => mockOllamaIsAvailable(...a),
       embed: (...a: unknown[]) => mockOllamaEmbed(...a),
-      chat: jest.fn(),
+      chat: vi.fn(),
     };
   },
 }));
 
-const mockGroqIsAvailable = jest.fn();
+const mockGroqIsAvailable = vi.fn();
 
-jest.mock('../providers/groq', () => ({
+vi.mock('../providers/groq', () => ({
   GroqProvider: function (_config?: unknown) {
     return {
       isAvailable: (...a: unknown[]) => mockGroqIsAvailable(...a),
-      embed: jest.fn(),
-      chat: jest.fn(),
+      embed: vi.fn(),
+      chat: vi.fn(),
     };
   },
 }));
 
-const mockOpenRouterIsAvailable = jest.fn();
-const mockOpenRouterEmbed = jest.fn();
+const mockOpenRouterIsAvailable = vi.fn();
+const mockOpenRouterEmbed = vi.fn();
 
-jest.mock('../providers/openrouter', () => ({
+vi.mock('../providers/openrouter', () => ({
   OpenRouterProvider: function (_config?: unknown) {
     return {
       isAvailable: (...a: unknown[]) => mockOpenRouterIsAvailable(...a),
       embed: (...a: unknown[]) => mockOpenRouterEmbed(...a),
-      chat: jest.fn(),
+      chat: vi.fn(),
     };
   },
 }));
@@ -84,15 +84,15 @@ jest.mock('../providers/openrouter', () => ({
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.update = jest.fn().mockReturnValue(chain);
-  chain.set = jest.fn().mockReturnValue(chain);
-  chain.insert = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.onConflictDoUpdate = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.update = vi.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
+  chain.insert = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.onConflictDoUpdate = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -103,19 +103,19 @@ function makeChain(result: unknown = []) {
 // DB mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbUpdate = jest.fn(() => makeChain());
-const mockDbInsert = jest.fn(() => makeChain());
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeChain());
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeChain());
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   hirnProviderSettings: {
     provider: 'hp_provider',
     isEnabled: 'hp_isEnabled',
@@ -127,25 +127,26 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
-  isNull: jest.fn().mockReturnValue({ __isNull: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
+  isNull: vi.fn().mockReturnValue({ __isNull: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   createProvider,
   getDefaultChatProvider,
@@ -172,7 +173,7 @@ function makeDbRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockDbUpdate.mockImplementation(() => makeChain());
   mockDbInsert.mockImplementation(() => makeChain());

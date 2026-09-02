@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/tasks/[id]/complete
  *
@@ -15,16 +15,15 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
-jest.mock('@/auth', () => ({ auth: (...args: unknown[]) => mockAuth.apply(null, args) }));
+const mockAuth = vi.fn();
+vi.mock('@/auth', () => ({ auth: (...args: unknown[]) => mockAuth(...args) }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin:
     (handler: (req: Request, session: unknown, ctx: unknown) => unknown) =>
     (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -32,15 +31,14 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }));
 
-const mockGetDbUserId = jest.fn();
-const mockGetActiveTask = jest.fn();
-jest.mock('@/lib/api/task-helpers', () => ({
-  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
-  getActiveTask: (...args: unknown[]) => mockGetActiveTask.apply(null, args),
+const mockGetDbUserId = vi.fn();
+const mockGetActiveTask = vi.fn();
+vi.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
+  getActiveTask: (...args: unknown[]) => mockGetActiveTask(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -53,35 +51,35 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-const mockInsertReturning = jest.fn();
-jest.mock('@/db', () => ({
+const mockInsertReturning = vi.fn();
+vi.mock('@/db', () => ({
   db: {
-    insert: jest.fn(),
+    insert: vi.fn(),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   taskCompletions: { id: 'tc_id', taskId: 'tc_tid', completedBy: 'tc_cb', completedAt: 'tc_ca' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  sql: Object.assign(jest.fn().mockReturnValue({}), { raw: jest.fn().mockReturnValue({}) }),
+vi.mock('drizzle-orm', () => ({
+  sql: Object.assign(vi.fn().mockReturnValue({}), { raw: vi.fn().mockReturnValue({}) }),
 }));
 
-const mockNotifyUsers = jest.fn();
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: (...args: unknown[]) => mockNotifyUsers.apply(null, args),
+const mockNotifyUsers = vi.fn();
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: (...args: unknown[]) => mockNotifyUsers(...args),
 }));
 
-jest.mock('@/config/notifications', () => ({
+vi.mock('@/config/notifications', () => ({
   RELATED_TYPES: { TASK: 'task' },
 }));
 
-jest.mock('@/lib/schemas/tasks', () => ({
+vi.mock('@/lib/schemas/tasks', () => ({
   taskCompletionSchema: {
     safeParse: (b: unknown) => {
       return {
@@ -99,7 +97,7 @@ jest.mock('@/lib/schemas/tasks', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -136,8 +134,8 @@ function makeRequest(body: Record<string, unknown> = {}) {
 // Setup
 // ---------------------------------------------------------------------------
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockGetActiveTask.mockResolvedValue({ task: MOCK_TASK });
   mockGetDbUserId.mockResolvedValue({ dbUserId: 'db-user-1' });
@@ -145,8 +143,8 @@ beforeEach(() => {
     { id: 'comp-1', taskId: 'task-1', completedBy: 'db-user-1' },
   ]);
   mockNotifyUsers.mockResolvedValue(undefined);
-  require('@/db').db.insert.mockReturnValue({
-    values: jest.fn().mockReturnValue({ returning: mockInsertReturning }),
+  ((await import('@/db')).db.insert as any).mockReturnValue({
+    values: vi.fn().mockReturnValue({ returning: mockInsertReturning }),
   });
 });
 
@@ -164,7 +162,7 @@ describe('POST /api/tasks/[id]/complete — unauthenticated', () => {
 
 describe('POST /api/tasks/[id]/complete — task not found', () => {
   it('returns 404 when getActiveTask returns an error response', async () => {
-    const { NextResponse } = require('next/server');
+    const { NextResponse } = (await import('next/server')) as any;
     mockGetActiveTask.mockResolvedValueOnce({
       error: NextResponse.json({ success: false, error: 'Not found' }, { status: 404 }),
     });

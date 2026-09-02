@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/it-hilfe/my-requests
  *
@@ -23,27 +23,27 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
 // Select chain: select().from().where().orderBy().limit().offset()
-const mockOffset = jest.fn();
-const mockLimit = jest.fn().mockReturnValue({ offset: mockOffset });
-const mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit });
-const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
-const mockSelect = jest.fn().mockReturnValue({ from: mockFrom });
+const mockOffset = vi.fn();
+const mockLimit = vi.fn().mockReturnValue({ offset: mockOffset });
+const mockOrderBy = vi.fn().mockReturnValue({ limit: mockLimit });
+const mockWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+const mockFrom = vi.fn().mockReturnValue({ where: mockWhere });
+const mockSelect = vi.fn().mockReturnValue({ from: mockFrom });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockSelect.apply(null, args),
+    select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   itHilfeRequests: {
     id: 'ihr_id',
     requesterId: 'ihr_requesterId',
@@ -70,31 +70,30 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'sql' }), { raw: jest.fn() }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'sql' }), { raw: vi.fn() }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
     apiUnauthorized: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 401 }),
-    parsePagination: jest.fn().mockReturnValue({ limit: 20, offset: 0, page: 1 }),
+    parsePagination: vi.fn().mockReturnValue({ limit: 20, offset: 0, page: 1 }),
     hasMoreItems: (offset: number, limit: number, total: number) => offset + limit < total,
   };
 });
@@ -103,7 +102,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -158,7 +157,7 @@ function makeRequest(params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockSelect.mockReturnValue({ from: mockFrom });
   mockFrom.mockReturnValue({ where: mockWhere });

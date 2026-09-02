@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/decisions/[id]/send-invitations
  *
@@ -16,13 +16,13 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = (typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler) as (
       ...args: unknown[]
@@ -30,11 +30,9 @@ jest.mock('@/lib/api/middleware', () => ({
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         if (!(session as { user: { isStaff?: boolean } }).user.isStaff) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -43,24 +41,24 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockDbExecute = jest.fn();
-const mockDbSelect = jest.fn();
+const mockDbExecute = vi.fn();
+const mockDbSelect = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     execute: (...args: unknown[]) => mockDbExecute(...args),
     select: (...args: unknown[]) => mockDbSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   decisions: { id: 'd_id' },
   decisionVotes: { id: 'dv_id' },
   users: { id: 'u_id', email: 'u_email' },
   userProfiles: { userId: 'up_userId', emailNotifications: 'up_email_notifications' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   inArray: (a: unknown, b: unknown) => ({ __inArray: [a, b] }),
   sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
@@ -69,37 +67,36 @@ jest.mock('drizzle-orm', () => ({
   getTableName: (_table: unknown) => 'decisions',
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-jest.mock('@/lib/email/templates/decisions', () => ({
-  decisionVotingOpened: jest.fn().mockReturnValue({
+vi.mock('@/lib/email/templates/decisions', () => ({
+  decisionVotingOpened: vi.fn().mockReturnValue({
     subject: 'Test',
     html: '<p>Test</p>',
     text: 'Test',
   }),
 }));
 
-jest.mock('@/lib/services/decisions-voting', () => ({
-  resolveEligibleUserIds: jest.fn(),
+vi.mock('@/lib/services/decisions-voting', () => ({
+  resolveEligibleUserIds: vi.fn(),
 }));
 
-jest.mock('@/lib/services/decisions-crud', () => ({
+vi.mock('@/lib/services/decisions-crud', () => ({
   asArray: (_val: unknown, def: unknown) => def,
 }));
 
-jest.mock('@/config/decisions', () => ({
+vi.mock('@/config/decisions', () => ({
   DECISION_STATUS: { VOTING: 'voting', DISCUSSION: 'discussion', DRAFT: 'draft' },
   PARTICIPANT_SCOPE_DEFAULT: 'all_staff',
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), error: jest.fn(), warn: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), error: vi.fn(), warn: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (_err: unknown, msg: string) =>
@@ -115,13 +112,14 @@ jest.mock('@/lib/api/helpers', () => {
 // Import after mocks
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 import { resolveEligibleUserIds } from '@/lib/services/decisions-voting';
 import { sendCustomEmail } from '@/lib/email';
 
-const mockResolveEligibleUserIds = resolveEligibleUserIds as jest.Mock;
-const mockSendCustomEmail = sendCustomEmail as jest.Mock;
+const mockResolveEligibleUserIds = resolveEligibleUserIds as Mock;
+const mockSendCustomEmail = sendCustomEmail as Mock;
 
 const ADMIN_SESSION = {
   user: { id: 'admin-1', email: 'admin@revamp-it.ch', isStaff: true },
@@ -145,15 +143,15 @@ function makeRequest() {
 }
 
 function makeSelectChain(result: unknown[]) {
-  const leftJoin = jest.fn();
-  const where = jest.fn().mockResolvedValue(result);
+  const leftJoin = vi.fn();
+  const where = vi.fn().mockResolvedValue(result);
   leftJoin.mockReturnValue({ where });
-  const from = jest.fn().mockReturnValue({ leftJoin });
+  const from = vi.fn().mockReturnValue({ leftJoin });
   return { from, leftJoin, where };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(ADMIN_SESSION);
 });
 

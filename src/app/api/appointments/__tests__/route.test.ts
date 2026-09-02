@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/appointments and POST /api/appointments
  *
@@ -8,17 +8,16 @@
  *   POST - 401, 201 with created appointment (fire-and-forget email)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -26,23 +25,23 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
+const mockSelect = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
       mockInsert(...args);
       return { values: mockValues };
     },
-    execute: jest.fn().mockResolvedValue({ rows: [] }),
+    execute: vi.fn().mockResolvedValue({ rows: [] }),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   serviceAppointments: {
     id: 'sa_id',
     userId: 'sa_userId',
@@ -70,7 +69,7 @@ jest.mock('@/db/schema', () => ({
   repairerProfiles: { id: 'rp_id', businessName: 'rp_businessName' },
 }));
 
-jest.mock('drizzle-orm/pg-core', () => ({
+vi.mock('drizzle-orm/pg-core', () => ({
   alias: (_t: unknown, name: string) => ({
     id: `${name}_id`,
     name: `${name}_name`,
@@ -78,7 +77,7 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -90,8 +89,7 @@ jest.mock('drizzle-orm', () => ({
   isNull: (a: unknown) => ({ __isNull: a }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -113,55 +111,55 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
-  appointmentUnassignedAlert: jest.fn().mockResolvedValue(undefined),
-  sendEmail: jest.fn().mockResolvedValue({ success: true }),
+vi.mock('@/lib/email', () => ({
+  sendCustomEmail: vi.fn().mockResolvedValue({ success: true }),
+  appointmentUnassignedAlert: vi.fn().mockResolvedValue(undefined),
+  sendEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-const mockValidateBody = jest.fn((_schema: unknown, data: unknown) => ({ success: true, data }));
-const mockValidateQuery = jest.fn((_schema: unknown, data: unknown) => ({
+const mockValidateBody = vi.fn((_schema: unknown, data: unknown) => ({ success: true, data }));
+const mockValidateQuery = vi.fn((_schema: unknown, data: unknown) => ({
   success: true,
   data: { limit: 20, offset: 0, ...(data as object) },
 }));
 
-jest.mock('@/lib/schemas', () => ({
+vi.mock('@/lib/schemas', () => ({
   validateBody: (schema: unknown, data: unknown) => mockValidateBody(schema, data),
   validateQuery: (schema: unknown, data: unknown) => mockValidateQuery(schema, data),
   CreateAppointmentSchema: {},
   GetAppointmentsQuerySchema: {},
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   REVAMPIT_NOTIFICATION_EMAIL: 'notify@revamp-it.ch',
   URGENCY_DEFAULT: 'normal',
 }));
 
-jest.mock('@/config/booking-status', () => ({
+vi.mock('@/config/booking-status', () => ({
   BOOKING_STATUS: { REQUESTED: 'requested', IN_PROGRESS: 'in_progress' },
 }));
 
-jest.mock('@/lib/constants', () => ({
+vi.mock('@/lib/constants', () => ({
   ROLES: { REPAIRER: 'repairer', CUSTOMER: 'customer' },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'http://localhost:3000',
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: { SERVICE_APPOINTMENTS: 'service_appointments' },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 
 const MOCK_SESSION = {
@@ -188,26 +186,24 @@ const MOCK_APPOINTMENT = {
 };
 
 function makeSelectChain(rows: unknown[]) {
-  const offset = jest.fn().mockResolvedValue(rows);
-  const limit = jest.fn().mockReturnValue({ offset });
-  const orderBy = jest.fn().mockReturnValue({ limit });
-  const where = jest
-    .fn()
-    .mockReturnValue({ orderBy, limit: jest.fn().mockReturnValue({ offset }) });
-  const leftJoin = jest.fn();
+  const offset = vi.fn().mockResolvedValue(rows);
+  const limit = vi.fn().mockReturnValue({ offset });
+  const orderBy = vi.fn().mockReturnValue({ limit });
+  const where = vi.fn().mockReturnValue({ orderBy, limit: vi.fn().mockReturnValue({ offset }) });
+  const leftJoin = vi.fn();
   leftJoin.mockReturnValue({ leftJoin, where });
-  const from = jest.fn().mockReturnValue({ leftJoin, where });
+  const from = vi.fn().mockReturnValue({ leftJoin, where });
   return { from };
 }
 
 function makeCountChain(count: number) {
-  const where = jest.fn().mockResolvedValue([{ total: count }]);
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockResolvedValue([{ total: count }]);
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockValidateBody.mockImplementation((_schema: unknown, data: unknown) => ({
@@ -219,8 +215,8 @@ beforeEach(() => {
     data: { limit: 20, offset: 0, ...(data as object) },
   }));
 
-  jest.requireMock('@/lib/email').sendCustomEmail.mockResolvedValue({ success: true });
-  jest.requireMock('@/lib/email').appointmentUnassignedAlert.mockResolvedValue(undefined);
+  ((await import('@/lib/email')) as any).sendCustomEmail.mockResolvedValue({ success: true });
+  ((await import('@/lib/email')) as any).appointmentUnassignedAlert.mockResolvedValue(undefined);
 
   // Default: first select returns appointments list, second returns count
   mockSelect
@@ -355,9 +351,9 @@ describe('POST /api/appointments — success', () => {
     // Reset selects: first for slug lookup, second for count (POST path uses insert, not a second select for count)
     mockSelect.mockReset();
     const slugChain = {
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          limit: jest.fn().mockResolvedValue([{ id: 'svc-resolved' }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue([{ id: 'svc-resolved' }]),
         }),
       }),
     };

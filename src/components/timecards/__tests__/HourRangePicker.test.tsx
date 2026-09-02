@@ -16,7 +16,7 @@ function slot(getByRole: ReturnType<typeof render>['getByRole'], time: string) {
 describe('HourRangePicker', () => {
   it('shows a device-matched prompt when nothing is selected', () => {
     const { getByText } = render(
-      <HourRangePicker start={null} end={null} durationMinutes={0} onChange={jest.fn()} />,
+      <HourRangePicker start={null} end={null} durationMinutes={0} onChange={vi.fn()} />,
     );
     // next-intl is mocked to return keys.
     expect(getByText('hourHint')).toBeInTheDocument();
@@ -25,14 +25,14 @@ describe('HourRangePicker', () => {
 
   it('seeds the summary from an existing entry (break reconstructed at midday)', () => {
     const { getByText } = render(
-      <HourRangePicker start="09:00" end="17:00" durationMinutes={420} onChange={jest.fn()} />,
+      <HourRangePicker start="09:00" end="17:00" durationMinutes={420} onChange={vi.fn()} />,
     );
     // 60 min surplus lands in the midday window (12:00 + 12:30 slots removed).
     expect(getByText(/09:00–12:00 · 13:00–17:00/)).toBeInTheDocument();
   });
 
   it('a single click toggles one 30-min slot on', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(
       <HourRangePicker start={null} end={null} durationMinutes={0} onChange={onChange} />,
     );
@@ -41,7 +41,7 @@ describe('HourRangePicker', () => {
   });
 
   it('clicking a selected slot toggles it off — and clearing everything reports null times', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(
       <HourRangePicker start={null} end={null} durationMinutes={0} onChange={onChange} />,
     );
@@ -51,7 +51,7 @@ describe('HourRangePicker', () => {
   });
 
   it('press + drag paints a contiguous range (break 0)', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(
       <HourRangePicker start={null} end={null} durationMinutes={0} onChange={onChange} />,
     );
@@ -63,7 +63,7 @@ describe('HourRangePicker', () => {
   });
 
   it('drag interpolates skipped slots (fast moves cannot leave holes)', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(
       <HourRangePicker start={null} end={null} durationMinutes={0} onChange={onChange} />,
     );
@@ -75,7 +75,7 @@ describe('HourRangePicker', () => {
   });
 
   it('two plain clicks on non-adjacent slots → split shift, gap becomes break', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(
       <HourRangePicker start={null} end={null} durationMinutes={0} onChange={onChange} />,
     );
@@ -86,7 +86,7 @@ describe('HourRangePicker', () => {
   });
 
   it('painting two blocks makes a split shift: 08–12 + 14–17 with a 2h break', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(
       <HourRangePicker start={null} end={null} durationMinutes={0} onChange={onChange} />,
     );
@@ -103,7 +103,7 @@ describe('HourRangePicker', () => {
   });
 
   it('a drag starting on a selected slot ERASES', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(
       <HourRangePicker start="09:00" end="12:00" durationMinutes={180} onChange={onChange} />,
     );
@@ -115,7 +115,7 @@ describe('HourRangePicker', () => {
   });
 
   it('re-seeds from changed entry props without echoing onChange', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { rerender, getByText } = render(
       <HourRangePicker start="09:00" end="12:00" durationMinutes={180} onChange={onChange} />,
     );

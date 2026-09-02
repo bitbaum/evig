@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/workshops/[slug]/register-with-payment
  *
@@ -7,22 +7,22 @@
  *   POST - 401, 400 (validation), 404 (workshop not found), 400 (full), 201 (success)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockInsert = jest.fn();
-const mockValues = jest.fn();
-const mockReturning = jest.fn();
-const mockExecute = jest.fn();
-const mockTransaction = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockInsert = vi.fn();
+const mockValues = vi.fn();
+const mockReturning = vi.fn();
+const mockExecute = vi.fn();
+const mockTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
@@ -34,7 +34,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema/workshops', () => ({
+vi.mock('@/db/schema/workshops', () => ({
   workshops: {
     id: 'w_id',
     title: 'w_title',
@@ -58,7 +58,7 @@ jest.mock('@/db/schema/workshops', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -67,25 +67,24 @@ jest.mock('drizzle-orm', () => ({
   getTableName: () => 'mock_table',
 }));
 
-const mockValidateBody = jest.fn();
+const mockValidateBody = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
+vi.mock('@/lib/schemas', () => ({
+  validateBody: (...args: unknown[]) => mockValidateBody(...args),
   WorkshopRegisterWithPaymentSchema: {},
 }));
 
-const mockProcessPayment = jest.fn();
-const mockBuildInvoiceLineItem = jest.fn();
-const mockCentsToDisplay = jest.fn();
+const mockProcessPayment = vi.fn();
+const mockBuildInvoiceLineItem = vi.fn();
+const mockCentsToDisplay = vi.fn();
 
-jest.mock('@/lib/payments/payment-flow', () => ({
+vi.mock('@/lib/payments/payment-flow', () => ({
   processPayment: (...args: unknown[]) => mockProcessPayment(...args),
   buildInvoiceLineItem: (...args: unknown[]) => mockBuildInvoiceLineItem(...args),
   centsToDisplay: (...args: unknown[]) => mockCentsToDisplay(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -100,11 +99,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/workshop-registration-status', () => ({
+vi.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
     PENDING: 'pending',
     CONFIRMED: 'confirmed',
@@ -113,7 +112,7 @@ jest.mock('@/config/workshop-registration-status', () => ({
   },
 }));
 
-jest.mock('@/config/workshops', () => ({
+vi.mock('@/config/workshops', () => ({
   WORKSHOP_INSTANCE_STATUS: {
     SCHEDULED: 'scheduled',
     CANCELLED: 'cancelled',
@@ -121,13 +120,13 @@ jest.mock('@/config/workshops', () => ({
   },
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: { PENDING: 'pending', SUCCEEDED: 'succeeded' },
 }));
 
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
+vi.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 const MOCK_SESSION = {
@@ -163,7 +162,7 @@ function makeRequest(slug = 'linux-basics', body?: unknown) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockValidateBody.mockReturnValue({ success: true, data: VALID_BODY });
   mockBuildInvoiceLineItem.mockReturnValue({ description: 'Linux Basics', amount: 2500 });
@@ -179,12 +178,12 @@ beforeEach(() => {
   mockReturning.mockResolvedValue([{ id: 'reg-1' }]);
   mockValues.mockReturnValue({ returning: mockReturning });
   mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {
-    const txInsert = jest.fn().mockReturnValue({
-      values: jest.fn().mockReturnValue({
-        returning: jest.fn().mockResolvedValue([{ id: 'reg-1' }]),
+    const txInsert = vi.fn().mockReturnValue({
+      values: vi.fn().mockReturnValue({
+        returning: vi.fn().mockResolvedValue([{ id: 'reg-1' }]),
       }),
     });
-    const txExecute = jest.fn().mockResolvedValue({ rows: [] });
+    const txExecute = vi.fn().mockResolvedValue({ rows: [] });
     return fn({ insert: txInsert, execute: txExecute });
   });
 });
@@ -199,7 +198,6 @@ describe('POST /api/workshops/[slug]/register-with-payment — unauthenticated',
 
 describe('POST /api/workshops/[slug]/register-with-payment — validation', () => {
   it('returns 400 when body validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Validation failed' }, { status: 400 }),
@@ -297,19 +295,19 @@ describe('POST /api/workshops/[slug]/register-with-payment — existing registra
     mockSelect.mockReturnValue({ from: mockFrom });
 
     // Capture which path the transaction took: UPDATE (resurrect) vs INSERT
-    const txInsert = jest.fn().mockReturnValue({
-      values: jest.fn().mockReturnValue({
-        returning: jest.fn().mockResolvedValue([{ id: 'new-reg' }]),
+    const txInsert = vi.fn().mockReturnValue({
+      values: vi.fn().mockReturnValue({
+        returning: vi.fn().mockResolvedValue([{ id: 'new-reg' }]),
       }),
     });
-    const txUpdate = jest.fn().mockReturnValue({
-      set: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          returning: jest.fn().mockResolvedValue([{ id: 'prior-reg' }]),
+    const txUpdate = vi.fn().mockReturnValue({
+      set: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          returning: vi.fn().mockResolvedValue([{ id: 'prior-reg' }]),
         }),
       }),
     });
-    const txExecute = jest.fn().mockResolvedValue({ rows: [] });
+    const txExecute = vi.fn().mockResolvedValue({ rows: [] });
     mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) =>
       fn({ insert: txInsert, update: txUpdate, execute: txExecute }),
     );
@@ -357,9 +355,9 @@ describe('POST /api/workshops/[slug]/register-with-payment — existing registra
     // sibling registrant slipped in between the outer read and the
     // transaction). Capacity exceeded.
     mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) => {
-      const txInsert = jest.fn();
-      const txUpdate = jest.fn();
-      const txExecute = jest.fn().mockResolvedValueOnce({
+      const txInsert = vi.fn();
+      const txUpdate = vi.fn();
+      const txExecute = vi.fn().mockResolvedValueOnce({
         rows: [{ current_participants: 20, max_participants: 20 }],
       });
       return fn({ insert: txInsert, update: txUpdate, execute: txExecute });

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/vote/[id] (public) and POST /api/vote/[id] (public)
  *
@@ -14,36 +14,35 @@
  * The negative cases below are the point — they assert the closed side.
  */
 
-const mockGetPublicDecision = jest.fn();
-const mockSubmitVote = jest.fn();
-const mockAuth = jest.fn();
-const mockGetDbUserId = jest.fn();
+const mockGetPublicDecision = vi.fn();
+const mockSubmitVote = vi.fn();
+const mockAuth = vi.fn();
+const mockGetDbUserId = vi.fn();
 
-jest.mock('@/auth', () => ({
+vi.mock('@/auth', () => ({
   auth: () => mockAuth(),
 }));
 
-jest.mock('@/lib/api/task-helpers', () => ({
+vi.mock('@/lib/api/task-helpers', () => ({
   getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
 }));
 
-jest.mock('@/lib/services/decisions', () => ({
+vi.mock('@/lib/services/decisions', () => ({
   getPublicDecision: (...args: unknown[]) => mockGetPublicDecision(...args),
   submitVote: (...args: unknown[]) => mockSubmitVote(...args),
 }));
 
-const mockQuery = jest.fn();
+const mockQuery = vi.fn();
 
-jest.mock('@/lib/auth/db', () => ({
+vi.mock('@/lib/auth/db', () => ({
   query: (...args: unknown[]) => mockQuery(...args),
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: { USERS: 'users' },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -56,16 +55,17 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/security/rate-limit', () => ({
-  rateLimiters: { voteSubmit: jest.fn(() => true) },
-  getClientIdentifier: jest.fn(() => '127.0.0.1'),
+vi.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: { voteSubmit: vi.fn((..._args: unknown[]) => true) },
+  getClientIdentifier: vi.fn((..._args: unknown[]) => '127.0.0.1'),
 }));
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, POST } from '../route';
 import { rateLimiters } from '@/lib/security/rate-limit';
 
@@ -85,9 +85,9 @@ const MOCK_DECISION = {
 };
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 
-  (rateLimiters.voteSubmit as jest.Mock).mockReturnValue(true);
+  (rateLimiters.voteSubmit as Mock).mockReturnValue(true);
   mockGetPublicDecision.mockResolvedValue(MOCK_DECISION);
   // Default: no session, and the typed email belongs to nobody — the ordinary
   // "someone opened a shared link" case.
@@ -138,7 +138,7 @@ describe('GET /api/vote/[id] — success', () => {
 
 describe('POST /api/vote/[id] — rate limited', () => {
   it('returns 429 when rate limit is exceeded', async () => {
-    (rateLimiters.voteSubmit as jest.Mock).mockReturnValue(false);
+    (rateLimiters.voteSubmit as Mock).mockReturnValue(false);
 
     const req = new NextRequest('http://localhost/api/vote/decision-1', {
       method: 'POST',

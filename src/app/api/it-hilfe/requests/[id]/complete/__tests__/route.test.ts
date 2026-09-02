@@ -1,18 +1,17 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/it-hilfe/requests/[id]/complete (withAuth)
  */
 
 // ── Auth mock ──────────────────────────────────────────────────────────────
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -22,16 +21,16 @@ jest.mock('@/lib/api/middleware', () => ({
 
 // ── DB mocks ───────────────────────────────────────────────────────────────
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockTransaction = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -42,7 +41,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   itHilfeRequests: {
     id: 'ihr_id',
     requesterId: 'ihr_requesterId',
@@ -61,7 +60,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
@@ -69,8 +68,7 @@ jest.mock('drizzle-orm', () => ({
   getTableName: (_t: unknown) => 'it_hilfe_requests',
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -85,15 +83,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
   OFFER_STATUS: {
     PENDING: 'pending',
@@ -103,8 +101,8 @@ jest.mock('@/config/it-hilfe', () => ({
   },
 }));
 
-jest.mock('@/lib/it-hilfe/notifications', () => ({
-  notifyRequestCompleted: jest.fn(),
+vi.mock('@/lib/it-hilfe/notifications', () => ({
+  notifyRequestCompleted: vi.fn(),
 }));
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
@@ -124,7 +122,8 @@ const MOCK_SESSION = {
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -140,16 +139,16 @@ function makeRequest(id: string) {
 function setupTwoSelectChain(row1: unknown | null, row2: unknown | null) {
   // First select: request + user join
   mockSelect.mockReturnValueOnce({
-    from: jest.fn().mockReturnValue({
-      innerJoin: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue(row1 ? [row1] : []),
+    from: vi.fn().mockReturnValue({
+      innerJoin: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue(row1 ? [row1] : []),
       }),
     }),
   });
   // Second select: offer
   mockSelect.mockReturnValueOnce({
-    from: jest.fn().mockReturnValue({
-      where: jest.fn().mockResolvedValue(row2 ? [row2] : []),
+    from: vi.fn().mockReturnValue({
+      where: vi.fn().mockResolvedValue(row2 ? [row2] : []),
     }),
   });
 }
@@ -157,23 +156,23 @@ function setupTwoSelectChain(row1: unknown | null, row2: unknown | null) {
 // ── Tests ──────────────────────────────────────────────────────────────────
 
 describe('POST /api/it-hilfe/requests/[id]/complete', () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
+  beforeEach(async () => {
+    vi.resetAllMocks();
     mockUpdateWhere.mockResolvedValue(undefined);
     mockSet.mockReturnValue({ where: mockUpdateWhere });
     mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {
-      const txUpdate = jest.fn().mockReturnValue({
-        set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+      const txUpdate = vi.fn().mockReturnValue({
+        set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }),
       });
       // Default FOR UPDATE inside transaction returns status='matched' so the
       // race-recheck passes for happy-path tests. Tests covering the
       // race-loser case override via mockTransaction.mockImplementationOnce.
-      const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'matched' }] });
+      const txExecute = vi.fn().mockResolvedValue({ rows: [{ status: 'matched' }] });
       return fn({ update: txUpdate, execute: txExecute });
     });
     // Re-establish fire-and-forget mocks cleared by resetAllMocks
-    const notif = jest.requireMock('@/lib/it-hilfe/notifications') as {
-      notifyRequestCompleted: jest.Mock;
+    const notif = (await import('@/lib/it-hilfe/notifications')) as unknown as {
+      notifyRequestCompleted: Mock;
     };
     notif.notifyRequestCompleted.mockImplementation(() => undefined);
   });
@@ -282,9 +281,9 @@ describe('POST /api/it-hilfe/requests/[id]/complete', () => {
 
     // Inside the transaction the FOR UPDATE sees status='completed' — a
     // sibling click already won the race.
-    const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'completed' }] });
-    const txUpdate = jest.fn().mockReturnValue({
-      set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+    const txExecute = vi.fn().mockResolvedValue({ rows: [{ status: 'completed' }] });
+    const txUpdate = vi.fn().mockReturnValue({
+      set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }),
     });
     mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) =>
       fn({ update: txUpdate, execute: txExecute }),

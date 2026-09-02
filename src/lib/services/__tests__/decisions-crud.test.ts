@@ -58,51 +58,53 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
-const mockTxExecute = jest.fn();
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) };
-const mockDbTransaction = jest
+const mockDbExecute = vi.fn();
+const mockTxExecute = vi.fn();
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute(...args) };
+const mockDbTransaction = vi
   .fn()
   .mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
+    transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
 }));
 
-jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' });
-  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
-  (sqlFn as unknown as Record<string, unknown>).join = jest
-    .fn()
-    .mockReturnValue({ __sql: 'joined' });
+vi.mock('drizzle-orm', async () => {
+  const sqlFn = vi.fn().mockReturnValue({ __sql: 'mocked' });
+  (sqlFn as unknown as Record<string, unknown>).raw = vi.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = vi.fn().mockReturnValue({ __sql: 'joined' });
   return {
-    ...jest.requireActual('drizzle-orm'),
+    ...(await vi.importActual('drizzle-orm')),
     sql: sqlFn,
-    getTableName: jest.fn().mockReturnValue('mock_table'),
+    getTableName: vi.fn().mockReturnValue('mock_table'),
   };
 });
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   decisions: { id: 'decisions' },
   decisionVotes: { id: 'decisionVotes' },
   decisionComments: { id: 'decisionComments' },
+  protocolActionLinks: { id: 'protocolActionLinks' },
+  tasks: { id: 'tasks' },
+  meetingProtocols: { id: 'meetingProtocols' },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'users' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   asArray,
   asObject,
@@ -162,7 +164,7 @@ function makeDbRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbTransaction.mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) =>
     fn(mockTx),
   );
@@ -387,7 +389,7 @@ describe('createDecision', () => {
     );
 
     // The sql template was called with options that now have IDs
-    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls;
+    const sqlCalls = ((await import('drizzle-orm')).sql as unknown as Mock).mock.calls;
     const optionsArg = sqlCalls.find(
       (call: unknown[]) => typeof call[1] === 'string' && call[1].includes('"id"'),
     );

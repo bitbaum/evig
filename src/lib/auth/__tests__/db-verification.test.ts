@@ -59,16 +59,16 @@ function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
   // select / query methods
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
   // insert methods
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.onConflictDoUpdate = jest.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.onConflictDoUpdate = vi.fn().mockReturnValue(chain);
   // update methods
-  chain.set = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -79,21 +79,21 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbInsert = jest.fn(() => makeChain([]));
-const mockDbUpdate = jest.fn(() => makeChain([]));
-const mockDbDelete = jest.fn(() => makeChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbDelete = vi.fn((..._args: unknown[]) => makeChain([]));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
+    delete: (...args: unknown[]) => mockDbDelete(...args),
   },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: {
     id: 'users_id',
     email: 'users_email',
@@ -108,31 +108,32 @@ jest.mock('@/db/schema/auth', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  gt: jest.fn().mockReturnValue({ __gt: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  gt: vi.fn().mockReturnValue({ __gt: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
   sql: Object.assign(
-    jest.fn().mockReturnValue({
+    vi.fn().mockReturnValue({
       __sql: 'mocked',
-      mapWith: jest.fn().mockReturnValue({ __sql: 'mapped' }),
+      mapWith: vi.fn().mockReturnValue({ __sql: 'mapped' }),
     }),
     {
-      raw: jest.fn().mockReturnValue({ __raw: true }),
+      raw: vi.fn().mockReturnValue({ __raw: true }),
     },
   ),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   createVerificationToken,
   verifyEmailWithToken,
@@ -164,7 +165,7 @@ function makeTokenRow(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Do NOT use resetAllMocks here: it strips sql`...`.mapWith() return value,
   // causing TypeError inside try/catch blocks that mask test failures.
   mockDbSelect.mockImplementation(() => makeChain([]));
@@ -228,8 +229,8 @@ describe('verifyEmailWithToken', () => {
   it('returns { success: false } on DB error (does not throw)', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
       }),
     } as unknown as ReturnType<typeof makeChain>);
 
@@ -326,8 +327,8 @@ describe('verifyEmailCode', () => {
   it('returns { success: false } on DB error (does not throw)', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue(Promise.reject(new Error('connection lost'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue(Promise.reject(new Error('connection lost'))),
       }),
     } as unknown as ReturnType<typeof makeChain>);
 
@@ -361,7 +362,7 @@ describe('createPasswordResetToken', () => {
     await createPasswordResetToken(EMAIL);
     const after = Date.now();
 
-    const chain = mockDbInsert.mock.results[0].value as { values: jest.Mock };
+    const chain = mockDbInsert.mock.results[0].value as { values: Mock };
     const valuesArg = chain.values.mock.calls[0][0] as { expires: string };
     const exp = new Date(valuesArg.expires).getTime();
     const oneHourMs = 60 * 60 * 1000;
@@ -376,7 +377,7 @@ describe('createPasswordResetToken', () => {
     await createPasswordResetToken(EMAIL, sevenDaysMs);
     const after = Date.now();
 
-    const chain = mockDbInsert.mock.results[0].value as { values: jest.Mock };
+    const chain = mockDbInsert.mock.results[0].value as { values: Mock };
     const valuesArg = chain.values.mock.calls[0][0] as { expires: string };
     const exp = new Date(valuesArg.expires).getTime();
 
@@ -412,8 +413,8 @@ describe('verifyPasswordResetToken', () => {
   it('returns { success: false } on DB error (does not throw)', async () => {
     mockDbSelect.mockReturnValueOnce({
       ...makeChain([]),
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue(Promise.reject(new Error('timeout'))),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue(Promise.reject(new Error('timeout'))),
       }),
     } as unknown as ReturnType<typeof makeChain>);
 
@@ -443,7 +444,7 @@ describe('updateUserPassword', () => {
     const result = await updateUserPassword(EMAIL, 'new-hash');
 
     expect(result.success).toBe(true);
-    const chain = mockDbUpdate.mock.results[0].value as { set: jest.Mock };
+    const chain = mockDbUpdate.mock.results[0].value as { set: Mock };
     const setArg = chain.set.mock.calls[0][0] as Record<string, unknown>;
     expect(setArg.passwordHash).toBe('new-hash');
     expect(setArg.emailVerified).toBeDefined();
@@ -452,9 +453,9 @@ describe('updateUserPassword', () => {
   it('returns { success: false } on DB error (does not throw)', async () => {
     mockDbUpdate.mockReturnValueOnce({
       ...makeChain([]),
-      set: jest.fn().mockReturnValue({
-        where: jest.fn().mockReturnValue({
-          returning: jest.fn().mockReturnValue(Promise.reject(new Error('constraint'))),
+      set: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          returning: vi.fn().mockReturnValue(Promise.reject(new Error('constraint'))),
         }),
       }),
     } as unknown as ReturnType<typeof makeChain>);

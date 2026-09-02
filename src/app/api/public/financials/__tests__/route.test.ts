@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/public/financials
  *
@@ -19,25 +19,23 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockGetAvailableYears = jest.fn();
-const mockLoadFinancialData = jest.fn();
+const mockGetAvailableYears = vi.fn();
+const mockLoadFinancialData = vi.fn();
 
-jest.mock('@/lib/hirn/data/financial-loader', () => ({
-  getAvailableYears: (...args: unknown[]) => mockGetAvailableYears.apply(null, args),
-  loadFinancialData: (...args: unknown[]) => mockLoadFinancialData.apply(null, args),
+vi.mock('@/lib/hirn/data/financial-loader', () => ({
+  getAvailableYears: (...args: unknown[]) => mockGetAvailableYears(...args),
+  loadFinancialData: (...args: unknown[]) => mockLoadFinancialData(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => ({
+vi.mock('@/lib/api/helpers', async () => ({
   apiSuccessCached: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server');
     return NextResponse.json({ success: false, error: msg }, { status });
   },
 }));
@@ -46,6 +44,7 @@ jest.mock('@/lib/api/helpers', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -72,7 +71,7 @@ function makeFinancialData(year: number) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockGetAvailableYears.mockResolvedValue([2025, 2024, 2023, 2022, 2021, 2020]);
   mockLoadFinancialData.mockImplementation((year: number) =>
     Promise.resolve(makeFinancialData(year)),

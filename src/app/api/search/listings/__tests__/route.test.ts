@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/search/listings (public)
  *
@@ -8,21 +8,20 @@
  *         200 with results (normal search)
  */
 
-const mockSearchListings = jest.fn();
+const mockSearchListings = vi.fn();
 
-jest.mock('@/lib/search/meilisearch', () => ({
+vi.mock('@/lib/search/meilisearch', () => ({
   searchListings: (...args: unknown[]) => mockSearchListings(...args),
 }));
 
-const mockValidateQuery = jest.fn();
+const mockValidateQuery = vi.fn();
 
-jest.mock('@/lib/schemas', () => ({
+vi.mock('@/lib/schemas', () => ({
   validateQuery: (...args: unknown[]) => mockValidateQuery(...args),
   ListingsQuerySchema: {},
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccessCached: (data: unknown, _maxAge?: number, _stale?: number) =>
       NextResponse.json({ success: true, data }),
@@ -33,11 +32,11 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const VALID_FILTERS = {
@@ -55,7 +54,7 @@ const VALID_FILTERS = {
 };
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 
   // Default: valid query
   mockValidateQuery.mockReturnValue({ success: true, data: VALID_FILTERS });
@@ -68,7 +67,6 @@ beforeEach(() => {
 
 describe('GET /api/search/listings — invalid query', () => {
   it('returns 400 when query params are invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server') as typeof import('next/server');
     mockValidateQuery.mockReturnValueOnce({
       success: false,
       error: NextResponse.json(

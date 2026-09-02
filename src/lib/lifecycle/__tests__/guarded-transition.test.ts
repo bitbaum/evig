@@ -19,40 +19,41 @@
 // ---------------------------------------------------------------------------
 
 interface FakeTx {
-  execute: jest.Mock;
-  transaction: jest.Mock;
+  execute: Mock;
+  transaction: Mock;
 }
 
 function makeFakeTx(rowsQueue: Array<{ rows: unknown[] }>): FakeTx {
   // Each call to execute() shifts the next queued result (FOR UPDATE select
   // first, then any second-entity read the check performs).
   const tx: FakeTx = {
-    execute: jest.fn(() => Promise.resolve(rowsQueue.shift() ?? { rows: [] })),
-    transaction: jest.fn((cb: (t: FakeTx) => unknown) => cb(tx)),
+    execute: vi.fn((..._args: unknown[]) => Promise.resolve(rowsQueue.shift() ?? { rows: [] })),
+    transaction: vi.fn((cb: (t: FakeTx) => unknown) => cb(tx)),
   };
   return tx;
 }
 
 let mockModuleTx: FakeTx;
 
-const mockTransaction = jest.fn((cb: (t: FakeTx) => unknown) => cb(mockModuleTx));
+const mockTransaction = vi.fn((cb: (t: FakeTx) => unknown) => cb(mockModuleTx));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     transaction: (cb: (t: unknown) => unknown) => mockTransaction(cb as (t: FakeTx) => unknown),
   },
 }));
 
+import type { Mock } from 'vitest';
 import { guardedTransition } from '../guarded-transition';
 
 describe('guardedTransition', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('returns { ok: false } and does not call apply when the locked row is missing', async () => {
     mockModuleTx = makeFakeTx([{ rows: [] }]);
-    const apply = jest.fn();
+    const apply = vi.fn();
 
     const res = await guardedTransition({
       lockTable: 'it_hilfe_requests',
@@ -67,7 +68,7 @@ describe('guardedTransition', () => {
 
   it('returns { ok: false } and does not call apply when check() is false', async () => {
     mockModuleTx = makeFakeTx([{ rows: [{ status: 'matched' }] }]);
-    const apply = jest.fn();
+    const apply = vi.fn();
 
     const res = await guardedTransition<{ status: string }, void>({
       lockTable: 'it_hilfe_requests',
@@ -82,7 +83,7 @@ describe('guardedTransition', () => {
 
   it('runs apply exactly once and surfaces its result when check() passes', async () => {
     mockModuleTx = makeFakeTx([{ rows: [{ status: 'open' }] }]);
-    const apply = jest.fn((_tx: unknown, _row: unknown) => Promise.resolve('done'));
+    const apply = vi.fn((_tx: unknown, _row: unknown) => Promise.resolve('done'));
 
     const res = await guardedTransition<{ status: string }, string>({
       lockTable: 'it_hilfe_requests',
@@ -100,7 +101,7 @@ describe('guardedTransition', () => {
   it('lets an async check() read a second entity through the same tx', async () => {
     // First execute() = FOR UPDATE on the request; second = the offer re-read.
     mockModuleTx = makeFakeTx([{ rows: [{ status: 'open' }] }, { rows: [{ status: 'pending' }] }]);
-    const apply = jest.fn(() => Promise.resolve(true));
+    const apply = vi.fn((..._args: unknown[]) => Promise.resolve(true));
 
     const res = await guardedTransition<{ status: string }, boolean>({
       lockTable: 'it_hilfe_requests',
@@ -120,7 +121,7 @@ describe('guardedTransition', () => {
 
   it('reuses a passed-in Tx instead of opening a module-level transaction', async () => {
     const passedTx = makeFakeTx([{ rows: [{ status: 'open' }] }]);
-    const apply = jest.fn(() => Promise.resolve('via-tx'));
+    const apply = vi.fn((..._args: unknown[]) => Promise.resolve('via-tx'));
 
     const res = await guardedTransition<{ status: string }, string>({
       lockTable: 'service_appointments',

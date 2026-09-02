@@ -26,27 +26,27 @@
 function makeSelectChain(result: unknown[] = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.leftJoin = jest.fn().mockReturnValue(chain);
-  chain.groupBy = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.leftJoin = vi.fn().mockReturnValue(chain);
+  chain.groupBy = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
   chain.then = resolved.then.bind(resolved);
   chain.catch = resolved.catch.bind(resolved);
   chain.finally = resolved.finally.bind(resolved);
   return chain;
 }
 
-const mockDbSelect = jest.fn(() => makeSelectChain([]));
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeSelectChain([]));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   repairerProfiles: { id: 'repairerProfiles', userId: 'userId', isActive: 'isActive' },
   repairerServices: { id: 'repairerServices', repairerId: 'repairerId', isActive: 'isActive' },
   userSkills: { userId: 'userSkills_userId', skillId: 'skillId' },
@@ -54,25 +54,25 @@ jest.mock('@/db/schema', () => ({
   userProfiles: { userId: 'userProfiles_userId', avatarUrl: 'userProfiles_avatarUrl' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __sql: 'raw' }),
-    join: jest.fn().mockReturnValue({ __sql: 'joined' }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __sql: 'raw' }),
+    join: vi.fn().mockReturnValue({ __sql: 'joined' }),
   }),
 }));
 
-jest.mock('@/config/repairer-status', () => ({
+vi.mock('@/config/repairer-status', () => ({
   REPAIRER_PROFILE_TIER: {
     COMMUNITY: 'community',
     PROFESSIONAL: 'professional',
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -125,7 +125,7 @@ function makeService(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockDbSelect.mockImplementation(() => makeSelectChain([]));
 });
 

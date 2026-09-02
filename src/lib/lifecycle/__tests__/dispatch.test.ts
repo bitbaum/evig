@@ -9,42 +9,42 @@
  *   - activity + audit channels fire when present
  */
 
-const mockDelete = jest.fn();
-jest.mock('@/db', () => ({
+const mockDelete = vi.fn();
+vi.mock('@/db', () => ({
   db: {
-    delete: jest.fn(() => ({ where: mockDelete })),
+    delete: vi.fn((..._args: unknown[]) => ({ where: mockDelete })),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   notifications: { relatedId: { name: 'related_id' }, type: { name: 'type' } },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   and: (...args: unknown[]) => ({ and: args }),
   eq: (col: unknown, val: unknown) => ({ eq: [col, val] }),
 }));
 
-const mockNotifyUsers = jest.fn().mockResolvedValue(undefined);
-const mockNotifyAllStaff = jest.fn().mockResolvedValue(undefined);
-jest.mock('@/lib/services/notifications', () => ({
+const mockNotifyUsers = vi.fn().mockResolvedValue(undefined);
+const mockNotifyAllStaff = vi.fn().mockResolvedValue(undefined);
+vi.mock('@/lib/services/notifications', () => ({
   notifyUsers: (ids: string[], payload: unknown) => mockNotifyUsers(ids, payload),
   notifyAllStaff: (payload: unknown, exclude?: string) => mockNotifyAllStaff(payload, exclude),
 }));
 
-const mockLogActivity = jest.fn();
-jest.mock('@/lib/activity', () => ({
+const mockLogActivity = vi.fn();
+vi.mock('@/lib/activity', () => ({
   logActivity: (params: unknown) => mockLogActivity(params),
 }));
 
-const mockLogContentDecision = jest.fn();
-jest.mock('@/lib/auth/audit', () => ({
+const mockLogContentDecision = vi.fn();
+vi.mock('@/lib/auth/audit', () => ({
   logContentDecision: (...args: unknown[]) => mockLogContentDecision(...args),
 }));
 
-const mockWarn = jest.fn();
-jest.mock('@/lib/logger', () => ({
-  logger: { warn: (...args: unknown[]) => mockWarn(...args), error: jest.fn(), info: jest.fn() },
+const mockWarn = vi.fn();
+vi.mock('@/lib/logger', () => ({
+  logger: { warn: (...args: unknown[]) => mockWarn(...args), error: vi.fn(), info: vi.fn() },
 }));
 
 import { dispatchWorkflowEvent } from '../dispatch';
@@ -53,7 +53,7 @@ const base = { type: 'test_event', title: 'T', content: 'C' };
 
 describe('dispatchWorkflowEvent', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockDelete.mockResolvedValue(undefined);
     mockNotifyUsers.mockResolvedValue(undefined);
   });

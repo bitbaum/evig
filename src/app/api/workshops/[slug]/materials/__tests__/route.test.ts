@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/workshops/[slug]/materials (public with optional auth)
  *
@@ -9,21 +9,21 @@
  *         200 with attended materials (authenticated + attended)
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-const mockSelect = jest.fn();
+const mockSelect = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   workshops: {
     id: 'ws_id',
     title: 'ws_title',
@@ -57,7 +57,7 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   asc: (a: unknown) => ({ __asc: a }),
@@ -68,7 +68,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/config/workshop-registration-status', () => ({
+vi.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
     PENDING: 'pending',
     CONFIRMED: 'confirmed',
@@ -82,12 +82,11 @@ jest.mock('@/config/workshop-registration-status', () => ({
   },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -98,7 +97,7 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 const MOCK_PUBLIC_MATERIAL = {
@@ -115,41 +114,41 @@ const MOCK_PUBLIC_MATERIAL = {
 
 // Build parallel query chain with .then() for workshop lookup and registration check
 function makeWorkshopLookupChain(workshop: unknown) {
-  const thenFn = jest
+  const thenFn = vi
     .fn()
     .mockImplementation((cb: (rows: unknown[]) => unknown) =>
       Promise.resolve(cb(workshop ? [workshop] : [])),
     );
-  const where = jest.fn().mockReturnValue({ then: thenFn });
-  const from = jest.fn().mockReturnValue({ where });
+  const where = vi.fn().mockReturnValue({ then: thenFn });
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
 function makeRegistrationLookupChain(reg: unknown) {
-  const thenFn = jest
+  const thenFn = vi
     .fn()
     .mockImplementation((cb: (rows: unknown[]) => unknown) =>
       Promise.resolve(cb(reg ? [reg] : [])),
     );
-  const limit = jest.fn().mockReturnValue({ then: thenFn });
-  const orderBy = jest.fn().mockReturnValue({ limit });
-  const where = jest.fn().mockReturnValue({ orderBy });
-  const innerJoin2 = jest.fn().mockReturnValue({ where });
-  const innerJoin1 = jest.fn().mockReturnValue({ innerJoin: innerJoin2 });
-  const from = jest.fn().mockReturnValue({ innerJoin: innerJoin1 });
+  const limit = vi.fn().mockReturnValue({ then: thenFn });
+  const orderBy = vi.fn().mockReturnValue({ limit });
+  const where = vi.fn().mockReturnValue({ orderBy });
+  const innerJoin2 = vi.fn().mockReturnValue({ where });
+  const innerJoin1 = vi.fn().mockReturnValue({ innerJoin: innerJoin2 });
+  const from = vi.fn().mockReturnValue({ innerJoin: innerJoin1 });
   return { from };
 }
 
 // Build materials fetch chain: where → orderBy (resolves to array)
 function makeMaterialsChain(materials: unknown[]) {
-  const orderBy = jest.fn().mockResolvedValue(materials);
-  const where = jest.fn().mockReturnValue({ orderBy });
-  const from = jest.fn().mockReturnValue({ where });
+  const orderBy = vi.fn().mockResolvedValue(materials);
+  const where = vi.fn().mockReturnValue({ orderBy });
+  const from = vi.fn().mockReturnValue({ where });
   return { from };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(null); // unauthenticated by default
 });
 

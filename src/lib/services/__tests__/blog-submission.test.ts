@@ -24,66 +24,64 @@
 // Drizzle chainable mock setup
 // ---------------------------------------------------------------------------
 
-const mockUpdateWhere = jest.fn().mockResolvedValue([]);
-const mockUpdateSet = jest.fn().mockReturnValue({ where: mockUpdateWhere });
-const mockDbUpdate = jest.fn().mockReturnValue({ set: mockUpdateSet });
+const mockUpdateWhere = vi.fn().mockResolvedValue([]);
+const mockUpdateSet = vi.fn().mockReturnValue({ where: mockUpdateWhere });
+const mockDbUpdate = vi.fn().mockReturnValue({ set: mockUpdateSet });
 
 // Transaction mock: the callback receives mockTx
-const mockTxInsertReturning = jest.fn().mockResolvedValue([{ id: 'post-abc' }]);
-const mockTxInsertValues = jest.fn().mockReturnValue({ returning: mockTxInsertReturning });
-const mockTxInsert = jest.fn().mockReturnValue({ values: mockTxInsertValues });
-const mockTxUpdateWhere = jest.fn().mockResolvedValue([]);
-const mockTxUpdateSet = jest.fn().mockReturnValue({ where: mockTxUpdateWhere });
-const mockTxUpdate = jest.fn().mockReturnValue({ set: mockTxUpdateSet });
+const mockTxInsertReturning = vi.fn().mockResolvedValue([{ id: 'post-abc' }]);
+const mockTxInsertValues = vi.fn().mockReturnValue({ returning: mockTxInsertReturning });
+const mockTxInsert = vi.fn().mockReturnValue({ values: mockTxInsertValues });
+const mockTxUpdateWhere = vi.fn().mockResolvedValue([]);
+const mockTxUpdateSet = vi.fn().mockReturnValue({ where: mockTxUpdateWhere });
+const mockTxUpdate = vi.fn().mockReturnValue({ set: mockTxUpdateSet });
 const mockTx = { insert: mockTxInsert, update: mockTxUpdate };
-const mockDbTransaction = jest
+const mockDbTransaction = vi
   .fn()
   .mockImplementation((fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
 // execute mock (used by editSubmission)
-const mockDbExecute = jest
+const mockDbExecute = vi
   .fn()
   .mockResolvedValue({ rows: [{ id: 'sub-1', title: 'Updated Title' }] });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
+    transaction: (...args: unknown[]) => mockDbTransaction(...args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   blogSubmissions: { id: 'blogSubmissions_table' },
   blogPosts: { id: 'blogPosts_table' },
 }));
 
-jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked_sql' });
-  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
-  (sqlFn as unknown as Record<string, unknown>).join = jest
-    .fn()
-    .mockReturnValue({ __sql: 'joined' });
+vi.mock('drizzle-orm', async () => {
+  const sqlFn = vi.fn().mockReturnValue({ __sql: 'mocked_sql' });
+  (sqlFn as unknown as Record<string, unknown>).raw = vi.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = vi.fn().mockReturnValue({ __sql: 'joined' });
   return {
-    ...jest.requireActual('drizzle-orm'),
+    ...(await vi.importActual('drizzle-orm')),
     sql: sqlFn,
-    eq: jest.fn().mockReturnValue({ __eq: true }),
-    getTableName: jest.fn().mockReturnValue('mock_table'),
+    eq: vi.fn().mockReturnValue({ __eq: true }),
+    getTableName: vi.fn().mockReturnValue('mock_table'),
   };
 });
 
-const mockSendEmail = jest.fn().mockResolvedValue({ success: true });
-jest.mock('@/lib/email', () => ({
-  sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
+const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
+vi.mock('@/lib/email', () => ({
+  sendEmail: (...args: unknown[]) => mockSendEmail(...args),
 }));
 
-const mockCreateNotification = jest.fn().mockResolvedValue(undefined);
-jest.mock('@/lib/services/notifications', () => ({
-  createNotification: (...args: unknown[]) => mockCreateNotification.apply(null, args),
+const mockCreateNotification = vi.fn().mockResolvedValue(undefined);
+vi.mock('@/lib/services/notifications', () => ({
+  createNotification: (...args: unknown[]) => mockCreateNotification(...args),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -140,7 +138,7 @@ function makeSubmission(overrides: Partial<Record<string, unknown>> = {}) {
 const REVIEWER = 'reviewer-1';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockSendEmail.mockResolvedValue({ success: true });
   mockCreateNotification.mockResolvedValue(undefined);
   mockDbUpdate.mockReturnValue({ set: mockUpdateSet });

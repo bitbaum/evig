@@ -19,8 +19,8 @@
  */
 
 type MockAudioInstance = {
-  play: jest.Mock;
-  pause: jest.Mock;
+  play: Mock;
+  pause: Mock;
   currentTime: number;
   ontimeupdate: (() => void) | null;
   onended: (() => void) | null;
@@ -33,10 +33,13 @@ let mockAudioInstance: MockAudioInstance;
 Object.defineProperty(global, 'Audio', {
   configurable: true,
   writable: true,
-  value: jest.fn().mockImplementation(() => {
+  // vitest's vi.fn(), unlike jest's jest.fn(), invokes `new Audio()` on the
+  // mockImplementation itself -- an arrow function isn't a valid constructor
+  // and throws "is not a constructor", so this must be a real function.
+  value: vi.fn().mockImplementation(function () {
     mockAudioInstance = {
-      play: jest.fn().mockResolvedValue(undefined),
-      pause: jest.fn(),
+      play: vi.fn().mockResolvedValue(undefined),
+      pause: vi.fn(),
       currentTime: 0,
       ontimeupdate: null,
       onended: null,
@@ -45,10 +48,11 @@ Object.defineProperty(global, 'Audio', {
   }),
 });
 
+import type { Mock, MockedClass } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useAudioPlayback } from '../useAudioPlayback';
 
-const MockAudio = global.Audio as jest.MockedClass<typeof Audio>;
+const MockAudio = global.Audio as MockedClass<typeof Audio>;
 
 beforeEach(() => {
   MockAudio.mockClear();

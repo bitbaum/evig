@@ -8,24 +8,24 @@
  */
 
 // ── Drizzle transaction mock ────────────────────────────────────────────────
-const mockTxDeleteWhere = jest.fn().mockResolvedValue(undefined);
-const mockTxDelete = jest.fn().mockReturnValue({ where: mockTxDeleteWhere });
-const mockTxInsertConflict = jest.fn().mockResolvedValue(undefined);
-const mockTxInsertValues = jest.fn().mockReturnValue({ onConflictDoUpdate: mockTxInsertConflict });
-const mockTxInsert = jest.fn().mockReturnValue({ values: mockTxInsertValues });
+const mockTxDeleteWhere = vi.fn().mockResolvedValue(undefined);
+const mockTxDelete = vi.fn().mockReturnValue({ where: mockTxDeleteWhere });
+const mockTxInsertConflict = vi.fn().mockResolvedValue(undefined);
+const mockTxInsertValues = vi.fn().mockReturnValue({ onConflictDoUpdate: mockTxInsertConflict });
+const mockTxInsert = vi.fn().mockReturnValue({ values: mockTxInsertValues });
 const mockTx = { delete: mockTxDelete, insert: mockTxInsert };
-const mockTransaction = jest
+const mockTransaction = vi
   .fn()
   .mockImplementation((fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: { transaction: (fn: (tx: unknown) => Promise<unknown>) => mockTransaction(fn) },
 }));
-jest.mock('@/lib/logger', () => ({ logger: { error: jest.fn(), info: jest.fn() } }));
+vi.mock('@/lib/logger', () => ({ logger: { error: vi.fn(), info: vi.fn() } }));
 
 import { syncPostTranslations } from '../blog-translations';
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => vi.clearAllMocks());
 
 const POST = '11111111-1111-1111-1111-111111111111';
 

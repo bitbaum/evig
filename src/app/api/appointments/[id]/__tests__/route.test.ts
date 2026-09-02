@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/appointments/[id] and PATCH /api/appointments/[id]
  *
@@ -8,17 +8,16 @@
  *   PATCH - 401, 400 (missing id), 404, 403 (permission error), 400 (bad action), 200
  */
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -26,12 +25,12 @@ jest.mock('@/lib/api/middleware', () => ({
     }),
 }));
 
-const mockSelect = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -41,7 +40,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   serviceAppointments: {
     id: 'sa_id',
     userId: 'sa_userId',
@@ -82,7 +81,7 @@ jest.mock('@/db/schema', () => ({
   repairerProfiles: { id: 'rp_id', businessName: 'rp_businessName', phone: 'rp_phone' },
 }));
 
-jest.mock('drizzle-orm/pg-core', () => ({
+vi.mock('drizzle-orm/pg-core', () => ({
   alias: (_t: unknown, name: string) => ({
     id: `${name}_id`,
     name: `${name}_name`,
@@ -90,7 +89,7 @@ jest.mock('drizzle-orm/pg-core', () => ({
   }),
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -101,8 +100,7 @@ jest.mock('drizzle-orm', () => ({
   isNull: (a: unknown) => ({ __isNull: a }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -119,35 +117,35 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // The 'rate' action mirrors into reviews via createReview — mock it so the test
 // doesn't pull the real review/schema module chain.
-const mockCreateReview = jest.fn().mockResolvedValue({ reviewId: 'rev-1' });
-jest.mock('@/lib/reviews/create-review', () => ({
+const mockCreateReview = vi.fn().mockResolvedValue({ reviewId: 'rev-1' });
+vi.mock('@/lib/reviews/create-review', () => ({
   createReview: (...args: unknown[]) => mockCreateReview(...args),
 }));
 
-const mockValidateBody = jest.fn((_schema: unknown, data: unknown) => ({ success: true, data }));
+const mockValidateBody = vi.fn((_schema: unknown, data: unknown) => ({ success: true, data }));
 
-jest.mock('@/lib/schemas', () => ({
+vi.mock('@/lib/schemas', () => ({
   validateBody: (schema: unknown, data: unknown) => mockValidateBody(schema, data),
   AppointmentActionSchema: {},
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
 }));
 
-jest.mock('@/lib/services/appointment-actions', () => ({
-  buildActionUpdate: jest.fn(),
-  executeAppointmentUpdate: jest.fn(),
-  sendAppointmentNotification: jest.fn().mockResolvedValue(undefined),
+vi.mock('@/lib/services/appointment-actions', () => ({
+  buildActionUpdate: vi.fn(),
+  executeAppointmentUpdate: vi.fn(),
+  sendAppointmentNotification: vi.fn().mockResolvedValue(undefined),
 }));
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, PATCH } from '../route';
 
 const MOCK_SESSION = {
@@ -179,10 +177,10 @@ const MOCK_APPOINTMENT = {
 };
 
 function makeSelectChain(rows: unknown[]) {
-  const where = jest.fn().mockResolvedValue(rows);
-  const leftJoin = jest.fn();
+  const where = vi.fn().mockResolvedValue(rows);
+  const leftJoin = vi.fn();
   leftJoin.mockReturnValue({ leftJoin, where });
-  const from = jest.fn().mockReturnValue({ leftJoin, where });
+  const from = vi.fn().mockReturnValue({ leftJoin, where });
   return { from };
 }
 
@@ -190,8 +188,8 @@ function makeContext(id = 'appt-1') {
   return { params: Promise.resolve({ id }) };
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockValidateBody.mockImplementation((_schema: unknown, data: unknown) => ({
     success: true,
@@ -202,7 +200,7 @@ beforeEach(() => {
   mockUpdateWhere.mockResolvedValue([MOCK_APPOINTMENT]);
 
   const { sendAppointmentNotification, buildActionUpdate, executeAppointmentUpdate } =
-    jest.requireMock('@/lib/services/appointment-actions');
+    (await import('@/lib/services/appointment-actions')) as any;
   sendAppointmentNotification.mockResolvedValue(undefined);
   buildActionUpdate.mockReturnValue({ updateSet: {}, newStatus: null });
   executeAppointmentUpdate.mockResolvedValue({ ...MOCK_APPOINTMENT });
@@ -294,7 +292,7 @@ describe('PATCH /api/appointments/[id] — validation', () => {
   });
 
   it('returns 403 when buildActionUpdate returns a permission error', async () => {
-    const { buildActionUpdate } = jest.requireMock('@/lib/services/appointment-actions');
+    const { buildActionUpdate } = (await import('@/lib/services/appointment-actions')) as any;
     buildActionUpdate.mockReturnValueOnce({ error: 'Kein Zugriff auf diesen Termin' });
 
     const req = new NextRequest('http://localhost/api/appointments/appt-1', {
@@ -307,7 +305,7 @@ describe('PATCH /api/appointments/[id] — validation', () => {
   });
 
   it('returns 400 when buildActionUpdate returns a non-permission error', async () => {
-    const { buildActionUpdate } = jest.requireMock('@/lib/services/appointment-actions');
+    const { buildActionUpdate } = (await import('@/lib/services/appointment-actions')) as any;
     buildActionUpdate.mockReturnValueOnce({ error: 'Ungültige Aktion' });
 
     const req = new NextRequest('http://localhost/api/appointments/appt-1', {
@@ -320,9 +318,8 @@ describe('PATCH /api/appointments/[id] — validation', () => {
   });
 
   it('returns 400 when trying to re-rate an already-rated appointment', async () => {
-    const { buildActionUpdate, executeAppointmentUpdate } = jest.requireMock(
-      '@/lib/services/appointment-actions',
-    );
+    const { buildActionUpdate, executeAppointmentUpdate } =
+      (await import('@/lib/services/appointment-actions')) as any;
     buildActionUpdate.mockReturnValueOnce({ updateSet: {}, newStatus: null });
     // null returned from executeAppointmentUpdate when action=rate means already rated
     executeAppointmentUpdate.mockResolvedValueOnce(null);
@@ -344,9 +341,8 @@ describe('PATCH /api/appointments/[id] — validation', () => {
 
 describe('PATCH /api/appointments/[id] — success', () => {
   it('returns 200 with updated appointment', async () => {
-    const { buildActionUpdate, executeAppointmentUpdate } = jest.requireMock(
-      '@/lib/services/appointment-actions',
-    );
+    const { buildActionUpdate, executeAppointmentUpdate } =
+      (await import('@/lib/services/appointment-actions')) as any;
     buildActionUpdate.mockReturnValueOnce({
       updateSet: { status: 'accepted' },
       newStatus: 'accepted',

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/webhooks/kivvi — inbound Kivvi ERP item-change receiver
  * (the REVERSE leg of the bidirectional product sync).
@@ -23,7 +23,7 @@ const mockDb = {
   updates: [] as Array<{ table: string; values: Record<string, unknown> }>,
 };
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: () => ({
       from: () => ({
@@ -42,7 +42,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema/inventory', () => ({
+vi.mock('@/db/schema/inventory', () => ({
   inventoryItems: {
     __t: 'inventoryItems',
     id: 'ii_id',
@@ -51,11 +51,11 @@ jest.mock('@/db/schema/inventory', () => ({
   },
 }));
 
-jest.mock('@/db/schema/marketplace', () => ({
+vi.mock('@/db/schema/marketplace', () => ({
   listings: { __t: 'listings', inventoryItemId: 'l_inv', status: 'l_status' },
 }));
 
-jest.mock('@/config/marketplace', () => ({
+vi.mock('@/config/marketplace', () => ({
   LISTING_STATUS: {
     ACTIVE: 'active',
     SOLD: 'sold',
@@ -65,16 +65,15 @@ jest.mock('@/config/marketplace', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -87,7 +86,7 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 function sign(rawBody: string, secret = SECRET): string {
   return createHmac('sha256', secret).update(rawBody).digest('hex');
@@ -105,7 +104,7 @@ function makeReq(rawBody: string, signature?: string | null) {
 
 // Load the route with the secret in place (captured at module eval time).
 process.env.KIVVI_WEBHOOK_SECRET = SECRET;
-const { POST } = require('../route') as typeof import('../route');
+const { POST } = (await import('../route')) as unknown as typeof import('../route');
 
 beforeEach(() => {
   mockDb.rows = [];
@@ -128,14 +127,12 @@ describe('POST /api/webhooks/kivvi — signature verification', () => {
 
   it('fails closed (401) when KIVVI_WEBHOOK_SECRET is not configured', async () => {
     const raw = JSON.stringify({ event: 'inventory_item.updated', data: { id: 'kv-1' } });
-    let promise: Promise<Response> | undefined;
-    jest.isolateModules(() => {
-      delete process.env.KIVVI_WEBHOOK_SECRET;
-      const mod = require('../route') as typeof import('../route');
-      promise = mod.POST(makeReq(raw, sign(raw))) as unknown as Promise<Response>;
-    });
+    vi.resetModules();
+    delete process.env.KIVVI_WEBHOOK_SECRET;
+    const mod = (await import('../route')) as unknown as typeof import('../route');
+    const promise = mod.POST(makeReq(raw, sign(raw))) as unknown as Promise<Response>;
     process.env.KIVVI_WEBHOOK_SECRET = SECRET;
-    const res = await promise!;
+    const res = await promise;
     expect(res.status).toBe(401);
   });
 });

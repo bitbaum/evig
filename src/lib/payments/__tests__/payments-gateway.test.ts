@@ -29,14 +29,14 @@
 function makeChain(result: unknown = []) {
   const resolved = Promise.resolve(result);
   const chain: Record<string, unknown> = {};
-  chain.select = jest.fn().mockReturnValue(chain);
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.insert = jest.fn().mockReturnValue(chain);
-  chain.values = jest.fn().mockReturnValue(chain);
-  chain.returning = jest.fn().mockReturnValue(chain);
-  chain.update = jest.fn().mockReturnValue(chain);
-  chain.set = jest.fn().mockReturnValue(chain);
+  chain.select = vi.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.insert = vi.fn().mockReturnValue(chain);
+  chain.values = vi.fn().mockReturnValue(chain);
+  chain.returning = vi.fn().mockReturnValue(chain);
+  chain.update = vi.fn().mockReturnValue(chain);
+  chain.set = vi.fn().mockReturnValue(chain);
   chain.then = (resolved as Promise<unknown>).then.bind(resolved);
   chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
   chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
@@ -47,19 +47,19 @@ function makeChain(result: unknown = []) {
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]));
-const mockDbInsert = jest.fn(() => makeChain([]));
-const mockDbUpdate = jest.fn(() => makeChain());
+const mockDbSelect = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbInsert = vi.fn((..._args: unknown[]) => makeChain([]));
+const mockDbUpdate = vi.fn((..._args: unknown[]) => makeChain());
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect(...args),
+    insert: (...args: unknown[]) => mockDbInsert(...args),
+    update: (...args: unknown[]) => mockDbUpdate(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   paymentProviders: {
     id: 'pp_id',
     slug: 'pp_slug',
@@ -86,28 +86,29 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
-    raw: jest.fn().mockReturnValue({ __raw: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: vi.fn().mockReturnValue({ __raw: true }),
   }),
 }));
 
-jest.mock('@/config/payment-status', () => ({
+vi.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: { PENDING: 'pending', COMPLETED: 'completed' },
   PAYMENT_TRANSACTION_TYPE: { PAYMENT: 'payment' },
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
+import type { Mock } from 'vitest';
 import {
   getPaymentProvider,
   createTransaction,
@@ -131,7 +132,7 @@ const BASE_TX_PARAMS = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockDbSelect.mockImplementation(() => makeChain([]));
   mockDbInsert.mockImplementation(() => makeChain([{ id: 'tx-new-1' }]));
   mockDbUpdate.mockImplementation(() => makeChain());
@@ -171,9 +172,9 @@ describe('getPaymentProvider', () => {
 
     await getPaymentProvider();
 
-    const { eq } = jest.requireMock('drizzle-orm') as { eq: jest.Mock };
+    const { eq } = (await import('drizzle-orm')) as unknown as { eq: Mock };
     // eq should be called with the slug column and 'payrexx'
-    const slugCall = eq.mock.calls.find(([, v]: [unknown, string]) => v === 'payrexx');
+    const slugCall = eq.mock.calls.find((c: unknown[]) => c[1] === 'payrexx');
     expect(slugCall).toBeDefined();
   });
 
@@ -204,8 +205,8 @@ describe('createTransaction', () => {
     let capturedValues: Record<string, unknown> | null = null;
     mockDbInsert.mockImplementationOnce(() => {
       const chain = makeChain([{ id: 'tx-1' }]);
-      const origValues = chain.values as jest.Mock;
-      chain.values = jest.fn((...args: unknown[]) => {
+      const origValues = chain.values as Mock;
+      chain.values = vi.fn((...args: unknown[]) => {
         capturedValues = args[0] as Record<string, unknown>;
         return origValues(...args);
       });
@@ -221,8 +222,8 @@ describe('createTransaction', () => {
     let capturedValues: Record<string, unknown> | null = null;
     mockDbInsert.mockImplementationOnce(() => {
       const chain = makeChain([{ id: 'tx-1' }]);
-      const origValues = chain.values as jest.Mock;
-      chain.values = jest.fn((...args: unknown[]) => {
+      const origValues = chain.values as Mock;
+      chain.values = vi.fn((...args: unknown[]) => {
         capturedValues = args[0] as Record<string, unknown>;
         return origValues(...args);
       });

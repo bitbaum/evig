@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/user/reviews
  *
@@ -10,17 +10,16 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
     mockAuth().then(async (session: unknown) => {
       if (!session || !(session as { user?: { id?: string } }).user?.id) {
-        const { NextResponse } = jest.requireActual('next/server');
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
       }
       const resolvedContext = context?.params ? { params: await context.params } : undefined;
@@ -29,16 +28,15 @@ jest.mock('@/lib/api/middleware', () => ({
   parsePagination: () => ({ limit: 20, offset: 0 }),
 }));
 
-const mockSelect = jest.fn();
+const mockSelect = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -49,24 +47,24 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/review-status', () => ({
+vi.mock('@/config/review-status', () => ({
   REVIEW_STATUS: { PUBLISHED: 'published', PENDING: 'pending' },
 }));
 
-jest.mock('@/config/database', () => ({
+vi.mock('@/config/database', () => ({
   TABLE_NAMES: { USERS: 'users' },
   REVIEW_TARGET_TYPES: { REPAIRER: 'repairer', WORKSHOP: 'workshop' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
@@ -77,11 +75,11 @@ jest.mock('drizzle-orm', () => ({
   count: (a?: unknown) => ({ __count: a }),
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('@/db/schema/services', () => ({
+vi.mock('@/db/schema/services', () => ({
   repairerProfiles: {
     id: 'rp_id',
     userId: 'rp_userId',
@@ -89,7 +87,7 @@ jest.mock('@/db/schema/services', () => ({
   },
 }));
 
-jest.mock('@/db/schema/reviews', () => ({
+vi.mock('@/db/schema/reviews', () => ({
   reviews: {
     id: 'rv_id',
     reviewerId: 'rv_reviewerId',
@@ -121,7 +119,7 @@ jest.mock('@/db/schema/reviews', () => ({
   },
 }));
 
-jest.mock('@/db/schema/workshops', () => ({
+vi.mock('@/db/schema/workshops', () => ({
   workshops: { id: 'w_id', title: 'w_title' },
 }));
 
@@ -191,14 +189,14 @@ const SUBQUERY_RESPONDER = {
  */
 function makeSubqueryChain(asResult: unknown) {
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.leftJoin = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.where = jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
-  chain.offset = jest.fn().mockReturnValue(chain);
-  chain.as = jest.fn().mockReturnValue(asResult);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.leftJoin = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.where = vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
+  chain.offset = vi.fn().mockReturnValue(chain);
+  chain.as = vi.fn().mockReturnValue(asResult);
   return chain;
 }
 
@@ -207,16 +205,16 @@ function makeSubqueryChain(asResult: unknown) {
  * Used for the actual data queries (reviews, count).
  */
 function makeChain(terminal: 'where' | 'offset', result: unknown[]) {
-  const terminalFn = jest.fn().mockResolvedValue(result);
+  const terminalFn = vi.fn().mockResolvedValue(result);
   const chain: Record<string, unknown> = {};
-  chain.from = jest.fn().mockReturnValue(chain);
-  chain.leftJoin = jest.fn().mockReturnValue(chain);
-  chain.innerJoin = jest.fn().mockReturnValue(chain);
-  chain.where = terminal === 'where' ? terminalFn : jest.fn().mockReturnValue(chain);
-  chain.orderBy = jest.fn().mockReturnValue(chain);
-  chain.limit = jest.fn().mockReturnValue(chain);
-  chain.offset = terminal === 'offset' ? terminalFn : jest.fn().mockReturnValue(chain);
-  chain.as = jest.fn().mockReturnValue(chain);
+  chain.from = vi.fn().mockReturnValue(chain);
+  chain.leftJoin = vi.fn().mockReturnValue(chain);
+  chain.innerJoin = vi.fn().mockReturnValue(chain);
+  chain.where = terminal === 'where' ? terminalFn : vi.fn().mockReturnValue(chain);
+  chain.orderBy = vi.fn().mockReturnValue(chain);
+  chain.limit = vi.fn().mockReturnValue(chain);
+  chain.offset = terminal === 'offset' ? terminalFn : vi.fn().mockReturnValue(chain);
+  chain.as = vi.fn().mockReturnValue(chain);
   return chain;
 }
 
@@ -228,6 +226,7 @@ function makeRequest() {
 // Import under test
 // ---------------------------------------------------------------------------
 
+import { NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -235,7 +234,7 @@ import { GET } from '../route';
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
 });
 

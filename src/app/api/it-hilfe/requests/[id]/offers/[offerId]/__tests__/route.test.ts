@@ -1,28 +1,28 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for DELETE /api/it-hilfe/requests/[id]/offers/[offerId]
  */
 
 // ── Auth mock ──────────────────────────────────────────────────────────────
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
 // ── DB mocks ───────────────────────────────────────────────────────────────
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
-const mockTransaction = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
+const mockTransaction = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -33,7 +33,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   itHilfeOffers: {
     id: 'iho_id',
     requestId: 'iho_requestId',
@@ -43,7 +43,7 @@ jest.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'ihr_id', offerCount: 'ihr_offerCount' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -52,8 +52,7 @@ jest.mock('drizzle-orm', () => ({
   getTableName: (_t: unknown) => 'it_hilfe_offers',
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -70,15 +69,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   OFFER_STATUS: {
     PENDING: 'pending',
     WITHDRAWN: 'withdrawn',
@@ -109,7 +108,7 @@ const MOCK_OFFER = {
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { DELETE } from '../route';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -134,17 +133,17 @@ function setupSelectChain(rows: unknown[]) {
 
 describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUpdateWhere.mockResolvedValue(undefined);
     mockSet.mockReturnValue({ where: mockUpdateWhere });
     // Default FOR UPDATE inside transaction returns status='pending' so the
     // race-recheck passes. Tests covering the race-loser branch override
     // via mockTransaction.mockImplementationOnce.
     mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {
-      const txUpdate = jest.fn().mockReturnValue({
-        set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+      const txUpdate = vi.fn().mockReturnValue({
+        set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }),
       });
-      const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'pending' }] });
+      const txExecute = vi.fn().mockResolvedValue({ rows: [{ status: 'pending' }] });
       return fn({ update: txUpdate, execute: txExecute });
     });
   });
@@ -236,10 +235,10 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
     mockAuth.mockResolvedValue(MOCK_SESSION);
     setupSelectChain([MOCK_OFFER]);
 
-    const txUpdate = jest.fn().mockReturnValue({
-      set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+    const txUpdate = vi.fn().mockReturnValue({
+      set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(undefined) }),
     });
-    const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'withdrawn' }] });
+    const txExecute = vi.fn().mockResolvedValue({ rows: [{ status: 'withdrawn' }] });
     mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) =>
       fn({ update: txUpdate, execute: txExecute }),
     );

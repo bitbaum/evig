@@ -7,14 +7,14 @@
  *     Wrong output = users see incorrect recency information.
  */
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 import { cn, formatRelativeTime } from '../utils';
 
 // Pin "now" to a fixed moment for reproducible relative-time assertions
 const NOW = new Date('2026-05-15T10:00:00.000Z');
-beforeAll(() => jest.setSystemTime(NOW));
-afterAll(() => jest.useRealTimers());
+beforeAll(() => vi.setSystemTime(NOW));
+afterAll(() => vi.useRealTimers());
 
 // ============================================================================
 // cn — Tailwind class merging

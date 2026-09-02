@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/newsletter/confirm
  *
@@ -19,18 +19,18 @@
  *   - Content-Type is text/html for all responses
  */
 
-const mockReturning = jest.fn();
-const mockWhere = jest.fn().mockReturnValue({ returning: mockReturning });
-const mockSet = jest.fn().mockReturnValue({ where: mockWhere });
-const mockUpdate = jest.fn().mockReturnValue({ set: mockSet });
+const mockReturning = vi.fn();
+const mockWhere = vi.fn().mockReturnValue({ returning: mockReturning });
+const mockSet = vi.fn().mockReturnValue({ where: mockWhere });
+const mockUpdate = vi.fn().mockReturnValue({ set: mockSet });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    update: (...args: unknown[]) => mockUpdate.apply(null, args),
+    update: (...args: unknown[]) => mockUpdate(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   newsletterSubscriptions: {
     email: 'email',
     isActive: 'is_active',
@@ -39,22 +39,22 @@ jest.mock('@/db/schema', () => ({
   },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'NOW()' }), { raw: jest.fn() }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  and: vi.fn().mockReturnValue({ __and: true }),
+  sql: Object.assign(vi.fn().mockReturnValue({ __sql: 'NOW()' }), { raw: vi.fn() }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/org', () => ({
+vi.mock('@/config/org', () => ({
   ORG: { name: 'Revamp-IT' },
 }));
 
-jest.mock('@/config/urls', () => ({
+vi.mock('@/config/urls', () => ({
   APP_URL: 'https://revamp-it.test',
 }));
 
@@ -68,7 +68,7 @@ function makeRequest(token?: string) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockReturning.mockResolvedValue([{ email: 'hans@example.com' }]);
   mockUpdate.mockReturnValue({ set: mockSet });
   mockSet.mockReturnValue({ where: mockWhere });

@@ -9,20 +9,20 @@
  */
 
 // Mock db — factory runs at hoist time, so define mock inline
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: jest.fn(),
-    insert: jest.fn(),
-    update: jest.fn(),
-    execute: jest.fn(),
-    transaction: jest.fn(),
+    select: vi.fn(),
+    insert: vi.fn(),
+    update: vi.fn(),
+    execute: vi.fn(),
+    transaction: vi.fn(),
   },
 }));
 
 // Mock drizzle-orm functions
-jest.mock('drizzle-orm', () => ({
-  eq: jest.fn((...args: unknown[]) => args),
-  and: jest.fn((...args: unknown[]) => args),
+vi.mock('drizzle-orm', () => ({
+  eq: vi.fn((...args: unknown[]) => args),
+  and: vi.fn((...args: unknown[]) => args),
   sql: Object.assign(
     (strings: TemplateStringsArray, ...values: unknown[]) => ({ strings, values }),
     { raw: (s: string) => s },
@@ -30,7 +30,7 @@ jest.mock('drizzle-orm', () => ({
 }));
 
 // Mock db/schema
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   paymentProviders: {
     id: 'id',
     slug: 'slug',
@@ -85,7 +85,7 @@ jest.mock('@/db/schema', () => ({
 }));
 
 // Mock next/server
-jest.mock('next/server', () => ({
+vi.mock('next/server', () => ({
   NextRequest: class {},
   NextResponse: {
     json: (data: unknown, init?: { status?: number }) => ({
@@ -96,22 +96,23 @@ jest.mock('next/server', () => ({
 }));
 
 // Mock logger
-jest.mock('@/lib/logger', () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
 // Mock Payrexx client
-jest.mock('@/lib/payments/payrexx-client', () => ({
-  createGateway: jest.fn().mockResolvedValue({
+vi.mock('@/lib/payments/payrexx-client', () => ({
+  createGateway: vi.fn().mockResolvedValue({
     id: 123456,
     link: 'https://mock.payrexx.com/pay/123456',
   }),
 }));
 
+import type { Mock, MockedFunction } from 'vitest';
 import {
   calculateFees,
   calculateSwissVAT,
@@ -128,15 +129,15 @@ import { SWISS_VAT_RATES } from '../tax-compliance';
 import { createGateway } from '@/lib/payments/payrexx-client';
 import { db } from '@/db';
 
-const mockCreateGateway = createGateway as jest.MockedFunction<typeof createGateway>;
+const mockCreateGateway = createGateway as MockedFunction<typeof createGateway>;
 
-// Get reference to mocked db (defined in jest.mock factory above)
+// Get reference to mocked db (defined in vi.mock factory above)
 const mockDb = db as unknown as {
-  select: jest.Mock;
-  insert: jest.Mock;
-  update: jest.Mock;
-  execute: jest.Mock;
-  transaction: jest.Mock;
+  select: Mock;
+  insert: Mock;
+  update: Mock;
+  execute: Mock;
+  transaction: Mock;
 };
 
 // Queue-based result system for Drizzle chain mocks
@@ -149,14 +150,14 @@ function queueDbResult(...results: unknown[]) {
 function setupSelectChain() {
   mockDb.select.mockImplementation(() => {
     const chain: Record<string, unknown> = {
-      from: jest.fn(),
-      where: jest.fn(),
-      innerJoin: jest.fn(),
-      leftJoin: jest.fn(),
+      from: vi.fn(),
+      where: vi.fn(),
+      innerJoin: vi.fn(),
+      leftJoin: vi.fn(),
     };
-    (chain.from as jest.Mock).mockImplementation(() => {
+    (chain.from as Mock).mockImplementation(() => {
       const fromChain: Record<string, unknown> = {
-        where: jest.fn().mockImplementation(() => {
+        where: vi.fn().mockImplementation(() => {
           const result = mockDbResolveQueue.shift() ?? [];
           return Promise.resolve(result);
         }),
@@ -174,11 +175,11 @@ function setupSelectChain() {
 function setupInsertChain() {
   mockDb.insert.mockImplementation(() => {
     const chain: Record<string, unknown> = {
-      values: jest.fn(),
+      values: vi.fn(),
     };
-    (chain.values as jest.Mock).mockImplementation(() => {
+    (chain.values as Mock).mockImplementation(() => {
       const valuesChain: Record<string, unknown> = {
-        returning: jest.fn().mockImplementation(() => {
+        returning: vi.fn().mockImplementation(() => {
           const result = mockDbResolveQueue.shift() ?? [];
           return Promise.resolve(result);
         }),
@@ -196,13 +197,13 @@ function setupInsertChain() {
 function setupUpdateChain() {
   mockDb.update.mockImplementation(() => {
     const chain: Record<string, unknown> = {
-      set: jest.fn(),
+      set: vi.fn(),
     };
-    (chain.set as jest.Mock).mockImplementation(() => {
+    (chain.set as Mock).mockImplementation(() => {
       const setChain: Record<string, unknown> = {
-        where: jest.fn(),
+        where: vi.fn(),
       };
-      (setChain.where as jest.Mock).mockImplementation(() => {
+      (setChain.where as Mock).mockImplementation(() => {
         mockDbResolveQueue.shift();
         return Promise.resolve();
       });

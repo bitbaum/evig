@@ -24,16 +24,17 @@
  *   - delegate to the logger singleton
  */
 
+import type { MockInstance } from 'vitest';
 import { logger, logDebug, logInfo, logWarn, logError } from '../logger';
 
-let consoleLog: jest.SpyInstance;
-let consoleWarn: jest.SpyInstance;
-let consoleError: jest.SpyInstance;
+let consoleLog: MockInstance;
+let consoleWarn: MockInstance;
+let consoleError: MockInstance;
 
 beforeEach(() => {
-  consoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
-  consoleWarn = jest.spyOn(console, 'warn').mockImplementation(() => {});
-  consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+  consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
+  consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 });
 
 afterEach(() => {

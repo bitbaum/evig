@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET /api/blog/submit (admin submission list)
  *
@@ -22,19 +22,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -43,20 +42,20 @@ jest.mock('@/lib/api/middleware', () => ({
 }));
 
 // Query chain: select().from().leftJoin().leftJoin().where().orderBy()
-const mockOrderBy = jest.fn();
-const mockQueryWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
-const mockLeftJoin2 = jest.fn().mockReturnValue({ where: mockQueryWhere });
-const mockLeftJoin1 = jest.fn().mockReturnValue({ leftJoin: mockLeftJoin2 });
-const mockFrom = jest.fn().mockReturnValue({ leftJoin: mockLeftJoin1 });
-const mockSelect = jest.fn().mockReturnValue({ from: mockFrom });
+const mockOrderBy = vi.fn();
+const mockQueryWhere = vi.fn().mockReturnValue({ orderBy: mockOrderBy });
+const mockLeftJoin2 = vi.fn().mockReturnValue({ where: mockQueryWhere });
+const mockLeftJoin1 = vi.fn().mockReturnValue({ leftJoin: mockLeftJoin2 });
+const mockFrom = vi.fn().mockReturnValue({ leftJoin: mockLeftJoin1 });
+const mockSelect = vi.fn().mockReturnValue({ from: mockFrom });
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockSelect.apply(null, args),
+    select: (...args: unknown[]) => mockSelect(...args),
   },
 }));
 
-jest.mock('@/db/schema', () => ({
+vi.mock('@/db/schema', () => ({
   blogSubmissions: {
     id: 'bs_id',
     submitterName: 'bs_submitterName',
@@ -83,23 +82,22 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name' },
 }));
 
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  desc: jest.fn().mockReturnValue({ __desc: true }),
+vi.mock('drizzle-orm', async () => ({
+  ...(await vi.importActual('drizzle-orm')),
+  eq: vi.fn().mockReturnValue({ __eq: true }),
+  desc: vi.fn().mockReturnValue({ __desc: true }),
 }));
 
-jest.mock('drizzle-orm/pg-core', () => ({
-  // Static (not jest.fn) so it survives jest.resetAllMocks() without re-setup
+vi.mock('drizzle-orm/pg-core', () => ({
+  // Static (not vi.fn) so it survives vi.resetAllMocks() without re-setup
   alias: (_table: unknown, name: string) => ({ id: `${name}_id`, name: `${name}_name` }),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -111,7 +109,8 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -154,7 +153,7 @@ function makeRequest(params: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockSelect.mockReturnValue({ from: mockFrom });
   mockFrom.mockReturnValue({ leftJoin: mockLeftJoin1 });
@@ -197,14 +196,14 @@ describe('GET /api/blog/submit — authenticated', () => {
 
   it('applies eq filter when status param is provided', async () => {
     await GET(makeRequest({ status: 'pending' }));
-    const { eq } = await import('drizzle-orm');
+    const { eq } = (await import('drizzle-orm')) as any;
     expect(eq).toHaveBeenCalledWith(expect.anything(), 'pending');
   });
 
   it('does not apply eq filter when status=all', async () => {
     await GET(makeRequest({ status: 'all' }));
-    const { eq } = await import('drizzle-orm');
-    const statusCalls = (eq as jest.Mock).mock.calls.filter((c) => c[1] === 'all');
+    const { eq } = (await import('drizzle-orm')) as any;
+    const statusCalls = (eq as Mock).mock.calls.filter((c) => c[1] === 'all');
     expect(statusCalls).toHaveLength(0);
   });
 

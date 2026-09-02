@@ -1,5 +1,5 @@
 // Mock Next.js server imports that aren't needed for schema-only tests
-jest.mock('next/server', () => ({
+vi.mock('next/server', () => ({
   NextRequest: class {},
   NextResponse: {
     json: (data: unknown, init?: { status?: number }) => ({
@@ -9,6 +9,7 @@ jest.mock('next/server', () => ({
   },
 }));
 
+import type { Mock } from 'vitest';
 import {
   validateBody,
   validateQuery,

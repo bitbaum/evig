@@ -61,10 +61,10 @@ function makeStubTranslator() {
   return fakeT as unknown as Parameters<typeof deriveIntakeHeroState>[2];
 }
 
-const onStatusFilter = jest.fn();
+const onStatusFilter = vi.fn();
 const t = makeStubTranslator();
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => vi.clearAllMocks());
 
 describe('deriveIntakeHeroState', () => {
   it('FAILED beats everything (blocked devices need a decision)', () => {

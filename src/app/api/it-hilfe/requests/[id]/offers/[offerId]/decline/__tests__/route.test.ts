@@ -1,28 +1,28 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for POST /api/it-hilfe/requests/[id]/offers/[offerId]/decline
  */
 
 // ── Auth mock ──────────────────────────────────────────────────────────────
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
 // ── DB mocks ───────────────────────────────────────────────────────────────
 
-const mockSelect = jest.fn();
-const mockFrom = jest.fn();
-const mockInnerJoin = jest.fn();
-const mockWhere = jest.fn();
-const mockUpdate = jest.fn();
-const mockSet = jest.fn();
-const mockUpdateWhere = jest.fn();
+const mockSelect = vi.fn();
+const mockFrom = vi.fn();
+const mockInnerJoin = vi.fn();
+const mockWhere = vi.fn();
+const mockUpdate = vi.fn();
+const mockSet = vi.fn();
+const mockUpdateWhere = vi.fn();
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => {
@@ -32,7 +32,7 @@ jest.mock('@/db', () => ({
   },
 }));
 
-jest.mock('@/db/schema/itHilfe', () => ({
+vi.mock('@/db/schema/itHilfe', () => ({
   itHilfeRequests: {
     id: 'ihr_id',
     requesterId: 'ihr_requesterId',
@@ -47,11 +47,11 @@ jest.mock('@/db/schema/itHilfe', () => ({
   },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }));
 
-jest.mock('drizzle-orm', () => ({
+vi.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
@@ -59,8 +59,7 @@ jest.mock('drizzle-orm', () => ({
   }),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -77,15 +76,15 @@ jest.mock('@/lib/api/helpers', () => {
   };
 });
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
-jest.mock('@/config/error-messages', () => ({
+vi.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Server error' },
 }));
 
-jest.mock('@/config/it-hilfe', () => ({
+vi.mock('@/config/it-hilfe', () => ({
   OFFER_STATUS: {
     PENDING: 'pending',
     ACCEPTED: 'accepted',
@@ -94,8 +93,8 @@ jest.mock('@/config/it-hilfe', () => ({
   },
 }));
 
-jest.mock('@/lib/it-hilfe/notifications', () => ({
-  notifyOfferDeclined: jest.fn(),
+vi.mock('@/lib/it-hilfe/notifications', () => ({
+  notifyOfferDeclined: vi.fn(),
 }));
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
@@ -115,7 +114,7 @@ const MOCK_SESSION = {
 
 // ── Imports (after mocks) ──────────────────────────────────────────────────
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { POST } from '../route';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -134,7 +133,7 @@ function makeRequest(id: string, offerId: string) {
 
 describe('POST /api/it-hilfe/requests/[id]/offers/[offerId]/decline', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUpdateWhere.mockResolvedValue(undefined);
     mockSet.mockReturnValue({ where: mockUpdateWhere });
   });
@@ -190,16 +189,16 @@ describe('POST /api/it-hilfe/requests/[id]/offers/[offerId]/decline', () => {
 
     // First select: request found, owned by user
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([{ requesterId: 'user-1', title: 'Fix laptop' }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([{ requesterId: 'user-1', title: 'Fix laptop' }]),
       }),
     });
 
     // Second select: offer not found
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([]),
         }),
       }),
     });
@@ -215,14 +214,14 @@ describe('POST /api/it-hilfe/requests/[id]/offers/[offerId]/decline', () => {
     mockAuth.mockResolvedValue(MOCK_SESSION);
 
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([{ requesterId: 'user-1', title: 'Fix laptop' }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([{ requesterId: 'user-1', title: 'Fix laptop' }]),
       }),
     });
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([
             {
               id: VALID_OFFER_UUID,
               helperId: 'helper-1',
@@ -246,14 +245,14 @@ describe('POST /api/it-hilfe/requests/[id]/offers/[offerId]/decline', () => {
     mockAuth.mockResolvedValue(MOCK_SESSION);
 
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([{ requesterId: 'user-1', title: 'Fix laptop' }]),
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockResolvedValue([{ requesterId: 'user-1', title: 'Fix laptop' }]),
       }),
     });
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([
             {
               id: VALID_OFFER_UUID,
               helperId: 'helper-1',

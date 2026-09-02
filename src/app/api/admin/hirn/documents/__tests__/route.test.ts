@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Tests for GET/DELETE /api/admin/hirn/documents
  *
@@ -22,19 +22,18 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn();
+const mockAuth = vi.fn();
 
-jest.mock('@/auth', () => ({
-  auth: (...args: unknown[]) => mockAuth.apply(null, args),
+vi.mock('@/auth', () => ({
+  auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
-jest.mock('@/lib/api/middleware', () => ({
+vi.mock('@/lib/api/middleware', async () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
     const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request) =>
       mockAuth().then((session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server');
           return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
         return (handler as (r: Request, s: unknown) => unknown)(req, session);
@@ -42,24 +41,23 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }));
 
-const mockListDocuments = jest.fn();
-const mockDeleteDocument = jest.fn();
-const mockGetIngestionStats = jest.fn();
+const mockListDocuments = vi.fn();
+const mockDeleteDocument = vi.fn();
+const mockGetIngestionStats = vi.fn();
 
-jest.mock('@/lib/hirn', () => ({
-  listDocuments: (...args: unknown[]) => mockListDocuments.apply(null, args),
-  deleteDocument: (...args: unknown[]) => mockDeleteDocument.apply(null, args),
-  getIngestionStats: (...args: unknown[]) => mockGetIngestionStats.apply(null, args),
+vi.mock('@/lib/hirn', () => ({
+  listDocuments: (...args: unknown[]) => mockListDocuments(...args),
+  deleteDocument: (...args: unknown[]) => mockDeleteDocument(...args),
+  getIngestionStats: (...args: unknown[]) => mockGetIngestionStats(...args),
 }));
 
-const mockIsSuperAdmin = jest.fn();
+const mockIsSuperAdmin = vi.fn();
 
-jest.mock('@/lib/permissions', () => ({
-  isSuperAdmin: (...args: unknown[]) => mockIsSuperAdmin.apply(null, args),
+vi.mock('@/lib/permissions', () => ({
+  isSuperAdmin: (...args: unknown[]) => mockIsSuperAdmin(...args),
 }));
 
-jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server');
+vi.mock('@/lib/api/helpers', async () => {
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -68,7 +66,7 @@ jest.mock('@/lib/api/helpers', () => {
       NextResponse.json({ success: false, error: msg }, { status: 403 }),
     apiBadRequest: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
-    parsePagination: jest.fn().mockReturnValue({ limit: 20, offset: 0 }),
+    parsePagination: vi.fn().mockReturnValue({ limit: 20, offset: 0 }),
   };
 });
 
@@ -76,7 +74,7 @@ jest.mock('@/lib/api/helpers', () => {
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { GET, DELETE } from '../route';
 
 // ---------------------------------------------------------------------------
@@ -112,15 +110,15 @@ function makeDeleteRequest(params: Record<string, string> = {}) {
   return new NextRequest(url.toString(), { method: 'DELETE' });
 }
 
-beforeEach(() => {
-  jest.resetAllMocks();
+beforeEach(async () => {
+  vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
   mockListDocuments.mockResolvedValue({ documents: MOCK_DOCUMENTS, total: 2 });
   mockDeleteDocument.mockResolvedValue(undefined);
   mockGetIngestionStats.mockResolvedValue({ totalDocuments: 5, totalChunks: 42 });
   mockIsSuperAdmin.mockReturnValue(true);
 
-  const helpers = require('@/lib/api/helpers');
+  const helpers = (await import('@/lib/api/helpers')) as any;
   helpers.parsePagination.mockReturnValue({ limit: 20, offset: 0 });
 });
 

@@ -23,66 +23,68 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn();
-const mockTxExecute = jest.fn();
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) };
-const mockDbTransaction = jest
+const mockDbExecute = vi.fn();
+const mockTxExecute = vi.fn();
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute(...args) };
+const mockDbTransaction = vi
   .fn()
   .mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
-jest.mock('@/db', () => ({
+vi.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute(...args),
+    transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
 }));
 
-jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' });
-  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
-  (sqlFn as unknown as Record<string, unknown>).join = jest
-    .fn()
-    .mockReturnValue({ __sql: 'joined' });
+vi.mock('drizzle-orm', async () => {
+  const sqlFn = vi.fn().mockReturnValue({ __sql: 'mocked' });
+  (sqlFn as unknown as Record<string, unknown>).raw = vi.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = vi.fn().mockReturnValue({ __sql: 'joined' });
   return {
-    ...jest.requireActual('drizzle-orm'),
+    ...(await vi.importActual('drizzle-orm')),
     sql: sqlFn,
-    getTableName: jest.fn().mockReturnValue('mock_table'),
+    getTableName: vi.fn().mockReturnValue('mock_table'),
   };
 });
 
-jest.mock('@/db/schema/misc', () => ({
+vi.mock('@/db/schema/misc', () => ({
   decisions: { id: 'decisions' },
   decisionVotes: { id: 'decisionVotes' },
+  decisionComments: { id: 'decisionComments' },
+  protocolActionLinks: { id: 'protocolActionLinks' },
+  tasks: { id: 'tasks' },
+  meetingProtocols: { id: 'meetingProtocols' },
 }));
 
-jest.mock('@/db/schema/auth', () => ({
+vi.mock('@/db/schema/auth', () => ({
   users: { id: 'users' },
 }));
 
-const mockResolveEligibleUserIds = jest.fn();
-const mockComputeTallies = jest.fn();
+const mockResolveEligibleUserIds = vi.fn();
+const mockComputeTallies = vi.fn();
 
-jest.mock('@/lib/services/decisions-voting', () => ({
-  resolveEligibleUserIds: (...args: unknown[]) => mockResolveEligibleUserIds.apply(null, args),
-  computeTallies: (...args: unknown[]) => mockComputeTallies.apply(null, args),
+vi.mock('@/lib/services/decisions-voting', () => ({
+  resolveEligibleUserIds: (...args: unknown[]) => mockResolveEligibleUserIds(...args),
+  computeTallies: (...args: unknown[]) => mockComputeTallies(...args),
 }));
 
 // fireNotification is fire-and-forget — execute the callback synchronously so
 // we can assert side effects without waiting on unresolved promises
-jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: jest.fn().mockResolvedValue(undefined),
-  createNotification: jest.fn().mockResolvedValue(undefined),
-  fireNotification: jest.fn().mockImplementation((fn: () => void) => {
+vi.mock('@/lib/services/notifications', () => ({
+  notifyUsers: vi.fn().mockResolvedValue(undefined),
+  createNotification: vi.fn().mockResolvedValue(undefined),
+  fireNotification: vi.fn().mockImplementation((fn: () => void) => {
     fn();
   }),
 }));
 
-jest.mock('@/lib/ai/decisions-narrative', () => ({
-  generateOutcomeNarrative: jest.fn().mockResolvedValue(null),
+vi.mock('@/lib/ai/decisions-narrative', () => ({
+  generateOutcomeNarrative: vi.fn().mockResolvedValue(null),
 }));
 
-jest.mock('@/lib/logger', () => ({
-  logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
+vi.mock('@/lib/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 // ---------------------------------------------------------------------------
@@ -123,7 +125,7 @@ function makeDecision(overrides: Partial<Record<string, unknown>> = {}) {
 const ACTOR = 'user-actor-1';
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   // Default: 5 eligible voters
   mockResolveEligibleUserIds.mockResolvedValue(['u1', 'u2', 'u3', 'u4', 'u5']);
   mockComputeTallies.mockReturnValue({ 'opt-a': { votes: 3, percentage: 100 } });
