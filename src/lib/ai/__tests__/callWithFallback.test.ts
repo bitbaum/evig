@@ -15,6 +15,14 @@
  *   - skips provider when API key is absent (no_key reason)
  *   - falls through to Ollama when Groq + OpenRouter both fail
  *   - returns null when all providers fail
+ *
+ *   ai-kit chain integration (the point of this migration — see providers.ts
+ *   header comment): the model id sent to each vendor comes from ai-kit's
+ *   `freeChain`, not a local hardcoded constant, so a retirement is fixed by
+ *   updating ai-kit once for the whole fleet rather than repinning this file.
+ *   - requests ai-kit's default free model id for Groq
+ *   - requests ai-kit's default free model id for OpenRouter (on fallback)
+ *   - honors an EVIG_GROQ_MODELS env override without a code change
  */
 
 // ---------------------------------------------------------------------------
@@ -249,6 +257,52 @@ describe('callWithFallback — falls through to Ollama', () => {
     expect(result!.provider).toBe('ollama');
     expect(result!.text).toBe('Ollama!');
     expect(result!.failedProviders).toHaveLength(2);
+  });
+});
+
+// ============================================================================
+// ai-kit chain integration — model id comes from ai-kit, not a local pin
+// ============================================================================
+
+describe('callWithFallback — ai-kit chain integration', () => {
+  it("requests ai-kit freeChain's default model id for Groq", async () => {
+    (global.fetch as Mock).mockResolvedValueOnce(okResponse('Groq-Antwort'));
+
+    await callWithFallback(opts);
+
+    const [, requestInit] = (global.fetch as Mock).mock.calls[0];
+    const body = JSON.parse(requestInit.body as string);
+    // Kept loose (only the vendor's own DEFAULT is asserted) so this doesn't
+    // itself become a second pin — see ai-kit's chain.ts for the full list.
+    expect(body.model).toBe('openai/gpt-oss-120b');
+  });
+
+  it("requests ai-kit freeChain's default model id for OpenRouter on fallback", async () => {
+    (global.fetch as Mock)
+      .mockResolvedValueOnce(errorResponse(401)) // Groq
+      .mockResolvedValueOnce(okResponse('OR-Antwort'));
+
+    await callWithFallback(opts);
+
+    const [, requestInit] = (global.fetch as Mock).mock.calls[1];
+    const body = JSON.parse(requestInit.body as string);
+    expect(body.model).toBe('nvidia/nemotron-3-super-120b-a12b:free');
+  });
+
+  it('honors an EVIG_GROQ_MODELS override without a code change', async () => {
+    process.env.EVIG_GROQ_MODELS = 'some-other-free-model';
+    __resetProviderCache();
+    try {
+      (global.fetch as Mock).mockResolvedValueOnce(okResponse('Groq-Antwort'));
+
+      await callWithFallback(opts);
+
+      const [, requestInit] = (global.fetch as Mock).mock.calls[0];
+      const body = JSON.parse(requestInit.body as string);
+      expect(body.model).toBe('some-other-free-model');
+    } finally {
+      delete process.env.EVIG_GROQ_MODELS;
+    }
   });
 });
 

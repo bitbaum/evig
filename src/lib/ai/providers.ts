@@ -15,6 +15,7 @@ import { eq, desc } from 'drizzle-orm';
 import { OLLAMA_URL, APP_URL } from '@/config/urls';
 import { ORG } from '@/config/org';
 import { recordAIToolsFailure, recordAIToolsSuccess } from './health';
+import { freeChain, usableChain, tryChain, ChainExhaustedError, type Link } from 'ai-kit';
 
 // =============================================================================
 // CONFIGURATION (SSOT - all AI provider settings in one place)
@@ -28,20 +29,21 @@ import { recordAIToolsFailure, recordAIToolsSuccess } from './health';
 // llama-3.x family, so that id died too, along with every OpenRouter llama-3
 // entry beside it. Four of the five ids here were dead simultaneously.
 //
-// Repinning is what this repo keeps doing and it is not what fixes it. What
-// fixes it is that dotfiles/scripts/ci/model-pin-audit.mjs now asks both
-// vendors DAILY whether these ids still exist, so the next retirement surfaces
-// within a day instead of on a user's screen. Every id below was verified
-// present in the live catalogue on 2026-08-27.
+// Repinning is what this repo kept doing and it did not fix the class of
+// problem. `callWithFallback` (the plain-text cascade below) no longer pins a
+// model at all: it builds its chain from ai-kit's `freeChain`, the fleet's
+// maintained, multi-model-per-vendor list, so a single retired id demotes to
+// the next model or vendor instead of taking the feature down. See
+// `callOpenAICompatText` / `callWithFallback`.
+//
+// The vision cascade (`callVisionWithFallback`, further down) is the one
+// exception — ai-kit's `freeChain` carries no vision-capable free model, so it
+// still pins GROQ_VISION_MODEL / OPENROUTER_VISION_MODEL by hand below.
+// dotfiles/scripts/ci/model-pin-audit.mjs asks both vendors DAILY whether
+// those two ids still exist, so a retirement surfaces within a day instead of
+// on a user's screen. Both verified present in the live catalogue 2026-08-27.
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'openai/gpt-oss-120b';
-// Fallback for large prompts. Same 131k context as the default above, which is
-// the whole Groq free lineup's window now — Groq's catalogue no longer has a
-// larger free model to escalate to, so this is a retry rather than an upgrade.
-const GROQ_LARGE_CONTEXT_MODEL = 'openai/gpt-oss-120b';
-
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_MODEL = 'nvidia/nemotron-3-super-120b-a12b:free';
 
 // Vision-capable models (multimodal). Groq's lineup lost vision except Qwen3
 // (verified: qwen/qwen3.6-27b accepts image_url, and it is still listed);
@@ -212,160 +214,44 @@ export interface CallOptions {
 // PROVIDER IMPLEMENTATIONS
 // =============================================================================
 
-async function callGroqWithModel(
-  model: string,
+/**
+ * One attempt at one ai-kit chain link (a vendor + a free model id). Thrown
+ * errors carry the same `reason` taxonomy the hand-rolled `callGroq`/
+ * `callOpenRouter` used to return inline, so `onLinkFailure` below can still
+ * build a `ProviderError` for `buildFailureMessage`.
+ */
+class ChainLinkError extends Error {
+  constructor(
+    readonly reason: ProviderError['reason'],
+    message: string,
+  ) {
+    super(message);
+    this.name = 'ChainLinkError';
+  }
+}
+
+async function callOpenAICompatText(
+  link: Link,
+  apiKey: string,
   opts: CallOptions,
-  cfg: ProviderRuntimeConfig,
-  signal: AbortSignal,
-): Promise<
-  { ok: true; text: string } | { ok: false; tooLarge: boolean; errorText: string; status: number }
-> {
-  const response = await fetch(GROQ_API_URL, {
-    method: 'POST',
-    headers: {
+): Promise<ProviderResult> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS);
+  try {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${cfg.groqApiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        { role: 'system', content: opts.systemPrompt },
-        { role: 'user', content: opts.userPrompt },
-      ],
-      temperature: opts.temperature ?? 0.3,
-      max_tokens: opts.maxTokens ?? 4096,
-    }),
-    signal,
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text().catch(() => '');
-    // Groq returns 413 or 429 with "Request too large" when the prompt exceeds the model's rate limit
-    const tooLarge =
-      response.status === 413 ||
-      (response.status === 429 && errorText.includes('Request too large'));
-    return { ok: false, tooLarge, errorText, status: response.status };
-  }
-
-  let result: Record<string, unknown>;
-  try {
-    result = await response.json();
-  } catch {
-    return { ok: false, tooLarge: false, errorText: 'Ungültige JSON-Antwort', status: 200 };
-  }
-
-  const text =
-    (result.choices as Array<{ message?: { content?: string } }>)?.[0]?.message?.content || '';
-  return { ok: true, text };
-}
-
-async function callGroq(
-  opts: CallOptions,
-  cfg: ProviderRuntimeConfig,
-): Promise<ProviderResult | ProviderError> {
-  if (!cfg.groqEnabled) {
-    return { provider: 'groq', reason: 'no_key', message: 'Groq ist deaktiviert' };
-  }
-
-  if (!cfg.groqApiKey) {
-    return { provider: 'groq', reason: 'no_key', message: 'GROQ_API_KEY nicht konfiguriert' };
-  }
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS);
-
-  try {
-    const primary = await callGroqWithModel(GROQ_MODEL, opts, cfg, controller.signal);
-
-    if (primary.ok) {
-      return { text: primary.text, model: `groq:${GROQ_MODEL}`, provider: 'groq' };
-    }
-
-    // Primary model hit token limit → retry with large-context model transparently
-    if (primary.tooLarge) {
-      logger.info('Groq primary model token limit hit, retrying with large-context model', {
-        primaryModel: GROQ_MODEL,
-        fallbackModel: GROQ_LARGE_CONTEXT_MODEL,
-      });
-      const fallback = await callGroqWithModel(
-        GROQ_LARGE_CONTEXT_MODEL,
-        opts,
-        cfg,
-        controller.signal,
-      );
-      if (fallback.ok) {
-        return { text: fallback.text, model: `groq:${GROQ_LARGE_CONTEXT_MODEL}`, provider: 'groq' };
-      }
-      return {
-        provider: 'groq',
-        reason: 'rate_limit',
-        message: `Anfrage zu gross für alle Groq-Modelle: ${fallback.errorText.substring(0, 200)}`,
-      };
-    }
-
-    if (primary.status === 401 || primary.status === 403) {
-      return {
-        provider: 'groq',
-        reason: 'auth',
-        message: `API-Schlüssel ungültig oder abgelaufen (${primary.status})`,
-      };
-    }
-    if (primary.status === 429) {
-      return { provider: 'groq', reason: 'rate_limit', message: 'Rate-Limit erreicht' };
-    }
-    return {
-      provider: 'groq',
-      reason: 'unknown',
-      message: `HTTP ${primary.status}: ${primary.errorText.substring(0, 200)}`,
+      Authorization: `Bearer ${apiKey}`,
     };
-  } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') {
-      return {
-        provider: 'groq',
-        reason: 'timeout',
-        message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s`,
-      };
+    if (link.provider.id === 'openrouter') {
+      headers['HTTP-Referer'] = APP_URL;
+      headers['X-Title'] = ORG.name;
     }
-    return {
-      provider: 'groq',
-      reason: 'network',
-      message: error instanceof Error ? error.message : 'Netzwerkfehler',
-    };
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
 
-async function callOpenRouter(
-  opts: CallOptions,
-  cfg: ProviderRuntimeConfig,
-): Promise<ProviderResult | ProviderError> {
-  if (!cfg.openRouterEnabled) {
-    return { provider: 'openrouter', reason: 'no_key', message: 'OpenRouter ist deaktiviert' };
-  }
-
-  if (!cfg.openRouterApiKey) {
-    return {
-      provider: 'openrouter',
-      reason: 'no_key',
-      message: 'OPENROUTER_API_KEY nicht konfiguriert',
-    };
-  }
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS);
-
-  try {
-    const response = await fetch(OPENROUTER_API_URL, {
+    const response = await fetch(`${link.provider.baseUrl}/chat/completions`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cfg.openRouterApiKey}`,
-        'HTTP-Referer': APP_URL,
-        'X-Title': ORG.name,
-      },
+      headers,
       body: JSON.stringify({
-        model: OPENROUTER_MODEL,
+        model: link.model,
         messages: [
           { role: 'system', content: opts.systemPrompt },
           { role: 'user', content: opts.userPrompt },
@@ -379,57 +265,54 @@ async function callOpenRouter(
     if (!response.ok) {
       const errorText = await response.text().catch(() => '');
       if (response.status === 401 || response.status === 403) {
-        return {
-          provider: 'openrouter',
-          reason: 'auth',
-          message: `API-Schlüssel ungültig (${response.status})`,
-        };
+        throw new ChainLinkError(
+          'auth',
+          `API-Schlüssel ungültig oder abgelaufen (${response.status})`, // i18n-ok
+        );
       }
-      if (response.status === 402) {
-        return {
-          provider: 'openrouter',
-          reason: 'auth',
-          message:
-            'OpenRouter: Datenschutz-Einstellungen prüfen oder Guthaben kaufen (openrouter.ai/settings)',
-        };
+      // 402 is OpenRouter-specific: a privacy setting or exhausted credit, not
+      // a bad key — surfaced under 'auth' so buildFailureMessage still points
+      // the user at the admin rather than a generic retry.
+      if (response.status === 402 && link.provider.id === 'openrouter') {
+        throw new ChainLinkError(
+          'auth',
+          'OpenRouter: Datenschutz-Einstellungen prüfen oder Guthaben kaufen (openrouter.ai/settings)',
+        );
       }
       if (response.status === 429) {
-        return { provider: 'openrouter', reason: 'rate_limit', message: 'Rate-Limit erreicht' };
+        throw new ChainLinkError('rate_limit', 'Rate-Limit erreicht');
       }
-      return {
-        provider: 'openrouter',
-        reason: 'unknown',
-        message: `HTTP ${response.status}: ${errorText.substring(0, 200)}`,
-      };
+      throw new ChainLinkError(
+        'unknown',
+        `HTTP ${response.status}: ${errorText.substring(0, 200)}`,
+      );
     }
 
     let result: Record<string, unknown>;
     try {
       result = await response.json();
     } catch {
-      return {
-        provider: 'openrouter',
-        reason: 'parse',
-        message: 'Ungültige JSON-Antwort von OpenRouter',
-      };
+      throw new ChainLinkError('parse', 'Ungültige JSON-Antwort');
     }
 
     const text =
       (result.choices as Array<{ message?: { content?: string } }>)?.[0]?.message?.content || '';
-    return { text, model: `openrouter:${OPENROUTER_MODEL}`, provider: 'openrouter' };
-  } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') {
-      return {
-        provider: 'openrouter',
-        reason: 'timeout',
-        message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s`,
-      };
-    }
+    if (!text) throw new ChainLinkError('parse', 'Leere Antwort');
+
     return {
-      provider: 'openrouter',
-      reason: 'network',
-      message: error instanceof Error ? error.message : 'Netzwerkfehler',
+      text,
+      model: `${link.provider.id}:${link.model}`,
+      provider: link.provider.id as ProviderName,
     };
+  } catch (error) {
+    if (error instanceof ChainLinkError) throw error;
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new ChainLinkError(
+        'timeout',
+        `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s`,
+      );
+    }
+    throw new ChainLinkError('network', error instanceof Error ? error.message : 'Netzwerkfehler');
   } finally {
     clearTimeout(timeoutId);
   }
@@ -501,45 +384,127 @@ function isError(result: ProviderResult | ProviderError): result is ProviderErro
 // PUBLIC API
 // =============================================================================
 
+/** ai-kit env-var prefix for this app's text chain (see ai-kit's `withEnvPrefix`). */
+const AI_KIT_CHAIN_PREFIX = 'EVIG';
+
 /**
- * Call AI providers in cascade: Groq → OpenRouter → Ollama.
+ * An `Env` for `usableChain` that reflects the DB-resolved config, not raw
+ * `process.env` — a provider disabled or re-keyed in `/admin/hirn` must drop
+ * out of (or change) the chain without a redeploy, same as before this
+ * migration. Everything else (e.g. an `EVIG_GROQ_MODELS` override) still
+ * comes through from `process.env`.
+ */
+function buildChainEnv(cfg: ProviderRuntimeConfig): Record<string, string | undefined> {
+  return {
+    ...process.env,
+    GROQ_API_KEY: cfg.groqEnabled ? cfg.groqApiKey || undefined : undefined,
+    OPENROUTER_API_KEY: cfg.openRouterEnabled ? cfg.openRouterApiKey || undefined : undefined,
+  };
+}
+
+/**
+ * ONE link per vendor. `freeChain` lists several free models per provider,
+ * but a second model at the SAME vendor draws on the same org-wide daily
+ * budget — so trying it first just spends latency on a near-certain repeat
+ * failure. Matches the pattern already in surf-your-life's `lib/domain/llm.ts`
+ * and aoz-housing's `src/lib/ai/provider.ts`.
+ */
+function oneLinkPerVendor(links: Link[]): Link[] {
+  const seen = new Set<string>();
+  return links.filter((link) => {
+    if (seen.has(link.provider.id)) return false;
+    seen.add(link.provider.id);
+    return true;
+  });
+}
+
+/**
+ * Call AI providers in cascade: Groq → OpenRouter (via ai-kit's maintained
+ * `freeChain`) → Ollama (local, not part of ai-kit — see module header).
  * Returns the first successful response with info about which providers failed.
  */
 export async function callWithFallback(opts: CallOptions): Promise<CallResult | null> {
   const cfg = await loadProviderRuntimeConfig();
-
-  const providers: Array<
-    (o: CallOptions, c: ProviderRuntimeConfig) => Promise<ProviderResult | ProviderError>
-  > = [callGroq, callOpenRouter, callOllama];
+  const chainEnv = buildChainEnv(cfg);
+  const chain = oneLinkPerVendor(usableChain(freeChain(AI_KIT_CHAIN_PREFIX), chainEnv));
 
   const failedProviders: ProviderError[] = [];
 
-  for (const provider of providers) {
-    const result = await provider(opts, cfg);
+  // Providers `usableChain` silently drops (disabled, or no key) still need to
+  // show up in the failure list, same as the old callGroq/callOpenRouter did.
+  if (!cfg.groqEnabled) {
+    failedProviders.push({ provider: 'groq', reason: 'no_key', message: 'Groq ist deaktiviert' });
+  } else if (!cfg.groqApiKey) {
+    failedProviders.push({
+      provider: 'groq',
+      reason: 'no_key',
+      message: 'GROQ_API_KEY nicht konfiguriert',
+    });
+  }
+  if (!cfg.openRouterEnabled) {
+    failedProviders.push({
+      provider: 'openrouter',
+      reason: 'no_key',
+      message: 'OpenRouter ist deaktiviert',
+    });
+  } else if (!cfg.openRouterApiKey) {
+    failedProviders.push({
+      provider: 'openrouter',
+      reason: 'no_key',
+      message: 'OPENROUTER_API_KEY nicht konfiguriert',
+    });
+  }
 
-    if (isError(result)) {
-      failedProviders.push(result);
-      logger.warn(`AI provider ${result.provider} failed`, {
-        reason: result.reason,
-        message: result.message,
+  if (chain.length > 0) {
+    try {
+      const result = await tryChain(chain, {
+        attempt: (link) => callOpenAICompatText(link, chainEnv[link.provider.keyEnv] ?? '', opts),
+        onLinkFailure: (link, error) => {
+          const reason = error instanceof ChainLinkError ? error.reason : 'unknown';
+          const message = error instanceof Error ? error.message : String(error);
+          failedProviders.push({ provider: link.provider.id as ProviderName, reason, message });
+          logger.warn(`AI provider ${link.provider.id} failed`, {
+            model: link.model,
+            reason,
+            message,
+          });
+        },
       });
-      continue;
-    }
 
+      if (failedProviders.length > 0) {
+        logger.info(`AI fallback to ${result.provider}`, {
+          failedProviders: failedProviders.map((p) => `${p.provider}:${p.reason}`),
+        });
+      }
+      recordAIToolsSuccess();
+      return { text: result.text, model: result.model, provider: result.provider, failedProviders };
+    } catch (error) {
+      if (!(error instanceof ChainExhaustedError)) throw error;
+      // Every ai-kit link failed (already recorded via onLinkFailure above) —
+      // fall through to Ollama below rather than giving up.
+    }
+  }
+
+  const ollamaResult = await callOllama(opts, cfg);
+  if (!isError(ollamaResult)) {
     if (failedProviders.length > 0) {
-      logger.info(`AI fallback to ${result.provider}`, {
+      logger.info(`AI fallback to ${ollamaResult.provider}`, {
         failedProviders: failedProviders.map((p) => `${p.provider}:${p.reason}`),
       });
     }
-
     recordAIToolsSuccess();
     return {
-      text: result.text,
-      model: result.model,
-      provider: result.provider,
+      text: ollamaResult.text,
+      model: ollamaResult.model,
+      provider: ollamaResult.provider,
       failedProviders,
     };
   }
+  failedProviders.push(ollamaResult);
+  logger.warn(`AI provider ${ollamaResult.provider} failed`, {
+    reason: ollamaResult.reason,
+    message: ollamaResult.message,
+  });
 
   logger.error('All AI providers failed', {
     failures: failedProviders.map((p) => ({
