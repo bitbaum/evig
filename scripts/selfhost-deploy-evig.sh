@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Deploy RevampIT to revampit.orangecat.ch (Hetzner /opt/revampit/app).
+# Deploy evig to evig.orangecat.ch (Hetzner /opt/evig/app).
 set -euo pipefail
 
 BOX="${BOX:-ubuntu@167.233.22.31}"
-NAME=revampit
+NAME=evig
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REMOTE_BASE="/opt/$NAME"
 REMOTE_APP="$REMOTE_BASE/app"
@@ -176,4 +176,4 @@ REMOTE
 
 echo "RESULT $NAME@$RELEASE_SHA: $result"
 
-echo "Done: https://revampit.orangecat.ch/"
+echo "Done: https://evig.orangecat.ch/"
