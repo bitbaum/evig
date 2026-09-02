@@ -29,3 +29,10 @@ yarn.lock
 # is where it is most opinionated and least useful, and it would bury the real
 # diff. Remove this line when you want docs formatted too.
 *.md
+
+# Python virtualenvs (e.g. services/transcription/.venv) are local-only: present
+# on a dev box, absent in CI. Walking one makes `npm run verify` fail locally on
+# vendored site-packages while CI stays green — exactly the local/CI split the
+# verify contract exists to prevent.
+.venv
+**/.venv

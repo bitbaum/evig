@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-# Runs as root so it can read the root-owned /opt/revampit/app/.env.
-ExecStart=/opt/revampit/ops/backup-db-to-r2.sh
+# Runs as root so it can read the root-owned /opt/evig/app/.env.
+ExecStart=/opt/evig/ops/backup-db-to-r2.sh
 # A backup must never wedge the box; cap the run.
 TimeoutStartSec=900
