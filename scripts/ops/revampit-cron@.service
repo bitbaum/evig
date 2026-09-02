@@ -6,6 +6,6 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 # %i is the endpoint under /api/cron/ (e.g. close-decisions). Runs as root so it
-# can read CRON_SECRET from the root-owned /opt/revampit/app/.env.
-ExecStart=/opt/revampit/ops/run-cron.sh %i
+# can read CRON_SECRET from the root-owned /opt/evig/app/.env.
+ExecStart=/opt/evig/ops/run-cron.sh %i
 TimeoutStartSec=180

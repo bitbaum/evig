@@ -8,7 +8,7 @@
 set -euo pipefail
 
 ENDPOINT="${1:?usage: run-cron.sh <endpoint>}"
-APP_ENV="${APP_ENV:-/opt/revampit/app/.env}"
+APP_ENV="${APP_ENV:-/opt/evig/app/.env}"
 PORT="${PORT:-4004}"
 
 # CRON_SECRET (if set) authenticates the call as `Authorization: Bearer <secret>`;

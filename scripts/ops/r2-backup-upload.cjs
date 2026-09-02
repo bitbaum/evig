@@ -6,14 +6,14 @@
  *
  * SDK resolution order (first that loads wins) — the backup must not depend on
  * the app's redeployable node_modules:
- *   1. /opt/revampit/ops/node_modules  (pinned, installed once — primary)
+ *   1. /opt/evig/ops/node_modules  (pinned, installed once — primary)
  *   2. $APP_DIR/node_modules           (the live app — fallback)
  *
  * Usage:  node r2-backup-upload.cjs <localFile> <objectKey>
  * Env:    S3_ENDPOINT, S3_REGION, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY
  *         BACKUP_BUCKET  (default: revampit-backups)
  *         RETENTION_DAYS (default: 30)
- *         APP_DIR        (default: /opt/revampit/app)
+ *         APP_DIR        (default: /opt/evig/app)
  *         SDK_DIR        (optional explicit @aws-sdk/client-s3 path)
  */
 const fs = require('fs');
@@ -21,8 +21,8 @@ const fs = require('fs');
 function loadSdk() {
   const candidates = [
     process.env.SDK_DIR,
-    '/opt/revampit/ops/node_modules/@aws-sdk/client-s3',
-    `${process.env.APP_DIR || '/opt/revampit/app'}/node_modules/@aws-sdk/client-s3`,
+    '/opt/evig/ops/node_modules/@aws-sdk/client-s3',
+    `${process.env.APP_DIR || '/opt/evig/app'}/node_modules/@aws-sdk/client-s3`,
   ].filter(Boolean);
   for (const p of candidates) {
     try {

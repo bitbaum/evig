@@ -4,15 +4,15 @@
 # the local uploads dir, then push both to the PRIVATE R2 bucket
 # `revampit-backups`. Retention is enforced in the uploader (RETENTION_DAYS).
 #
-# Installed at /opt/revampit/ops/ and run by the revampit-backup.timer (root,
+# Installed at /opt/evig/ops/ and run by the revampit-backup.timer (root,
 # so it can read the root-owned app/.env). Source of truth lives in the repo at
 # scripts/ops/ — re-run the install block in scripts/ops/README.md to update.
 set -euo pipefail
 
-APP_DIR="${APP_DIR:-/opt/revampit/app}"
+APP_DIR="${APP_DIR:-/opt/evig/app}"
 OPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE="$APP_DIR/.env"
-UPLOADS_DIR="${UPLOADS_DIR:-/opt/revampit/uploads}"
+UPLOADS_DIR="${UPLOADS_DIR:-/opt/evig/uploads}"
 
 [ -r "$ENV_FILE" ] || { echo "ERROR: cannot read $ENV_FILE (run as root)"; exit 1; }
 
@@ -28,7 +28,7 @@ export BACKUP_BUCKET="${BACKUP_BUCKET:-revampit-backups}"
 export RETENTION_DAYS="${RETENTION_DAYS:-30}"
 # Prefer the backup's OWN pinned SDK (installed once in ops/), independent of
 # app redeploys; the uploader falls back to the app's copy if this is absent.
-export SDK_DIR="${SDK_DIR:-/opt/revampit/ops/node_modules/@aws-sdk/client-s3}"
+export SDK_DIR="${SDK_DIR:-/opt/evig/ops/node_modules/@aws-sdk/client-s3}"
 
 [ -n "$DATABASE_URL" ]  || { echo "ERROR: DATABASE_URL empty in $ENV_FILE"; exit 1; }
 [ -n "$S3_ENDPOINT" ]   || { echo "ERROR: S3_ENDPOINT empty in $ENV_FILE"; exit 1; }
