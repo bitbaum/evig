@@ -10,7 +10,7 @@
 > GitHub Actions → rsync → systemd, with nightly backups to Cloudflare R2. The
 > Frauenfeld / Datacenter Thurgau plan below was the original target and did not
 > ship as written; treat it as historical context, not the current runbook. For the
-> current flow see `scripts/selfhost-deploy-revampit.sh`, `scripts/ops/README.md`,
+> current flow see `scripts/selfhost-deploy-evig.sh`, `scripts/ops/README.md`,
 > and `docs/DISASTER_RECOVERY.md`.
 
 ---
