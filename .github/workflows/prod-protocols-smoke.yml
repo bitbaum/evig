@@ -17,7 +17,7 @@ on:
     inputs:
       base_url:
         description: Target deployment
-        default: https://revampit.orangecat.ch
+        default: https://evig.orangecat.ch
         required: true
       variant:
         description: Which audio sizes to test

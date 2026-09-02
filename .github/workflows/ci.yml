@@ -44,7 +44,7 @@ jobs:
           # Build-time placeholders so strict env validation doesn't fail during CI compile.
           AUTH_SECRET: ci-build-placeholder-secret-32chars
           DB_HOST: localhost
-          DB_NAME: revampit_ci
+          DB_NAME: evig_ci
           DB_USER: ci
           DB_PASSWORD: ci
 
@@ -54,7 +54,7 @@ jobs:
     name: Auth Smoke Test
     runs-on: ubuntu-latest
     # Deliberately NO `needs:`. This job tests the ALREADY-DEPLOYED production
-    # site (PLAYWRIGHT_BASE_URL defaults to https://revampit.orangecat.ch); it
+    # site (PLAYWRIGHT_BASE_URL defaults to https://evig.orangecat.ch); it
     # never builds this branch and reads nothing `quality` produced. Waiting on
     # `quality` (429s) was ordering, not dependency — and after #303 unblocked
     # the e2e job, this pair became the new critical path: quality 429s →
@@ -90,7 +90,7 @@ jobs:
           fi
           export AUTH_TEST_EMAIL="$EMAIL"
           export AUTH_TEST_PASSWORD="$PASSWORD"
-          PLAYWRIGHT_BASE_URL="${PLAYWRIGHT_BASE_URL:-https://revampit.orangecat.ch}" \
+          PLAYWRIGHT_BASE_URL="${PLAYWRIGHT_BASE_URL:-https://evig.orangecat.ch}" \
             npx playwright test tests/e2e/auth-smoke.spec.ts --project=chromium --reporter=line
 
   # Prod health gate: full dual-persona route inventory (186 routes) when passwords set.
@@ -138,7 +138,7 @@ jobs:
         image: pgvector/pgvector:pg17
         env:
           POSTGRES_PASSWORD: ci
-          POSTGRES_DB: revampit_drift
+          POSTGRES_DB: evig_drift
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 10s
@@ -156,7 +156,7 @@ jobs:
           PGPORT: 5432
           PGUSER: postgres
           PGPASSWORD: ci
-          PGDATABASE: revampit_drift
+          PGDATABASE: evig_drift
         run: bash scripts/db/apply-migrations-ci.sh
 
   e2e-local:
@@ -179,7 +179,7 @@ jobs:
         image: pgvector/pgvector:pg17
         env:
           POSTGRES_PASSWORD: ci
-          POSTGRES_DB: revampit_e2e
+          POSTGRES_DB: evig_e2e
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 10s
@@ -194,7 +194,7 @@ jobs:
       PLAYWRIGHT_BASE_URL: http://localhost:3001
       DB_HOST: localhost
       DB_PORT: 5432
-      DB_NAME: revampit_e2e
+      DB_NAME: evig_e2e
       DB_USER: postgres
       DB_PASSWORD: ci
       DB_SSL: false
@@ -202,14 +202,14 @@ jobs:
       PGPORT: 5432
       PGUSER: postgres
       PGPASSWORD: ci
-      PGDATABASE: revampit_e2e
-      AUTH_TEST_EMAIL: e2e-admin@revampit.test
+      PGDATABASE: evig_e2e
+      AUTH_TEST_EMAIL: e2e-admin@evig.test
       AUTH_TEST_PASSWORD: E2EAdmin123!
-      AUTH_TEST_ADMIN_EMAIL: e2e-admin@revampit.test
+      AUTH_TEST_ADMIN_EMAIL: e2e-admin@evig.test
       AUTH_TEST_ADMIN_PASSWORD: E2EAdmin123!
-      AUTH_TEST_SECOND_ADMIN_EMAIL: e2e-admin2@revampit.test
+      AUTH_TEST_SECOND_ADMIN_EMAIL: e2e-admin2@evig.test
       AUTH_TEST_SECOND_ADMIN_PASSWORD: E2EAdmin123!
-      AUTH_TEST_USER_EMAIL: e2e-user@revampit.test
+      AUTH_TEST_USER_EMAIL: e2e-user@evig.test
       AUTH_TEST_USER_PASSWORD: E2EUser123!
     steps:
       - name: Checkout code
@@ -238,14 +238,14 @@ jobs:
 
       - name: Start app
         run: |
-          npm run start -- -p 3001 > revampit-e2e.log 2>&1 &
+          npm run start -- -p 3001 > evig-e2e.log 2>&1 &
           for i in {1..90}; do
             if curl -fsS http://localhost:3001/api/health >/dev/null; then
               exit 0
             fi
             sleep 2
           done
-          cat revampit-e2e.log
+          cat evig-e2e.log
           exit 1
 
       - name: Run Playwright E2E journeys
@@ -269,7 +269,7 @@ jobs:
           path: |
             playwright-report/
             test-results/
-            revampit-e2e.log
+            evig-e2e.log
           if-no-files-found: ignore
 
   # Unit tests. This job ran with `continue-on-error: true` from the day it was

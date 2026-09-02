@@ -23,7 +23,7 @@ GitHub Actions  (.github/workflows/deploy-selfhost.yml)
    │  npm ci → npm run lint → npm run typecheck
    │  write .env.selfhost.local (from SELFHOST_ENV secret)
    │  set up SSH (from HETZNER_SSH_PRIVATE_KEY secret)
-   │  bash scripts/selfhost-deploy-revampit.sh
+   │  bash scripts/selfhost-deploy-evig.sh
    ▼
 Build standalone output in the runner
    │
@@ -66,14 +66,14 @@ Any push to `main` starts the **"Deploy production app"** workflow
    (`chmod 600`).
 7. **Setup SSH** from the `HETZNER_SSH_PRIVATE_KEY` repo secret, and add the
    Hetzner host to `known_hosts`.
-8. **Run `bash scripts/selfhost-deploy-revampit.sh`** — the actual deploy.
+8. **Run `bash scripts/selfhost-deploy-evig.sh`** — the actual deploy.
 
 If either required secret is missing, the workflow logs a notice and exits
 cleanly without deploying (see Troubleshooting).
 
 ### What the deploy script does
 
-`scripts/selfhost-deploy-revampit.sh`:
+`scripts/selfhost-deploy-evig.sh`:
 
 1. **Builds the Next.js standalone output** locally in the runner.
 2. **Applies pending DB migrations to PROD first.** Any
@@ -143,7 +143,7 @@ you have a valid `.env.selfhost.local` (gitignored) plus SSH access to the box:
 npm run deploy:selfhost
 ```
 
-This runs the same `scripts/selfhost-deploy-revampit.sh` locally: build →
+This runs the same `scripts/selfhost-deploy-evig.sh` locally: build →
 migrate → rsync → restart → health gate → rollback on failure. Prefer pushing to
 `main` whenever possible so lint/typecheck and concurrency control still apply.
 
@@ -204,7 +204,7 @@ code didn't expect.
 ## Related
 
 - Workflow: `.github/workflows/deploy-selfhost.yml`
-- Deploy script: `scripts/selfhost-deploy-revampit.sh`
+- Deploy script: `scripts/selfhost-deploy-evig.sh`
 - DB / prod environment notes: project `CLAUDE.md` → "Database Configuration"
 - GitHub secrets reference: `docs/guides/github-vercel-setup.md` (legacy filename;
   see note at its top)

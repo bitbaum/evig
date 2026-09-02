@@ -61,7 +61,7 @@ Drizzle Kit itself remains installed (`drizzle-kit` in devDependencies) — it's
 
 5. **Apply to production — automatic on deploy.** Production runs a self-hosted
    Postgres 17 on the Hetzner box (`DATABASE_URL=postgresql://…@localhost:5432/revampit`).
-   The deploy (`scripts/selfhost-deploy-revampit.sh`) applies any unrecorded
+   The deploy (`scripts/selfhost-deploy-evig.sh`) applies any unrecorded
    `scripts/db/migrations/*.sql` to the prod DB **before** activating the new
    release — each migration runs in its own transaction with `ON_ERROR_STOP`, and a
    failed migration aborts the deploy. So in the normal case you just push; the

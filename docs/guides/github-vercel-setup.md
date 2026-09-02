@@ -68,4 +68,4 @@ in `deployment.md`.
 
 - Current deploy guide: `deployment.md`
 - Workflow: `.github/workflows/deploy-selfhost.yml`
-- Deploy script: `scripts/selfhost-deploy-revampit.sh`
+- Deploy script: `scripts/selfhost-deploy-evig.sh`

@@ -11,7 +11,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-BASE_URL="${PLAYWRIGHT_BASE_URL:-https://revampit.orangecat.ch}"
+BASE_URL="${PLAYWRIGHT_BASE_URL:-https://evig.orangecat.ch}"
 
 if [ -z "${AUTH_TEST_USER_PASSWORD:-}" ] || [ -z "${AUTH_TEST_ADMIN_PASSWORD:-}" ]; then
   echo "AUTH_TEST_USER_PASSWORD and AUTH_TEST_ADMIN_PASSWORD not set — skipping inventory smoke."

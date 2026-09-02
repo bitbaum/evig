@@ -1,6 +1,6 @@
 name: Deploy production app
 
-# Push to main → build + rsync to production app revampit.orangecat.ch.
+# Push to main → build + rsync to production app evig.orangecat.ch.
 # One-time setup (Settings → Secrets → Actions):
 #   HETZNER_SSH_PRIVATE_KEY   — private key for ubuntu@167.233.22.31
 #   SELFHOST_ENV                — full contents of .env.selfhost.local (multiline OK)
@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: revampit.orangecat.ch
+    name: evig.orangecat.ch
     runs-on: ubuntu-latest
     timeout-minutes: 45
     outputs:
@@ -85,7 +85,7 @@ jobs:
           # warm (the .next/cache step above), so the gate costs little.
           AUTH_SECRET: ci-build-placeholder-secret-32chars
           DB_HOST: localhost
-          DB_NAME: revampit_ci
+          DB_NAME: evig_ci
           DB_USER: ci
           DB_PASSWORD: ci
 
@@ -105,7 +105,7 @@ jobs:
 
       - name: Deploy
         if: steps.secrets.outputs.configured == 'true'
-        run: bash scripts/selfhost-deploy-revampit.sh
+        run: bash scripts/selfhost-deploy-evig.sh
 
       - name: Mark deployed
         id: mark-deployed
