@@ -102,7 +102,7 @@
     "@auth/pg-adapter": "^1.11.3",
     "@aws-sdk/client-s3": "^3.1123.0",
     "@fleet/ai-forms": "github:bitbaum/ai-forms#v0.1.2",
-    "@sentry/nextjs": "^10.72.0",
+    "@sentry/nextjs": "^10.73.0",
     "@tiptap/extension-link": "^3.30.6",
     "@tiptap/extension-table": "^3.30.6",
     "@tiptap/pm": "^3.30.6",
