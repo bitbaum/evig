@@ -13,7 +13,7 @@
  * Deliberately in-process — see `../hirn/health.ts` for why.
  */
 
-import { createHealthTracker } from 'ai-kit';
+import { createHealthTracker } from '@bitbaum/ai-kit';
 
 const tracker = createHealthTracker({ downAfter: 3 });
 

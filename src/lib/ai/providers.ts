@@ -15,7 +15,7 @@ import { eq, desc } from 'drizzle-orm';
 import { OLLAMA_URL, APP_URL } from '@/config/urls';
 import { ORG } from '@/config/org';
 import { recordAIToolsFailure, recordAIToolsSuccess } from './health';
-import { freeChain, usableChain, tryChain, ChainExhaustedError, type Link } from 'ai-kit';
+import { freeChain, usableChain, tryChain, ChainExhaustedError, type Link } from '@bitbaum/ai-kit';
 
 // =============================================================================
 // CONFIGURATION (SSOT - all AI provider settings in one place)
