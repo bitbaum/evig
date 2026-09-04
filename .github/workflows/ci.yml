@@ -270,7 +270,7 @@ jobs:
 
       - name: Start app
         run: |
-          pnpm run start -- -p 3001 > evig-e2e.log 2>&1 &
+          pnpm run start -p 3001 > evig-e2e.log 2>&1 &
           for i in {1..90}; do
             if curl -fsS http://localhost:3001/api/health >/dev/null; then
               exit 0
@@ -281,7 +281,7 @@ jobs:
           exit 1
 
       - name: Run Playwright E2E journeys
-        run: pnpm run test:e2e:journeys -- --project=chromium --reporter=line
+        run: pnpm run test:e2e:journeys --project=chromium --reporter=line
 
       # Specs that are not named *journey and therefore fell outside the glob
       # above — so nothing ran them, anywhere, ever. Run by name, not by
@@ -291,7 +291,7 @@ jobs:
       #   notification-hrefs 21 assertions
       #   user-admin-flows   16 assertions
       - name: Run Playwright E2E guards
-        run: pnpm run test:e2e:guards -- --project=chromium --reporter=line
+        run: pnpm run test:e2e:guards --project=chromium --reporter=line
 
       - name: Upload E2E artifacts
         if: always()
