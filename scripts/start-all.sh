@@ -167,7 +167,7 @@ else
 
     # Start Next.js
     print_status "Starting Next.js on port $NEXTJS_PORT..."
-    WATCHPACK_POLLING=1 npm run dev &
+    WATCHPACK_POLLING=1 pnpm run dev &
     NEXTJS_PID=$!
     echo $NEXTJS_PID > "$PROJECT_DIR/.nextjs.pid"
 

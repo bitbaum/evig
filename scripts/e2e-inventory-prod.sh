@@ -40,7 +40,7 @@ export AUTH_TEST_USER_EMAIL="${AUTH_TEST_USER_EMAIL:?set AUTH_TEST_USER_EMAIL to
 export AUTH_TEST_ADMIN_EMAIL="${AUTH_TEST_ADMIN_EMAIL:-georgy.butaev@revamp-it.ch}"
 
 echo "=== dual-persona inventory smoke → ${BASE_URL} ==="
-npx playwright test tests/e2e/feature-inventory.spec.ts --project=chromium --reporter=line
+pnpm exec playwright test tests/e2e/feature-inventory.spec.ts --project=chromium --reporter=line
 
 # The MUTATING journey specs (it-hilfe, marketplace checkout, workshops,
 # service appointments, timecards, intake, tasks, protocols, decisions, cms,

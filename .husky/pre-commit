@@ -3,4 +3,4 @@
 # staged files only. Typecheck is intentionally NOT here — it's slow and
 # CI catches it. To bypass in an emergency: `git commit --no-verify`.
 
-npx lint-staged
+pnpm exec lint-staged

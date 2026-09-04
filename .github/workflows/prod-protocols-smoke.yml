@@ -44,17 +44,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: '24'
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Generate speech fixtures (espeak-ng + ffmpeg)
         id: fixtures
@@ -88,7 +96,7 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}
           PROTOCOLS_SMOKE_AUDIO: ${{ steps.fixtures.outputs.files }}
-        run: npx playwright test tests/e2e/prod-protocols-smoke.spec.ts --project=chromium --reporter=line
+        run: pnpm exec playwright test tests/e2e/prod-protocols-smoke.spec.ts --project=chromium --reporter=line
 
       - name: Upload artifacts
         if: always()

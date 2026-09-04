@@ -17,10 +17,10 @@ run_step() {
   echo ""
 }
 
-run_step "TypeScript" npm run typecheck
-run_step "Lint" npm run lint
-run_step "SSOT and i18n compliance" npm run compliance
-run_step "Unit tests" npm run test -- --runInBand
-run_step "Production build" npm run build
+run_step "TypeScript" pnpm run typecheck
+run_step "Lint" pnpm run lint
+run_step "SSOT and i18n compliance" pnpm run compliance
+run_step "Unit tests" pnpm run test --runInBand
+run_step "Production build" pnpm run build
 
 echo "Ship gate passed."
