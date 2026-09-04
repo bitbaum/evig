@@ -1,5 +1,7 @@
 # Production Dockerfile for RevampIT Next.js Application
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
+# corepack activates the pnpm pinned in package.json `packageManager`
+RUN corepack enable
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -8,9 +10,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
-# Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Install dependencies (build deps too — the builder stage compiles with these)
+RUN pnpm install --frozen-lockfile && pnpm store prune
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -26,7 +28,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
 
 # Build the application
-RUN npm run build
+RUN pnpm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner

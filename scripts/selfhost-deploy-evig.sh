@@ -25,7 +25,7 @@ echo "=== build $NAME@$RELEASE_SHA ==="
 NEXT_PUBLIC_BUILD_SHA="$RELEASE_SHA" \
 NEXT_PUBLIC_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
 SELF_HOST=1 \
-npm run build
+pnpm run build
 
 ST="$SRC/.next/standalone"
 [ -d "$ST" ] || { echo "ERROR: no standalone output"; exit 1; }

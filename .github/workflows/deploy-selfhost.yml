@@ -43,16 +43,26 @@ jobs:
         if: steps.secrets.outputs.configured == 'true'
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+        if: steps.secrets.outputs.configured == 'true'
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        if: steps.secrets.outputs.configured == 'true'
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         if: steps.secrets.outputs.configured == 'true'
         uses: actions/setup-node@v7
         with:
           node-version: '24'
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
         if: steps.secrets.outputs.configured == 'true'
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       # Persist Next.js's incremental compiler cache across runs. The build runs
       # on this ephemeral runner, so without this every build is COLD (full
@@ -63,9 +73,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: .next/cache
-          key: nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
           restore-keys: |
-            nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       # ONE definition of "verified" — the same bundle ci.yml runs, called
       # verbatim. These four steps used to be re-inlined here, which quietly made
@@ -76,7 +86,7 @@ jobs:
       # + build, and it already includes the i18n structure gate via `test`.
       - name: Verify (lint + umlauts + chrome + typecheck + test + build)
         if: steps.secrets.outputs.configured == 'true'
-        run: npm run verify
+        run: pnpm run verify
         env:
           # Same build-time placeholders ci.yml uses: this step runs BEFORE
           # .env.selfhost.local is written, so strict env validation would
@@ -124,6 +134,6 @@ jobs:
 
       # Read-only: public pages render + DB-backed public APIs return success.
       # No login, no prod mutation. The heavier authenticated dual-persona
-      # journeys (which mutate prod) are manual: npm run test:e2e:inventory:prod.
+      # journeys (which mutate prod) are manual: pnpm run test:e2e:inventory:prod.
       - name: Run read-only smoke (public pages + APIs)
         run: bash scripts/post-deploy-smoke.sh

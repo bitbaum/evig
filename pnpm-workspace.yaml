@@ -1,0 +1,31 @@
+# pnpm config (pnpm 11 reads overrides/build allowances from here,
+# NOT from package.json — npm `overrides` and `pnpm.onlyBuiltDependencies`
+# there are silently ignored).
+allowBuilds:
+  '@parcel/watcher': true
+  '@sentry/cli': true
+  '@swc/core': true
+  # Git dep needs its prepare build; pnpm demands the exact resolved URL.
+  # If the @fleet/ai-forms pin moves, update this sha (pnpm prints the new
+  # key in its ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED message).
+  'ai-forms@https://codeload.github.com/bitbaum/ai-forms/tar.gz/52e3239ae4b0a2fcdc579edc2b9d8f8e7bff44b9': true
+  esbuild: true
+  puppeteer: true
+  unrs-resolver: true
+minimumReleaseAgeExclude:
+  - '@bitbaum/ai-kit'
+overrides:
+  '@swc/helpers': 0.5.23
+  '@opentelemetry/core': ^2.8.0
+  fast-xml-parser: ^5.3.6
+  ajv: ^6.14.0
+  minimatch: ^10.2.1
+  nodemailer: ^9.0.1
+  js-yaml: ^4.3.1
+  basic-ftp: '>=5.3.0'
+  postcss: ^8.5.26
+  esbuild: 0.28.1
+  shell-quote: 1.10.0
+  brace-expansion: ^5.0.9
+  uuid: $uuid
+  sharp: $sharp

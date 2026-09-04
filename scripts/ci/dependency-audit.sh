@@ -39,14 +39,14 @@ tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 report="$tmp/audit.json"
 
-# --omit=dev: a dev-only advisory cannot be reached by the running site, and
+# --prod: a dev-only advisory cannot be reached by the running site, and
 # treating it as production risk is how a gate earns a reputation for crying
-# wolf and gets switched off. npm audit exits non-zero when it FINDS things, so
+# wolf and gets switched off. pnpm audit exits non-zero when it FINDS things, so
 # its status is not an error signal here — the parsed counts are.
-npm audit --omit=dev --json > "$report" 2>/dev/null || true
+pnpm audit --prod --json > "$report" 2>/dev/null || true
 
 if [ ! -s "$report" ]; then
-  echo "::error::npm audit produced no output — treating as a failure rather than a pass"
+  echo "::error::pnpm audit produced no output — treating as a failure rather than a pass"
   exit 1
 fi
 
@@ -62,7 +62,7 @@ PY
 )
 
 if [ -z "$counts" ]; then
-  echo "::error::could not parse npm audit output — treating as a failure rather than a pass"
+  echo "::error::could not parse pnpm audit output — treating as a failure rather than a pass"
   exit 1
 fi
 
@@ -79,6 +79,7 @@ import json, sys
 with open(sys.argv[1]) as fh:
     data = json.load(fh)
 
+# npm audit v2 shape: top-level "vulnerabilities" keyed by package name.
 for name, v in sorted(data.get("vulnerabilities", {}).items()):
     if v.get("severity") not in ("critical", "high"):
         continue
@@ -92,6 +93,14 @@ for name, v in sorted(data.get("vulnerabilities", {}).items()):
     else:
         fix = "no"
     print("- **{}** `{}` — {} (fix available: {})".format(v["severity"], name, title, fix))
+
+# pnpm audit emits the older v1 shape: top-level "advisories" keyed by id.
+for _id, a in sorted(data.get("advisories", {}).items()):
+    if a.get("severity") not in ("critical", "high"):
+        continue
+    title = (a.get("title") or "")[:110]
+    patched = a.get("patched_versions") or "none"
+    print("- **{}** `{}` — {} (patched: {})".format(a["severity"], a.get("module_name"), title, patched))
 PY
 )
 
@@ -108,7 +117,7 @@ if [ "$ALERT_ISSUE" = "1" ]; then
 
   if [ "$((crit + high))" -gt 0 ]; then
     BODY=$(printf '%s\n' \
-      "\`npm audit --omit=dev\` on \`main\`: **critical:$crit high:$high** (moderate:$mod low:$low)." \
+      "\`pnpm audit --prod\` on \`main\`: **critical:$crit high:$high** (moderate:$mod low:$low)." \
       "" \
       "$detail" \
       "" \

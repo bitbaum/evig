@@ -22,24 +22,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       # SSOT: lint + umlauts + typecheck + test + build are bundled in the
-      # `verify` npm script (package.json). CI calls it verbatim so the gating
+      # `verify` script (package.json). CI calls it verbatim so the gating
       # chain can't drift from what runs locally. Do not re-inline these checks
       # here — the umlaut gate (Swiss ä/ö/ü convention) lives inside `verify`
       # too. Unit tests are ALSO run by the standalone `test` job below, which
       # the post-main verdict needs by name; that duplication is deliberate and
       # parallel (no wall-clock cost), not an oversight.
       - name: Verify (lint + umlauts + typecheck + test + build)
-        run: npm run verify
+        run: pnpm run verify
         env:
           # Build-time placeholders so strict env validation doesn't fail during CI compile.
           AUTH_SECRET: ci-build-placeholder-secret-32chars
@@ -63,17 +71,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run auth smoke (if credentials configured)
         env:
@@ -91,7 +107,7 @@ jobs:
           export AUTH_TEST_EMAIL="$EMAIL"
           export AUTH_TEST_PASSWORD="$PASSWORD"
           PLAYWRIGHT_BASE_URL="${PLAYWRIGHT_BASE_URL:-https://evig.orangecat.ch}" \
-            npx playwright test tests/e2e/auth-smoke.spec.ts --project=chromium --reporter=line
+            pnpm exec playwright test tests/e2e/auth-smoke.spec.ts --project=chromium --reporter=line
 
   # Prod health gate: full dual-persona route inventory (186 routes) when passwords set.
   # Primary gate is post-deploy in deploy-selfhost.yml; this catches prod regressions on PRs too.
@@ -106,17 +122,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run inventory smoke (if dual-persona secrets configured)
         env:
@@ -215,30 +239,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Apply migrations
         run: bash scripts/db/apply-migrations-ci.sh
 
       - name: Seed E2E data
-        run: npm run e2e:seed
+        run: pnpm run e2e:seed
 
       - name: Build app
-        run: npm run build
+        run: pnpm run build
 
       - name: Start app
         run: |
-          npm run start -- -p 3001 > evig-e2e.log 2>&1 &
+          pnpm run start -- -p 3001 > evig-e2e.log 2>&1 &
           for i in {1..90}; do
             if curl -fsS http://localhost:3001/api/health >/dev/null; then
               exit 0
@@ -249,7 +281,7 @@ jobs:
           exit 1
 
       - name: Run Playwright E2E journeys
-        run: npm run test:e2e:journeys -- --project=chromium --reporter=line
+        run: pnpm run test:e2e:journeys -- --project=chromium --reporter=line
 
       # Specs that are not named *journey and therefore fell outside the glob
       # above — so nothing ran them, anywhere, ever. Run by name, not by
@@ -259,7 +291,7 @@ jobs:
       #   notification-hrefs 21 assertions
       #   user-admin-flows   16 assertions
       - name: Run Playwright E2E guards
-        run: npm run test:e2e:guards -- --project=chromium --reporter=line
+        run: pnpm run test:e2e:guards -- --project=chromium --reporter=line
 
       - name: Upload E2E artifacts
         if: always()
@@ -288,17 +320,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: npm run test
+        run: pnpm run test
 
   # Dependency advisories. Blocks a PR that INTRODUCES a critical; high and
   # below are reported but do not fail, because a third party publishing an
@@ -313,14 +353,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      # No version input: pnpm/action-setup reads packageManager from package.json.
+      - uses: pnpm/action-setup@v6
+
+      # The action's default store nests inside its own bin dir; a git-dep
+      # prepare build then dies with TS2742. Pin the store somewhere sane.
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Audit runtime dependencies
         env:
