@@ -14,7 +14,7 @@ Thanks for the interest. This document covers the practical workflow for shippin
 ## Prerequisites
 
 - Node.js **20+**
-- A Postgres instance — start local Docker with `npm run services:up` (port 5433). Production runs on self-hosted Postgres 17 on Hetzner.
+- A Postgres instance — start local Docker with `pnpm run services:up` (port 5433). Production runs on self-hosted Postgres 17 on Hetzner.
 - (Optional, for full feature coverage) Meilisearch, Redis (upstash), Listmonk
 
 ## Local setup
@@ -23,14 +23,14 @@ Thanks for the interest. This document covers the practical workflow for shippin
 git clone https://github.com/bitbaum/evig.git
 cd evig
 cp .env.example .env.local         # fill in DATABASE_URL, AUTH_SECRET, payment + email keys
-npm install
-npm run db:migrate                  # apply scripts/db/migrations/*.sql
-npm run dev                         # Next.js on :3000
+pnpm install
+pnpm run db:migrate                  # apply scripts/db/migrations/*.sql
+pnpm run dev                         # Next.js on :3000
 ```
 
 The app is a **single Next.js 16 application**. There is no separate API server, CMS server, or microservice — everything (pages, API routes, admin surface) lives in `src/app/`. Earlier iterations had a `cms-api/` subproject; it is no longer maintained and its files are not part of the dev loop.
 
-Full architecture orientation: [`docs/ARCHITECTURE_QUICK_START.md`](./docs/ARCHITECTURE_QUICK_START.md). Every npm script: [`docs/COMMANDS.md`](./docs/COMMANDS.md).
+Full architecture orientation: [`docs/ARCHITECTURE_QUICK_START.md`](./docs/ARCHITECTURE_QUICK_START.md). Every package script: [`docs/COMMANDS.md`](./docs/COMMANDS.md).
 
 ## Workflow
 
@@ -51,10 +51,10 @@ Lead the body with **why**, not what — the diff already shows what.
 ### Before opening a PR
 
 ```bash
-npm test               # Jest (7,500+ tests across 500+ suites)
-npm run lint           # ESLint
-npm run typecheck      # tsc --noEmit
-npm run lint:umlauts   # catches ASCII umlaut substitutes in German strings
+pnpm test               # Vitest (7,500+ tests across 500+ suites)
+pnpm run lint           # ESLint
+pnpm run typecheck      # tsc --noEmit
+pnpm run lint:umlauts   # catches ASCII umlaut substitutes in German strings
 ```
 
 CI re-runs all of these. PRs blocked by failing CI will not be merged.
@@ -69,7 +69,7 @@ These are the rules the codebase actually relies on. Violations either fail CI o
 | Use `TABLE_NAMES` from `@/config/database` — never hardcode table strings | One source of truth; renaming a table is one diff |
 | Parameterized queries only — never string-concatenate user input | SQL injection |
 | Use `CONTACT` / `ORG` / `LOCATIONS` from `@/config/org` — never hardcode addresses, phones, emails | Same SSOT principle, applied to org-level data |
-| Swiss German: `ss` (not `ß`), proper `ä/ö/ü` (never `ae/oe/ue`) | Project locale standard; `npm run lint:umlauts` enforces it |
+| Swiss German: `ss` (not `ß`), proper `ä/ö/ü` (never `ae/oe/ue`) | Project locale standard; `pnpm run lint:umlauts` enforces it |
 | Wrap multi-statement writes in `db.transaction(...)` with explicit `FOR UPDATE` when needed | Concurrency safety — TOCTOU races cost us real bugs in 2026-Q1 |
 | Mobile-first responsive Tailwind, 44×44 minimum tap targets | Most users land on phones |
 

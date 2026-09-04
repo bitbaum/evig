@@ -130,5 +130,5 @@ One assistant, one brand: **Hirn**, on both surfaces. What changed:
 ---
 
 ## Verification gate (every batch)
-`npm run typecheck` + `npm run lint` + `npm test` + `npm run lint:umlauts` green;
+`pnpm run typecheck` + `pnpm run lint` + `pnpm test` + `pnpm run lint:umlauts` green;
 deploy via push-to-main → GH Actions; verify key pages live on prod (public + admin).

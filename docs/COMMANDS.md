@@ -6,18 +6,18 @@ last_modified_summary: IT-Hilfe journey E2E (edit + withdraw); local run notes
 
 # RevampIT Commands Reference (SSOT)
 
-**Single Source of Truth** for all npm scripts and commands.
+**Single Source of Truth** for all package scripts and commands.
 
 ---
 
 ## Quick Start Commands
 
 ```bash
-npm run d              # Start everything (databases + dev server)
-npm run dev            # Frontend only (port 3000)
-npm run services:up    # Start Docker services (db, redis, meilisearch)
-npm run services:down  # Stop Docker services
-npm run setup-admins   # Create admin users
+pnpm run d              # Start everything (databases + dev server)
+pnpm run dev            # Frontend only (port 3000)
+pnpm run services:up    # Start Docker services (db, meilisearch, listmonk)
+pnpm run services:down  # Stop Docker services
+pnpm run setup-admins   # Create admin users
 ```
 
 ---
@@ -25,8 +25,7 @@ npm run setup-admins   # Create admin users
 ## Development Commands
 
 ```bash
-npm run dev            # Start Next.js dev server (port 3000)
-npm run dev:cms        # Start CMS (currently disabled)
+pnpm run dev            # Start Next.js dev server (port 3000)
 ```
 
 ---
@@ -34,12 +33,12 @@ npm run dev:cms        # Start CMS (currently disabled)
 ## Docker Services
 
 ```bash
-npm run services:up    # Start all services (db, redis, meilisearch)
-npm run services:down  # Stop all services
-npm run db:up          # Start main database only
-npm run db:down        # Stop main database
-npm run setup          # Start database and wait 5 seconds
-npm run reset          # Stop all, remove volumes, and reset
+pnpm run services:up    # Start all services (db, meilisearch, listmonk)
+pnpm run services:down  # Stop all services
+pnpm run db:up          # Start main database only
+pnpm run db:down        # Stop main database
+pnpm run setup          # Start database and wait 5 seconds
+pnpm run reset          # Stop all, remove volumes, and reset
 ```
 
 ---
@@ -47,11 +46,11 @@ npm run reset          # Stop all, remove volumes, and reset
 ## Build & Production
 
 ```bash
-npm run build          # Production build (Next.js + sitemap)
-npm run start          # Start production server
-npm run typecheck      # TypeScript validation (run before commits!)
-npm run lint           # ESLint check
-npm run i18n:businessplan  # Business plan i18n shape/invariant parity (8 locales)
+pnpm run build          # Production build (Next.js + sitemap)
+pnpm run start          # Start production server
+pnpm run typecheck      # TypeScript validation (run before commits!)
+pnpm run lint           # ESLint check
+pnpm run i18n:businessplan  # Business plan i18n shape/invariant parity (8 locales)
 ```
 
 ### Monitor-Upcycling content scripts
@@ -68,28 +67,28 @@ See `docs/projects/upcycling.md` for mini-site SSOT map.
 ## Testing
 
 ```bash
-npm run test           # Jest unit tests
-npm run test:watch     # Jest watch mode
-npm run test:coverage  # Jest with coverage
-npm run test:e2e       # Playwright E2E tests
-npm run test:e2e:auth  # Auth login smoke (needs AUTH_TEST_EMAIL/PASSWORD)
-npm run test:e2e:inventory # Dual-persona feature inventory (user + admin)
-npm run test:e2e:inventory:prod # Same, with prod health wait (CI / post-deploy)
-npm run test:e2e:user-admin # Legacy quick smoke (subset)
-npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
-npm run test:e2e:it-hilfe:journey # Dual-persona lifecycle + edit/withdraw (see E2E section)
-npm run test:e2e:marketplace:journey # User sells, admin buys (Payrexx when configured)
-npm run test:e2e:workshops:proposal:journey # User proposes, admin approve/reject
-npm run test:e2e:timecards:journey          # Staff submit + admin approve (TIME round-trip)
-npm run test:e2e:intake:journey             # Admin intake create → checklist → publish
-npm run test:e2e:tasks:journey              # Admin task create → complete
-npm run test:e2e:protocols:journey          # Admin protocol create → JSON import → finalize
-npm run test:e2e:decisions:journey          # Admin decision create → vote → close
-npm run test:e2e:cms:journey                # Admin blog draft → publish → public view
-npm run test:e2e:it-hilfe:preferred:journey # Request with preferred techniker
-npm run test:e2e:service:journey # User books repair, admin assigns techniker (dual-persona)
-npm run test:e2e:ui    # Playwright with UI
-npm run test:all       # Run all tests
+pnpm run test           # Vitest unit tests
+pnpm run test:watch     # Vitest watch mode
+pnpm run test:coverage  # Vitest with coverage
+pnpm run test:e2e       # Playwright E2E tests
+pnpm run test:e2e:auth  # Auth login smoke (needs AUTH_TEST_EMAIL/PASSWORD)
+pnpm run test:e2e:inventory # Dual-persona feature inventory (user + admin)
+pnpm run test:e2e:inventory:prod # Same, with prod health wait (CI / post-deploy)
+pnpm run test:e2e:user-admin # Legacy quick smoke (subset)
+pnpm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
+pnpm run test:e2e:it-hilfe:journey # Dual-persona lifecycle + edit/withdraw (see E2E section)
+pnpm run test:e2e:marketplace:journey # User sells, admin buys (Payrexx when configured)
+pnpm run test:e2e:workshops:proposal:journey # User proposes, admin approve/reject
+pnpm run test:e2e:timecards:journey          # Staff submit + admin approve (TIME round-trip)
+pnpm run test:e2e:intake:journey             # Admin intake create → checklist → publish
+pnpm run test:e2e:tasks:journey              # Admin task create → complete
+pnpm run test:e2e:protocols:journey          # Admin protocol create → JSON import → finalize
+pnpm run test:e2e:decisions:journey          # Admin decision create → vote → close
+pnpm run test:e2e:cms:journey                # Admin blog draft → publish → public view
+pnpm run test:e2e:it-hilfe:preferred:journey # Request with preferred techniker
+pnpm run test:e2e:service:journey # User books repair, admin assigns techniker (dual-persona)
+pnpm run test:e2e:ui    # Playwright with UI
+pnpm run test:all       # Run all tests
 ```
 
 ---
@@ -124,38 +123,38 @@ Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or rec
 **Local marketplace journey (no prod secrets):**
 
 ```bash
-npm run e2e:seed
+pnpm run e2e:seed
 PLAYWRIGHT_CHANNEL=chrome \
 AUTH_TEST_USER_EMAIL=e2e-user@revampit.test AUTH_TEST_USER_PASSWORD='E2EUser123!' \
 AUTH_TEST_ADMIN_EMAIL=e2e-admin@revampit.test AUTH_TEST_ADMIN_PASSWORD='E2EAdmin123!' \
-npm run test:e2e:marketplace:journey
+pnpm run test:e2e:marketplace:journey
 ```
 
 **Local IT-Hilfe dual-persona journey** (owner edit + withdraw offer + full lifecycle):
 
 ```bash
-npm run e2e:seed
+pnpm run e2e:seed
 PLAYWRIGHT_CHANNEL=chrome PLAYWRIGHT_BASE_URL=http://localhost:3001 \
 AUTH_TEST_USER_EMAIL=e2e-user@revampit.test AUTH_TEST_USER_PASSWORD='E2EUser123!' \
 AUTH_TEST_ADMIN_EMAIL=e2e-admin@revampit.test AUTH_TEST_ADMIN_PASSWORD='E2EAdmin123!' \
-npm run test:e2e:it-hilfe:journey
+pnpm run test:e2e:it-hilfe:journey
 ```
 
-Use `npx next dev --port 3001 --webpack` locally if Turbopack returns 404 on `/api/auth/*`. Restart the dev server if create-request rate limit (`Zu viele Anfragen`) trips during repeated runs.
+Use `pnpm exec next dev --port 3001 --webpack` locally if Turbopack returns 404 on `/api/auth/*`. Restart the dev server if create-request rate limit (`Zu viele Anfragen`) trips during repeated runs.
 
-Apply migration `114_listing_questions.sql` before first local run (`npm run db:migrate` or direct `psql`). **Prod:** applied on Hetzner 2026-07-04 (see `docs/FEATURE_INVENTORY.md` → Marketplace UX rollout tracker).
+Apply migration `114_listing_questions.sql` before first local run (`pnpm run db:migrate` or direct `psql`). **Prod:** applied on Hetzner 2026-07-04 (see `docs/FEATURE_INVENTORY.md` → Marketplace UX rollout tracker).
 
-After each successful deploy, **Dual-persona inventory smoke** runs automatically when the two password secrets are set (routes + IT-Hilfe + marketplace + workshops + service journeys). Manual re-run: `npm run test:e2e:inventory:prod`.
+After each successful deploy, **Dual-persona inventory smoke** runs automatically when the two password secrets are set (routes + IT-Hilfe + marketplace + workshops + service journeys). Manual re-run: `pnpm run test:e2e:inventory:prod`.
 
 Payrexx go-live checklist: `docs/operations/PAYREXX_SETUP.md` · config SSOT: `src/config/payrexx.ts`.
 
 ### Manual
 
 ```bash
-npm run deploy          # same as deploy:selfhost
-npm run deploy:selfhost # build standalone → release backup → activate → /api/health gate → rollback on failure
-npm run ship            # quality gate (typecheck, lint, build, tests)
-npm run db:migrate      # apply unrecorded scripts/db/migrations/*.sql (DATABASE_URL / PG* env)
+pnpm run deploy          # same as deploy:selfhost
+pnpm run deploy:selfhost # build standalone → release backup → activate → /api/health gate → rollback on failure
+pnpm run ship            # quality gate (typecheck, lint, build, tests)
+pnpm run db:migrate      # apply unrecorded scripts/db/migrations/*.sql (DATABASE_URL / PG* env)
 ```
 
 Operational checks:
@@ -179,7 +178,7 @@ The deploy script copies the server-local `.env` and `launch.sh` into each relea
 ## Database
 
 ```bash
-npm run db:migrate-users  # Migrate existing users
+pnpm run db:migrate-users  # Migrate existing users
 ```
 
 ---
@@ -187,13 +186,13 @@ npm run db:migrate-users  # Migrate existing users
 ## Production Docker
 
 ```bash
-npm run prod:build     # Build production Docker image
-npm run prod:up        # Start production containers
-npm run prod:down      # Stop production containers
+pnpm run prod:build     # Build production Docker image
+pnpm run prod:up        # Start production containers
+pnpm run prod:down      # Stop production containers
 ```
 
 ---
 
-**Last Updated**: 2026-06-19  
+**Last Updated**: 2026-09-04  
 **Last Modified Summary**: Post-deploy dual-persona inventory in GitHub Actions; E2E secret docs.  
 **Source**: `package.json`

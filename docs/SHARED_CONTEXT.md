@@ -46,7 +46,7 @@ jurisdiction, letterhead) takes it from `ORG` in that file.
 
 | Environment | Host | Port | Database | Notes |
 |-------------|------|------|----------|-------|
-| **Local dev** | `localhost` | 5433 | `revampit_cms` | `npm run services:up` (Docker) |
+| **Local dev** | `localhost` | 5433 | `revampit_cms` | `pnpm run services:up` (Docker) |
 | **Production** | `localhost` (on box) | 5432 | `revampit` | Hetzner self-hosted; ops via SSH tunnel — see `.env.selfhost.local.example` |
 
 **SSOT:** `DATABASE_URL` only. No `AUTH_DB_*` split.

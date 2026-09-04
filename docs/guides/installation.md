@@ -6,7 +6,7 @@ This guide will help you set up the RevampIT development environment on your loc
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js 18+** - [Download](https://nodejs.org/)
+- **Node.js 22.13+** - [Download](https://nodejs.org/)
 - **PostgreSQL 13+** - [Download](https://www.postgresql.org/download/)
 - **Git** - [Download](https://git-scm.com/downloads)
 - **Docker** (optional) - [Download](https://www.docker.com/get-started)
@@ -24,11 +24,11 @@ cd revampit
 
 ```bash
 # Install frontend dependencies
-npm install
+pnpm install
 
 # Install CMS API dependencies
 cd cms-api
-npm install
+pnpm install
 cd ..
 ```
 
@@ -46,7 +46,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 # Database — DATABASE_URL is the single connection source (app + auth share this pool).
-# Local dev: Docker Postgres (npm run services:up → port 5433)
+# Local dev: Docker Postgres (pnpm run services:up → port 5433)
 DATABASE_URL=postgresql://postgres:your_password@localhost:5433/revampit_cms
 ```
 
@@ -100,7 +100,7 @@ createdb revampit_cms
 
 # Run migrations
 cd cms-api
-npm run migrate
+pnpm run migrate
 cd ..
 ```
 
@@ -111,12 +111,12 @@ Open two terminal windows:
 **Terminal 1 - CMS API:**
 ```bash
 cd cms-api
-npm run dev
+pnpm run dev
 ```
 
 **Terminal 2 - Frontend:**
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### 6. Access the Application
@@ -172,23 +172,23 @@ psql -h localhost -p 5432 -U postgres -d revampit_cms
 
 #### Permission Issues
 ```bash
-# Fix npm permissions (Unix/Linux)
-sudo chown -R $(whoami) ~/.npm
+# Fix pnpm store permissions (Unix/Linux)
+sudo chown -R $(whoami) "$(pnpm store path)"
 
-# Clear npm cache
-npm cache clean --force
+# Prune the pnpm store
+pnpm store prune
 ```
 
 #### Module Not Found
 ```bash
 # Clear node_modules and reinstall
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules
+pnpm install
 
 # Also clear cms-api modules
 cd cms-api
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules
+pnpm install
 cd ..
 ```
 
@@ -242,7 +242,7 @@ curl http://localhost:3000
 curl http://localhost:3001/health
 
 # Check database connection
-cd cms-api && npm run db:status
+cd cms-api && pnpm run db:status
 ```
 
 ## Next Steps

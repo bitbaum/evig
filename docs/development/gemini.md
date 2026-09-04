@@ -168,8 +168,8 @@ function processProducts(products: Product[]): ProcessedProduct[] {
 ```typescript
 // ✅ GOOD: Request verification
 "After implementing this, what commands should I run to verify it works?
-- npm run lint?
-- npm run test?
+- pnpm run lint?
+- pnpm run test?
 - curl http://localhost:3000/api/endpoint?"
 ```
 
@@ -421,16 +421,16 @@ export async function GET(request: NextRequest) {
 
 ```bash
 # 1. Check TypeScript compilation
-npm run build
+pnpm run build
 
 # 2. Check linting
-npm run lint
+pnpm run lint
 
 # 3. Run tests
-npm run test
+pnpm run test
 
 # 4. Test manually
-npm run dev
+pnpm run dev
 # Then test in browser
 
 # 5. Check for console errors

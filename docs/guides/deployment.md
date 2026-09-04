@@ -1,7 +1,7 @@
 # RevampIT Deployment Guide
 
 **Created:** 2024-12-29
-**Last Updated:** 2026-06-19
+**Last Updated:** 2026-09-04
 **Summary:** Production deploys run via GitHub Actions → Hetzner self-host. Vercel is retired.
 
 Production runs on a **self-hosted Next.js standalone build on a Hetzner box**
@@ -20,7 +20,7 @@ Developer
    │  git push origin main
    ▼
 GitHub Actions  (.github/workflows/deploy-selfhost.yml)
-   │  npm ci → npm run lint → npm run typecheck
+   │  pnpm install --frozen-lockfile → pnpm run verify
    │  write .env.selfhost.local (from SELFHOST_ENV secret)
    │  set up SSH (from HETZNER_SSH_PRIVATE_KEY secret)
    │  bash scripts/selfhost-deploy-evig.sh
@@ -57,11 +57,11 @@ Any push to `main` starts the **"Deploy production app"** workflow
 ### What GitHub Actions runs
 
 1. **Checkout** the pushed commit.
-2. **Setup Node 20** (with npm cache).
-3. **`npm ci`** — clean install.
-4. **`npm run lint`** — ESLint. A failure here fails the workflow and **nothing
+2. **Setup Node 24** (with pnpm cache).
+3. **`pnpm install --frozen-lockfile`** — clean install.
+4. **`pnpm run lint`** — ESLint. A failure here fails the workflow and **nothing
    is deployed**.
-5. **`npm run typecheck`** — TypeScript. Same: failure aborts the deploy.
+5. **`pnpm run typecheck`** — TypeScript. Same: failure aborts the deploy.
 6. **Write `.env.selfhost.local`** from the `SELFHOST_ENV` repo secret
    (`chmod 600`).
 7. **Setup SSH** from the `HETZNER_SSH_PRIVATE_KEY` repo secret, and add the
@@ -140,7 +140,7 @@ deploys. If you must deploy from a developer machine (e.g. Actions is down), and
 you have a valid `.env.selfhost.local` (gitignored) plus SSH access to the box:
 
 ```bash
-npm run deploy:selfhost
+pnpm run deploy:selfhost
 ```
 
 This runs the same `scripts/selfhost-deploy-evig.sh` locally: build →
@@ -157,8 +157,8 @@ The deploy never started — nothing changed in production. Fix locally and push
 again:
 
 ```bash
-npm run lint
-npm run typecheck
+pnpm run lint
+pnpm run typecheck
 ```
 
 ### Workflow skips with a "secrets not set" notice

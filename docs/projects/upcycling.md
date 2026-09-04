@@ -21,7 +21,7 @@ Public sub-site at `/projects/upcycling/*` for the Monitor-Upcycling project: ex
 | Published guide slugs | `src/data/upcycling-guides.ts` |
 | Status numbers + milestones | `src/data/upcycling-status.ts` |
 | Business plan content | `messages/*.json` → `projects.upcycling.businessPlan` |
-| Business plan shape parity | `npm run i18n:businessplan` |
+| Business plan shape parity | `pnpm run i18n:businessplan` |
 
 ## Reading flow
 
@@ -46,7 +46,7 @@ Interest/newsletter band (`UpcyclingInterestBand`) is skipped on landing, busine
 ## i18n scripts
 
 ```bash
-npm run i18n:businessplan          # parity check (required before merge)
+pnpm run i18n:businessplan          # parity check (required before merge)
 node scripts/sync-businessplan-locales.mjs   # after DE businessPlan edits
 node scripts/prune-businessplan-archive.mjs  # archive stale citation keys
 ```

@@ -57,7 +57,7 @@ Drizzle Kit itself remains installed (`drizzle-kit` in devDependencies) — it's
 
 3. **Update the Drizzle schema in `src/db/schema/*.ts`** to mirror the migration. This is what TypeScript code reads — the two must stay in sync. Forgetting this is the most common foot-gun.
 
-4. **Run locally:** `npm run db:up` (starts the Docker Postgres), then `bash scripts/db/run-migration.sh`. The runner shows `applied: N · skipped: M` at the end; new migrations should appear in the applied count.
+4. **Run locally:** `pnpm run db:up` (starts the Docker Postgres), then `bash scripts/db/run-migration.sh`. The runner shows `applied: N · skipped: M` at the end; new migrations should appear in the applied count.
 
 5. **Apply to production — automatic on deploy.** Production runs a self-hosted
    Postgres 17 on the Hetzner box (`DATABASE_URL=postgresql://…@localhost:5432/revampit`).

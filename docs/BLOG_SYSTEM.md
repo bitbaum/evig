@@ -11,7 +11,7 @@ The RevampIt blog is a **git-based, TinaCMS-powered blogging system** with user-
 - **Content Format**: Markdown with frontmatter
 - **Storage**: File system (no database needed)
 - **Styling**: Tailwind CSS (Medium-inspired)
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 
 ## File Structure
 
@@ -72,7 +72,7 @@ Each component has a single responsibility:
 
 1. **Using TinaCMS**:
    ```bash
-   npm run dev
+   pnpm run dev
    # Visit http://localhost:3000/admin
    # Click "Posts" → "Create new post"
    ```

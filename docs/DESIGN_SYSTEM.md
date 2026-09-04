@@ -148,7 +148,7 @@ Updated 2026-06-15 after OrangeCat/FleetCrown audit + Phase 0 SSOT migration:
 | **Phase 5** — Admin/dashboard sweep | done 2026-06-15 | Dashboard cards → `card-shell`; overlays → `shadow-xs`; chart tooltips migrated |
 | **Phase 6** — Raw control migration | done 2026-06-15 | Primitives only in feature code; ESLint design rules → **error** project-wide |
 
-Run `npm run lint` to see palette-class warnings (new rules as of 2026-06-15).
+Run `pnpm run lint` to see palette-class warnings (new rules as of 2026-06-15).
 
 ### RevampIT vs OrangeCat — key differences
 

@@ -4,8 +4,8 @@
 
 ### One-Command Setup
 ```bash
-npm run d              # Start all services
-npm run setup-admins   # Create admin users
+pnpm run d              # Start all services
+pnpm run setup-admins   # Create admin users
 ```
 
 ### Access Points
@@ -20,8 +20,8 @@ npm run setup-admins   # Create admin users
 
 ### Start/Stop Services
 ```bash
-npm run d              # Start everything
-npm run stop:all       # Stop all services
+pnpm run d              # Start everything
+pnpm run stop:all       # Stop all services
 ```
 
 ### Monitor System
@@ -68,12 +68,12 @@ Click any button to copy the command to clipboard:
 ```bash
 docker ps                    # Check if containers are running
 docker compose down         # Clean restart
-npm run d                   # Restart all
+pnpm run d                   # Restart all
 ```
 
 ### Can't Access Admin
 ```bash
-npm run setup-admins        # Recreate admin users
+pnpm run setup-admins        # Recreate admin users
 # Check credentials above
 ```
 
@@ -85,7 +85,7 @@ npm run setup-admins        # Recreate admin users
 ### Database Issues
 ```bash
 docker compose down -v      # Remove volumes (⚠️ loses data)
-npm run reset              # Full system reset
+pnpm run reset              # Full system reset
 ```
 
 ## 📞 Support

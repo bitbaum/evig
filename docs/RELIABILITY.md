@@ -24,7 +24,7 @@ This project is configured to favor reliability of Auth and Database while keepi
 ## How to run migrations
 
 ```
-npm run db:up
+pnpm run db:up
 bash scripts/db/run-migration.sh
 ```
 

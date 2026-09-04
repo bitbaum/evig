@@ -164,12 +164,12 @@ docker compose -f docker-compose.prod.yml up -d app
 ### Local Testing (before migration)
 ```bash
 # Test production build locally
-npm run prod:build
-npm run prod:up
-npm run prod:health
+pnpm run prod:build
+pnpm run prod:up
+pnpm run prod:health
 
 # Stop local production test
-npm run prod:down
+pnpm run prod:down
 ```
 
 ### Backup & Recovery

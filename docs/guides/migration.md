@@ -67,7 +67,7 @@ node migrate-about-content.js
 
 ```bash
 # 1. Start Next.js development server
-npm run dev
+pnpm run dev
 
 # 2. Visit About page
 open http://localhost:3000/about
@@ -134,7 +134,7 @@ docker-compose up -d strapi
 curl http://localhost:1337/api/static-pages?filters[page_key][$eq]=about
 
 # Check Next.js logs
-npm run dev
+pnpm run dev
 ```
 
 ### **If you need to rollback:**

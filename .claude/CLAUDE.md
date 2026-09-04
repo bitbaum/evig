@@ -85,7 +85,7 @@ revampit/
 |-------|------------|------|
 | Frontend | Next.js 16, TypeScript, Tailwind | 3000 |
 | **Prod DB** | **Self-hosted Postgres on Hetzner** (Supabase stack, `localhost:5432/revampit`) | On the app box |
-| **Dev DB** | PostgreSQL in Docker (`npm run services:up`, port 5433) | localhost:5433 |
+| **Dev DB** | PostgreSQL in Docker (`pnpm run services:up`, port 5433) | localhost:5433 |
 | Search | Meilisearch | 7700 |
 | Payments | Payrexx (mock in dev) | — |
 
@@ -113,7 +113,7 @@ revampit/
 2. **Schema reaches ANY shared database ONLY via `scripts/db/migrations/`.**
    `drizzle-kit push` is FORBIDDEN against dev/prod — push-created tables are
    invisible to from-scratch replays and broke CI for days (see 101b/109
-   baselines). Local ad-hoc DBs: `npm run db:migrate`. The CI Migration Drift
+   baselines). Local ad-hoc DBs: `pnpm run db:migrate`. The CI Migration Drift
    job replays every migration from zero; before pushing a new migration,
    replay locally in a throwaway pgvector container.
 3. **App-level enums live in `src/config/*` + zod at the write boundary — NOT
@@ -191,10 +191,10 @@ Community P2P (individuals + staff posting privately)
 ## Quick Start
 
 ```bash
-npm run d              # Start everything (recommended)
-npm run dev            # Frontend only
-npm run services:up    # Start Docker services
-npm run setup-admins   # Create admin users
+pnpm run d              # Start everything (recommended)
+pnpm run dev            # Frontend only
+pnpm run services:up    # Start Docker services
+pnpm run setup-admins   # Create admin users
 ```
 
 **Full commands**: See `docs/COMMANDS.md`
@@ -275,7 +275,7 @@ This is the #1 most common mistake. EVERY German word with ä, ö, ü MUST use t
 "Billett" ✓   "Ticket" ✗
 ```
 
-**Run `npm run lint:umlauts` to catch ASCII umlaut violations.**
+**Run `pnpm run lint:umlauts` to catch ASCII umlaut violations.**
 **ALWAYS run this before committing German text changes.**
 
 ### 4b. Translation (i18n) SSOT — messages hold STRINGS ONLY
@@ -301,7 +301,7 @@ Anything language-independent must NEVER live in a message file:
   length + per-element keys) — keep it green.
 
 DE is canonical; other locales deep-merge over it. Don't hardcode user-facing
-strings in components — add a key. Run `npm run compliance:i18n` for parity.
+strings in components — add a key. Run `pnpm run compliance:i18n` for parity.
 
 ### 6. Protected Files - NEVER Delete
 - `scripts/db/migrations/*`
@@ -473,8 +473,8 @@ Run `scripts/db/migrations/002b-simplified-auth.sql` to add:
 
 ## Pre-Commit Checklist
 
-- [ ] `npm run typecheck` passes
-- [ ] `npm run lint` passes
+- [ ] `pnpm run typecheck` passes
+- [ ] `pnpm run lint` passes
 - [ ] No `console.log` statements
 - [ ] Using `logger` from `@/lib/logger`
 - [ ] Using `TABLE_NAMES` from `@/config/database`
@@ -486,7 +486,7 @@ Run `scripts/db/migrations/002b-simplified-auth.sql` to add:
 | Document | Purpose |
 |----------|---------|
 | `docs/SHARED_CONTEXT.md` | Tech stack, database, file structure |
-| `docs/COMMANDS.md` | All npm scripts |
+| `docs/COMMANDS.md` | All package scripts |
 | `docs/MISSION_STATEMENT.md` | Organization mission |
 | `docs/CODE_AUDIT.md` | Current issues to fix |
 
@@ -502,4 +502,4 @@ Run `scripts/db/migrations/002b-simplified-auth.sql` to add:
 
 ---
 
-**Last Updated**: 2026-07-17
+**Last Updated**: 2026-09-04

@@ -305,8 +305,8 @@ git clone https://github.com/g-but/revampit.git
 cd revampit
 
 # 2. Install dependencies
-npm install
-cd cms-api && npm install && cd ..
+pnpm install
+cd cms-api && pnpm install && cd ..
 
 # 3. Set up environment
 cp .env.example .env.local
@@ -316,10 +316,10 @@ cp cms-api/.env.example cms-api/.env
 docker-compose up -d postgres
 
 # 5. Start CMS API (Terminal 1)
-cd cms-api && npm run dev
+cd cms-api && pnpm run dev
 
 # 6. Start frontend (Terminal 2)  
-npm run dev
+pnpm run dev
 
 # 7. Access admin interface
 open http://localhost:3000/admin/login

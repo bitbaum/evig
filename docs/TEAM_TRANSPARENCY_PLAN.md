@@ -204,9 +204,9 @@ Pure wiring of existing `tasks` + `team_profiles` + `activity_updates`.
 - SQL: `TABLE_NAMES` + parameterized only. Drizzle `sql` tag → `sql.raw(TABLE_NAMES.X)` for identifiers.
 - Permissions: gate every API with `withAdmin('<section>')`; the `team` section is **sensitive** (super-admin/explicit grant) — decide whether the board is `team`-sensitive or a new less-sensitive `team-board` id. Recommend: board readable by any staff (transparency is the point), HR/compensation stays in the sensitive `team` detail.
 - Design: semantic tokens + shared primitives (`Card`, `Button`, `Heading`, `IconBadge`, `Section`, `AdminTable`). No arbitrary hex, no `shadow-lg/xl` on cards, green only for CTA/focus/sustainability. `grep -rn '\[#' src/` stays empty.
-- i18n: all user-facing strings → message keys (DE canonical). Structure/enums → config, not messages. Run `npm run compliance:i18n`.
+- i18n: all user-facing strings → message keys (DE canonical). Structure/enums → config, not messages. Run `pnpm run compliance:i18n`.
 - Migrations reach PROD via `scripts/db/migrations/` only; replay from zero locally first.
-- Before done: `npm run typecheck`, `npm run lint`, `npm run lint:umlauts`, relevant tests.
+- Before done: `pnpm run typecheck`, `pnpm run lint`, `pnpm run lint:umlauts`, relevant tests.
 
 ---
 

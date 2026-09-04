@@ -35,7 +35,7 @@ This guide shows you how to configure email sending for development and producti
 
 4. **Test the configuration**:
    ```bash
-   npm run dev
+   pnpm run dev
    # Try registering a new user
    # Check your inbox for verification code
    ```
@@ -291,7 +291,7 @@ node --loader tsx test-email.js
 
 1. **Start dev server**:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 2. **Register a new user**:

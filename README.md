@@ -89,13 +89,13 @@ These are enforced, not suggested:
 - **Logger** -- `import { logger } from '@/lib/logger'`. Never `console.log`.
 - **TABLE_NAMES** -- never hardcoded table strings. Import from `src/config/database.ts`.
 - **Parameterized queries** -- never string concatenation. No exceptions.
-- **Swiss German** -- user-facing text uses `ss` (not `ß`), proper `ä/ö/ü` (never `ae/oe/ue`). `npm run lint:umlauts` catches violations.
+- **Swiss German** -- user-facing text uses `ss` (not `ß`), proper `ä/ö/ü` (never `ae/oe/ue`). `pnpm run lint:umlauts` catches violations.
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|------------|
-| Framework | Next.js 16 (App Router), React 19, TypeScript 5, Tailwind 4 |
+| Framework | Next.js 16 (App Router), React 19, TypeScript 6, Tailwind 4 |
 | Database | PostgreSQL (prod: Hetzner self-hosted; dev: Docker 5433), Drizzle ORM |
 | Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter (shares the app `DATABASE_URL` pool) |
 | Search | Meilisearch |
@@ -104,7 +104,7 @@ These are enforced, not suggested:
 | Storage | Cloudflare R2 (S3-compatible) for product/listing images |
 | Rate limiting | Redis (upstash) |
 | AI | HIRN (in-house provider stack: Groq → OpenRouter → Ollama cascade) |
-| Testing | Jest (7,500+ tests), Playwright (E2E) |
+| Testing | Vitest (7,500+ tests), Playwright (E2E) |
 | CI/CD | GitHub Actions → self-hosted Hetzner deploy (systemd `revampit-app`) |
 
 <details>
@@ -112,8 +112,8 @@ These are enforced, not suggested:
 
 ### Prerequisites
 
-- Node.js 20+
-- A PostgreSQL database — local Docker via `npm run services:up` (port 5433)
+- Node.js 22.13+ (CI and deploy run Node 24)
+- A PostgreSQL database — local Docker via `pnpm run services:up` (port 5433)
 - Optional: Meilisearch, Redis, Listmonk for full feature coverage
 
 ### Setup
@@ -122,9 +122,9 @@ These are enforced, not suggested:
 git clone https://github.com/bitbaum/evig.git
 cd evig
 cp .env.example .env.local    # fill in DATABASE_URL, AUTH_SECRET, payment keys, etc.
-npm install
-npm run db:migrate
-npm run dev                    # Next.js on :3000
+pnpm install
+pnpm run db:migrate
+pnpm run dev                    # Next.js on :3000
 ```
 
 ### Environment Variables
@@ -143,7 +143,7 @@ See `.env.example` for the full list.
 
 ## Testing
 
-7,500+ tests across 500+ Jest suites, plus a Playwright E2E layer.
+7,500+ tests across 500+ Vitest suites, plus a Playwright E2E layer.
 
 | Category | Coverage |
 |----------|----------|
@@ -155,8 +155,8 @@ See `.env.example` for the full list.
 | E2E (Playwright) | Auth smoke, marketplace, IT-Hilfe, security |
 
 ```bash
-npm test              # run all Jest tests
-npm run test:e2e      # run Playwright E2E suite
+pnpm test              # run all Vitest tests
+pnpm run test:e2e      # run Playwright E2E suite
 ```
 
 ### CI Pipeline
@@ -165,7 +165,7 @@ Defined in `.github/workflows/ci.yml`:
 
 1. **Code Quality** -- ESLint + TypeScript type check + Next.js build
 2. **Auth Smoke Test** -- Playwright, runs conditionally
-3. **Unit Tests** -- Jest, PR only
+3. **Unit Tests** -- Vitest, PR only
 
 On merge to `main`, the `.github/workflows/deploy-selfhost.yml` workflow lints, type-checks, builds the Next standalone bundle, rsyncs it to the Hetzner box, and restarts the systemd `revampit-app` service (with a page-render rollback gate). Vercel is not used for production.
 
@@ -192,7 +192,7 @@ src/
   db/schema/        # Drizzle schemas
 scripts/
   db/migrations/    # Sequential SQL migrations (072 ADD COLUMN token_version, etc.)
-tests/              # Jest test suites
+tests/              # Vitest test suites
 e2e/                # Playwright E2E tests
 ```
 
@@ -200,7 +200,7 @@ e2e/                # Playwright E2E tests
 
 1. Fork and create a feature branch
 2. Follow the development standards (TABLE_NAMES, logger, parameterized queries, Swiss German rules)
-3. Run `npm test` and `npm run lint:umlauts` before pushing
+3. Run `pnpm test` and `pnpm run lint:umlauts` before pushing
 4. Open a PR against `main` -- CI will validate code quality and tests
 
 ## License

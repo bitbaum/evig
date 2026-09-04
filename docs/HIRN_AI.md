@@ -134,13 +134,13 @@ OLLAMA_EMBEDDING_MODEL=nomic-embed-text
 
 ```bash
 # Alle Docs indexieren
-npx tsx scripts/hirn-ingest.ts --dir ./docs
+pnpm exec tsx scripts/hirn-ingest.ts --dir ./docs
 
 # Einzelne Datei
-npx tsx scripts/hirn-ingest.ts --file ./README.md
+pnpm exec tsx scripts/hirn-ingest.ts --file ./README.md
 
 # Stats anzeigen
-npx tsx scripts/hirn-ingest.ts --stats
+pnpm exec tsx scripts/hirn-ingest.ts --stats
 ```
 
 ## API Endpoints

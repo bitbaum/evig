@@ -977,21 +977,21 @@ const { data } = await supabase.from(PRODUCT_TABLE).select('*');
 
 ```bash
 # Development
-npm run dev              # Start dev server
-npm run dev:full         # Start all services
-npm run d                # Alias for dev:full
-npm run build            # Build for production
-npm run test             # Run tests
-npm run test:e2e         # Run E2E tests
-npm run lint             # Run linter
+pnpm run dev              # Start dev server
+pnpm run dev:full         # Start all services
+pnpm run d                # Alias for dev:full
+pnpm run build            # Build for production
+pnpm run test             # Run tests
+pnpm run test:e2e         # Run E2E tests
+pnpm run lint             # Run linter
 
 # Database
-npm run db:up            # Start database
-npm run db:down           # Stop database
-npm run services:up       # Start all Docker services
+pnpm run db:up            # Start database
+pnpm run db:down           # Stop database
+pnpm run services:up       # Start all Docker services
 
 # CMS API
-cd cms-api && npm run dev # Start CMS API server
+cd cms-api && pnpm run dev # Start CMS API server
 
 # Git
 git checkout -b feature/name  # Create feature branch

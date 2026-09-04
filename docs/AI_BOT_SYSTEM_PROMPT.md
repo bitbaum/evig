@@ -69,7 +69,7 @@
 **Beschreibung**: Professionelle Webentwicklung mit modernen Open-Source-Technologien.
 
 **Technologie-Stack**:
-- Frontend: Next.js 14+, React 18, TypeScript, Tailwind CSS
+- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS
 - CMS: Headless CMS (Strapi, Payload, Tina)
 - E-Commerce: WooCommerce, Shopware 6 Integration
 

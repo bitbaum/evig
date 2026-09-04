@@ -64,9 +64,9 @@ sudo systemctl restart revampit-app
 # E2E (full payment flows)
 AUTH_TEST_USER_PASSWORD='…' AUTH_TEST_ADMIN_PASSWORD='…' \
 PAYREXX_WEBHOOK_SECRET='…' \  # optional: simulates webhook in marketplace journey
-npm run test:e2e:marketplace:journey
-npm run test:e2e:workshops:journey
-npm run test:e2e:inventory:prod
+pnpm run test:e2e:marketplace:journey
+pnpm run test:e2e:workshops:journey
+pnpm run test:e2e:inventory:prod
 ```
 
 When configured, `isPayrexxCheckoutUnavailable()` is false on prod and checkout returns a hosted Payrexx URL instead of `PAYREXX_SETUP_MESSAGE`.

@@ -133,10 +133,10 @@ grep -r "function.*name" src/ | sort | uniq -d
 find src/ -type f -name "*.tsx" | sort
 
 # Find unused imports (requires tools like ts-prune)
-npx ts-prune
+pnpm dlx ts-prune
 
 # Find duplicate code blocks
-npx jscpd src/
+pnpm dlx jscpd src/
 
 # Check for conflicting exports
 grep -r "export.*from" src/ | sort

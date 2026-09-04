@@ -20,7 +20,7 @@ RevampIT uses a modern, scalable architecture designed for sustainability, perfo
 
 ## Technology Stack
 
-### Frontend: Next.js 14
+### Frontend: Next.js 16
 - **Framework**: Next.js with App Router
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
@@ -209,12 +209,12 @@ Backend Server
 
 ### Getting Started
 1. Clone repository
-2. Install dependencies (`npm install`)
+2. Install dependencies (`pnpm install`)
 3. Set up environment variables
 4. Start PostgreSQL database
 5. Run migrations
-6. Start CMS API (`npm run dev` in cms-api/)
-7. Start frontend (`npm run dev`)
+6. Start CMS API (`pnpm run dev` in cms-api/)
+7. Start frontend (`pnpm run dev`)
 
 ### Making Changes
 1. Create feature branch

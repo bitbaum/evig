@@ -90,9 +90,9 @@ grep: ProductCard
 **Use terminal for verification:**
 ```bash
 # After creating files, verify they work
-npm run lint
-npm run build
-npm run test
+pnpm run lint
+pnpm run build
+pnpm run test
 
 # Check git status
 git status
@@ -388,7 +388,7 @@ logger.debug('Debug info', { data });
 
 ```typescript
 // 1. Start dev server
-run_terminal_cmd: npm run dev
+run_terminal_cmd: pnpm run dev
 
 // 2. Navigate to page
 browser_navigate: http://localhost:3000/products
@@ -407,13 +407,13 @@ browser_snapshot
 
 ```bash
 # Run tests
-npm run test
+pnpm run test
 
 # Run linter
-npm run lint
+pnpm run lint
 
 # Check build
-npm run build
+pnpm run build
 
 # Check services
 docker compose ps
@@ -427,11 +427,11 @@ docker compose ps
 
 ```bash
 # Development
-npm run dev              # Start dev server
-npm run d                # Start all services
-npm run lint             # Check code quality
-npm run test             # Run tests
-npm run build            # Build for production
+pnpm run dev              # Start dev server
+pnpm run d                # Start all services
+pnpm run lint             # Check code quality
+pnpm run test             # Run tests
+pnpm run build            # Build for production
 
 # Git
 git status               # Check changes

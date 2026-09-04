@@ -130,7 +130,7 @@ Also used by IT-Hilfe anonymous-post claim flow (password-set link for unclaimed
 
 **Unverified existing account at register:** `registerUser()` resumes setup (updates password, resends 6-digit code) instead of blocking with "account exists".
 
-**Ops unlock:** `npx tsx scripts/dev/auth-unlock-user.ts <email> --verify-email` (see script header).
+**Ops unlock:** `pnpm exec tsx scripts/dev/auth-unlock-user.ts <email> --verify-email` (see script header).
 
 ### 5. Onboarding (dashboard)
 

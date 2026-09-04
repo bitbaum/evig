@@ -460,16 +460,16 @@ Provide complete implementation with error handling."
 "Verify the implementation:
 
 1. TypeScript compilation:
-   npm run build
+   pnpm run build
 
 2. Linting:
-   npm run lint
+   pnpm run lint
 
 3. Tests:
-   npm run test
+   pnpm run test
 
 4. Manual testing:
-   npm run dev
+   pnpm run dev
    # Test in browser
 
 5. Code review checklist:
@@ -493,8 +493,8 @@ Provide complete implementation with error handling."
    - Check all usages updated
 
 2. Code quality:
-   - npm run lint
-   - npm run build
+   - pnpm run lint
+   - pnpm run build
    - Check for regressions
 
 3. Documentation:

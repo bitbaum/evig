@@ -156,7 +156,7 @@ erstellen** on the report to mint a public `/r/<token>` link — view + print, n
 Open applications older than **365 days** (`HR_APPLICATION_RETENTION_DAYS`) can be closed by:
 
 ```bash
-npx tsx scripts/maintenance/hr-application-retention.ts
+pnpm exec tsx scripts/maintenance/hr-application-retention.ts
 ```
 
 Schedule via cron on production if desired.
@@ -183,7 +183,7 @@ Schedule via cron on production if desired.
 ## E2E verification
 
 ```bash
-npm run test -- src/lib/schemas/__tests__/hr-vacancies.test.ts
+pnpm run test src/lib/schemas/__tests__/hr-vacancies.test.ts
 # Full journey (needs auth env + DB):
-npm run test:e2e -- tests/e2e/hr-vacancy-journey.spec.ts
+pnpm run test:e2e -- tests/e2e/hr-vacancy-journey.spec.ts
 ```
