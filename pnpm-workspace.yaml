@@ -14,6 +14,7 @@ allowBuilds:
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - '@bitbaum/ai-kit'
+  - '@bitbaum/mail-kit'
 overrides:
   '@swc/helpers': 0.5.23
   '@opentelemetry/core': ^2.8.0
