@@ -29,6 +29,7 @@ import {
   isListmonkEnabled,
   subscribeToList,
 } from './listmonk';
+import { sendViaResend } from './resend';
 import type { EmailContent, SendEmailResult, TestEmailResult } from './types';
 
 // Re-export types
@@ -36,6 +37,9 @@ export type { EmailContent, SendEmailResult, TestEmailResult } from './types';
 
 // Re-export transporter utilities (SMTP)
 export { getTransporter, testEmailConfig } from './transporter';
+
+// Re-export Resend utilities
+export { sendViaResend, testResendConnection, isResendEnabled } from './resend';
 
 // Re-export Listmonk utilities
 export {
@@ -160,6 +164,19 @@ export async function sendEmail(
       }
     }
 
+    // Resend (fleet standard) — falls back to SMTP on failure like Listmonk
+    if (provider === 'resend') {
+      try {
+        return await sendViaResend(to, emailContent);
+      } catch (resendError) {
+        logger.warn('Resend failed, falling back to SMTP', {
+          error: resendError instanceof Error ? resendError.message : 'unknown',
+          to,
+          template,
+        });
+      }
+    }
+
     // SMTP (primary if provider=smtp, fallback if Listmonk failed)
     const transporter = await getTransporter();
     const mailOptions = {
@@ -201,6 +218,18 @@ export async function sendCustomEmail(to: string, content: EmailContent): Promis
       } catch (listmonkError) {
         logger.warn('Listmonk failed for custom email, falling back to SMTP', {
           error: listmonkError instanceof Error ? listmonkError.message : 'unknown',
+          to,
+        });
+      }
+    }
+
+    // Resend (fleet standard) — falls back to SMTP on failure like Listmonk
+    if (provider === 'resend') {
+      try {
+        return await sendViaResend(to, content);
+      } catch (resendError) {
+        logger.warn('Resend failed for custom email, falling back to SMTP', {
+          error: resendError instanceof Error ? resendError.message : 'unknown',
           to,
         });
       }

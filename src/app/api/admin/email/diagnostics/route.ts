@@ -3,8 +3,13 @@ import { z } from 'zod';
 import { withAdmin, type ValidSession } from '@/lib/api/middleware';
 import { apiBadRequest, apiError, apiSuccess } from '@/lib/api/helpers';
 import { logger } from '@/lib/logger';
-import { getEmailProvider, EMAIL_CONFIG, LISTMONK_CONFIG } from '@/config/email';
-import { testEmailConfig, testListmonkConnection, sendCustomEmail } from '@/lib/email';
+import { getEmailProvider, EMAIL_CONFIG, LISTMONK_CONFIG, RESEND_CONFIG } from '@/config/email';
+import {
+  testEmailConfig,
+  testListmonkConnection,
+  testResendConnection,
+  sendCustomEmail,
+} from '@/lib/email';
 import { ORG } from '@/config/org';
 
 /**
@@ -18,11 +23,19 @@ export const GET = withAdmin('settings', async () => {
   try {
     const provider = getEmailProvider();
     const connectionTest =
-      provider === 'listmonk' ? await testListmonkConnection() : await testEmailConfig();
+      provider === 'resend'
+        ? await testResendConnection()
+        : provider === 'listmonk'
+          ? await testListmonkConnection()
+          : await testEmailConfig();
 
     return apiSuccess({
       provider,
       connectionTest,
+      resend: {
+        keySet: Boolean(RESEND_CONFIG.API_KEY),
+        from: RESEND_CONFIG.FROM,
+      },
       smtp: {
         host: EMAIL_CONFIG.HOST,
         port: EMAIL_CONFIG.PORT,

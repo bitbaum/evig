@@ -2,29 +2,44 @@
  * Email configuration
  *
  * Single Source of Truth for email service configuration
- * Supports both direct SMTP (nodemailer) and Listmonk
- *
- * Listmonk is the recommended FOSS solution for production.
+ * Supports Resend (fleet standard), Listmonk, and direct SMTP (nodemailer).
  */
 
 import { ORG } from './org';
 
 /**
  * Email provider type
- * - 'listmonk': Use Listmonk for transactional and newsletter emails (recommended)
- * - 'smtp': Use direct SMTP via nodemailer (fallback)
+ * - 'resend': Fleet-standard transactional email via the Resend API (preferred)
+ * - 'listmonk': Listmonk for transactional and newsletter emails
+ * - 'smtp': Direct SMTP via nodemailer (legacy fallback)
  */
-export type EmailProvider = 'listmonk' | 'smtp';
+export type EmailProvider = 'resend' | 'listmonk' | 'smtp';
 
 /**
- * Get the configured email provider
+ * Get the configured email provider.
+ * Listmonk stays an explicit opt-in; otherwise Resend wins whenever its key
+ * is present, because the prod SMTP credential (Brevo) is dead — verified
+ * 2026-09-05: the relay answers "Login denied", so SMTP sends deliver nothing.
  */
 export function getEmailProvider(): EmailProvider {
   if (process.env.LISTMONK_ENABLED === 'true') {
     return 'listmonk';
   }
+  if (process.env.RESEND_API_KEY) {
+    return 'resend';
+  }
   return 'smtp';
 }
+
+/**
+ * Resend configuration (fleet standard).
+ * Only fleetcrown.orangecat.ch is verified in the shared Resend account, so
+ * the default sender follows the surf-your-life/vitareba convention.
+ */
+export const RESEND_CONFIG = {
+  API_KEY: process.env.RESEND_API_KEY || '',
+  FROM: process.env.RESEND_FROM || `${ORG.name} <evig@fleetcrown.orangecat.ch>`,
+} as const;
 
 /**
  * SMTP configuration (for direct nodemailer or as Listmonk's SMTP backend)
@@ -57,6 +72,11 @@ export const LISTMONK_CONFIG = {
 export function validateEmailConfig(): void {
   const provider = getEmailProvider();
 
+  if (provider === 'resend') {
+    // Presence of the key is the only requirement; FROM has a safe default.
+    return;
+  }
+
   if (provider === 'listmonk') {
     if (!LISTMONK_CONFIG.ENABLED) {
       throw new Error('LISTMONK_ENABLED must be true to use Listmonk');
@@ -78,6 +98,9 @@ export function validateEmailConfig(): void {
  * Check if any email provider is configured
  */
 export function isEmailConfigured(): boolean {
+  if (RESEND_CONFIG.API_KEY) {
+    return true;
+  }
   if (LISTMONK_CONFIG.ENABLED) {
     return true;
   }
