@@ -19,7 +19,7 @@ allowBuilds:
 # Naming the version makes each new release a deliberate line in a diff, which
 # is the entire point of the delay.
 minimumReleaseAgeExclude:
-  - '@bitbaum/ai-kit@0.9.0'
+  - '@bitbaum/ai-kit@0.12.0'
   - '@bitbaum/mail-kit@0.1.1'
 overrides:
   '@swc/helpers': 0.5.23

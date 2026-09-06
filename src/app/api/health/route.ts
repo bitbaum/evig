@@ -14,7 +14,7 @@ import { getLLMHealth } from '@/lib/hirn/health';
 import { getAIToolsHealth } from '@/lib/ai/health';
 
 interface ServiceStatus {
-  status: 'healthy' | 'unhealthy' | 'degraded';
+  status: 'healthy' | 'unhealthy' | 'degraded' | 'unknown';
   latency?: number;
   message?: string;
 }
@@ -33,10 +33,21 @@ interface HealthResponse {
 /**
  * A PASSIVE check — reports what the last real chat/AI-tools attempt
  * actually did, rather than making a fresh vendor call the way
- * `checkDatabase`/`checkMeilisearch` do. "unknown" (nothing has been
- * attempted yet since the last restart) reads as healthy, same as the
- * process itself: there is no evidence of a problem, and treating
- * "untested" as a failure would flap this endpoint on every deploy.
+ * `checkDatabase`/`checkMeilisearch` do.
+ *
+ * "unknown" — nothing attempted since the last restart — used to be reported
+ * as `healthy`. The reasoning was sound (treating "untested" as a failure
+ * would flap this endpoint on every deploy) and the LABEL was not: straight
+ * after a deploy this endpoint claimed the AI layer was healthy on the
+ * strength of no evidence whatsoever. A dead key, a retired model and a
+ * perfect chain all produced the same green word. Absence of failure is not
+ * evidence of success, and a check that cannot tell them apart should say so
+ * rather than pick the reassuring one.
+ *
+ * So "unknown" is now its own status. It still never escalates the overall
+ * status — no flap, exactly as before — but it no longer claims something it
+ * has not seen. To turn it into a real answer, ask `/api/health/ai?probe=1`,
+ * which makes an actual call.
  *
  * A "down" tracker maps to `unhealthy` here, but — same as Meilisearch —
  * the aggregation below only escalates the OVERALL status to `unhealthy`
@@ -50,6 +61,12 @@ function fromTrackerStatus(health: ReturnType<typeof getLLMHealth>): ServiceStat
   }
   if (health.status === 'degraded') {
     return { status: 'degraded', message: health.lastError ?? undefined };
+  }
+  if (health.status === 'unknown') {
+    return {
+      status: 'unknown',
+      message: 'no AI call observed since restart — probe /api/health/ai to find out',
+    };
   }
   return { status: 'healthy' };
 }
