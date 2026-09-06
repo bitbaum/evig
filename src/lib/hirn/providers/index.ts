@@ -380,6 +380,26 @@ export async function getChatResponse(
 }
 
 /**
+ * The chat chain as it stands RIGHT NOW, for the liveness probe.
+ *
+ * Deliberately re-read from the database on every call rather than cached: an
+ * admin who changes the provider in /admin/hirn and then probes must be told
+ * about the configuration they just saved, not the one this process started
+ * with. `createAiHealthHandler` calls this only when a probe actually runs —
+ * never on a cache hit — so a monitor polling the route does not also poll
+ * Postgres.
+ *
+ * Keys are resolved into the returned `env`, so the probe walks exactly the
+ * links a real chat would, with exactly the same credentials.
+ */
+export async function currentChatChain(): Promise<{
+  chain: Link[];
+  env: Record<string, string | undefined>;
+}> {
+  return buildChatChain(await getProviderSettings('system'));
+}
+
+/**
  * Get the embedding provider
  * Always uses Ollama for embeddings (local, free, 768 dimensions)
  * Falls back to OpenRouter if Ollama is unavailable

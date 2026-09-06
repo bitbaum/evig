@@ -18,7 +18,18 @@
 
 import { createHealthTracker } from '@bitbaum/ai-kit';
 
-const tracker = createHealthTracker({ downAfter: 3 });
+/**
+ * Exported so the liveness probe can write into the SAME tracker a real chat
+ * writes into. Otherwise one probe proves the chain works and `/api/health`
+ * carries on saying it has never seen a call — the probe's knowledge would die
+ * with the request that made it.
+ *
+ * Prefer `recordLLMSuccess`/`recordLLMFailure` in ordinary code; this exists
+ * for handing the tracker to something that records on your behalf.
+ */
+export const llmTracker = createHealthTracker({ downAfter: 3 });
+
+const tracker = llmTracker;
 
 /** Call after a chat completion that produced usable content. */
 export function recordLLMSuccess(): void {
