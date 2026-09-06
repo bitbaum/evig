@@ -112,6 +112,30 @@ describe('GET /api/health — all healthy', () => {
     const body = await response.json();
     expect(typeof body.data.services.database.latency).toBe('number');
   });
+
+  it('reports an unobserved AI layer as "unknown", never as "healthy"', async () => {
+    const response = await GET();
+    const body = await response.json();
+
+    // Nothing has called a model in this process. That state used to be
+    // reported as `healthy` — a green word backed by no evidence, where a dead
+    // key, a retired model id and a perfect chain all looked identical. The
+    // anti-flap reasoning behind it was right; the LABEL was not.
+    expect(body.data.services.hirn.status).toBe('unknown');
+    expect(body.data.services.hirn.message).toMatch(/no AI call observed/);
+  });
+
+  it('an unknown AI layer does NOT escalate the overall status', async () => {
+    const response = await GET();
+    const body = await response.json();
+
+    // This is the reason "unknown" got laundered into "healthy" in the first
+    // place: treating untested as failing would flap the endpoint that decides
+    // whether to restart the process, on every deploy. Being honest about the
+    // AI layer must not cost that.
+    expect(body.data.status).toBe('healthy');
+    expect(response.status).toBe(200);
+  });
 });
 
 describe('GET /api/health — database unhealthy', () => {
