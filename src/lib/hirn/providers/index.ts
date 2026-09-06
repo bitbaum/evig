@@ -5,6 +5,7 @@
  * Handles provider selection, fallbacks, and configuration.
  */
 
+import { complete, linkId, type Link, type Provider } from '@bitbaum/ai-kit';
 import { db } from '@/db';
 import { hirnProviderSettings } from '@/db/schema';
 import { eq, and, desc, isNull, sql } from 'drizzle-orm';
@@ -162,23 +163,216 @@ export async function getDefaultChatProvider(userId?: string): Promise<AIProvide
 }
 
 /**
- * Select the default chat provider and generate a completion in one step.
+ * The cloud providers, described the way `@bitbaum/ai-kit` describes a vendor.
  *
- * Three call sites used to do `getDefaultChatProvider()` then `.chat(...)`
- * separately, and none of them recorded whether it actually worked — the
- * same shape of gap that left an AI outage invisible to `/api/health`
- * elsewhere in this fleet. Callers that need a chat response should use
- * this instead of calling `getDefaultChatProvider` themselves.
+ * Ollama is deliberately absent. It speaks its own `/api/chat`, not an
+ * OpenAI-compatible `/chat/completions`, so it cannot join this chain without
+ * a translation layer — and it stays exactly as it was, for embeddings and as
+ * the local-first option below.
+ */
+const CLOUD_PROVIDERS = {
+  groq: {
+    id: 'groq',
+    baseUrl: 'https://api.groq.com/openai/v1',
+    keyEnv: 'GROQ_API_KEY',
+    fallbackModel: 'openai/gpt-oss-120b',
+    // Free tier, stated per day. Estimated LOW on purpose: handing out shares
+    // of capacity that turns out not to exist produces the exact wall the
+    // rationing exists to prevent, only later in the day.
+    dailyTokens: 100_000,
+    routed: false,
+  },
+  openrouter: {
+    id: 'openrouter',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    keyEnv: 'OPENROUTER_API_KEY',
+    fallbackModel: 'nvidia/nemotron-3-super-120b-a12b:free',
+    dailyTokens: 50_000,
+    // Routed ids: `:free` is the difference between free routing and a charge.
+    routed: true,
+  },
+} as const;
+
+type CloudProviderName = keyof typeof CLOUD_PROVIDERS;
+
+function isCloud(name: ProviderName): name is CloudProviderName {
+  return name === 'groq' || name === 'openrouter';
+}
+
+/**
+ * Turn the admin's configured providers into a chain ai-kit can WALK.
+ *
+ * The DB rows already express a preference order (user default, then system
+ * default, then anything else enabled). That order is worth keeping — it is a
+ * human decision. What was not worth keeping is how it was acted on.
+ */
+function buildChatChain(
+  systemSettings: ProviderSettings[],
+  userDefault?: ProviderSettings,
+): { chain: Link[]; env: Record<string, string | undefined> } {
+  const ordered: ProviderSettings[] = [];
+  const seen = new Set<ProviderName>();
+  const push = (s?: ProviderSettings) => {
+    if (!s || !s.is_enabled || seen.has(s.provider)) return;
+    seen.add(s.provider);
+    ordered.push(s);
+  };
+
+  push(userDefault);
+  push(systemSettings.find((s) => s.is_default && s.is_enabled));
+  for (const s of systemSettings) push(s);
+
+  const env: Record<string, string | undefined> = {};
+  const chain: Link[] = [];
+
+  for (const settings of ordered) {
+    if (!isCloud(settings.provider)) continue;
+    const spec = CLOUD_PROVIDERS[settings.provider];
+
+    // A key configured in /admin/hirn beats the environment — that is the
+    // whole point of the settings screen.
+    const key = settings.settings.api_key?.trim() || process.env[spec.keyEnv]?.trim();
+    if (!key) continue;
+    env[spec.keyEnv] = key;
+
+    // The configured model first, then this provider's known-good default as a
+    // second link. A configured id is the one most likely to have rotted — it
+    // was typed once and never checked again — and a second model at the same
+    // vendor costs nothing when the vendor is fine and rescues the call when
+    // only that id is gone. It cannot mask an exhausted day: a DAILY 429
+    // condemns the whole vendor, both links with it.
+    const models = [settings.settings.model?.trim(), spec.fallbackModel].filter(
+      (m, i, all): m is string => Boolean(m) && all.indexOf(m) === i,
+    );
+
+    const provider: Provider = {
+      id: spec.id,
+      baseUrl: settings.settings.base_url?.trim() || spec.baseUrl,
+      keyEnv: spec.keyEnv,
+      models,
+      dailyTokens: spec.dailyTokens,
+      routed: spec.routed,
+    };
+
+    for (const model of models) chain.push({ provider, model });
+  }
+
+  return { chain, env };
+}
+
+/**
+ * Select a chat provider and generate a completion in one step.
+ *
+ * WHAT CHANGED, AND WHY IT WAS WRONG BEFORE.
+ *
+ * This used to call `getDefaultChatProvider()` — which picks ONE provider by
+ * asking each candidate `isAvailable()`, a `GET /models` probe — and then call
+ * `.chat()` on it exactly once. The shape looked like a fallback chain and was
+ * not one, in the way that is hardest to see: it advanced on a signal
+ * unrelated to the failure it needed to survive. "Can I list your models?" and
+ * "can this model answer right now?" are different questions, and a 429, a
+ * retired model id, or an empty completion on the real call was terminal — the
+ * next provider was never tried, because the first had already passed its
+ * audition.
+ *
+ * It also cost an extra round trip before every single chat, to answer a
+ * question the chat itself was about to answer properly.
+ *
+ * `complete()` walks the real calls, and brings the three judgements this file
+ * got wrong (measured across the fleet 2026-09-06, 9 of 12 hand-rolled clients
+ * share them):
+ *
+ *   - an empty HTTP 200 is a FAILURE, not an answer. This file returned
+ *     `choices?.[0]?.message?.content || ''` — a reasoning model that spends
+ *     its budget thinking, or a vendor having a moment, produced an empty
+ *     string that was handed to the user as the assistant's reply.
+ *   - a DAILY 429 condemns that whole vendor for the walk, instead of trying
+ *     its other models against the same exhausted org-wide budget.
+ *   - a SIZE 429 ends the walk instead of demoting to a model with a SMALLER
+ *     ceiling, which is strictly worse.
+ *
+ * Plus a deadline per link, so a vendor that accepts the connection and never
+ * answers is abandoned rather than holding the request open forever.
+ *
+ * Ollama is not in the chain (it is not OpenAI-compatible), so when it is the
+ * configured default it is still tried first, on its own path.
  */
 export async function getChatResponse(
   options: ChatCompletionOptions,
   userId?: string,
 ): Promise<ChatCompletionResponse> {
   try {
-    const provider = await getDefaultChatProvider(userId);
-    const response = await provider.chat(options);
+    const systemSettings = await getProviderSettings('system');
+    const userSettings = userId ? await getProviderSettings('user', userId) : [];
+    const userDefault = userSettings.find((s) => s.is_default && s.is_enabled);
+
+    // Ollama cannot join the chain, so honour it the only way available: if it
+    // is the explicit default, try it first and fall through to the cloud
+    // chain when it is not running.
+    const localFirst = userDefault ?? systemSettings.find((s) => s.is_default && s.is_enabled);
+    if (localFirst?.provider === 'ollama' && localFirst.is_enabled) {
+      try {
+        const ollama = createProvider('ollama', {
+          baseUrl: localFirst.settings.base_url,
+          model: localFirst.settings.model,
+        });
+        const response = await ollama.chat(options);
+        if (response.content.trim() !== '') {
+          recordLLMSuccess();
+          return response;
+        }
+        logger.warn('Ollama returned an empty completion — falling through to the cloud chain');
+      } catch (error) {
+        logger.warn('Ollama unavailable — falling through to the cloud chain', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
+    }
+
+    const { chain, env } = buildChatChain(systemSettings, userDefault);
+    if (chain.length === 0) {
+      const tried = systemSettings
+        .filter((s) => s.is_enabled)
+        .map((s) => s.provider)
+        .join(', ');
+      throw new Error(
+        `Kein KI-Anbieter verfügbar. Geprüft: ${tried || 'keiner'}. Aktualisiere den API-Key (z.B. GROQ_API_KEY) oder die Anbieter-Einstellungen in /admin/hirn.`,
+      );
+    }
+
+    const result = await complete({
+      chain,
+      env,
+      messages: options.messages,
+      temperature: options.temperature ?? 0.7,
+      // Generous on purpose: the chain leads with reasoning models, which spend
+      // this budget thinking before emitting a visible token, and an empty
+      // completion is now correctly treated as a failure. A mean budget would
+      // walk the whole chain and report every link broken.
+      maxTokens: options.maxTokens ?? 2048,
+      onLinkFailure: (link, error) => {
+        logger.warn('Hirn chat link failed — trying the next', {
+          link: linkId(link),
+          error: error.message,
+        });
+      },
+    });
+
+    const usage = (result.raw as { usage?: Record<string, number> } | undefined)?.usage;
+
     recordLLMSuccess();
-    return response;
+    return {
+      content: result.text,
+      usage: usage
+        ? {
+            promptTokens: usage.prompt_tokens ?? 0,
+            completionTokens: usage.completion_tokens ?? 0,
+            totalTokens: usage.total_tokens ?? 0,
+          }
+        : undefined,
+      model: result.link.model,
+      provider: result.link.provider.id,
+    };
   } catch (error) {
     recordLLMFailure(error);
     throw error;
