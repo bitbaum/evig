@@ -35,7 +35,7 @@ importers:
         version: 0.12.0(react@19.2.8)
       '@bitbaum/mail-kit':
         specifier: ^0.1.0
-        version: 0.1.0
+        version: 0.1.1
       '@fleet/ai-forms':
         specifier: github:bitbaum/ai-forms#v0.1.2
         version: ai-forms@https://codeload.github.com/bitbaum/ai-forms/tar.gz/52e3239ae4b0a2fcdc579edc2b9d8f8e7bff44b9(react@19.2.8)
@@ -173,8 +173,8 @@ importers:
         version: 4.5.4
     devDependencies:
       '@eslint/eslintrc':
-        specifier: ^3.3.6
-        version: 3.3.6(supports-color@10.2.2)
+        specifier: ^3.3.7
+        version: 3.3.7(supports-color@10.2.2)
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.9.1(jiti@2.7.0)(supports-color@10.2.2))
@@ -479,8 +479,8 @@ packages:
       react:
         optional: true
 
-  '@bitbaum/mail-kit@0.1.0':
-    resolution: {integrity: sha512-RbFBDANTUEb2/O2duSXIp+lb8y9ycrdbSTPnvoQ8iZOZsfxQZLseKzgCZumN31q7jRbVNHjQRao0envGWsFJ5Q==}
+  '@bitbaum/mail-kit@0.1.1':
+    resolution: {integrity: sha512-3JfaeuwkI+8TVGeSDrr8/esaWkv2d7UAcNg1Xu5HHu6k3cBzuSaLGhuzHp0KlAJgGa2QEQIqtE7W1+PosKFOjw==}
     engines: {node: '>=20'}
 
   '@bramus/specificity@2.4.2':
@@ -733,8 +733,8 @@ packages:
     resolution: {integrity: sha512-MwcE1P+AZ4C6DWlpin/OmOA54mmIZ/+xZuJiQd4SyB29oAJjN30UW9wkKNptW2ctp4cEsvhlLY/CsQ1uoHDloQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@eslint/eslintrc@3.3.6':
-    resolution: {integrity: sha512-l2Ul9PrHsPCKcEY/ac7VgFj9D80C7S68sOKc618SyHDPK36s1XcFebXY0iTzUVn4Yq+YbwvSnDmCz9yxjX+QrA==}
+  '@eslint/eslintrc@3.3.7':
+    resolution: {integrity: sha512-F42g89Qd5oAWtp0k0nnSrjziAKza7w8SVT4mStc18LZMaRb4J1HQAHLCalEtDCxrTuksx7NU9qsmeLwpOfPqWw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/js@10.0.1':
@@ -6196,7 +6196,7 @@ snapshots:
     optionalDependencies:
       react: 19.2.8
 
-  '@bitbaum/mail-kit@0.1.0': {}
+  '@bitbaum/mail-kit@0.1.1': {}
 
   '@bramus/specificity@2.4.2':
     dependencies:
@@ -6371,7 +6371,7 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@eslint/eslintrc@3.3.6(supports-color@10.2.2)':
+  '@eslint/eslintrc@3.3.7(supports-color@10.2.2)':
     dependencies:
       ajv: 6.15.0
       debug: 4.4.3(supports-color@10.2.2)
