@@ -14,9 +14,20 @@ on:
   push:
     branches: [main]
 
+# Queue deploys; do NOT cancel them.
+#
+# Measured 2026-09-07: with `cancel-in-progress: true` and a ~13-minute deploy,
+# 4 of this repo's last 10 deploys were CANCELLED — 40%, against 0% for every
+# other repo in the fleet. Three in a row cancelled each other on one afternoon
+# and a merged fix took three attempts to reach production. Cancelling is safe
+# only if the newer run is guaranteed to finish, and at 13 minutes it is not.
+#
+# Queuing plus the supersede check in the CI gate below gives the intended
+# behaviour without the loss: a superseded commit exits early and cheaply,
+# and the newest commit always deploys.
 concurrency:
   group: deploy-selfhost-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -77,36 +88,62 @@ jobs:
           restore-keys: |
             nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
-      # ONE definition of "verified" — the same bundle ci.yml runs, called
-      # verbatim. These four steps used to be re-inlined here, which quietly made
-      # the DEPLOY gate weaker than the MERGE gate: it omitted `lint:chrome`
-      # (the card-shell ratchet) and ran only the i18n subset instead of the
-      # full unit suite. A regression those cover could not block a merge but
-      # could still ship. `verify` = lint + umlauts + chrome + typecheck + test
-      # + build, and it already includes the i18n structure gate via `test`.
-      - name: Verify (lint + umlauts + chrome + typecheck + test + build)
+      # ONE definition of "verified" — but REQUIRED, not re-run.
+      #
+      # This step used to be `pnpm run verify`, which is lint + umlauts + chrome
+      # + typecheck + test + build. CI Pipeline runs exactly that bundle on this
+      # same commit, and the two ran CONCURRENTLY — so the commit was verified
+      # twice in parallel and built four times in total per merge (CI verify,
+      # CI's E2E "Build app", this one, and the build inside the deploy script
+      # that actually ships). Only the last produces the artifact.
+      #
+      # Requiring CI's green is not a weaker gate than re-running it: the same
+      # bundle must pass, it simply has to pass ONCE. What made an earlier
+      # version of this step weaker was that it re-inlined a SUBSET (no
+      # lint:chrome, i18n only) — the fix for that is to depend on the full
+      # bundle, not to run a second copy of it.
+      #
+      # Exit paths: green -> deploy; red -> fail loudly; superseded (main has
+      # moved past this commit) -> skip, because the newer commit's deploy
+      # ships this change too. Fail-closed on timeout.
+      - name: Require CI green on this commit
+        id: gate
         if: steps.secrets.outputs.configured == 'true'
-        run: pnpm run verify
         env:
-          # Same build-time placeholders ci.yml uses: this step runs BEFORE
-          # .env.selfhost.local is written, so strict env validation would
-          # otherwise fail during compile. The deploy script rebuilds after
-          # this with the real env and the release SHA; that second build is
-          # warm (the .next/cache step above), so the gate costs little.
-          AUTH_SECRET: ci-build-placeholder-secret-32chars
-          DB_HOST: localhost
-          DB_NAME: evig_ci
-          DB_USER: ci
-          DB_PASSWORD: ci
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          for _ in $(seq 1 90); do
+            head=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha 2>/dev/null)
+            if [ -n "$head" ] && [ "$head" != "$GITHUB_SHA" ]; then
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              echo "::notice::superseded by ${head:0:8} — its deploy ships this change"
+              exit 0
+            fi
+            state=$(gh api \
+              "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$GITHUB_SHA&per_page=50" \
+              --jq '[.workflow_runs[] | select(.name=="CI Pipeline")] | first
+                    | "\(.status) \(.conclusion)"' 2>/dev/null)
+            case "$state" in
+              "completed success")
+                echo "proceed=true" >> "$GITHUB_OUTPUT"; exit 0 ;;
+              "completed "*)
+                echo "::error::CI Pipeline is $state for $GITHUB_SHA — deploy blocked"
+                exit 1 ;;
+            esac
+            sleep 20
+          done
+          echo "::error::timed out waiting for CI Pipeline on $GITHUB_SHA"
+          exit 1
 
       - name: Write selfhost env
-        if: steps.secrets.outputs.configured == 'true'
+        if: steps.secrets.outputs.configured == 'true' && steps.gate.outputs.proceed == 'true'
         run: |
           printf '%s' "$SELFHOST_ENV" > .env.selfhost.local
           chmod 600 .env.selfhost.local
 
       - name: Setup SSH
-        if: steps.secrets.outputs.configured == 'true'
+        if: steps.secrets.outputs.configured == 'true' && steps.gate.outputs.proceed == 'true'
         run: |
           mkdir -p ~/.ssh
           printf '%s\n' "$HETZNER_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
@@ -114,12 +151,16 @@ jobs:
           ssh-keyscan -H 167.233.22.31 >> ~/.ssh/known_hosts
 
       - name: Deploy
-        if: steps.secrets.outputs.configured == 'true'
+        if: steps.secrets.outputs.configured == 'true' && steps.gate.outputs.proceed == 'true'
         run: bash scripts/selfhost-deploy-evig.sh
 
+      # Must carry the gate too: this output is what starts the prod smoke job,
+      # and a superseded run never deployed anything. Marking it deployed would
+      # smoke-test a release this run did not make — and when that smoke fails
+      # it reports against THIS commit, blaming a change that never shipped.
       - name: Mark deployed
         id: mark-deployed
-        if: steps.secrets.outputs.configured == 'true'
+        if: steps.secrets.outputs.configured == 'true' && steps.gate.outputs.proceed == 'true'
         run: echo "deployed=true" >> "$GITHUB_OUTPUT"
 
   post-deploy-smoke:

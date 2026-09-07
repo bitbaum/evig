@@ -39,6 +39,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Next keeps its compiler output in .next/cache. Without restoring it every
+      # build in this repo is COLD — and this workflow builds twice (here and in
+      # the E2E job), while the deploy builds again. Measured 2026-09-07: the
+      # verify step alone was 9.6m. The deploy workflow already caches this; CI
+      # never did, which is why CI was the slower of the two.
+      #
+      # Key includes the job so the two builds do not fight over one cache entry;
+      # restore-keys let either warm from whichever ran last on this lockfile.
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ runner.os }}-verify-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-verify-${{ hashFiles('pnpm-lock.yaml') }}-
+            nextjs-${{ runner.os }}-
+
       # SSOT: lint + umlauts + typecheck + test + build are bundled in the
       # `verify` script (package.json). CI calls it verbatim so the gating
       # chain can't drift from what runs locally. Do not re-inline these checks
@@ -264,6 +281,23 @@ jobs:
 
       - name: Seed E2E data
         run: pnpm run e2e:seed
+
+      # Next keeps its compiler output in .next/cache. Without restoring it every
+      # build in this repo is COLD — and this workflow builds twice (here and in
+      # the E2E job), while the deploy builds again. Measured 2026-09-07: the
+      # verify step alone was 9.6m. The deploy workflow already caches this; CI
+      # never did, which is why CI was the slower of the two.
+      #
+      # Key includes the job so the two builds do not fight over one cache entry;
+      # restore-keys let either warm from whichever ran last on this lockfile.
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ runner.os }}-e2e-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-e2e-${{ hashFiles('pnpm-lock.yaml') }}-
+            nextjs-${{ runner.os }}-
 
       - name: Build app
         run: pnpm run build
