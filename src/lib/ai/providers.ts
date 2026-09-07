@@ -15,7 +15,14 @@ import { eq, desc } from 'drizzle-orm';
 import { OLLAMA_URL, APP_URL } from '@/config/urls';
 import { ORG } from '@/config/org';
 import { recordAIToolsFailure, recordAIToolsSuccess } from './health';
-import { freeChain, usableChain, tryChain, ChainExhaustedError, type Link } from '@bitbaum/ai-kit';
+import {
+  complete,
+  freeChain,
+  usableChain,
+  ChainExhaustedError,
+  LinkFailure,
+  type Link,
+} from '@bitbaum/ai-kit';
 
 // =============================================================================
 // CONFIGURATION (SSOT - all AI provider settings in one place)
@@ -34,7 +41,7 @@ import { freeChain, usableChain, tryChain, ChainExhaustedError, type Link } from
 // model at all: it builds its chain from ai-kit's `freeChain`, the fleet's
 // maintained, multi-model-per-vendor list, so a single retired id demotes to
 // the next model or vendor instead of taking the feature down. See
-// `callOpenAICompatText` / `callWithFallback`.
+// `complete()` (ai-kit) / `callWithFallback`.
 //
 // The vision cascade (`callVisionWithFallback`, further down) is the one
 // exception — ai-kit's `freeChain` carries no vision-capable free model, so it
@@ -230,92 +237,71 @@ class ChainLinkError extends Error {
   }
 }
 
-async function callOpenAICompatText(
-  link: Link,
-  apiKey: string,
-  opts: CallOptions,
-): Promise<ProviderResult> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS);
-  try {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    };
-    if (link.provider.id === 'openrouter') {
-      headers['HTTP-Referer'] = APP_URL;
-      headers['X-Title'] = ORG.name;
-    }
-
-    const response = await fetch(`${link.provider.baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        model: link.model,
-        messages: [
-          { role: 'system', content: opts.systemPrompt },
-          { role: 'user', content: opts.userPrompt },
-        ],
-        temperature: opts.temperature ?? 0.3,
-        max_tokens: opts.maxTokens ?? 4096,
-      }),
-      signal: controller.signal,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => '');
-      if (response.status === 401 || response.status === 403) {
-        throw new ChainLinkError(
-          'auth',
-          `API-Schlüssel ungültig oder abgelaufen (${response.status})`, // i18n-ok
-        );
-      }
-      // 402 is OpenRouter-specific: a privacy setting or exhausted credit, not
-      // a bad key — surfaced under 'auth' so buildFailureMessage still points
-      // the user at the admin rather than a generic retry.
-      if (response.status === 402 && link.provider.id === 'openrouter') {
-        throw new ChainLinkError(
-          'auth',
-          'OpenRouter: Datenschutz-Einstellungen prüfen oder Guthaben kaufen (openrouter.ai/settings)',
-        );
-      }
-      if (response.status === 429) {
-        throw new ChainLinkError('rate_limit', 'Rate-Limit erreicht');
-      }
-      throw new ChainLinkError(
-        'unknown',
-        `HTTP ${response.status}: ${errorText.substring(0, 200)}`,
-      );
-    }
-
-    let result: Record<string, unknown>;
-    try {
-      result = await response.json();
-    } catch {
-      throw new ChainLinkError('parse', 'Ungültige JSON-Antwort');
-    }
-
-    const text =
-      (result.choices as Array<{ message?: { content?: string } }>)?.[0]?.message?.content || '';
-    if (!text) throw new ChainLinkError('parse', 'Leere Antwort');
-
-    return {
-      text,
-      model: `${link.provider.id}:${link.model}`,
-      provider: link.provider.id as ProviderName,
-    };
-  } catch (error) {
-    if (error instanceof ChainLinkError) throw error;
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new ChainLinkError(
-        'timeout',
-        `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s`,
-      );
-    }
-    throw new ChainLinkError('network', error instanceof Error ? error.message : 'Netzwerkfehler');
-  } finally {
-    clearTimeout(timeoutId);
+/**
+ * Turn one of `complete()`'s typed failures into this app's reason + German
+ * message.
+ *
+ * WHAT THIS REPLACED, AND WHY IT MATTERED. The hand-rolled `fetch` here read a
+ * 429's body — `const errorText = await response.text()` — and then threw it
+ * away, reporting every one of them as `rate_limit: 'Rate-Limit erreicht'`.
+ * The three kinds of 429 share that status code and want OPPOSITE responses,
+ * and only that body tells them apart:
+ *
+ *   capacity — a burst. Waiting and retrying is the fix.
+ *   daily    — the vendor's whole org-wide budget is spent. Waiting minutes
+ *              cannot help; the reset is hours away, and every other model at
+ *              that vendor draws on the same meter.
+ *   size     — one request exceeded the per-minute allowance on its own.
+ *              Retrying unchanged fails identically; the prompt must shrink.
+ *
+ * "Rate-Limit erreicht" told a Betreuer to try again in a minute in all three
+ * cases, and was right in one.
+ */
+function chainLinkErrorFrom(error: Error, providerId: string): ChainLinkError {
+  if (!(error instanceof LinkFailure)) {
+    return new ChainLinkError('network', error.message || 'Netzwerkfehler');
   }
+
+  if (error.status === 401 || error.status === 403) {
+    return new ChainLinkError(
+      'auth',
+      `API-Schlüssel ungültig oder abgelaufen (${error.status})`, // i18n-ok
+    );
+  }
+
+  // 402 is OpenRouter-specific: a privacy setting or exhausted credit, not a
+  // bad key — surfaced under 'auth' so buildFailureMessage still points the
+  // user at the admin rather than a generic retry.
+  if (error.status === 402 && providerId === 'openrouter') {
+    return new ChainLinkError(
+      'auth',
+      'OpenRouter: Datenschutz-Einstellungen prüfen oder Guthaben kaufen (openrouter.ai/settings)',
+    );
+  }
+
+  if (error.kind === 'daily') {
+    return new ChainLinkError('rate_limit', 'Tageskontingent des Anbieters aufgebraucht');
+  }
+  if (error.kind === 'size') {
+    return new ChainLinkError('rate_limit', 'Anfrage zu gross für das Modell — bitte kürzen');
+  }
+  if (error.kind === 'capacity') {
+    return new ChainLinkError('rate_limit', 'Rate-Limit erreicht — kurz warten');
+  }
+
+  // Two shapes, one meaning to a user. `no response within Nms` is OUR deadline
+  // firing (ai-kit abandons the link and says so); `abort` is the other side or
+  // the runtime cutting the connection. Reporting the second as 'unknown' would
+  // send a Betreuer hunting for a configuration problem behind what is simply a
+  // call that did not come back.
+  if (/no response within|abort/i.test(error.message)) {
+    return new ChainLinkError('timeout', `Zeitüberschreitung: ${error.message}`);
+  }
+  if (/empty content/.test(error.message)) {
+    return new ChainLinkError('parse', 'Leere Antwort');
+  }
+
+  return new ChainLinkError('unknown', error.message);
 }
 
 async function callOllama(
@@ -457,19 +443,43 @@ export async function callWithFallback(opts: CallOptions): Promise<CallResult | 
 
   if (chain.length > 0) {
     try {
-      const result = await tryChain(chain, {
-        attempt: (link) => callOpenAICompatText(link, chainEnv[link.provider.keyEnv] ?? '', opts),
+      const completion = await complete({
+        chain,
+        env: chainEnv,
+        messages: [
+          { role: 'system', content: opts.systemPrompt },
+          { role: 'user', content: opts.userPrompt },
+        ],
+        temperature: opts.temperature ?? 0.3,
+        maxTokens: opts.maxTokens ?? 4096,
+        // Per LINK. A shared deadline is spent by the first vendor and leaves
+        // the rest already expired, turning "one vendor is slow" into "every
+        // vendor failed".
+        timeoutMs: opts.timeoutMs || DEFAULT_TIMEOUT_MS,
+        // OpenRouter ranks apps by these. Harmless at Groq, which ignores
+        // unknown headers, and losing them would take evig off that list with
+        // no error anywhere.
+        extraHeaders: { 'HTTP-Referer': APP_URL, 'X-Title': ORG.name },
         onLinkFailure: (link, error) => {
-          const reason = error instanceof ChainLinkError ? error.reason : 'unknown';
-          const message = error instanceof Error ? error.message : String(error);
-          failedProviders.push({ provider: link.provider.id as ProviderName, reason, message });
+          const mapped = chainLinkErrorFrom(error, link.provider.id);
+          failedProviders.push({
+            provider: link.provider.id as ProviderName,
+            reason: mapped.reason,
+            message: mapped.message,
+          });
           logger.warn(`AI provider ${link.provider.id} failed`, {
             model: link.model,
-            reason,
-            message,
+            reason: mapped.reason,
+            message: mapped.message,
           });
         },
       });
+
+      const result = {
+        text: completion.text,
+        model: `${completion.link.provider.id}:${completion.link.model}`,
+        provider: completion.link.provider.id as ProviderName,
+      };
 
       if (failedProviders.length > 0) {
         logger.info(`AI fallback to ${result.provider}`, {

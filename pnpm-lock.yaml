@@ -31,8 +31,8 @@ importers:
         specifier: ^3.1123.0
         version: 3.1123.0
       '@bitbaum/ai-kit':
-        specifier: ^0.12.0
-        version: 0.12.0(react@19.2.8)
+        specifier: ^0.13.0
+        version: 0.13.0(react@19.2.8)
       '@bitbaum/mail-kit':
         specifier: ^0.1.0
         version: 0.1.0
@@ -470,8 +470,8 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@bitbaum/ai-kit@0.12.0':
-    resolution: {integrity: sha512-EsmFmHxZ9pRB7y1nxrIfg1y0/ZS7AXZeG3pwCjMgo+48z/+zyVb3Bb+vd/ZfOYYoFwx2qHUy1cBsAcnjmPutkw==}
+  '@bitbaum/ai-kit@0.13.0':
+    resolution: {integrity: sha512-YCV3KtgQg+q/Vh0w95KHBj5fmzpSEAJN5ttTq4ljxWHjLjchzszaHgT/jVUZbUWVdHgC64tvk7R383ofyFQrzw==}
     engines: {node: '>=20'}
     peerDependencies:
       react: '>=18'
@@ -6190,7 +6190,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@bitbaum/ai-kit@0.12.0(react@19.2.8)':
+  '@bitbaum/ai-kit@0.13.0(react@19.2.8)':
     dependencies:
       ai-forms: 0.1.2(react@19.2.8)
     optionalDependencies:
