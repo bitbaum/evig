@@ -31,7 +31,7 @@ export function generateSlug(text: string): string {
   const slug = String(text)
     .toLowerCase()
     // 1. German/Swiss convention, before any diacritic stripping.
-    .replace(/[äöü]/g, m => ({ ä: 'ae', ö: 'oe', ü: 'ue' })[m] ?? m)
+    .replace(/[äöü]/g, (m) => ({ ä: 'ae', ö: 'oe', ü: 'ue' })[m] ?? m)
     .replace(/ß/g, 'ss')
     // 2. Every other Latin diacritic: decompose, then drop the combining marks.
     .normalize('NFD')
