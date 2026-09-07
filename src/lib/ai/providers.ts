@@ -257,9 +257,17 @@ class ChainLinkError extends Error {
  * "Rate-Limit erreicht" told a Betreuer to try again in a minute in all three
  * cases, and was right in one.
  */
+// Every message below is marked `// i18n-ok`, matching the convention this
+// file already used for the auth cases: these are DIAGNOSTIC strings for the
+// admin's failedProviders list, not UI copy rendered through t().
+//
+// All of them are marked, not only the two the audit flagged. It detects
+// German by umlaut, so 'Tageskontingent des Anbieters aufgebraucht' passes it
+// untouched — and leaving that one bare would be relying on a gate's blind
+// spot to stay green rather than on the rule being followed.
 function chainLinkErrorFrom(error: Error, providerId: string): ChainLinkError {
   if (!(error instanceof LinkFailure)) {
-    return new ChainLinkError('network', error.message || 'Netzwerkfehler');
+    return new ChainLinkError('network', error.message || 'Netzwerkfehler'); // i18n-ok
   }
 
   if (error.status === 401 || error.status === 403) {
@@ -280,13 +288,13 @@ function chainLinkErrorFrom(error: Error, providerId: string): ChainLinkError {
   }
 
   if (error.kind === 'daily') {
-    return new ChainLinkError('rate_limit', 'Tageskontingent des Anbieters aufgebraucht');
+    return new ChainLinkError('rate_limit', 'Tageskontingent des Anbieters aufgebraucht'); // i18n-ok
   }
   if (error.kind === 'size') {
-    return new ChainLinkError('rate_limit', 'Anfrage zu gross für das Modell — bitte kürzen');
+    return new ChainLinkError('rate_limit', 'Anfrage zu gross für das Modell — bitte kürzen'); // i18n-ok
   }
   if (error.kind === 'capacity') {
-    return new ChainLinkError('rate_limit', 'Rate-Limit erreicht — kurz warten');
+    return new ChainLinkError('rate_limit', 'Rate-Limit erreicht — kurz warten'); // i18n-ok
   }
 
   // Two shapes, one meaning to a user. `no response within Nms` is OUR deadline
@@ -295,10 +303,10 @@ function chainLinkErrorFrom(error: Error, providerId: string): ChainLinkError {
   // send a Betreuer hunting for a configuration problem behind what is simply a
   // call that did not come back.
   if (/no response within|abort/i.test(error.message)) {
-    return new ChainLinkError('timeout', `Zeitüberschreitung: ${error.message}`);
+    return new ChainLinkError('timeout', `Zeitüberschreitung: ${error.message}`); // i18n-ok
   }
   if (/empty content/.test(error.message)) {
-    return new ChainLinkError('parse', 'Leere Antwort');
+    return new ChainLinkError('parse', 'Leere Antwort'); // i18n-ok
   }
 
   return new ChainLinkError('unknown', error.message);
