@@ -84,25 +84,30 @@ import { callWithFallback, __resetProviderCache } from '../providers';
 // Fetch helper factories
 // ---------------------------------------------------------------------------
 
+// Real `Response` objects, not look-alikes.
+//
+// These were `{ ok, status, json, text }` literals, and the success one carried
+// `text: () => Promise.resolve('')` — harmless while the client read `json()`
+// first, and fatal the moment it read the text (which it must, to keep the
+// vendor's body in the error and tell a spent daily budget from a busy minute).
+// Every response then looked like a 200 with an unparseable body. A fake that
+// diverges from the contract it imitates decides what the client may do next.
+//
+// Each call builds a NEW one: a Response body can be read only once, so a
+// shared instance would make link two fail with "Body has already been read" —
+// a fake failure standing in front of the real one, inside the tests that check
+// the fallback.
 function okResponse(text: string) {
-  return Promise.resolve({
-    ok: true,
-    status: 200,
-    json: () =>
-      Promise.resolve({
-        choices: [{ message: { content: text } }],
-      }),
-    text: () => Promise.resolve(''),
-  });
+  return Promise.resolve(
+    new Response(JSON.stringify({ choices: [{ message: { content: text } }] }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    }),
+  );
 }
 
-function errorResponse(status: number) {
-  return Promise.resolve({
-    ok: false,
-    status,
-    json: () => Promise.resolve({}),
-    text: () => Promise.resolve(`HTTP error ${status}`),
-  });
+function errorResponse(status: number, body = `HTTP error ${status}`) {
+  return Promise.resolve(new Response(body, { status }));
 }
 
 function ollamaOkResponse(text: string) {
@@ -193,6 +198,64 @@ describe('callWithFallback — Groq 401 → OpenRouter', () => {
     expect(result!.text).toBe('OR-Antwort');
     expect(result!.failedProviders).toHaveLength(1);
     expect(result!.failedProviders[0]).toMatchObject({ provider: 'groq', reason: 'auth' });
+  });
+
+  // ── The 429 taxonomy: one status code, three failures, three remedies ──
+  //
+  // The hand-rolled client read the body (`await response.text()`) and threw it
+  // away, reporting every 429 as `rate_limit: 'Rate-Limit erreicht'`. That told
+  // a Betreuer to try again in a minute in all three cases, and was right in
+  // one. The message a person acts on is the point of classifying them.
+
+  it('a DAILY 429 says the day is spent, not "try again shortly"', async () => {
+    (global.fetch as Mock)
+      .mockResolvedValueOnce(
+        errorResponse(
+          429,
+          JSON.stringify({
+            error: { message: 'Rate limit reached for model per day. Limit 100000, used 100000.' },
+          }),
+        ),
+      )
+      .mockResolvedValueOnce(okResponse('OR-Antwort'));
+
+    const result = await callWithFallback(opts);
+
+    expect(result!.failedProviders[0]).toMatchObject({
+      provider: 'groq',
+      reason: 'rate_limit',
+      message: 'Tageskontingent des Anbieters aufgebraucht',
+    });
+    // Waiting cannot help — the reset is hours away — but the OTHER vendor has
+    // its own meter, which is the whole reason the chain crosses vendors.
+    expect(result!.provider).toBe('openrouter');
+  });
+
+  it('a SIZE 429 asks for a shorter prompt, and does not blame the vendor', async () => {
+    (global.fetch as Mock).mockResolvedValueOnce(
+      errorResponse(
+        429,
+        JSON.stringify({
+          error: {
+            message:
+              'Request too large for model with 12000 tokens per minute. Limit 12000, Requested 15000.',
+          },
+        }),
+      ),
+    );
+
+    await callWithFallback(opts);
+
+    // Demoting cannot help either: every link below has a SMALLER ceiling, so
+    // the walk STOPS rather than burning the chain to reach a worse version of
+    // the same error.
+    //
+    // Asserting a null result would not show this — everything failing produces
+    // null too. What distinguishes "stopped" from "tried them all and failed"
+    // is that OpenRouter was never asked.
+    const urls = (global.fetch as Mock).mock.calls.map(([url]) => String(url));
+    expect(urls.filter((u) => u.includes('groq'))).toHaveLength(1);
+    expect(urls.filter((u) => u.includes('openrouter'))).toHaveLength(0);
   });
 
   it('falls through to OpenRouter on Groq 429 (rate limit)', async () => {
