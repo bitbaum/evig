@@ -1,0 +1,83 @@
+/**
+ * evig tokens → bip-kit's --bp-* theming contract, for the blog's long-form
+ * surface only (imported by the post renderer, not by globals.css).
+ *
+ * Every value is a var() reference into the design-token SSOT
+ * (src/app/globals.css) — evig tokens are complete colors that flip with
+ * next-themes' `.dark` class, so ONE mapping covers both themes.
+ *
+ * The three-selector list is deliberate: bip-kit/styles.css defines its
+ * neutral defaults on `:root`, `[data-theme="dark"]`, and (inside a
+ * prefers-color-scheme media query) `:root:not([data-theme="light"])` — that
+ * last one has higher specificity than a bare `:root`, so a plain mapping
+ * would lose to it whenever the OS is dark. Matching each selector's
+ * specificity and loading after styles.css makes this mapping win everywhere.
+ */
+:root,
+:root:not([data-theme='light']),
+:root[data-theme='dark'] {
+  --bp-font-sans: var(--font-sans);
+  --bp-font-mono: var(--font-mono);
+
+  --bp-bg: var(--surface-page);
+  --bp-surface: var(--surface-raised);
+  --bp-fg: var(--text-primary);
+  --bp-fg-muted: var(--text-secondary);
+  --bp-fg-faint: var(--text-tertiary);
+  --bp-border: var(--border-subtle);
+
+  /* Links, active TOC entry, reading-progress hairline — the deep lime in
+     light, the electric lime in dark (accent-action flips with the theme). */
+  --bp-accent: var(--accent-action);
+  --bp-accent-contrast: var(--accent-action-text);
+
+  /* Callouts follow the status scales (info/success/warning/error). */
+  --bp-note: var(--color-info-600);
+  --bp-note-bg: color-mix(in srgb, var(--color-info-500) 8%, transparent);
+  --bp-tip: var(--color-success-600);
+  --bp-tip-bg: color-mix(in srgb, var(--color-success-500) 8%, transparent);
+  --bp-warn: var(--color-warning-600);
+  --bp-warn-bg: color-mix(in srgb, var(--color-warning-500) 10%, transparent);
+  --bp-danger: var(--color-error-600);
+  --bp-danger-bg: color-mix(in srgb, var(--color-error-500) 8%, transparent);
+}
+
+/* Status foregrounds need the lighter end of each scale on dark surfaces. */
+:root.dark {
+  --bp-note: var(--color-info-400);
+  --bp-tip: var(--color-success-400);
+  --bp-warn: var(--color-warning-400);
+  --bp-danger: var(--color-error-400);
+}
+
+/* evig's editorial sizing: 19px/1.75 body (the pre-bip-kit reader's measure),
+   and the surrounding blog grid owns the 720px column, so the article fills
+   it instead of re-imposing bip-kit's 70ch. The @media re-set matches
+   bip-kit's own ≥720px `--bp-size` bump at equal specificity, loaded later. */
+.bp-article {
+  --bp-size: 1.1875rem; /* 19px */
+  --bp-leading: 1.75;
+  max-width: none;
+  padding-inline: 0;
+}
+
+@media (min-width: 720px) {
+  .bp-article {
+    --bp-size: 1.1875rem;
+  }
+}
+
+/*
+ * Shiki dual themes: bip-kit's styles.css flips --shiki-light/--shiki-dark on
+ * `data-theme` + the OS preference, but evig's theme is a `.dark`/`.light`
+ * CLASS (next-themes attribute="class"). These rules re-key the flip on the
+ * class; same specificity as the bip-kit rules, loaded later, so they win.
+ */
+:root.dark .bp-codeblock-highlighted span {
+  color: var(--shiki-dark);
+}
+@media (prefers-color-scheme: dark) {
+  :root.light .bp-codeblock-highlighted span {
+    color: var(--shiki-light);
+  }
+}
