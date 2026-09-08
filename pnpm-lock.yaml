@@ -64,8 +64,8 @@ importers:
         specifier: ^2.4.3
         version: 2.4.3
       bip-kit:
-        specifier: ^0.2.3
-        version: 0.2.3(katex@0.16.47)(mermaid@11.17.2)(react@19.2.8)(shiki@4.4.3)
+        specifier: ^0.2.4
+        version: 0.2.4(katex@0.16.47)(mermaid@11.17.2)(react@19.2.8)(shiki@4.4.3)
       busboy:
         specifier: ^1.6.0
         version: 1.6.0
@@ -2824,8 +2824,8 @@ packages:
   binary@0.3.0:
     resolution: {integrity: sha512-D4H1y5KYwpJgK8wk1Cue5LLPgmwHKYSChkbspQg5JtVuR5ulGckxfR62H3AE9UDkdMC8yyXlqYihuz3Aqg2XZg==}
 
-  bip-kit@0.2.3:
-    resolution: {integrity: sha512-Zp2VJMD9E/lLZvSy3HZNZERHORdTEmb5aBQAOb51s+kqHw/DsgxNy4YbaGyr0KMy+0a+0R3218Dd6Ny61mdQXg==}
+  bip-kit@0.2.4:
+    resolution: {integrity: sha512-dMxdWZshh0P0wtYHnoJvDw8yJ10SLQUd6h6YrKUcNROnlspV7wLRrMj2EWcgHwpqYGbJT7t2DgqNOQGUmuo7kQ==}
     engines: {node: '>=20'}
     peerDependencies:
       katex: '>=0.16'
@@ -8696,7 +8696,7 @@ snapshots:
       buffers: 0.1.1
       chainsaw: 0.1.0
 
-  bip-kit@0.2.3(katex@0.16.47)(mermaid@11.17.2)(react@19.2.8)(shiki@4.4.3):
+  bip-kit@0.2.4(katex@0.16.47)(mermaid@11.17.2)(react@19.2.8)(shiki@4.4.3):
     dependencies:
       react: 19.2.8
     optionalDependencies:
