@@ -15,9 +15,9 @@
  * preview can run the exact same parse.
  */
 
-import { parseContentBlocks } from 'bip-kit';
+import { parseContentBlocks, extractToc, unicodeSlugify } from 'bip-kit';
 import type { ContentBlock, TocEntry } from 'bip-kit';
-import { slugifyHeading, type TocHeading } from '@/lib/blog-toc';
+import { type TocHeading } from '@/lib/blog-toc';
 
 /**
  * Normalize author-flavored markdown to bip-kit's deliberately scoped
@@ -64,32 +64,25 @@ export function normalizeLongformMarkdown(markdown: string): string {
 }
 
 /**
- * Re-slug heading ids with evig's unicode-friendly slug (blog-toc.ts keeps
- * ä/ö/ü, 日本語, кириллица …). bip-kit's own slugger is ASCII-only, which
- * would turn every heading in the ja/ko/ru translations into `section-N`
- * and silently change the anchor URLs of already-published German posts
- * (`#geräte` → `#geraete`). The slug contract stays exactly what the site
- * has always linked to; de-duplication mirrors bip-kit's (`slug`, `slug-2`).
+ * evig's anchor contract: keep letters of any script (ä/ö/ü, 日本語,
+ * кириллица …) rather than transliterating to ASCII. bip-kit's DEFAULT
+ * slugger is ASCII-only, which would turn every heading in the ja/ko/ru
+ * translations into `section-N` and silently rename the anchors of
+ * already-published German posts (`#geräte` → `#geraete`).
+ *
+ * bip-kit v0.2.4 takes this as an option, so the policy is now one shared
+ * object passed to BOTH the parser and the TOC — previously this file had to
+ * re-slug the blocks itself in a second pass, which is how a heading's id and
+ * its TOC entry could drift apart. `unicodeSlugify` is bip-kit's own export
+ * and produces byte-identical slugs to the local `slugifyHeading` it replaces
+ * (verified across all 725 headings in the 101 published post files), so no
+ * published anchor moves.
  */
-function reslugHeadings(blocks: ContentBlock[]): TocEntry[] {
-  const seen = new Map<string, number>();
-  const toc: TocEntry[] = [];
-  for (const block of blocks) {
-    if (block.type === 'h2' || block.type === 'h3' || block.type === 'h4') {
-      const base = slugifyHeading(block.text) || 'section';
-      const n = (seen.get(base) ?? 0) + 1;
-      seen.set(base, n);
-      const id = n === 1 ? base : `${base}-${n}`;
-      block.id = id;
-      toc.push({ id, text: block.text, level: Number(block.type.slice(1)) as 2 | 3 | 4 });
-    }
-  }
-  return toc;
-}
+const SLUG_POLICY = { slugify: unicodeSlugify } as const;
 
 export interface ParsedLongform {
   blocks: ContentBlock[];
-  /** Full TOC (h2–h4) with the re-slugged ids. */
+  /** Full TOC (h2–h4); the same ids the heading blocks carry. */
   toc: TocEntry[];
   /** h2/h3 entries in the shape BlogTableOfContents consumes. */
   tocHeadings: TocHeading[];
@@ -97,8 +90,8 @@ export interface ParsedLongform {
 
 /** Parse a long-form markdown body into bip-kit typed blocks + TOC. */
 export function parseLongform(markdown: string): ParsedLongform {
-  const blocks = parseContentBlocks(normalizeLongformMarkdown(markdown));
-  const toc = reslugHeadings(blocks);
+  const blocks = parseContentBlocks(normalizeLongformMarkdown(markdown), SLUG_POLICY);
+  const toc = extractToc(blocks, SLUG_POLICY);
   // Same display contract as the old extractHeadings: h2/h3 only, inline
   // emphasis/code markers stripped so the rail label reads cleanly.
   const tocHeadings: TocHeading[] = toc
