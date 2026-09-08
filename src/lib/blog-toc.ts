@@ -1,10 +1,8 @@
 /**
- * Table-of-contents helpers for blog posts.
+ * Table-of-contents shape for blog posts.
  *
- * Pure string/util code — no `fs`, no React — so it is safe to import from both
+ * Pure type/util code — no `fs`, no React — so it is safe to import from both
  * the server (heading extraction) and the client (the sticky TOC component).
- * The slug produced here MUST match the `id` the markdown renderer puts on each
- * heading, so anchor links and scroll-spy line up.
  */
 
 export interface TocHeading {
@@ -13,15 +11,11 @@ export interface TocHeading {
   level: 2 | 3;
 }
 
-/** Stable, unicode-friendly slug (keeps ä/ö/ü, 日本語, etc.). */
-export function slugifyHeading(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\p{L}\p{N}]+/gu, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
 // Heading EXTRACTION moved to src/lib/longform/parse.ts: the bip-kit block
 // parser is the one markdown reader now, and the TOC derives from the same
 // typed blocks the article renders — one id contract, no regex re-parse.
+//
+// SLUGGING moved to bip-kit too. The local `slugifyHeading` that used to live
+// here is now bip-kit's `unicodeSlugify`, passed to the parser and the TOC as
+// one policy (see longform/parse.ts). It was byte-identical, and keeping a
+// second copy here is exactly how an id and the anchor linking to it drift.
