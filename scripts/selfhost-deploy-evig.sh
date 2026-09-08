@@ -94,6 +94,24 @@ if [ -d "$SRC/node_modules/@swc/helpers/esm" ]; then
   cp -a "$SRC/node_modules/@swc/helpers/esm" "$STAGE/$NEST/node_modules/@swc/helpers/"
 fi
 
+# ── shiki top-level link (bip-kit long-form highlighting) ───────────────────
+# Next auto-externalizes shiki, and bip-kit's ArticleBody loads it with plain
+# Node resolution from the server chunk at runtime. Output tracing copies the
+# .pnpm store entries into standalone node_modules/.pnpm but does not always
+# emit the top-level node_modules/shiki symlink — on the box (no outer
+# node_modules to leak from) the import then finds nothing and blog code
+# blocks silently render as the un-highlighted mono fallback while dev shows
+# them highlighted. Same trap and same fix as FleetCrown #513 and orangecat's
+# deploy-selfhost.sh: what the tracer can't see, the assemble step supplies.
+# Version-agnostic; no-op when the link already exists.
+for NM in "$STAGE/node_modules" "$STAGE/$NEST/node_modules"; do
+  SHIKI_STORE_ENTRY="$(ls "$NM/.pnpm" 2>/dev/null | grep -E '^shiki@' | head -1 || true)"
+  if [ -n "$SHIKI_STORE_ENTRY" ] && [ ! -e "$NM/shiki" ]; then
+    ln -s ".pnpm/$SHIKI_STORE_ENTRY/node_modules/shiki" "$NM/shiki"
+    echo "→ deploy: linked ${NM#"$STAGE/"}/shiki -> .pnpm/$SHIKI_STORE_ENTRY"
+  fi
+done
+
 echo "=== rsync release → $REMOTE_RELEASE ==="
 ssh -o BatchMode=yes "$BOX" "sudo mkdir -p '$REMOTE_RELEASE' && sudo chown \"\$(id -u):\$(id -g)\" '$REMOTE_RELEASES' && sudo chown -R \"\$(id -u):\$(id -g)\" '$REMOTE_RELEASE'"
 rsync -az --delete --partial \

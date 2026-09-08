@@ -22,25 +22,6 @@ export function slugifyHeading(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-/**
- * Extract H2/H3 headings from markdown, skipping fenced code blocks so a shell
- * `# comment` inside ```bash never becomes a fake TOC entry.
- */
-export function extractHeadings(markdown: string): TocHeading[] {
-  const out: TocHeading[] = [];
-  let inFence = false;
-  for (const raw of markdown.split('\n')) {
-    if (/^\s*(```|~~~)/.test(raw)) {
-      inFence = !inFence;
-      continue;
-    }
-    if (inFence) continue;
-    const m = /^(#{2,3})\s+(.+?)\s*#*$/.exec(raw);
-    if (!m) continue;
-    const level = m[1].length as 2 | 3;
-    // Drop inline emphasis/code markers so the visible label reads cleanly.
-    const text = m[2].replace(/[*_`]/g, '').trim();
-    if (text) out.push({ id: slugifyHeading(text), level, text });
-  }
-  return out;
-}
+// Heading EXTRACTION moved to src/lib/longform/parse.ts: the bip-kit block
+// parser is the one markdown reader now, and the TOC derives from the same
+// typed blocks the article renders — one id contract, no regex re-parse.
