@@ -107,7 +107,24 @@ accident. Every other timer here is installed and running.
 auth and are publicly triggerable). It is preserved across deploys (the deploy
 excludes `.env` from rsync and copies the existing one forward).
 
+**The script waits for an app that is still starting.** `After=evig-app.service`
+orders a timer after the app unit's *start*, never its readiness, and
+`Persistent=true` fires every schedule missed while the box was off the moment it
+boots — so on a reboot the catch-up run and the app race each other. On
+2026-09-10 the box came up at 08:01:48 UTC, `timecard-reminders` (due 08:00)
+caught up at 08:01:58, and Next only bound `:4004` at 08:02:00: curl's
+connection-refused became the script's exit status, the *daily* unit then sat
+`failed` for 24h, and that day's reminders never went out. `run-cron.sh`
+therefore retries **only** curl's exit 7 (10 attempts, 6s apart — bounded well
+inside `TimeoutStartSec=180`). A real HTTP status still fails on the first
+response, so a broken endpoint is exactly as loud as it always was.
+`pnpm run test:ops` (part of `verify`, so CI runs it) proves both halves against
+a fake app that binds late and one that answers 500.
+
 ### Install / update on the box
+
+> Editing `run-cron.sh` here changes nothing on the box — the deploy only rsyncs
+> the standalone build. Re-run this block after every change to it.
 
 ```bash
 BOX=ubuntu@167.233.22.31
