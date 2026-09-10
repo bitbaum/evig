@@ -21,7 +21,16 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@bitbaum/ai-kit@0.13.0'
   - '@bitbaum/mail-kit@0.1.1'
-  - 'bip-kit@0.2.4'
+  # Two versions on purpose, and this is the shape a bump has to take here.
+  # The age-gate verifies the lockfile as it stands BEFORE resolution, so the
+  # version being REPLACED must still be exempt for the very install that
+  # replaces it. Moving this to a bare 'bip-kit@0.2.6' un-exempts 0.2.4, which
+  # is still in the lockfile at that moment, and the install dies with
+  # ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION naming the OLD version — which reads
+  # like the new release is at fault. Same shape as the @bitbaum/ai-kit line.
+  # The 0.2.4 half is inert once the lockfile no longer mentions it and can be
+  # dropped by whoever next bumps this package (add THEIR outgoing version).
+  - 'bip-kit@0.2.4 || 0.2.6'
 overrides:
   '@swc/helpers': 0.5.23
   '@opentelemetry/core': ^2.8.0
