@@ -41,7 +41,7 @@ script only. (i18n/umlaut/compliance helpers: `npm run compliance`, `npm run lin
 
 ## Deploy — self-hosted
 
-- Production runs at **https://revampit.orangecat.ch** (self-hosted Hetzner).
+- Production runs at **https://evig.orangecat.ch** (self-hosted Hetzner).
   `https://www.revamp-it.ch` is the LEGACY Joomla site — never smoke-test deploys there.
 - Push to `main` → `.github/workflows/deploy-selfhost.yml` runs lint + typecheck +
   i18n gate, then rsyncs the build to the box via `scripts/selfhost-deploy-revampit.sh`
