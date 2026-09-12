@@ -19,7 +19,7 @@ allowBuilds:
 # Naming the version makes each new release a deliberate line in a diff, which
 # is the entire point of the delay.
 minimumReleaseAgeExclude:
-  - "@bitbaum/ai-kit"
+  - '@bitbaum/ai-kit'
   - '@bitbaum/mail-kit@0.1.1'
   # Two versions on purpose, and this is the shape a bump has to take here.
   # The age-gate verifies the lockfile as it stands BEFORE resolution, so the
