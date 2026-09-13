@@ -5,9 +5,9 @@
  * runs in local dev — it is NOT deployed on the prod box, so protocol/meeting
  * audio could not be transcribed on prod at all. Groq's hosted Whisper
  * (whisper-large-v3-turbo) needs only GROQ_API_KEY (already set in prod), is
- * fast/cheap/cross-browser, and is the same provider OrangeCat + FleetCrown use.
+ * fast/cheap/cross-browser, and is the same provider OrangeCat + Loki use.
  *
- * Strategy (mirrors FleetCrown's hybrid): try Groq first; fall back to the local
+ * Strategy (mirrors Loki's hybrid): try Groq first; fall back to the local
  * service on any Groq failure or when the file exceeds Groq's upload limit.
  * Shared by any surface that needs transcription (protocols today; Hirn/erfassung
  * voice next) — callers pass a Blob/File, get `{ text, provider, model }`.

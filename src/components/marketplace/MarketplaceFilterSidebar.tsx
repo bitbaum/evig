@@ -34,7 +34,7 @@ interface FilterSidebarProps {
 /**
  * A refinement group — mono micro-label + content, separated by a single
  * hairline. Flat and fully visible (no accordion chrome): the panel reads as
- * one scannable instrument, x.ai / fleetcrown discipline.
+ * one scannable instrument, x.ai / loki discipline.
  */
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (

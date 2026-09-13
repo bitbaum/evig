@@ -132,7 +132,7 @@ Reference migrated file: `src/app/admin/appointments/page.tsx`.
 
 ## Migration backlog
 
-Updated 2026-06-15 after OrangeCat/FleetCrown audit + Phase 0 SSOT migration:
+Updated 2026-06-15 after OrangeCat/Loki audit + Phase 0 SSOT migration:
 
 | Pattern | Approx. count | Status |
 |---|---|---|

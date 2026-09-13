@@ -1,5 +1,5 @@
 /**
- * TechnicianCard — fleetcrown discipline (matches ListingCard BBB.1).
+ * TechnicianCard — loki discipline (matches ListingCard BBB.1).
  *
  * One symmetric layout regardless of state. No floating colored chips,
  * no warning-yellow star fill, no euro icon, no skill colored pills.

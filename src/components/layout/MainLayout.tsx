@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { Header } from './header';
 import Footer from './Footer';
 import { HirnPublicFab } from '@/components/hirn/HirnPublicFab';
-import { FleetCrownFeedbackEmbed } from '@/components/feedback/FleetCrownFeedbackEmbed';
+import { LokiFeedbackEmbed } from '@/components/feedback/LokiFeedbackEmbed';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -24,7 +24,7 @@ export default function MainLayout({ children, leanChrome = false }: MainLayoutP
       {!leanChrome && (
         <>
           <HirnPublicFab />
-          <FleetCrownFeedbackEmbed />
+          <LokiFeedbackEmbed />
         </>
       )}
     </div>

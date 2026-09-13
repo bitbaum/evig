@@ -7,7 +7,7 @@
  * SendResult to evig's SendEmailResult and preserves the throw-on-failure
  * contract that sendEmail() uses to fall back to SMTP.
  *
- * Sender: only `fleetcrown.orangecat.ch` is verified in the Resend account, so
+ * Sender: only `loki.orangecat.ch` is verified in the Resend account, so
  * like surf-your-life and vitareba we send as <app>@fleetcrown.orangecat.ch
  * until evig gets its own verified domain (RESEND_CONFIG.FROM reads
  * RESEND_FROM with that convention as the default).

@@ -13,7 +13,7 @@ function isAuthEndpoint(input: RequestInfo | URL): boolean {
 /**
  * Only same-origin requests get the CSRF header. Stamping it on cross-origin
  * fetches leaks the token to third-party hosts AND breaks their CORS preflight
- * (observed: the FleetCrown feedback widget's ingest POST was rejected because
+ * (observed: the Loki feedback widget's ingest POST was rejected because
  * x-csrf-token wasn't in the target's Access-Control-Allow-Headers).
  */
 function isSameOrigin(input: RequestInfo | URL): boolean {

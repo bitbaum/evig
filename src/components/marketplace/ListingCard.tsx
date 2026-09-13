@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * ListingCard — fleetcrown discipline edition.
+ * ListingCard — loki discipline edition.
  *
  * One layout regardless of state. No floating overlay badges, no spec
  * chip rail, no view/favorite counters, no decorative icons. Hierarchy
