@@ -11,7 +11,7 @@ interface FilterPillProps {
   ariaLabel?: string;
 }
 
-/** Monochrome filter pill — x.ai / fleetcrown discipline. Green only on primary CTAs. */
+/** Monochrome filter pill — x.ai / loki discipline. Green only on primary CTAs. */
 export function FilterPill({ active, onClick, children, className, ariaLabel }: FilterPillProps) {
   return (
     <Button

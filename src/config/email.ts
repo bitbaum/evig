@@ -33,7 +33,7 @@ export function getEmailProvider(): EmailProvider {
 
 /**
  * Resend configuration (fleet standard).
- * Only fleetcrown.orangecat.ch is verified in the shared Resend account, so
+ * Only loki.orangecat.ch is verified in the shared Resend account, so
  * the default sender follows the surf-your-life/vitareba convention.
  */
 export const RESEND_CONFIG = {

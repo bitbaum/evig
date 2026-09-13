@@ -6,7 +6,7 @@
  *
  * Created: 2025-12-17
  * Last Modified: 2026-06-15
- * Last Modified Summary: Migrate designPrimitive + surface/button helpers to semantic tokens (FleetCrown/x.ai discipline)
+ * Last Modified Summary: Migrate designPrimitive + surface/button helpers to semantic tokens (Loki/x.ai discipline)
  */
 
 /**

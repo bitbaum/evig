@@ -102,7 +102,7 @@ export default function MarketplacePage() {
 
   return (
     <div className="bg-canvas min-h-screen">
-      {/* ── Header — monochrome, fleetcrown discipline ──────────────── */}
+      {/* ── Header — monochrome, loki discipline ──────────────── */}
       <section className="border-b border-subtle py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">

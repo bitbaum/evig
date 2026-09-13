@@ -101,7 +101,7 @@ fi
 # emit the top-level node_modules/shiki symlink — on the box (no outer
 # node_modules to leak from) the import then finds nothing and blog code
 # blocks silently render as the un-highlighted mono fallback while dev shows
-# them highlighted. Same trap and same fix as FleetCrown #513 and orangecat's
+# them highlighted. Same trap and same fix as Loki #513 and orangecat's
 # deploy-selfhost.sh: what the tracer can't see, the assemble step supplies.
 # Version-agnostic; no-op when the link already exists.
 for NM in "$STAGE/node_modules" "$STAGE/$NEST/node_modules"; do
