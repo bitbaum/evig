@@ -73,7 +73,7 @@ hold the line on all of it by default:
 - **Config-driven, nothing hardcoded.** No hardcoded labels, categories, stats,
   numbers, or magic strings in components — source from config/DB. (Stats: DB or
   `org-numbers.defaults.ts`.)
-- **Design discipline — match OrangeCat / FleetCrown.** Semantic tokens + the
+- **Design discipline — match OrangeCat / Loki.** Semantic tokens + the
   shared primitives (`Card`, `Button`, `Heading`, `IconBadge`, `Section`,
   `EmptyState`, `Input`) only. NO arbitrary hex (`bg-[#…]`), NO inline style
   colors, NO `shadow-lg/xl` on cards, NO stray one-off chrome. Green is for CTAs /

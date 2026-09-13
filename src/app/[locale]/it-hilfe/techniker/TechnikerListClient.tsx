@@ -53,7 +53,7 @@ export default function TechnikerListClient() {
 
   return (
     <div className="bg-canvas min-h-screen">
-      {/* ── Header — fleetcrown discipline ─────────────────────────── */}
+      {/* ── Header — loki discipline ─────────────────────────── */}
       <section className="border-b border-subtle py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Link

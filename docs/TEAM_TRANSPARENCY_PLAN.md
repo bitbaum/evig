@@ -147,7 +147,7 @@ Notify the owner via existing `createNotification`. External comments (via share
 
 Returns a ready-to-run prompt (+ the structured JSON). Automation is then a **maturity ladder**, not a redesign — the brief is identical at every rung:
 - **L0 (build now, manual):** a **"Copy agent brief"** button on the detail page. Paste into Claude Code → agent edits `deliverables/<slug>/` → commits v+1 → status → `revising`→`in_review`.
-- **L1 (later, semi-auto):** an **"An Agent senden"** action fires the brief at a FleetCrown agent (RemoteTrigger / SendMessage / job queue); agent edits, opens a branch/new version, sets status back to review; human approves.
+- **L1 (later, semi-auto):** an **"An Agent senden"** action fires the brief at a Loki agent (RemoteTrigger / SendMessage / job queue); agent edits, opens a branch/new version, sets status back to review; human approves.
 - **L2 (future, auto):** "Request revision" with ≥1 open change_request auto-enqueues the agent; it produces v+1 and pings reviewers. Human in the loop only at final approve.
 
 Build L0 in Phase 1. L1/L2 change only *who calls the endpoint and what happens after* — no data/brief changes.
@@ -192,7 +192,7 @@ Pure wiring of existing `tasks` + `team_profiles` + `activity_updates`.
 - Stale-focus nudge on personal dashboard (§4.7).
 - Inline one-click `current_focus` edit from the profile/board.
 - Quick "activity" / "deliverable" add actions.
-- **"An Agent senden" (L1, §4.8):** fire the agent-brief endpoint at a FleetCrown agent (RemoteTrigger / SendMessage / job queue); agent edits `deliverables/<slug>/`, opens a branch/new version, sets status back to `in_review`. (L2 auto-enqueue is future — no data changes needed.)
+- **"An Agent senden" (L1, §4.8):** fire the agent-brief endpoint at a Loki agent (RemoteTrigger / SendMessage / job queue); agent edits `deliverables/<slug>/`, opens a branch/new version, sets status back to `in_review`. (L2 auto-enqueue is future — no data changes needed.)
 - (Optional) public team page `/[locale]/team` + `/[locale]/team/[id]` — mirror the technician public-profile pattern (join users + user_profiles + team_profiles where `show_on_about=true`). Only if outward-facing team visibility is wanted; not required for the internal north star.
 
 ---

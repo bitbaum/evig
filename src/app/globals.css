@@ -309,7 +309,7 @@
   background-color: var(--surface-raised);
 }
 @utility ui-public-hero-fold {
-  /* ─── Public surface primitives (fleetcrown / x.ai-inspired) ──────────────
+  /* ─── Public surface primitives (loki / x.ai-inspired) ──────────────
    * SSOT for landing / marketing / public-info pages. JSX consumes semantic
    * class names — never hardcodes typography, color, or surface chrome.
    * Mobile-first: the hero-fold IS one viewport — actionable above-the-fold
@@ -475,7 +475,7 @@
   color: var(--text-secondary);
 }
 @utility ui-public-card {
-  /* Surface card — fleetcrown-style content card for sections. */
+  /* Surface card — loki-style content card for sections. */
   @apply flex flex-col rounded-lg p-6 text-left;
   border: 1px solid var(--border-subtle);
   background: var(--surface-base);
@@ -497,7 +497,7 @@
   color: var(--text-secondary);
 }
 @utility ui-public-card-meta {
-  /* Bottom-anchored monospace meta line on surface cards (fleetcrown pattern) */
+  /* Bottom-anchored monospace meta line on surface cards (loki pattern) */
   @apply mt-auto pt-8 font-mono text-xs;
   color: var(--text-tertiary);
 }
