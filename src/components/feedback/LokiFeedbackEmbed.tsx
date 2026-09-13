@@ -2,22 +2,22 @@
 
 import { useEffect } from 'react';
 
-const WIDGET_SRC = 'https://fleetcrown.orangecat.ch/widget.js';
+const WIDGET_SRC = 'https://loki.orangecat.ch/widget.js';
 const PROJECT_TOKEN = 'fcw_45baa3d5c31f7cde10d65c168f6b9df9';
 /** Sits above HirnPublicFab (bottom-6 + h-14 ≈ 80px) so the two FABs stack. */
 const BOTTOM_OFFSET_PX = '88';
 
 /**
- * FleetCrown embeddable feedback widget (revampit = customer #1).
+ * Loki embeddable feedback widget (revampit = customer #1).
  *
  * Replaces the in-repo React widget (SuggestionButton et al.): feedback now
- * flows into the FleetCrown project inbox where it can be dispatched to an
+ * flows into the Loki project inbox where it can be dispatched to an
  * agent as a fix-task, instead of the local site_suggestions table. The token
  * is write-only and public by design; the server enforces an Origin allowlist
  * (www.revamp-it.ch / revamp-it.ch), so the widget renders on localhost but
  * submissions only succeed from prod.
  */
-export function FleetCrownFeedbackEmbed() {
+export function LokiFeedbackEmbed() {
   useEffect(() => {
     if (document.querySelector(`script[src="${WIDGET_SRC}"]`)) return;
     const script = document.createElement('script');

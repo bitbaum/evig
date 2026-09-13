@@ -42,7 +42,7 @@ interface TechnikerProfileViewProps {
   meta: TechnikerProfileMeta;
 }
 
-/** Public technician profile — same fleetcrown rhythm as the list cards. */
+/** Public technician profile — same loki rhythm as the list cards. */
 export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfileViewProps) {
   const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL;
   const ctaHref = IT_HILFE.routes.createForTechnician(technician.id);

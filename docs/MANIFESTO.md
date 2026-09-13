@@ -127,7 +127,7 @@ Revamp-IT is a real customer of the founder's own products:
 - **Kivvi** = canonical ERP (invoicing, accounting, MWST, inventory) — see
   `KIVVI_ERP_ADOPTION.md`.
 - **OrangeCat** = economic/fundraising layer (BTC wallets, stakeholder graph).
-- **FleetCrown** = agent-ops / control plane (watch conversations, switch between
+- **Loki** = agent-ops / control plane (watch conversations, switch between
   agent tabs, **typing-aware injection** so nothing clobbers the user's keystrokes).
 
 ---
@@ -196,7 +196,7 @@ self-hostable (§2 audit) is the proof.
   surface, dependency scorecard, forkable self-host packaging, own-social-media /
   blog / wellbeing posts (self/team/public), member calendars + 1:1 booking into a
   transparent budget, R&D department with a tunable energy-sustainability SSOT,
-  sliding-scale + BTC financing, language expansion, FleetCrown typing-aware
+  sliding-scale + BTC financing, language expansion, Loki typing-aware
   injection.
 - **Openness audit done (2026-07-06):** platform is MIT + ~fully open; only hard
   lock-in is Payrexx. `package.json` now declares `"license": "MIT"`.
