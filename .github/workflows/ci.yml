@@ -48,7 +48,7 @@ jobs:
       # Key includes the job so the two builds do not fight over one cache entry;
       # restore-keys let either warm from whichever ran last on this lockfile.
       - name: Cache Next.js build
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .next/cache
           key: nextjs-${{ runner.os }}-verify-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
@@ -291,7 +291,7 @@ jobs:
       # Key includes the job so the two builds do not fight over one cache entry;
       # restore-keys let either warm from whichever ran last on this lockfile.
       - name: Cache Next.js build
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .next/cache
           key: nextjs-${{ runner.os }}-e2e-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
