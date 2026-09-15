@@ -102,9 +102,9 @@ importers:
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
-      lru-cache:
-        specifier: ^11.5.2
-        version: 11.5.2
+      limitkit:
+        specifier: github:bitbaum/limitkit#v0.2.0
+        version: https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7
       lucide-react:
         specifier: ^1.44.0
         version: 1.44.0(react@19.3.0)
@@ -4487,6 +4487,11 @@ packages:
   lilconfig@3.1.3:
     resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
     engines: {node: '>=14'}
+
+  limitkit@https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7}
+    version: 0.2.0
+    engines: {node: '>=18'}
 
   linkify-it@5.0.2:
     resolution: {integrity: sha512-ONTm2jCMAVZjgQa/Fy1kScXsuOoF5NPTsoFBdE1KVIZ2vAh/r9+Bqo+0jINCBYnavTPQZz38QzFTme79ENoN3Q==}
@@ -10518,6 +10523,8 @@ snapshots:
       lightningcss-win32-x64-msvc: 1.33.0
 
   lilconfig@3.1.3: {}
+
+  limitkit@https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7: {}
 
   linkify-it@5.0.2:
     dependencies:

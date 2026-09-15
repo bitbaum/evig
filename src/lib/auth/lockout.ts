@@ -1,15 +1,14 @@
 /**
- * Rate Limiting and Account Lockout System
+ * Account lockout after repeated failed logins.
  *
- * Provides protection against:
- * - Brute force attacks
- * - Credential stuffing
- * - API abuse
+ * Lockouts are persisted in user_lockouts via the DB helpers below; the
+ * in-memory helpers are the fallback when the DB is unavailable while
+ * recording a failed login, and the unit under test.
  *
- * Request rate-limit counters are kept in-memory for the current process.
- * Account lockouts are persisted in user_lockouts via the DB helpers below;
- * the in-memory lockout helpers are kept only as a fallback if the DB is
- * unavailable while recording a failed login.
+ * Request rate limiting used to live in this file too (as rate-limiter.ts);
+ * it moved to lib/security/rate-limit.ts on 2026-09-14 when both hand-rolled
+ * limiters were replaced by limitkit. Lockout is not rate limiting: it is a
+ * per-account, progressively longer, DB-backed state that a login must clear.
  */
 
 import { AUTH_CONFIG } from './config';
@@ -26,12 +25,6 @@ const lockoutsTable = getTableName(userLockouts);
 // Types
 // =============================================================================
 
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
-  blockedUntil?: number;
-}
-
 interface LockoutEntry {
   failedAttempts: number;
   lockedUntil?: number;
@@ -43,18 +36,11 @@ interface LockoutEntry {
 // In-Memory Storage (for single-instance deployments)
 // =============================================================================
 
-const rateLimitStore = new Map<string, RateLimitEntry>();
 const lockoutStore = new Map<string, LockoutEntry>();
 
 // Cleanup old entries periodically
 setInterval(() => {
   const now = Date.now();
-
-  for (const [key, entry] of rateLimitStore.entries()) {
-    if (entry.resetAt < now && (!entry.blockedUntil || entry.blockedUntil < now)) {
-      rateLimitStore.delete(key);
-    }
-  }
 
   for (const [key, entry] of lockoutStore.entries()) {
     // Keep lockout history for 24 hours
@@ -63,81 +49,6 @@ setInterval(() => {
     }
   }
 }, 60 * 1000); // Run every minute
-
-// =============================================================================
-// Rate Limiting Functions
-// =============================================================================
-
-export type RateLimitType = 'login' | 'register' | 'passwordReset' | 'newsletter' | 'submission';
-
-interface RateLimitResult {
-  allowed: boolean;
-  remaining: number;
-  resetAt: number;
-  retryAfter?: number; // Seconds until retry allowed
-}
-
-/**
- * Check if a request is rate limited
- * @param identifier - User identifier (IP, email, or combination)
- * @param type - Type of rate limit to check
- */
-export function checkRateLimit(identifier: string, type: RateLimitType): RateLimitResult {
-  const config = AUTH_CONFIG.rateLimit[type];
-  const key = `${type}:${identifier}`;
-  const now = Date.now();
-
-  let entry = rateLimitStore.get(key);
-
-  // Check if currently blocked
-  if (entry?.blockedUntil && entry.blockedUntil > now) {
-    return {
-      allowed: false,
-      remaining: 0,
-      resetAt: entry.blockedUntil,
-      retryAfter: Math.ceil((entry.blockedUntil - now) / 1000),
-    };
-  }
-
-  // Reset if window expired
-  if (!entry || entry.resetAt < now) {
-    entry = {
-      count: 0,
-      resetAt: now + config.windowMs,
-    };
-  }
-
-  // Check if within limits
-  const remaining = Math.max(0, config.maxAttempts - entry.count - 1);
-  const allowed = entry.count < config.maxAttempts;
-
-  if (allowed) {
-    // Increment counter
-    entry.count++;
-    rateLimitStore.set(key, entry);
-  } else {
-    // Block for additional time
-    if ('blockDuration' in config && config.blockDuration) {
-      entry.blockedUntil = now + config.blockDuration;
-      rateLimitStore.set(key, entry);
-    }
-  }
-
-  return {
-    allowed,
-    remaining,
-    resetAt: entry.resetAt,
-    retryAfter: allowed ? undefined : Math.ceil((entry.resetAt - now) / 1000),
-  };
-}
-
-/**
- * Reset rate limit for an identifier (e.g., after successful action)
- */
-export function resetRateLimit(identifier: string, type: RateLimitType): void {
-  const key = `${type}:${identifier}`;
-  rateLimitStore.delete(key);
-}
 
 // =============================================================================
 // Account Lockout Functions
@@ -411,48 +322,4 @@ export async function clearLockoutDb(userId: string): Promise<void> {
   } catch (error) {
     logger.error('Error clearing lockout from database', { error, userId });
   }
-}
-
-// =============================================================================
-// Middleware Helper
-// =============================================================================
-
-/**
- * Get client IP from request headers
- * Handles proxies and load balancers
- */
-export function getClientIp(headers: Headers): string {
-  // Check various headers in order of preference
-  const forwardedFor = headers.get('x-forwarded-for');
-  if (forwardedFor) {
-    // Take first IP in chain (original client)
-    return forwardedFor.split(',')[0].trim();
-  }
-
-  const realIp = headers.get('x-real-ip');
-  if (realIp) {
-    return realIp.trim();
-  }
-
-  const cfConnectingIp = headers.get('cf-connecting-ip');
-  if (cfConnectingIp) {
-    return cfConnectingIp.trim();
-  }
-
-  return 'unknown';
-}
-
-/**
- * Create rate limit key from request
- * Combines IP and optionally email for more granular limiting
- */
-export function createRateLimitKey(
-  ip: string,
-  email?: string,
-  type: RateLimitType = 'login',
-): string {
-  if (email) {
-    return `${ip}:${email.toLowerCase()}`;
-  }
-  return ip;
 }

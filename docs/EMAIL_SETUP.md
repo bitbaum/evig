@@ -416,7 +416,7 @@ All templates include:
 **Solutions:**
 1. **Gmail**: 500 emails/day limit - switch to SendGrid for production
 2. **SendGrid Free**: 100 emails/day - upgrade if needed
-3. **Rate limiting**: Check `src/lib/auth/rate-limiter.ts` config
+3. **Rate limiting**: Check `src/lib/security/rate-limit.ts` (`AUTH_RATE_LIMITS`)
 
 ---
 

@@ -32,7 +32,7 @@ This report provides a comprehensive analysis of the Revamp-it website system, c
 **Components:**
 - `docker-compose.yml`: Properly configured with PostgreSQL and Strapi services
 - `docker-compose.override.yml`: Development overrides working correctly
-- `docker-setup.sh`: Functional setup script for container management
+- `docker-setup.sh`: removed 2026-09-14 — it was a Strapi-era wrapper around `docker-compose up`, and no compose file has a Strapi service any more
 
 **Findings:**
 - ✅ PostgreSQL container starts successfully on port 5434

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react';
@@ -13,6 +13,7 @@ import { SUCCESS_MESSAGES } from '@/config/error-messages';
 import { apiFetch } from '@/lib/api/client';
 import { ROUTES } from '@/config/routes';
 import { todayLocalIso } from '@/lib/utils/date';
+import { useMounted } from '@/hooks/useMounted';
 import { Modal } from '@/components/ui/Modal';
 
 interface AppointmentBookingFormProps {
@@ -40,7 +41,7 @@ export default function AppointmentBookingForm({
     success: boolean;
     message: string;
   } | null>(null);
-  // Populate the date-input min after mount. Computing today client-side
+  // The date-input min is only set after mount. Computing today client-side
   // gives the browser's local-tz today (correct for the user) instead of
   // UTC's today — without the deferral, SSR would render UTC's today and
   // the client would re-render with browser-tz today, producing a
@@ -48,11 +49,8 @@ export default function AppointmentBookingForm({
   // mount means no min constraint is enforced for the brief window
   // between SSR and client mount — fine, the user can't interact that
   // fast anyway.
-  const [minDate, setMinDate] = useState<string>('');
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMinDate(todayLocalIso());
-  }, []);
+  const mounted = useMounted();
+  const minDate = mounted ? todayLocalIso() : '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

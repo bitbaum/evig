@@ -9,7 +9,7 @@ import { hashPassword } from '@/lib/auth/password';
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
 import { logger } from '@/lib/logger';
 import { ERROR_MESSAGES } from '@/config/error-messages';
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { checkRateLimit, getClientIdentifier } from '@/lib/security/rate-limit';
 import { validateBody, ResetPasswordSchema } from '@/lib/schemas';
 import { sendCustomEmail, passwordChangeConfirmation } from '@/lib/email';
 import { db } from '@/db';
@@ -19,7 +19,7 @@ import { eq } from 'drizzle-orm';
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - prevent brute force token guessing
-    const clientIp = getClientIp(request.headers);
+    const clientIp = getClientIdentifier(request);
     const rateLimitResult = checkRateLimit(clientIp, 'passwordReset');
 
     if (!rateLimitResult.allowed) {

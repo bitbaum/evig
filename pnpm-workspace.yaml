@@ -9,6 +9,9 @@ allowBuilds:
   # If the @fleet/ai-forms pin moves, update this sha (pnpm prints the new
   # key in its ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED message).
   'ai-forms@https://codeload.github.com/bitbaum/ai-forms/tar.gz/52e3239ae4b0a2fcdc579edc2b9d8f8e7bff44b9': true
+  # Same shape for limitkit (github:bitbaum/limitkit#v0.2.0): dist is built by
+  # its prepare script, and pnpm keys the allowance by the resolved tarball.
+  'limitkit@https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7': true
   esbuild: true
   puppeteer: true
   unrs-resolver: true

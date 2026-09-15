@@ -3,7 +3,7 @@ import { auth } from '@/auth';
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 import { logger } from '@/lib/logger';
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { checkRateLimit, getClientIdentifier } from '@/lib/security/rate-limit';
 import { z } from 'zod';
 import { db } from '@/db';
 import { users, membershipApplications } from '@/db/schema';
@@ -24,7 +24,7 @@ const MembershipSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const clientIp = getClientIp(request.headers);
+    const clientIp = getClientIdentifier(request);
     const rateLimit = checkRateLimit(clientIp, 'newsletter');
     if (!rateLimit.allowed) {
       return apiRateLimited(ERROR_MESSAGES.RATE_LIMITED, {

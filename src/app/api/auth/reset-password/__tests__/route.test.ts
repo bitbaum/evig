@@ -25,9 +25,9 @@
 const mockCheckRateLimit = vi.fn();
 const mockGetClientIp = vi.fn().mockReturnValue('10.0.0.1');
 
-vi.mock('@/lib/auth/rate-limiter', () => ({
+vi.mock('@/lib/security/rate-limit', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
-  getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
+  getClientIdentifier: (...args: unknown[]) => mockGetClientIp(...args),
 }));
 
 const mockVerifyPasswordResetToken = vi.fn();

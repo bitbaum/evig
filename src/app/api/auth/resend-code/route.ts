@@ -12,13 +12,13 @@ import { logger } from '@/lib/logger';
 import { getUserByEmail, createVerificationCode } from '@/lib/auth/db';
 import { sendEmail } from '@/lib/email';
 import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui';
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { checkRateLimit, getClientIdentifier } from '@/lib/security/rate-limit';
 import { validateBody, ResendCodeSchema } from '@/lib/schemas';
 
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - prevent abuse
-    const clientIp = getClientIp(request.headers);
+    const clientIp = getClientIdentifier(request);
     const rateLimitResult = checkRateLimit(clientIp, 'register'); // Use register rate limit
 
     if (!rateLimitResult.allowed) {

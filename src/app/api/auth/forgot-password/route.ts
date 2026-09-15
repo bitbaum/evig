@@ -9,7 +9,7 @@ import { sendEmail } from '@/lib/email';
 import { apiError, apiSuccess, apiRateLimited } from '@/lib/api/helpers';
 import { logger } from '@/lib/logger';
 import { ERROR_MESSAGES } from '@/config/error-messages';
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { checkRateLimit, getClientIdentifier } from '@/lib/security/rate-limit';
 import { validateBody, ForgotPasswordSchema } from '@/lib/schemas';
 import { ORG, CONTACT } from '@/config/org';
 import { getPasswordResetUrl } from '@/config/urls';
@@ -17,7 +17,7 @@ import { getPasswordResetUrl } from '@/config/urls';
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - prevent password reset abuse
-    const clientIp = getClientIp(request.headers);
+    const clientIp = getClientIdentifier(request);
     const rateLimitResult = checkRateLimit(clientIp, 'passwordReset');
 
     if (!rateLimitResult.allowed) {

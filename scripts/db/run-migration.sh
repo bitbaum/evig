@@ -91,10 +91,10 @@ echo -e "${YELLOW}Running migrations (version-sorted, skipping already-applied).
 COUNT_APPLIED=0
 COUNT_SKIPPED=0
 
-# Ordering + the superseded-duplicate list are shared with the CI replay and the
-# production deploy — see scripts/db/migration-order.sh. Before that file, this
-# runner had no skip list, so a from-scratch local DB died on the duplicate
-# 005_messaging_system.sql that CI had been skipping for months.
+# Ordering is shared with the CI replay and the production deploy — see
+# scripts/db/migration-order.sh. Before that file, each runner sorted for
+# itself and they disagreed, so a from-scratch local DB died on a duplicate
+# that CI had been skipping for months.
 # shellcheck source=scripts/db/migration-order.sh
 source "$(dirname "${BASH_SOURCE[0]}")/migration-order.sh"
 

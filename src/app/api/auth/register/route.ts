@@ -10,14 +10,14 @@ import { registerUser } from '@/auth';
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 import { logger } from '@/lib/logger';
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { checkRateLimit, getClientIdentifier } from '@/lib/security/rate-limit';
 import { RegisterSchema } from '@/lib/schemas';
 import { redeemReferralCode } from '@/lib/referral';
 
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - prevent registration abuse
-    const clientIp = getClientIp(request.headers);
+    const clientIp = getClientIdentifier(request);
     const rateLimitResult = checkRateLimit(clientIp, 'register');
 
     if (!rateLimitResult.allowed) {

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { useMounted } from '@/hooks/useMounted';
 import { apiFetch } from '@/lib/api/client';
 import { TIMECARD_ENTRY_CATEGORY_OPTIONS } from '@/config/timecards';
 import { useTimecardIntl } from '@/hooks/useTimecardIntl';
@@ -63,7 +64,8 @@ export function TimecardReviewDrawer({
   const t = useTranslations('admin.timecards');
   const { statusLabel, categoryLabel, duration, period } = useTimecardIntl();
   const panelRef = useFocusTrap<HTMLDivElement>(true, onClose);
-  const [mounted, setMounted] = useState(false);
+  // Portal target only exists after mount (SSR has no document).
+  const mounted = useMounted();
   const [card, setCard] = useState<ReviewCard | null>(null);
   const [entries, setEntries] = useState<ReviewEntry[]>([]);
   const [editing, setEditing] = useState(false);
@@ -74,11 +76,6 @@ export function TimecardReviewDrawer({
   // this + the next step (the report), so the approver never has to hunt for
   // the card they just acted on.
   const [flash, setFlash] = useState<string | null>(null);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- portal mount guard (SSR-safe)
-    setMounted(true);
-  }, []);
 
   const load = useCallback(async () => {
     const r = await apiFetch<ReviewCard>(`/api/admin/timecards/${cardId}`);

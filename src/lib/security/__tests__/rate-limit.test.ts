@@ -1,18 +1,24 @@
 /**
- * Tests for the LRU-cache-backed rate limiter (lib/security/rate-limit.ts).
+ * Tests for the limitkit-backed rate limiter (lib/security/rate-limit.ts).
  *
- * Two exports:
- *   - createRateLimiter(interval, maxRequests): returns a check fn that
- *     returns true while the per-identifier counter is below maxRequests
- *     and false thereafter; counter resets after `interval` ms (TTL)
- *   - getClientIdentifier(request): pulls IP from x-forwarded-for, then
- *     x-real-ip, then 'unknown-ip' fallback. Multi-IP forwarded chains
- *     pick the first (leftmost = real client).
- *
- *   rateLimiters constants — verify the documented per-flow limits.
+ * The window algorithm is limitkit's and tested there; what is pinned HERE is
+ * evig's contract on top of it:
+ *   - createRateLimiter(interval, maxRequests): a check fn that returns true
+ *     while the per-identifier count is below maxRequests and false after
+ *   - checkRateLimit(identifier, type): the typed limits the auth/public
+ *     forms use, with the {allowed, remaining, resetAt, retryAfter} shape
+ *   - getClientIdentifier(request): the LAST x-forwarded-for hop (written by
+ *     our own proxy), then x-real-ip, then 'unknown'
+ *   - rateLimiters / AUTH_RATE_LIMITS constants — the documented limits
  */
 
-import { createRateLimiter, getClientIdentifier, rateLimiters } from '../rate-limit';
+import {
+  AUTH_RATE_LIMITS,
+  checkRateLimit,
+  createRateLimiter,
+  getClientIdentifier,
+  rateLimiters,
+} from '../rate-limit';
 
 // ============================================================================
 // createRateLimiter
@@ -45,7 +51,7 @@ describe('createRateLimiter', () => {
     expect(allow('user-2')).toBe(false);
   });
 
-  it('returns independent instances (no shared cache between limiters)', () => {
+  it('returns independent instances (no shared store between limiters)', () => {
     const limA = createRateLimiter(60_000, 1);
     const limB = createRateLimiter(60_000, 1);
     expect(limA('shared-id')).toBe(true);
@@ -59,6 +65,51 @@ describe('createRateLimiter', () => {
     expect(allow('x')).toBe(false);
     expect(allow('x')).toBe(false);
     expect(allow('x')).toBe(false);
+  });
+});
+
+// ============================================================================
+// checkRateLimit (typed limits)
+// ============================================================================
+
+describe('checkRateLimit', () => {
+  // Unique identifiers per test: the typed limiters are module singletons.
+  let testId = 0;
+  const uniqueId = () => `rate-test-${++testId}-${Date.now()}`;
+
+  it('allows the first request with the full shape', () => {
+    const result = checkRateLimit(uniqueId(), 'login');
+    expect(result.allowed).toBe(true);
+    expect(result.remaining).toBe(AUTH_RATE_LIMITS.login.maxAttempts - 1);
+    expect(result.resetAt).toBeGreaterThan(Date.now() - 1000);
+    expect(result.retryAfter).toBeUndefined();
+  });
+
+  it('blocks after maxAttempts with remaining 0 and a real retryAfter', () => {
+    const id = uniqueId();
+    for (let i = 0; i < AUTH_RATE_LIMITS.login.maxAttempts; i++) {
+      expect(checkRateLimit(id, 'login').allowed).toBe(true);
+    }
+    const blocked = checkRateLimit(id, 'login');
+    expect(blocked.allowed).toBe(false);
+    expect(blocked.remaining).toBe(0);
+    expect(blocked.retryAfter).toBeGreaterThan(0);
+  });
+
+  it('keys each type separately', () => {
+    const id = uniqueId();
+    for (let i = 0; i < AUTH_RATE_LIMITS.passwordReset.maxAttempts; i++) {
+      checkRateLimit(id, 'passwordReset');
+    }
+    expect(checkRateLimit(id, 'passwordReset').allowed).toBe(false);
+    expect(checkRateLimit(id, 'register').allowed).toBe(true);
+  });
+
+  it('verification-code attempts: 5 per window of at least 30 minutes', () => {
+    // Was "5 per 15 min then a 30-min block" in AUTH_CONFIG; the sliding
+    // 30-minute window keeps the steady-state rate (5 per half hour).
+    expect(AUTH_RATE_LIMITS.login.maxAttempts).toBe(5);
+    expect(AUTH_RATE_LIMITS.login.windowMs).toBeGreaterThanOrEqual(30 * 60 * 1000);
   });
 });
 
@@ -82,15 +133,24 @@ describe('getClientIdentifier', () => {
     expect(getClientIdentifier(req)).toBe('203.0.113.7');
   });
 
-  it('picks the first IP from a comma-separated x-forwarded-for chain', () => {
-    // Per X-Forwarded-For spec, leftmost is the client; rest are proxies.
+  it('picks the LAST hop of a chain — the one our proxy appended', () => {
+    // A proxy APPENDS to X-Forwarded-For, so the leftmost entries are whatever
+    // the client sent and only the rightmost is unforgeable.
     const req = reqWithHeaders({ 'x-forwarded-for': '203.0.113.7, 10.0.0.1, 10.0.0.2' });
-    expect(getClientIdentifier(req)).toBe('203.0.113.7');
+    expect(getClientIdentifier(req)).toBe('10.0.0.2');
+  });
+
+  it('a client-supplied first hop cannot mint a fresh bucket', () => {
+    const allow = createRateLimiter(60_000, 1);
+    const spoofed = (fake: string) =>
+      allow(getClientIdentifier(reqWithHeaders({ 'x-forwarded-for': `${fake}, 198.51.100.9` })));
+    expect(spoofed('1.1.1.1')).toBe(true);
+    expect(spoofed('2.2.2.2')).toBe(false);
   });
 
   it('trims whitespace around the chosen IP', () => {
-    const req = reqWithHeaders({ 'x-forwarded-for': '   203.0.113.7   , 10.0.0.1' });
-    expect(getClientIdentifier(req)).toBe('203.0.113.7');
+    const req = reqWithHeaders({ 'x-forwarded-for': '203.0.113.7,   10.0.0.1   ' });
+    expect(getClientIdentifier(req)).toBe('10.0.0.1');
   });
 
   it('falls back to x-real-ip when x-forwarded-for is missing', () => {
@@ -106,9 +166,9 @@ describe('getClientIdentifier', () => {
     expect(getClientIdentifier(req)).toBe('203.0.113.7');
   });
 
-  it('returns the unknown-ip fallback when no IP headers are present', () => {
+  it('returns the unknown fallback when no IP headers are present', () => {
     const req = reqWithHeaders({});
-    expect(getClientIdentifier(req)).toBe('unknown-ip');
+    expect(getClientIdentifier(req)).toBe('unknown');
   });
 });
 

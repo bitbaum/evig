@@ -142,6 +142,26 @@ const eslintConfig = [
       'no-restricted-syntax': ['error', ...DESIGN_SYSTEM_SYNTAX],
     },
   },
+  {
+    // App code logs through `logger` (src/lib/logger.ts) — the ONE console
+    // sink, where level gating and the [LEVEL] prefix live. A bare console.log
+    // bypasses both and is what a debugging session leaves behind. Driven to
+    // zero in src/ on 2026-09-14; this keeps it there. warn/error stay
+    // allowed because the logger itself is built on them and a crash path
+    // must be able to speak even if the logger module failed to load.
+    // scripts/ are CLIs whose stdout IS their output — deliberately not
+    // covered; the test/logger carve-outs are below.
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+    },
+  },
+  {
+    files: ['src/lib/logger.ts', 'src/**/__tests__/**', 'src/**/*.test.{ts,tsx}'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
   // Public locale routes: same strict rules (kept explicit for clarity in reviews).
   {
     files: ['src/app/[locale]/**/*.{ts,tsx}'],
