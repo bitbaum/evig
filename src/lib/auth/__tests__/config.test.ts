@@ -305,11 +305,6 @@ describe('AUTH_CONFIG security floor', () => {
     expect(AUTH_CONFIG.password.maxLength).toBeLessThanOrEqual(128);
   });
 
-  it('login lockout block ≥ 30 minutes after maxAttempts (5)', () => {
-    expect(AUTH_CONFIG.rateLimit.login.maxAttempts).toBe(5);
-    expect(AUTH_CONFIG.rateLimit.login.blockDuration).toBeGreaterThanOrEqual(30 * 60 * 1000);
-  });
-
   it('cookies are httpOnly + sameSite=strict', () => {
     expect(AUTH_CONFIG.cookies.httpOnly).toBe(true);
     expect(AUTH_CONFIG.cookies.sameSite).toBe('strict');

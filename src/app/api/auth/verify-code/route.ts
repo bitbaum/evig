@@ -10,7 +10,7 @@ import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/h
 import { ERROR_MESSAGES } from '@/config/error-messages';
 import { logger } from '@/lib/logger';
 import { verifyEmailCode } from '@/lib/auth/db';
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { checkRateLimit, getClientIdentifier } from '@/lib/security/rate-limit';
 import { validateBody, VerifyCodeSchema } from '@/lib/schemas';
 import { sendCustomEmail, staffWelcome, welcome } from '@/lib/email';
 import { isStaffEmail } from '@/lib/permissions';
@@ -22,7 +22,7 @@ import { eq } from 'drizzle-orm';
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - prevent brute force attacks
-    const clientIp = getClientIp(request.headers);
+    const clientIp = getClientIdentifier(request);
     const rateLimitResult = checkRateLimit(clientIp, 'login'); // Use login rate limit for verification
 
     if (!rateLimitResult.allowed) {

@@ -31,7 +31,7 @@ import {
 } from '@/lib/auth/db';
 import { hashPassword, verifyPassword } from '@/lib/auth/password';
 import { ROLES, isStaffEmail, getInitialStaffPermissions, isSuperAdmin } from '@/lib/constants';
-import { isAccountLockedDb, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/rate-limiter';
+import { isAccountLockedDb, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/lockout';
 import { updateUser } from '@/lib/auth/db';
 import { logger } from '@/lib/logger';
 import { SESSION_MAX_AGE_SECONDS, SESSION_UPDATE_AGE_SECONDS } from '@/config/security';

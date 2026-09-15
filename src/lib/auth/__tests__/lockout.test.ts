@@ -1,8 +1,5 @@
 /**
- * Tests for rate-limiter.ts
- *
- * Tests rate limiting, account lockout, client IP extraction,
- * and rate limit key creation.
+ * Tests for lockout.ts — in-memory and DB-backed account lockout.
  */
 
 // Mock dependencies before imports
@@ -27,137 +24,16 @@ vi.mock('@/lib/logger', () => ({
 
 import type { Mock } from 'vitest';
 import {
-  checkRateLimit,
-  resetRateLimit,
   recordFailedAttempt,
   isAccountLocked,
   resetLockout,
   clearFailedAttempts,
   isAccountLockedDb,
-  getClientIp,
-  createRateLimitKey,
-} from '../rate-limiter';
+} from '../lockout';
 
 const mockDb = (await import('@/db')).db as unknown as {
   select: Mock;
 };
-
-// ============================================================================
-// getClientIp
-// ============================================================================
-
-describe('getClientIp', () => {
-  it('extracts from x-forwarded-for (first IP)', () => {
-    const headers = new Headers();
-    headers.set('x-forwarded-for', '1.2.3.4, 5.6.7.8');
-    expect(getClientIp(headers)).toBe('1.2.3.4');
-  });
-
-  it('extracts from x-real-ip', () => {
-    const headers = new Headers();
-    headers.set('x-real-ip', '10.0.0.1');
-    expect(getClientIp(headers)).toBe('10.0.0.1');
-  });
-
-  it('extracts from cf-connecting-ip', () => {
-    const headers = new Headers();
-    headers.set('cf-connecting-ip', '192.168.1.1');
-    expect(getClientIp(headers)).toBe('192.168.1.1');
-  });
-
-  it('returns "unknown" when no IP headers present', () => {
-    const headers = new Headers();
-    expect(getClientIp(headers)).toBe('unknown');
-  });
-
-  it('prefers x-forwarded-for over x-real-ip', () => {
-    const headers = new Headers();
-    headers.set('x-forwarded-for', '1.1.1.1');
-    headers.set('x-real-ip', '2.2.2.2');
-    expect(getClientIp(headers)).toBe('1.1.1.1');
-  });
-});
-
-// ============================================================================
-// createRateLimitKey
-// ============================================================================
-
-describe('createRateLimitKey', () => {
-  it('returns IP-only key when no email', () => {
-    expect(createRateLimitKey('1.2.3.4')).toBe('1.2.3.4');
-  });
-
-  it('combines IP and lowercase email', () => {
-    expect(createRateLimitKey('1.2.3.4', 'User@Example.com')).toBe('1.2.3.4:user@example.com');
-  });
-});
-
-// ============================================================================
-// checkRateLimit
-// ============================================================================
-
-describe('checkRateLimit', () => {
-  // Use unique identifiers per test to avoid cross-test pollution
-  let testId = 0;
-  const getUniqueId = () => `rate-test-${++testId}-${Date.now()}`;
-
-  it('allows first request', () => {
-    const id = getUniqueId();
-    const result = checkRateLimit(id, 'login');
-    expect(result.allowed).toBe(true);
-    expect(result.remaining).toBeGreaterThanOrEqual(0);
-  });
-
-  it('allows multiple requests within limit', () => {
-    const id = getUniqueId();
-    // Login allows 5 attempts
-    for (let i = 0; i < 4; i++) {
-      const result = checkRateLimit(id, 'login');
-      expect(result.allowed).toBe(true);
-    }
-  });
-
-  it('blocks after exceeding max attempts', () => {
-    const id = getUniqueId();
-    // Login allows 5 attempts per 15-min window
-    for (let i = 0; i < 5; i++) {
-      checkRateLimit(id, 'login');
-    }
-    const blocked = checkRateLimit(id, 'login');
-    expect(blocked.allowed).toBe(false);
-    expect(blocked.remaining).toBe(0);
-  });
-
-  it('provides retryAfter when blocked', () => {
-    const id = getUniqueId();
-    for (let i = 0; i < 6; i++) {
-      checkRateLimit(id, 'login');
-    }
-    const blocked = checkRateLimit(id, 'login');
-    expect(blocked.allowed).toBe(false);
-    expect(blocked.retryAfter).toBeGreaterThan(0);
-  });
-
-  it('resets after calling resetRateLimit', () => {
-    const id = getUniqueId();
-    for (let i = 0; i < 5; i++) {
-      checkRateLimit(id, 'login');
-    }
-    resetRateLimit(id, 'login');
-    const result = checkRateLimit(id, 'login');
-    expect(result.allowed).toBe(true);
-  });
-
-  it('works with different rate limit types', () => {
-    const id = getUniqueId();
-    // passwordReset has 3 max attempts
-    for (let i = 0; i < 3; i++) {
-      checkRateLimit(id, 'passwordReset');
-    }
-    const blocked = checkRateLimit(id, 'passwordReset');
-    expect(blocked.allowed).toBe(false);
-  });
-});
 
 // ============================================================================
 // Account Lockout

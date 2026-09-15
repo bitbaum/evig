@@ -165,8 +165,10 @@ it.** A gate that has never been seen red is a claim, not a check.
   filler text to dodge its own min-length rule.
 
 ### Structure
-- **Two rate limiters** (`lib/auth/rate-limiter`, `lib/security/rate-limit`),
-  ~20 routes each, plus a dead Redis backing (`lib/auth/redis.ts`).
+- ~~**Two rate limiters** (`lib/auth/rate-limiter`, `lib/security/rate-limit`),
+  ~20 routes each~~ — resolved 2026-09-14: one module (`lib/security/rate-limit`)
+  over the fleet's `limitkit`; the account-lockout half of the auth file lives
+  on as `lib/auth/lockout`. A dead Redis backing (`lib/auth/redis.ts`) remains.
 - **`src/config/ui-colors.ts`** — 86 hex literals; a second token source
   competing with `globals.css`. Condition colours there are light-mode only.
 - **God files**: `payment-webhook.ts` (938), `useTimecardDraft.ts` (969),

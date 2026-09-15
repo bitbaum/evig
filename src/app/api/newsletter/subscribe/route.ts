@@ -5,7 +5,7 @@ import { withAdmin } from '@/lib/api/middleware';
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 import { logger } from '@/lib/logger';
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { checkRateLimit, getClientIdentifier } from '@/lib/security/rate-limit';
 import { sendEmail } from '@/lib/email';
 import { APP_URL } from '@/config/urls';
 import { LISTMONK_CONFIG } from '@/config/email';
@@ -17,7 +17,7 @@ import { eq, desc, sql } from 'drizzle-orm';
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - prevent subscription abuse
-    const clientIp = getClientIp(request.headers);
+    const clientIp = getClientIdentifier(request);
     const rateLimitResult = checkRateLimit(clientIp, 'newsletter');
 
     if (!rateLimitResult.allowed) {
