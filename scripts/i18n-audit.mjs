@@ -41,6 +41,36 @@ const currentMissing = Object.fromEntries(
   }),
 );
 
+// Baseline shape: ONE entry per key, naming the locales it is missing from
+// (locales in the canonical order above). The earlier shape — one key list per
+// locale — wrote the same keys once per locale, six near-identical 90-line
+// blocks for a file that states ~90 facts. A missing key is a fact; it is
+// stated once. `byLocale`/`byKey` convert between the two views.
+function byKey(missingByLocale) {
+  const keys = {};
+  for (const locale of locales) {
+    for (const key of missingByLocale[locale] ?? []) {
+      (keys[key] ??= []).push(locale);
+    }
+  }
+  return Object.fromEntries(
+    Object.keys(keys)
+      .sort()
+      .map((key) => [key, keys[key]]),
+  );
+}
+
+function byLocale(missingByKey) {
+  return Object.fromEntries(
+    locales.map((locale) => [
+      locale,
+      Object.entries(missingByKey)
+        .filter(([, missingIn]) => missingIn.includes(locale))
+        .map(([key]) => key),
+    ]),
+  );
+}
+
 if (updateBaseline) {
   fs.mkdirSync(path.dirname(baselinePath), { recursive: true });
   fs.writeFileSync(
@@ -48,10 +78,10 @@ if (updateBaseline) {
     `${JSON.stringify(
       {
         description:
-          'Known missing translation keys. The audit fails only on regressions beyond this baseline.',
+          'Known missing translation keys, one entry per key naming the locales it is missing from. The audit fails only on regressions beyond this baseline.',
         defaultLocale,
         locales,
-        missing: currentMissing,
+        missing: byKey(currentMissing),
       },
       null,
       2,
@@ -61,7 +91,7 @@ if (updateBaseline) {
   process.exit(0);
 }
 
-const baseline = fs.existsSync(baselinePath) ? (readJson(baselinePath).missing ?? {}) : {};
+const baseline = fs.existsSync(baselinePath) ? byLocale(readJson(baselinePath).missing ?? {}) : {};
 
 let hasRegression = false;
 
