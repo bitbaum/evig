@@ -25,8 +25,8 @@ else
 fi
 
 count=0
-# Ordering + the superseded-duplicate list are shared with the local runner and
-# the production deploy — see scripts/db/migration-order.sh.
+# Ordering is shared with the local runner and the production deploy — see
+# scripts/db/migration-order.sh.
 # shellcheck source=scripts/db/migration-order.sh
 source "$ROOT/scripts/db/migration-order.sh"
 
