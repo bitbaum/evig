@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useTranslations } from 'next-intl';
 import { Sun, Moon, Monitor } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useMounted } from '@/hooks/useMounted';
 
 interface ThemeToggleProps {
   className?: string;
@@ -19,9 +19,9 @@ const OPTIONS = [
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
   const t = useTranslations('accessibility.theme');
-  const [mounted, setMounted] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only mount flag
-  useEffect(() => setMounted(true), []);
+  // The resolved theme is only knowable in the browser; render the neutral
+  // icon until then so server and first client render agree.
+  const mounted = useMounted();
   const current = mounted ? (theme ?? 'system') : 'system';
   const option = OPTIONS.find((item) => item.value === current) ?? OPTIONS[1];
   const Icon = option.icon;

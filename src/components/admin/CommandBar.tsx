@@ -3,7 +3,7 @@
 // Command palette shell (⌘K): dialog state, fetch/debounce, keyboard nav. Rows +
 // registry live in ./command-bar/.
 
-import { useEffect, useRef, useState, useCallback, useMemo, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -11,6 +11,7 @@ import { apiFetch } from '@/lib/api/client';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useMounted } from '@/hooks/useMounted';
 import { buildResults } from './command-bar/build-results';
 import { ResultsList } from './command-bar/ResultsList';
 import type { SearchIndex, ResultItem } from './command-bar/types';
@@ -27,13 +28,8 @@ export function CommandBar() {
   const [index, setIndex] = useState<SearchIndex | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [loading, setLoading] = useState(false);
-  // Portal target only exists after mount (SSR has no document) — the
-  // subscribe-to-nothing store reads false on the server, true on the client.
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
+  // Portal target only exists after mount (SSR has no document).
+  const mounted = useMounted();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
