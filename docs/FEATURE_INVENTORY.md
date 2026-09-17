@@ -25,15 +25,17 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | Persona | Account | Checks |
 |---------|---------|--------|
-| **User** | `butaeff@gmail.com` (non-admin) | Dashboard, public pages, IT-Hilfe/marketplace/workshops — **must be blocked from `/admin/*`** |
-| **Admin** | `georgy.butaev@revamp-it.ch` (super-admin) | All admin routes **plus** the same user + public routes |
+| **User** | non-admin account, from `AUTH_TEST_USER_EMAIL` | Dashboard, public pages, IT-Hilfe/marketplace/workshops — **must be blocked from `/admin/*`** |
+| **Admin** | staff/super-admin account, from `AUTH_TEST_ADMIN_EMAIL` | All admin routes **plus** the same user + public routes |
 
 ```bash
 PLAYWRIGHT_BASE_URL=https://revampit.orangecat.ch \
-AUTH_TEST_USER_EMAIL=butaeff@gmail.com AUTH_TEST_USER_PASSWORD='…' \
-AUTH_TEST_ADMIN_EMAIL=georgy.butaev@revamp-it.ch AUTH_TEST_ADMIN_PASSWORD='…' \
+AUTH_TEST_USER_EMAIL='…' AUTH_TEST_USER_PASSWORD='…' \
+AUTH_TEST_ADMIN_EMAIL='…' AUTH_TEST_ADMIN_PASSWORD='…' \
 npm run test:e2e:inventory
 ```
+
+Both addresses are real logins on the target deployment, so they live in the repository secrets of the same name rather than in this file — there is no default for either.
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 

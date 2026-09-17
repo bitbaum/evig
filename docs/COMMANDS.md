@@ -113,10 +113,10 @@ Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or rec
 |--------|--------|
 | `HETZNER_SSH_PRIVATE_KEY` | Private key for `ubuntu@167.233.22.31` |
 | `SELFHOST_ENV` | Full contents of `.env.selfhost.local` |
-| `AUTH_TEST_USER_PASSWORD` | Non-admin E2E account (`butaeff@gmail.com`) — post-deploy + CI inventory |
-| `AUTH_TEST_ADMIN_PASSWORD` | Staff E2E account (`georgy.butaev@revamp-it.ch`) — post-deploy + CI inventory |
-| `AUTH_TEST_USER_EMAIL` | Optional override for user persona (defaults to butaeff) |
-| `AUTH_TEST_ADMIN_EMAIL` | Optional override for admin persona (defaults to georgy) |
+| `AUTH_TEST_USER_EMAIL` | Login address of the non-admin E2E account — post-deploy + CI inventory. No default; the run fails naming this secret if unset |
+| `AUTH_TEST_USER_PASSWORD` | Password for that non-admin E2E account |
+| `AUTH_TEST_ADMIN_EMAIL` | Login address of the staff (admin) E2E account — same jobs, same rule |
+| `AUTH_TEST_ADMIN_PASSWORD` | Password for that staff E2E account |
 | `AUTH_TEST_EMAIL` / `AUTH_TEST_PASSWORD` | Legacy single-account auth smoke (`test:e2e:auth`) |
 | `PLAYWRIGHT_CHANNEL` | `chrome` or `msedge` when bundled Chromium cannot install (e.g. Ubuntu 26) |
 

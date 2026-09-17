@@ -1,16 +1,24 @@
 import type { Page } from '@playwright/test';
 import { dismissCookieBanner } from './ui';
 
-const DEFAULT_EMAIL = process.env.AUTH_TEST_EMAIL || 'admin@revampit.ch';
+/**
+ * No persona below carries a default address. They are logins on a real
+ * deployment, so a literal here would both publish whose account it is and let
+ * a misconfigured run drive the suite as that person. CI supplies every one of
+ * these from a repository secret (prod) or from the seeded fixture accounts in
+ * the e2e-local job; unset means the calling spec skips, which is the honest
+ * outcome for "no credentials configured".
+ */
+const DEFAULT_EMAIL = process.env.AUTH_TEST_EMAIL || '';
 const DEFAULT_PASSWORD = process.env.AUTH_TEST_PASSWORD || 'Admin123!';
 
 /** Non-admin persona — default prod E2E user (requester or techniker). */
-export const USER_TEST_EMAIL = process.env.AUTH_TEST_USER_EMAIL || 'butaeff@gmail.com';
+export const USER_TEST_EMAIL = process.env.AUTH_TEST_USER_EMAIL || '';
 export const USER_TEST_PASSWORD =
   process.env.AUTH_TEST_USER_PASSWORD || process.env.AUTH_TEST_PASSWORD || '';
 
 /** Staff persona — default prod E2E admin. */
-export const ADMIN_TEST_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || 'georgy.butaev@revamp-it.ch';
+export const ADMIN_TEST_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || '';
 export const ADMIN_TEST_PASSWORD =
   process.env.AUTH_TEST_ADMIN_PASSWORD || process.env.TEST_ADMIN_PASSWORD || '';
 
@@ -29,6 +37,8 @@ export const TECHNICIAN_TEST_PASSWORD = process.env.AUTH_TEST_TECHNICIAN_PASSWOR
 
 export function hasDualPersonaCredentials(): boolean {
   return Boolean(
+    USER_TEST_EMAIL &&
+    ADMIN_TEST_EMAIL &&
     USER_TEST_PASSWORD &&
     ADMIN_TEST_PASSWORD &&
     USER_TEST_EMAIL.toLowerCase() !== ADMIN_TEST_EMAIL.toLowerCase(),

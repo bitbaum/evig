@@ -2,8 +2,11 @@
  * Dual-persona feature inventory smoke — SSOT for "check everything as user + admin".
  *
  * Env (production or local):
- *   AUTH_TEST_USER_EMAIL / AUTH_TEST_USER_PASSWORD  — non-admin (butaeff@gmail.com)
- *   AUTH_TEST_ADMIN_EMAIL / AUTH_TEST_ADMIN_PASSWORD — staff (georgy.butaev@revamp-it.ch)
+ *   AUTH_TEST_USER_EMAIL / AUTH_TEST_USER_PASSWORD  — the non-admin persona
+ *   AUTH_TEST_ADMIN_EMAIL / AUTH_TEST_ADMIN_PASSWORD — the staff (admin) persona
+ *
+ * All four are repository secrets in CI and have no defaults here: they are
+ * logins on a real deployment. Unset one and the matching persona skips.
  *
  * Run: npm run test:e2e:inventory
  */
@@ -30,9 +33,9 @@ import type { Page } from '@playwright/test';
 
 test.setTimeout(90_000);
 
-const USER_EMAIL = process.env.AUTH_TEST_USER_EMAIL || 'butaeff@gmail.com';
+const USER_EMAIL = process.env.AUTH_TEST_USER_EMAIL || '';
 const USER_PASSWORD = process.env.AUTH_TEST_USER_PASSWORD || process.env.AUTH_TEST_PASSWORD || '';
-const ADMIN_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || 'georgy.butaev@revamp-it.ch';
+const ADMIN_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || '';
 const ADMIN_PASSWORD =
   process.env.AUTH_TEST_ADMIN_PASSWORD || process.env.TEST_ADMIN_PASSWORD || '';
 
@@ -48,7 +51,10 @@ function describePersona(
     let dynamicIds: DynamicSmokeIds = {};
 
     test.beforeAll(async ({ browser }) => {
-      test.skip(!password, envHint);
+      // The address has no default any more, so an unset one is as much a
+      // "not configured" as an unset password — skip on either, rather than
+      // attempting a login with an empty e-mail and reporting a page failure.
+      test.skip(!password || !email, envHint);
       const context = await browser.newContext();
       sharedPage = await context.newPage();
       await loginWithCredentials(sharedPage, '/dashboard', email, password);
@@ -70,7 +76,7 @@ describePersona(
   'User persona (non-admin)',
   USER_EMAIL,
   USER_PASSWORD,
-  'Set AUTH_TEST_USER_PASSWORD',
+  'Set AUTH_TEST_USER_EMAIL + AUTH_TEST_USER_PASSWORD',
   ({ getPage, getIds }) => {
     for (const route of USER_DASHBOARD_ROUTES) {
       test(`#${route.id} user — ${route.label}`, async () => {
@@ -119,7 +125,7 @@ describePersona(
   'Admin persona (staff)',
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
-  'Set AUTH_TEST_ADMIN_PASSWORD',
+  'Set AUTH_TEST_ADMIN_EMAIL + AUTH_TEST_ADMIN_PASSWORD',
   ({ getPage, getIds }) => {
     for (const route of ADMIN_ROUTES) {
       test(`#${route.id} admin — ${route.label}`, async () => {
