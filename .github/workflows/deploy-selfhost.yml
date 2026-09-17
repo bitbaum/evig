@@ -5,8 +5,14 @@ name: Deploy production app
 #   HETZNER_SSH_PRIVATE_KEY   — private key for ubuntu@<box>; the box IP itself is
 #                               the org Actions variable HETZNER_IP, not a literal here
 #   SELFHOST_ENV                — full contents of .env.selfhost.local (multiline OK)
-#   AUTH_TEST_USER_PASSWORD     — non-admin E2E account (butaeff@gmail.com)
-#   AUTH_TEST_ADMIN_PASSWORD    — staff E2E account (georgy.butaev@revamp-it.ch)
+#   AUTH_TEST_USER_PASSWORD     — password for the non-admin E2E account. The
+#                                 address is deliberately not recorded here: pass it
+#                                 in AUTH_TEST_USER_EMAIL (see scripts/e2e-inventory-prod.sh).
+#   AUTH_TEST_ADMIN_PASSWORD    — password for the staff (admin) E2E account; its
+#                                 address comes from AUTH_TEST_ADMIN_EMAIL the same way.
+#   Both are real personal mailboxes, so their addresses are configuration, not
+#   source: src/config/e2e-test-accounts.ts reads E2E_TEST_ACCOUNT_EMAILS for the
+#   same reason, and this repo is public.
 # Without deploy secrets the job logs a notice and exits cleanly.
 # Without E2E passwords the post-deploy inventory step is skipped.
 
