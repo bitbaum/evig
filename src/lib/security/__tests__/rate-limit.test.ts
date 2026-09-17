@@ -12,6 +12,9 @@
  *   - rateLimiters / AUTH_RATE_LIMITS constants — the documented limits
  */
 
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
 import {
   AUTH_RATE_LIMITS,
   checkRateLimit,
@@ -19,6 +22,39 @@ import {
   getClientIdentifier,
   rateLimiters,
 } from '../rate-limit';
+
+// ============================================================================
+// The class-ender: one place decides which forwarded hop to believe
+// ============================================================================
+
+describe('nothing re-derives the client IP from the raw header', () => {
+  // getClientIdentifier (limitkit) is the single place allowed to read
+  // x-forwarded-for. Every hand-rolled copy of that read has been the same
+  // bug: the first hop, or the whole header, is text the CALLER typed, so a
+  // limiter keyed on it gets a fresh bucket per request and cannot trip, and
+  // an audit row holding it records the caller's own claim as evidence.
+  const SRC = join(process.cwd(), 'src');
+  const ALLOWED = [join('src', 'lib', 'security', 'rate-limit.ts')];
+
+  const sourceFiles = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+      const path = join(dir, entry.name);
+      if (entry.isDirectory()) return entry.name === '__tests__' ? [] : sourceFiles(path);
+      return /\.(ts|tsx)$/.test(entry.name) ? [path] : [];
+    });
+
+  it('no file outside lib/security/rate-limit.ts reads x-forwarded-for', () => {
+    const offenders = sourceFiles(SRC)
+      .map((file) => file.replace(process.cwd() + '/', ''))
+      .filter(
+        (file) =>
+          !ALLOWED.includes(file) &&
+          /['"]x-forwarded-for['"]/i.test(readFileSync(join(process.cwd(), file), 'utf8')),
+      );
+
+    expect(offenders).toEqual([]);
+  });
+});
 
 // ============================================================================
 // createRateLimiter

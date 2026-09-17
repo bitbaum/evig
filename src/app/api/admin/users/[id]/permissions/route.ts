@@ -21,6 +21,7 @@ import { logger } from '@/lib/logger';
 import { logPermissionsChange, logSuperAdminChange } from '@/lib/auth/audit';
 import { apiSuccess, apiError, apiForbidden, apiBadRequest, apiNotFound } from '@/lib/api/helpers';
 import { validateBody, AdminPermissionsSchema } from '@/lib/schemas';
+import { getClientIdentifier } from '@/lib/security/rate-limit';
 
 /**
  * Get request context for audit logging
@@ -28,8 +29,9 @@ import { validateBody, AdminPermissionsSchema } from '@/lib/schemas';
 function getAuditContext(request: NextRequest, userId: string | null) {
   return {
     userId,
-    ipAddress:
-      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+    // The hop Caddy wrote. The raw header is caller-supplied text, which
+    // is not evidence once it lands in an audit row.
+    ipAddress: getClientIdentifier(request),
     userAgent: request.headers.get('user-agent') || 'unknown',
   };
 }

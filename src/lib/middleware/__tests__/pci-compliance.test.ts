@@ -192,6 +192,38 @@ describe('withPaymentSecurity — rate limiting', () => {
     );
   });
 
+  it('keys on the LAST forwarded hop — the one Caddy appended', async () => {
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+    await withPaymentSecurity(handler)(
+      makeRequest({ headers: { 'x-forwarded-for': '203.0.113.1, 198.51.100.9' } }),
+    );
+
+    expect(mockIsAllowed).toHaveBeenCalledWith(
+      '198.51.100.9',
+      expect.any(Number),
+      expect.any(Number),
+    );
+  });
+
+  // The regression guard. This middleware used to pass the RAW header through
+  // as the bucket key, so a caller could vary it per request and never fill a
+  // bucket — the payment throttle could not trip.
+  it('ignores a spoofed leading hop: every variation keys the same bucket', async () => {
+    const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
+
+    for (const spoofed of ['1.1.1.1', '2.2.2.2', '3.3.3.3']) {
+      await withPaymentSecurity(handler)(
+        makeRequest({ headers: { 'x-forwarded-for': `${spoofed}, 198.51.100.9` } }),
+      );
+    }
+
+    expect(mockIsAllowed.mock.calls.map((call) => call[0])).toEqual([
+      '198.51.100.9',
+      '198.51.100.9',
+      '198.51.100.9',
+    ]);
+  });
+
   it('falls back to x-real-ip when x-forwarded-for is missing', async () => {
     const handler = vi.fn().mockResolvedValue(NextResponse.json({ ok: true }));
     await withPaymentSecurity(handler)(makeRequest({ headers: { 'x-real-ip': '198.51.100.1' } }));
