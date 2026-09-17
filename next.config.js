@@ -41,7 +41,69 @@ const nextConfig = {
     return [];
   },
   async headers() {
+    // Security headers on every response. Shape follows the fleet reference
+    // implementation, aoz-begleitung/next.config.js. Everything in this list is
+    // inert for rendering: it constrains sniffing, framing, referrer detail,
+    // transport and device APIs — never what a page is allowed to load.
+    const securityHeaders = [
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      // SAMEORIGIN, not DENY: nothing here is meant to be embedded on another
+      // site (no embed route, no OG/preview frame), and the two <iframe>s we do
+      // render — the deliverable preview in /d/[token] and in the admin review
+      // — only ever load SAME-ORIGIN urls (`isInternalPreview` is
+      // `url.startsWith('/')`), so SAMEORIGIN leaves both working.
+      { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+      { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+      // camera=(self), microphone=(self) — deliberately NOT the empty
+      // `camera=(), microphone=()`. An empty allowlist denies the feature to
+      // EVERY origin including this one, so the browser never prompts and
+      // getUserMedia rejects immediately with NotAllowedError. That would
+      // silently break meeting recording (components/admin/protocols/
+      // RecordButton.tsx, hooks/useVoiceRecording.ts) and the live product
+      // camera (hooks/useAIProductAnalysis.ts startCamera, components/
+      // erfassung/ImageCapture.tsx). `(self)` permits only this origin, so the
+      // browser still asks the person — which is their decision to make.
+      // geolocation stays fully denied: nothing here uses it.
+      { key: 'Permissions-Policy', value: 'camera=(self), microphone=(self), geolocation=()' },
+      // REPORT-ONLY on purpose, and it must stay that way until it has been
+      // observed. An enforcing Content-Security-Policy blocks SILENTLY: a
+      // policy one source short breaks a stylesheet, an image or a third-party
+      // script with nothing on screen to explain it. Report-Only asks the
+      // browser to report what WOULD have been blocked and block nothing, so
+      // this header cannot change how any page looks or behaves.
+      //
+      // What has to be observed before it could ever become an enforcing
+      // `Content-Security-Policy`:
+      //   1. a report sink is actually wired up (report-to / report-uri) —
+      //      today nothing collects these reports;
+      //   2. zero violations over real traffic covering the public site, the
+      //      admin surfaces, the marketplace (R2 / S3 images), the embedded
+      //      FleetCrown feedback widget script, and the static presentation
+      //      decks under /presentations;
+      //   3. 'unsafe-inline' and 'unsafe-eval' replaced by per-request nonces —
+      //      while they are present script-src is largely decorative.
+      {
+        key: 'Content-Security-Policy-Report-Only',
+        value: [
+          "default-src 'self'",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fleetcrown.orangecat.ch https://loki.orangecat.ch",
+          "style-src 'self' 'unsafe-inline'",
+          "img-src 'self' data: blob: https:",
+          "font-src 'self' data:",
+          "media-src 'self' blob: data: https:",
+          "connect-src 'self' https://fleetcrown.orangecat.ch https://loki.orangecat.ch https://*.r2.dev https://*.amazonaws.com",
+          "frame-src 'self'",
+          "frame-ancestors 'self'",
+          "base-uri 'self'",
+          "form-action 'self'",
+          "object-src 'none'",
+        ].join('; '),
+      },
+    ];
+
     return [
+      { source: '/(.*)', headers: securityHeaders },
       {
         // Prevent search engines from indexing presentations (unlisted, share-by-link only)
         source: '/presentations/:path*',
