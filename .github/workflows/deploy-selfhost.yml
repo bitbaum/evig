@@ -2,7 +2,8 @@ name: Deploy production app
 
 # Push to main → build + rsync to production app evig.orangecat.ch.
 # One-time setup (Settings → Secrets → Actions):
-#   HETZNER_SSH_PRIVATE_KEY   — private key for ubuntu@167.233.22.31
+#   HETZNER_SSH_PRIVATE_KEY   — private key for ubuntu@<box>; the box IP itself is
+#                               the org Actions variable HETZNER_IP, not a literal here
 #   SELFHOST_ENV                — full contents of .env.selfhost.local (multiline OK)
 #   AUTH_TEST_USER_PASSWORD     — non-admin E2E account (butaeff@gmail.com)
 #   AUTH_TEST_ADMIN_PASSWORD    — staff E2E account (georgy.butaev@revamp-it.ch)
@@ -39,6 +40,11 @@ jobs:
     env:
       HETZNER_SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_PRIVATE_KEY }}
       SELFHOST_ENV: ${{ secrets.SELFHOST_ENV }}
+      # The box IP has ONE definition for the whole org: the `HETZNER_IP`
+      # Actions variable (visibility: all). It was duplicated here as a literal
+      # and again in scripts/selfhost-deploy-evig.sh, so re-IPing the box meant
+      # finding every copy. Both now read this.
+      HETZNER_IP: ${{ vars.HETZNER_IP }}
     steps:
       - name: Check secrets configured
         id: secrets
@@ -148,10 +154,20 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "$HETZNER_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H 167.233.22.31 >> ~/.ssh/known_hosts
+          # Fail loudly rather than keyscanning an empty host: `ssh-keyscan -H ""`
+          # writes nothing, exits 0, and the deploy then dies much later with an
+          # unhelpful host-key error. An unset org variable is a configuration
+          # bug, not a reason to continue.
+          if [ -z "$HETZNER_IP" ]; then
+            echo "::error::HETZNER_IP is empty — set the org Actions variable HETZNER_IP (visibility: all) to the box IP."
+            exit 1
+          fi
+          ssh-keyscan -H "$HETZNER_IP" >> ~/.ssh/known_hosts
 
       - name: Deploy
         if: steps.secrets.outputs.configured == 'true' && steps.gate.outputs.proceed == 'true'
+        # Inherits HETZNER_IP from the job env above; the deploy script builds
+        # BOX from it and refuses to run without it.
         run: bash scripts/selfhost-deploy-evig.sh
 
       # Must carry the gate too: this output is what starts the prod smoke job,

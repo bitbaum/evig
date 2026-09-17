@@ -2,7 +2,12 @@
 # Deploy evig to evig.orangecat.ch (Hetzner /opt/evig/app).
 set -euo pipefail
 
-BOX="${BOX:-ubuntu@167.233.22.31}"
+# The box IP is defined ONCE, org-wide: the `HETZNER_IP` Actions variable
+# (visibility: all), passed in by .github/workflows/deploy-selfhost.yml.
+# It used to be a literal here AND in that workflow — two copies of one
+# fact, so re-IPing the box meant hunting for every one of them. Override
+# BOX directly for a one-off target; otherwise refuse to guess.
+BOX="${BOX:-ubuntu@${HETZNER_IP:?set HETZNER_IP or BOX}}"
 NAME=evig
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REMOTE_BASE="/opt/$NAME"

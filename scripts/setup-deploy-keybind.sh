@@ -7,6 +7,12 @@
 
 set -e
 
+# Repo root, derived from THIS script's own location (scripts/ -> repo root).
+# It used to be a literal "/home/g/dev/revampit" baked into the generated
+# trigger script: wrong on any machine but one laptop, and wrong there too since
+# the repo was renamed to evig. The checkout knows where it is; ask it.
+PROJECT_DIR="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -37,15 +43,15 @@ print_header() {
 
 # Function to create the key binding script
 create_deploy_trigger() {
-    cat > deploy-trigger.sh << 'EOF'
+    cat > deploy-trigger.sh << EOF
 #!/bin/bash
 # Quick deployment trigger script
 # This script can be bound to a key for instant deployment
 
-# Change to project directory (adjust path as needed)
-PROJECT_DIR="/home/g/dev/revampit"
-cd "$PROJECT_DIR" || {
-    echo "Error: Could not change to project directory: $PROJECT_DIR"
+# Repo root, resolved from the checkout at setup time.
+PROJECT_DIR="${PROJECT_DIR}"
+cd "\$PROJECT_DIR" || {
+    echo "Error: Could not change to project directory: \$PROJECT_DIR"
     exit 1
 }
 
