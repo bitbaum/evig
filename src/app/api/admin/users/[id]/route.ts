@@ -19,6 +19,7 @@ import { logUserDeletion } from '@/lib/auth/audit';
 import { apiSuccess, apiError, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas';
+import { getClientIdentifier } from '@/lib/security/rate-limit';
 
 /**
  * GET /api/admin/users/[id]
@@ -247,8 +248,9 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
     await logUserDeletion(
       {
         userId: session.user.id,
-        ipAddress:
-          request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+        // The hop Caddy wrote. The raw header is caller-supplied text,
+        // which is not evidence once it lands in an audit row.
+        ipAddress: getClientIdentifier(request),
         userAgent: request.headers.get('user-agent') || 'unknown',
       },
       id,

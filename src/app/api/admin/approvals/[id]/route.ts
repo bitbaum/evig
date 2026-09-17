@@ -27,6 +27,7 @@ import { logger } from '@/lib/logger';
 import { runReviewTransition } from '@/lib/lifecycle/review-workflow';
 import type { TransitionTable } from '@/lib/lifecycle';
 import type { WorkflowEvent } from '@/lib/lifecycle/dispatch';
+import { getClientIdentifier } from '@/lib/security/rate-limit';
 
 const CONTENT_TRANSITIONS: TransitionTable = [
   { action: 'approve', from: APPROVAL_STATUS.PENDING, to: APPROVAL_STATUS.APPROVED },
@@ -108,10 +109,9 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
             kind: 'content_decision',
             ctx: {
               userId: session.user.id,
-              ipAddress:
-                request.headers.get('x-forwarded-for') ||
-                request.headers.get('x-real-ip') ||
-                'unknown',
+              // The hop Caddy wrote. The raw header is caller-supplied
+              // text, not evidence once it lands in an audit row.
+              ipAddress: getClientIdentifier(request),
               userAgent: request.headers.get('user-agent') || 'unknown',
             },
             contentType: row.content_type ?? 'unknown',

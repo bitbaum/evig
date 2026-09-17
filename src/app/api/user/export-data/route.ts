@@ -13,6 +13,7 @@ import { ORG } from '@/config/org';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { query } from '@/lib/auth/db';
 import { TABLE_NAMES } from '@/config/database';
+import { getClientIdentifier } from '@/lib/security/rate-limit';
 import { logger } from '@/lib/logger';
 
 const EXPORT_EVENT_TYPE = 'data_export';
@@ -130,10 +131,11 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
     };
 
     // --- Audit log ---
-    const ipAddress =
-      _request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      _request.headers.get('x-real-ip') ||
-      'unknown';
+    // The row written here is what the 3-exports-per-24h counter above reads
+    // back, so the address in it has to be the one Caddy wrote. Caddy APPENDS
+    // the real peer to X-Forwarded-For; the FIRST hop is whatever the caller
+    // typed, so recording that recorded the caller's own claim.
+    const ipAddress = getClientIdentifier(_request);
     const userAgent = _request.headers.get('user-agent') ?? null;
 
     await safeQuery(

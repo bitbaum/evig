@@ -8,6 +8,7 @@ import {
   isSecureRequest,
   createAuditLog,
 } from '@/lib/payments/security';
+import { getClientIdentifier } from '@/lib/security/rate-limit';
 import { logger } from '@/lib/logger';
 
 // Route handler context type for dynamic route parameters
@@ -65,9 +66,13 @@ export function withPaymentSecurity(
     } = options;
 
     try {
-      // Get client identifier (IP address)
-      const clientIP =
-        request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+      // The key the payment throttle counts against. This used to be the RAW
+      // X-Forwarded-For header, so a caller could send a different value on
+      // every request — "1.1.1.1", then "1.1.1.1, x", then anything at all —
+      // and land in a fresh bucket each time; the throttle could never trip.
+      // Caddy APPENDS the real peer address, so only the last hop is ours.
+      // getClientIdentifier (limitkit) is the one place that decides this.
+      const clientIP = getClientIdentifier(request);
 
       // Rate limiting
       if (!paymentRateLimiter.isAllowed(clientIP, rateLimit.maxAttempts, rateLimit.windowMs)) {
@@ -120,7 +125,9 @@ export function withPaymentSecurity(
         'payment_endpoint',
         request.nextUrl.pathname,
         { error: error instanceof Error ? error.message : 'Unknown error' },
-        request.headers.get('x-forwarded-for') || 'unknown',
+        // The audit trail records the hop Caddy wrote, not the caller's own
+        // header text — a spoofable string in an audit log is worse than none.
+        getClientIdentifier(request),
       );
 
       logger.error('Security incident', auditEntry);
