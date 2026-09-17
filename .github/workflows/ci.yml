@@ -165,7 +165,22 @@ jobs:
           AUTH_TEST_ADMIN_PASSWORD: ${{ secrets.AUTH_TEST_ADMIN_PASSWORD }}
           AUTH_TEST_USER_EMAIL: ${{ secrets.AUTH_TEST_USER_EMAIL }}
           AUTH_TEST_ADMIN_EMAIL: ${{ secrets.AUTH_TEST_ADMIN_EMAIL }}
-        run: bash scripts/e2e-inventory-prod.sh
+        run: |
+          # The script has no baked-in persona addresses any more, so a missing
+          # address secret would abort inside it with a bare `parameter null`.
+          # Name the secret instead — but only once the passwords say the smoke
+          # is meant to run at all; with no secrets configured this still skips.
+          if [ -n "${AUTH_TEST_USER_PASSWORD:-}" ] && [ -n "${AUTH_TEST_ADMIN_PASSWORD:-}" ]; then
+            if [ -z "${AUTH_TEST_USER_EMAIL:-}" ]; then
+              echo "::error::AUTH_TEST_USER_EMAIL secret not set — the non-admin E2E login address has no default any more."
+              exit 1
+            fi
+            if [ -z "${AUTH_TEST_ADMIN_EMAIL:-}" ]; then
+              echo "::error::AUTH_TEST_ADMIN_EMAIL secret not set — the staff E2E login address has no default any more."
+              exit 1
+            fi
+          fi
+          bash scripts/e2e-inventory-prod.sh
 
   # Migration drift check — applies every SQL migration in scripts/db/migrations/
   # to a throwaway Postgres container. Uses pgvector image so 005-hirn-ai-rag.sql

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Dual-persona feature inventory against production (or PLAYWRIGHT_BASE_URL).
 #
-# Requires AUTH_TEST_USER_PASSWORD and AUTH_TEST_ADMIN_PASSWORD.
-# Optional: AUTH_TEST_USER_EMAIL, AUTH_TEST_ADMIN_EMAIL, PLAYWRIGHT_BASE_URL.
+# Requires AUTH_TEST_USER_PASSWORD and AUTH_TEST_ADMIN_PASSWORD, plus
+# AUTH_TEST_USER_EMAIL and AUTH_TEST_ADMIN_EMAIL for the two personas.
+# Optional: PLAYWRIGHT_BASE_URL.
 #
 # Used by GitHub Actions post-deploy and manual: npm run test:e2e:inventory:prod
 
@@ -33,11 +34,14 @@ if [ "$ready" -ne 1 ]; then
 fi
 
 export PLAYWRIGHT_BASE_URL="$BASE_URL"
-# No hardcoded user default — the old butaeff@gmail.com test account was removed.
-# Set AUTH_TEST_USER_EMAIL to a real non-admin account (ideally against a staging
-# URL, since these journeys mutate data). The admin default is a real account.
-export AUTH_TEST_USER_EMAIL="${AUTH_TEST_USER_EMAIL:?set AUTH_TEST_USER_EMAIL to a real non-admin account}"
-export AUTH_TEST_ADMIN_EMAIL="${AUTH_TEST_ADMIN_EMAIL:-georgy.butaev@revamp-it.ch}"
+# Neither persona address has a default. Both are real accounts on the target
+# deployment, so a baked-in default would do two bad things at once: publish a
+# person's address in a public repo, and silently drive this suite as whoever
+# that is when the variable is missing. In CI both come from the repository
+# secrets of the same name; locally, export them yourself. Prefer a staging
+# PLAYWRIGHT_BASE_URL — the journeys beyond the read-only inventory mutate data.
+export AUTH_TEST_USER_EMAIL="${AUTH_TEST_USER_EMAIL:?set AUTH_TEST_USER_EMAIL (repo secret AUTH_TEST_USER_EMAIL) to the non-admin E2E account}"
+export AUTH_TEST_ADMIN_EMAIL="${AUTH_TEST_ADMIN_EMAIL:?set AUTH_TEST_ADMIN_EMAIL (repo secret AUTH_TEST_ADMIN_EMAIL) to the staff/admin E2E account}"
 
 echo "=== dual-persona inventory smoke → ${BASE_URL} ==="
 pnpm exec playwright test tests/e2e/feature-inventory.spec.ts --project=chromium --reporter=line

@@ -9,8 +9,11 @@ name: Prod protocols smoke
 #   small — ~90 s m4a (< 24 MB): direct Groq Whisper path
 #   large — ~30 min m4a (> 24 MB): ffmpeg-chunked transcription path
 #
-# Requires secrets: AUTH_TEST_ADMIN_PASSWORD (and optionally
-# AUTH_TEST_ADMIN_EMAIL — defaults to georgy.butaev@revamp-it.ch).
+# Requires two repository secrets, both for the staff (admin) E2E account on
+# the target deployment: AUTH_TEST_ADMIN_EMAIL (its login address — a real
+# account with /admin access, held as a secret so the repo does not publish
+# whose it is) and AUTH_TEST_ADMIN_PASSWORD. Neither has a default; the job
+# fails with a named error if either is missing.
 
 on:
   workflow_dispatch:
@@ -36,6 +39,10 @@ jobs:
     steps:
       - name: Check secrets configured
         run: |
+          if [ -z "$AUTH_TEST_ADMIN_EMAIL" ]; then
+            echo "::error::AUTH_TEST_ADMIN_EMAIL secret not set — the staff E2E login address has no default any more."
+            exit 1
+          fi
           if [ -z "$AUTH_TEST_ADMIN_PASSWORD" ]; then
             echo "::error::AUTH_TEST_ADMIN_PASSWORD secret not set — cannot log in to prod."
             exit 1

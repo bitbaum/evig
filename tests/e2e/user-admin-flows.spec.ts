@@ -15,9 +15,9 @@ import { loginWithCredentials } from './helpers/auth';
 
 test.setTimeout(60_000);
 
-const USER_EMAIL = process.env.AUTH_TEST_USER_EMAIL || 'butaeff@gmail.com';
+const USER_EMAIL = process.env.AUTH_TEST_USER_EMAIL || '';
 const USER_PASSWORD = process.env.AUTH_TEST_USER_PASSWORD || process.env.AUTH_TEST_PASSWORD || '';
-const ADMIN_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || 'georgy.butaev@revamp-it.ch';
+const ADMIN_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || '';
 const ADMIN_PASSWORD =
   process.env.AUTH_TEST_ADMIN_PASSWORD || process.env.TEST_ADMIN_PASSWORD || '';
 
@@ -36,7 +36,9 @@ function describeAuthenticatedFlows(
     let sharedPage: Page;
 
     test.beforeAll(async ({ browser }) => {
-      test.skip(!password, envHint);
+      // Same as the inventory spec: no default address, so an unset address
+      // means "not configured", not a broken login page.
+      test.skip(!password || !email, envHint);
       const context = await browser.newContext();
       sharedPage = await context.newPage();
       await loginWithCredentials(sharedPage, '/dashboard', email, password);
@@ -54,7 +56,7 @@ describeAuthenticatedFlows(
   'Non-admin user flows',
   USER_EMAIL,
   USER_PASSWORD,
-  'Set AUTH_TEST_USER_PASSWORD or AUTH_TEST_PASSWORD',
+  'Set AUTH_TEST_USER_EMAIL and AUTH_TEST_USER_PASSWORD (or AUTH_TEST_PASSWORD)',
   (getPage) => {
     test('dashboard loads', async () => {
       const page = getPage();
@@ -139,7 +141,7 @@ describeAuthenticatedFlows(
   'Admin user flows',
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
-  'Set AUTH_TEST_ADMIN_PASSWORD or TEST_ADMIN_PASSWORD',
+  'Set AUTH_TEST_ADMIN_EMAIL and AUTH_TEST_ADMIN_PASSWORD (or TEST_ADMIN_PASSWORD)',
   (getPage) => {
     test('admin dashboard loads', async () => {
       const page = getPage();
