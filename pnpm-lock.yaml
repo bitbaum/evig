@@ -31,10 +31,10 @@ importers:
         specifier: ^3.1130.0
         version: 3.1130.0
       '@bitbaum/ai-kit':
-        specifier: ^1.10.0
-        version: 1.10.0(react@19.3.0)
+        specifier: ^1.11.0
+        version: 1.11.0(react@19.3.0)
       '@bitbaum/mail-kit':
-        specifier: ^0.1.0
+        specifier: ^0.1.1
         version: 0.1.1
       '@fleet/ai-forms':
         specifier: github:bitbaum/ai-forms#v0.1.2
@@ -64,8 +64,8 @@ importers:
         specifier: ^2.4.3
         version: 2.4.3
       bip-kit:
-        specifier: ^0.2.7
-        version: 0.2.7(katex@0.16.47)(mermaid@12.0.0)(react@19.3.0)(shiki@4.4.3)
+        specifier: ^0.3.1
+        version: 0.3.1(katex@0.16.47)(mermaid@12.0.0)(react@19.3.0)(shiki@4.4.3)
       busboy:
         specifier: ^1.6.0
         version: 1.6.0
@@ -482,8 +482,8 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@bitbaum/ai-kit@1.10.0':
-    resolution: {integrity: sha512-XlqyyLEYDmXqIwDjJ+WMM/MhnK5TRnIpcHgTybVfXTmfHzOEg3FBgzPXOR7CbHi0ppCHmF4qTRd8L+uwyG0TpQ==}
+  '@bitbaum/ai-kit@1.11.0':
+    resolution: {integrity: sha512-WNprP0kydOfxyFz4itnkbc1Khu2R7CP+z4809usXKFukc+xEiooKT1qKnf0RWu0ti4CIFikz3BluoNlF1Di83w==}
     engines: {node: '>=20'}
     peerDependencies:
       react: '>=18'
@@ -2852,8 +2852,8 @@ packages:
   binary@0.3.0:
     resolution: {integrity: sha512-D4H1y5KYwpJgK8wk1Cue5LLPgmwHKYSChkbspQg5JtVuR5ulGckxfR62H3AE9UDkdMC8yyXlqYihuz3Aqg2XZg==}
 
-  bip-kit@0.2.7:
-    resolution: {integrity: sha512-oe4f2IXAYuOQ1ocDLg0ET27qpNfb7nOSVobFEbu+xLyvluZ1rLygjOhg4b9tB9CxTKb9R35Bh3RdibVLxFAYkw==}
+  bip-kit@0.3.1:
+    resolution: {integrity: sha512-OnkaJiDCRz0UeMifgI8NHnHoaBWyvpYOgdDIfOcxMiIWDWliVyHU+jg5aYX6zccIH15G5uze1vaGJV1XdRDDJg==}
     engines: {node: '>=20'}
     peerDependencies:
       katex: '>=0.16'
@@ -4489,7 +4489,7 @@ packages:
     engines: {node: '>=14'}
 
   limitkit@https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7}
+    resolution: {gitHosted: true, integrity: sha512-54xOFgnD25oBR4CSDlqIWSG0CJIxX9LNEA+SiUQwXXnDHSurLtUEDhhWZJ07LOY4+qyU6QQDvrK4x3XbNvpR3Q==, tarball: https://codeload.github.com/bitbaum/limitkit/tar.gz/75adef1e993f90c6079a36a6cd96567cae5924c7}
     version: 0.2.0
     engines: {node: '>=18'}
 
@@ -6623,7 +6623,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@bitbaum/ai-kit@1.10.0(react@19.3.0)':
+  '@bitbaum/ai-kit@1.11.0(react@19.3.0)':
     dependencies:
       ai-forms: 0.1.2(react@19.3.0)
     optionalDependencies:
@@ -8776,7 +8776,7 @@ snapshots:
       buffers: 0.1.1
       chainsaw: 0.1.0
 
-  bip-kit@0.2.7(katex@0.16.47)(mermaid@12.0.0)(react@19.3.0)(shiki@4.4.3):
+  bip-kit@0.3.1(katex@0.16.47)(mermaid@12.0.0)(react@19.3.0)(shiki@4.4.3):
     dependencies:
       react: 19.3.0
     optionalDependencies:
