@@ -18,7 +18,9 @@ name: Deploy production app
 
 on:
   workflow_dispatch: {}
-  push:
+  workflow_run:
+    workflows: [CI Pipeline]
+    types: [completed]
     branches: [main]
 
 # Queue deploys; do NOT cancel them.
@@ -38,6 +40,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request')
     name: evig.orangecat.ch
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -65,6 +68,8 @@ jobs:
       - name: Checkout code
         if: steps.secrets.outputs.configured == 'true'
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       # No version input: pnpm/action-setup reads packageManager from package.json.
       - uses: pnpm/action-setup@v6
@@ -123,29 +128,49 @@ jobs:
         if: steps.secrets.outputs.configured == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          CI_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          CI_EVENT: ${{ github.event.workflow_run.event }}
         run: |
           set +e
+          # workflow_run already means the named CI workflow completed. Validate
+          # the success and source event, then avoid starting a polling loop.
+          if [ "$EVENT_NAME" = workflow_run ]; then
+            if [ "$CI_CONCLUSION" != success ] || [ "$CI_EVENT" = pull_request ] || [ -z "$TARGET_SHA" ]; then
+              echo "::error::Refusing deploy for CI conclusion=$CI_CONCLUSION event=$CI_EVENT sha=$TARGET_SHA"
+              exit 1
+            fi
+            head=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha 2>/dev/null)
+            if [ -n "$head" ] && [ "$head" != "$TARGET_SHA" ]; then
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              echo "::notice::superseded by ${head:0:8} — its deploy ships this change"
+              exit 0
+            fi
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           for _ in $(seq 1 90); do
             head=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha 2>/dev/null)
-            if [ -n "$head" ] && [ "$head" != "$GITHUB_SHA" ]; then
+            if [ -n "$head" ] && [ "$head" != "$TARGET_SHA" ]; then
               echo "proceed=false" >> "$GITHUB_OUTPUT"
               echo "::notice::superseded by ${head:0:8} — its deploy ships this change"
               exit 0
             fi
             state=$(gh api \
-              "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$GITHUB_SHA&per_page=50" \
+              "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$TARGET_SHA&per_page=50" \
               --jq '[.workflow_runs[] | select(.name=="CI Pipeline")] | first
                     | "\(.status) \(.conclusion)"' 2>/dev/null)
             case "$state" in
               "completed success")
                 echo "proceed=true" >> "$GITHUB_OUTPUT"; exit 0 ;;
               "completed "*)
-                echo "::error::CI Pipeline is $state for $GITHUB_SHA — deploy blocked"
+                echo "::error::CI Pipeline is $state for $TARGET_SHA — deploy blocked"
                 exit 1 ;;
             esac
             sleep 20
           done
-          echo "::error::timed out waiting for CI Pipeline on $GITHUB_SHA"
+          echo "::error::timed out waiting for CI Pipeline on $TARGET_SHA"
           exit 1
 
       - name: Write selfhost env
@@ -194,6 +219,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       # Read-only: public pages render + DB-backed public APIs return success.
       # No login, no prod mutation. The heavier authenticated dual-persona
