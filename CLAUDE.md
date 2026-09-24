@@ -87,6 +87,22 @@ hold the line on all of it by default:
 - **Keep docs true.** When behaviour changes, update the docs/CLAUDE.md in the same
   change — stale docs are a defect.
 
+## The product fits the person
+
+This site loads Loki's feedback widget (`src/components/feedback/LokiFeedbackEmbed.tsx`). Whatever a visitor
+dislikes, they point at it and choose **Change it for me** or **Show me how to
+get there**. Loki then builds that experience, or shows the path and makes it
+findable for the next person. Tailoring every product to the person using it is
+the direction for the whole fleet. It is defined once, together with what has and
+hasn't shipped, in bitbaum/loki `docs/architecture/tailored-experience.md`, so
+do not restate it here.
+
+To make a surface changeable in place, put `data-loki-target` and an
+`aria-label` on it and call `window.Loki?.report({ target })` from a control
+inside it. That control must be a real link to the feedback page, taken over
+only when `window.Loki.ready` is true, so it is never a button that does
+nothing.
+
 ## Stack
 
 | Layer | Technology |
