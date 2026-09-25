@@ -133,6 +133,10 @@ export const rateLimiters = {
   // Hirn admin chat: 60 per hour per staff member (working tool, generous).
   hirnChatStaff: createRateLimiter(ONE_HOUR_MS, 60),
 
+  // Decision Beschluss narrative: 10 per hour per staff member. Each click is
+  // one model call on the free tier; there is no background path any more.
+  decisionNarrative: createRateLimiter(ONE_HOUR_MS, 10),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(FIFTEEN_MINUTES_MS, 100),
 };

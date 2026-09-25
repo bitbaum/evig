@@ -79,10 +79,6 @@ vi.mock('@/lib/services/notifications', () => ({
   }),
 }));
 
-vi.mock('@/lib/ai/decisions-narrative', () => ({
-  generateOutcomeNarrative: vi.fn().mockResolvedValue(null),
-}));
-
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
