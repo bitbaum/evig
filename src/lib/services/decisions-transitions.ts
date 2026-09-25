@@ -21,7 +21,6 @@ import {
 import { type VoteData, type DecisionOption } from '@/lib/schemas/decisions';
 import { type DbDecisionRow, asArray, asObject } from './decisions-crud';
 import { computeTallies, resolveEligibleUserIds } from './decisions-voting';
-import { generateOutcomeNarrative } from '@/lib/ai/decisions-narrative';
 
 // Table name refs
 const dTable = getTableName(decisions);
@@ -143,29 +142,9 @@ export async function transitionDecision(
       `decision_closed:${txResult.id}`,
     );
 
-    // Generate AI outcome narrative asynchronously (non-blocking)
-    fireNotification(async () => {
-      const options = asArray<DecisionOption>(txResult.options, []);
-      const outcome = (txResult.outcome || {}) as Record<string, unknown>;
-      const narrative = await generateOutcomeNarrative({
-        title: txResult.title,
-        description: txResult.description,
-        votingMethod: txResult.voting_method,
-        options,
-        outcome,
-        outcomeSummary: txResult.outcome_summary,
-        participantScope: (txResult.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT,
-        category: txResult.category || 'operativ',
-      });
-      if (narrative) {
-        await db.execute(sql`
-            UPDATE ${sql.raw(dTable)}
-            SET ai_outcome_narrative = ${narrative}
-            WHERE id = ${txResult.id}
-          `);
-      }
-    }, `decision_narrative:${txResult.id}`);
-
+    // No AI here: closing (by a person or by the close-decisions cron) must
+    // not spend the free-tier model. The Beschluss narrative is generated only
+    // when staff click for it — see lib/services/decisions-narrative.ts.
     return { decision: txResult };
   }
 

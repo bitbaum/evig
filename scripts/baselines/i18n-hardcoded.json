@@ -5558,6 +5558,11 @@
       "snippet": "Erfolgreich für Workshop angemeldet"
     },
     {
+      "file": "src/config/error-messages.ts",
+      "line": 136,
+      "snippet": "KI-Dienst vorübergehend nicht verfügbar. Bitte versuche es später erneut."
+    },
+    {
       "file": "src/config/hirn/page-contexts.ts",
       "line": 64,
       "snippet": "Die Nutzerin ist auf dem Verkaufsformular des Marktplatzes und kann ein gebrauch…"

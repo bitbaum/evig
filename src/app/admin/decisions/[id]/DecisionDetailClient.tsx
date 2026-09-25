@@ -90,6 +90,7 @@ export default function DecisionDetailClient({
           outcomeSummary={decision.outcomeSummary}
           votingMethod={decision.votingMethod}
           aiOutcomeNarrative={decision.aiOutcomeNarrative}
+          narrativeRequest={{ decisionId, onGenerated: () => void fetchDecision() }}
         />
       )}
 

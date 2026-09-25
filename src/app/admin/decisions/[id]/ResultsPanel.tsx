@@ -9,6 +9,7 @@ import {
   type SimpleMajorityResponse,
 } from '@/config/decisions';
 import { Panel } from '@/components/ui/Panel';
+import { GenerateNarrativeButton } from './GenerateNarrativeButton';
 
 interface RankedOption {
   id: string;
@@ -36,6 +37,8 @@ interface Props {
   outcomeSummary: string | null;
   votingMethod: VotingMethod;
   aiOutcomeNarrative?: string | null;
+  /** When set, a missing narrative can be generated on request. */
+  narrativeRequest?: { decisionId: string; onGenerated: () => void };
 }
 
 function Bar({
@@ -107,6 +110,7 @@ export default function ResultsPanel({
   outcomeSummary,
   votingMethod,
   aiOutcomeNarrative,
+  narrativeRequest,
 }: Props) {
   const data = outcome as OutcomeData | null;
   if (!data) return null;
@@ -114,6 +118,12 @@ export default function ResultsPanel({
   return (
     <Panel title="Ergebnis" className="p-6">
       {/* AI Outcome Narrative — Beschluss hero */}
+      {!aiOutcomeNarrative && narrativeRequest && (
+        <GenerateNarrativeButton
+          decisionId={narrativeRequest.decisionId}
+          onGenerated={narrativeRequest.onGenerated}
+        />
+      )}
       {aiOutcomeNarrative && (
         <div className="mb-6 rounded-lg border-2 border-strong bg-action-muted p-4">
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-action">

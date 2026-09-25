@@ -133,6 +133,7 @@ export const ERROR_MESSAGES = {
   DECISION_NOT_APPROVED: 'Entscheidung wurde nicht angenommen',
   TASKS_ALREADY_CREATED: 'Aufgaben wurden bereits erstellt',
   AI_PROPOSAL_FAILED: 'KI-Vorschlag fehlgeschlagen',
+  AI_UNAVAILABLE: 'KI-Dienst vorübergehend nicht verfügbar. Bitte versuche es später erneut.',
 } as const;
 
 /**
