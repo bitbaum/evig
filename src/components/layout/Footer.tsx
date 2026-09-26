@@ -11,6 +11,13 @@ import { NewsletterSignup } from '@/components/community/NewsletterSignup';
 import Heading from '@/components/ui/Heading';
 import { useTranslations } from 'next-intl';
 
+// Every footer link is a 44px target (fleet nav contract rule 3) — the hit
+// area grows, the text does not. The lists drop their space-y-2 to pay for it.
+const FOOTER_LINK =
+  'inline-flex min-h-touch min-w-touch items-center text-sm text-text-secondary hover:text-text-primary transition-colors';
+const FOOTER_LEGAL_LINK =
+  'inline-flex min-h-touch min-w-touch items-center justify-center hover:text-text-primary transition-colors';
+
 /**
  * Footer — flips with theme like the rest of the site. The legacy
  * "always dark" treatment broke the visual rhythm of the page in
@@ -41,33 +48,27 @@ export default function Footer() {
             >
               {tFooter('navigation')}
             </Heading>
-            <ul className="space-y-2">
+            <ul>
               {mainNavigation.map((item) => (
                 <li key={item.name}>
                   {item.external ? (
                     <a
                       href={item.href}
-                      className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+                      className={FOOTER_LINK}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       {item.nameKey ? tNav(item.nameKey as never) : item.name}
                     </a>
                   ) : (
-                    <Link
-                      href={item.href}
-                      className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-                    >
+                    <Link href={item.href} className={FOOTER_LINK}>
                       {item.nameKey ? tNav(item.nameKey as never) : item.name}
                     </Link>
                   )}
                 </li>
               ))}
               <li>
-                <Link
-                  href={ROUTES.public.vision}
-                  className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-                >
+                <Link href={ROUTES.public.vision} className={FOOTER_LINK}>
                   {tFooter('vision')}
                 </Link>
               </li>
@@ -82,13 +83,10 @@ export default function Footer() {
             >
               {tDivisions('overview.eyebrow')}
             </Heading>
-            <ul className="space-y-2">
+            <ul>
               {EVIG_DIVISIONS.map((division) => (
                 <li key={division.id}>
-                  <Link
-                    href={division.href}
-                    className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-                  >
+                  <Link href={division.href} className={FOOTER_LINK}>
                     {division.wordmark}
                   </Link>
                 </li>
@@ -107,10 +105,7 @@ export default function Footer() {
             <address className="space-y-4 not-italic">
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-text-tertiary shrink-0" />
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-                >
+                <a href={`mailto:${CONTACT.email}`} className={FOOTER_LINK}>
                   {CONTACT.email}
                 </a>
               </div>
@@ -145,39 +140,24 @@ export default function Footer() {
         <div className="mt-6 pt-6 border-t">
           <nav
             aria-label={tFooter('legal')}
-            className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-text-tertiary"
+            className="flex flex-wrap justify-center gap-x-4 text-xs text-text-tertiary"
           >
-            <Link
-              href={ROUTES.public.impressum}
-              className="hover:text-text-primary transition-colors"
-            >
+            <Link href={ROUTES.public.impressum} className={FOOTER_LEGAL_LINK}>
               {tFooter('impressum')}
             </Link>
-            <Link
-              href={ROUTES.public.datenschutz}
-              className="hover:text-text-primary transition-colors"
-            >
+            <Link href={ROUTES.public.datenschutz} className={FOOTER_LEGAL_LINK}>
               {tFooter('privacyPolicy')}
             </Link>
-            <Link href={ROUTES.public.agb} className="hover:text-text-primary transition-colors">
+            <Link href={ROUTES.public.agb} className={FOOTER_LEGAL_LINK}>
               {tFooter('termsOfService')}
             </Link>
-            <Link
-              href={ROUTES.public.transparenz}
-              className="hover:text-text-primary transition-colors"
-            >
+            <Link href={ROUTES.public.transparenz} className={FOOTER_LEGAL_LINK}>
               {tFooter('transparency')}
             </Link>
-            <Link
-              href={ROUTES.public.changelog}
-              className="hover:text-text-primary transition-colors"
-            >
+            <Link href={ROUTES.public.changelog} className={FOOTER_LEGAL_LINK}>
               {tFooter('changelog')}
             </Link>
-            <Link
-              href={ROUTES.public.mitgliedWerden}
-              className="hover:text-text-primary transition-colors"
-            >
+            <Link href={ROUTES.public.mitgliedWerden} className={FOOTER_LEGAL_LINK}>
               {tNav('membership')}
             </Link>
           </nav>

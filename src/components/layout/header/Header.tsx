@@ -192,7 +192,13 @@ export function Header() {
                 <ThemeToggle />
                 {/* Highlighted CTA(s) — e.g. Kontakt */}
                 {actionNavItems.map((item) => (
-                  <Button key={item.name} href={item.href} variant="outline" size="sm">
+                  <Button
+                    key={item.name}
+                    href={item.href}
+                    variant="outline"
+                    size="sm"
+                    className="min-h-touch"
+                  >
                     {item.nameKey ? navItemLabel(tNav as NavTranslator, item.nameKey) : item.name}
                   </Button>
                 ))}
@@ -222,8 +228,8 @@ export function Header() {
                 className={cn(
                   // Boxed like the theme toggle — the bare ghost icon was easy
                   // to miss on phones (thin faint lines at the screen edge).
-                  // h-9 w-9 matches every other icon control in the bar.
-                  'relative h-9 w-9 rounded-lg border border-subtle bg-surface-raised',
+                  // h-11 w-11 (44px touch floor) matches every other icon control in the bar.
+                  'relative h-11 w-11 rounded-lg border border-subtle bg-surface-raised',
                   'text-text-primary hover:border-strong hover:bg-surface-raised',
                 )}
                 onClick={() => setMobileMenuOpen(true)}

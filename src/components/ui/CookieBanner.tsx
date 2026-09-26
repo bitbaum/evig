@@ -1,6 +1,6 @@
 'use client';
 
-import { useSyncExternalStore, useCallback } from 'react';
+import { useSyncExternalStore, useCallback, useEffect, useRef } from 'react';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
@@ -46,10 +46,31 @@ export function CookieBanner() {
     }
   }, []);
 
+  // While the banner is up it is bottom chrome, like the mobile bottom nav:
+  // publish its height so bottom-anchored controls (the Hirn FAB) sit above it
+  // instead of under it — "Verstanden" was painted on top of "Hirn öffnen" at
+  // phone and tablet widths. 0px (unset) once dismissed.
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!visible || !el) return;
+    const root = document.documentElement;
+    const publish = () =>
+      root.style.setProperty('--cookie-banner-clearance', `${el.offsetHeight}px`);
+    publish();
+    const observer = new ResizeObserver(publish);
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty('--cookie-banner-clearance');
+    };
+  }, [visible]);
+
   if (!visible) return null;
 
   return (
     <div
+      ref={ref}
       role="dialog"
       aria-live="polite"
       aria-label={t('title')}
