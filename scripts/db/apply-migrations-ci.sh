@@ -18,7 +18,8 @@ echo "=== Migration drift check → ${PGUSER}@${PGHOST}:${PGPORT}/${PGDATABASE} 
 psql -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;" || true
 
 # Hirn RAG (005-hirn-ai-rag.sql) needs pgvector — skip gracefully only when unavailable
-if psql -tAc "SELECT 1 FROM pg_available_extensions WHERE name = 'vector'" | grep -q 1; then
+has_vector=$(psql -tAc "SELECT 1 FROM pg_available_extensions WHERE name = 'vector'" || true)
+if grep -q 1 <<<"$has_vector"; then
   psql -c "CREATE EXTENSION IF NOT EXISTS vector;"
 else
   echo "WARN: pgvector extension not available — Hirn RAG migration will fail if present"
@@ -42,7 +43,8 @@ echo ""
 echo "Final table count:"
 psql -tA -c "SELECT COUNT(*) FROM pg_tables WHERE schemaname='public'"
 echo ""
-if psql -tAc "SELECT to_regclass('public.schema_migrations') IS NOT NULL" | grep -q t; then
+has_tracking=$(psql -tAc "SELECT to_regclass('public.schema_migrations') IS NOT NULL" || true)
+if grep -q t <<<"$has_tracking"; then
   echo "Tracking table state:"
   psql -tA -c "SELECT COUNT(*) || ' rows in schema_migrations' FROM schema_migrations"
 fi
