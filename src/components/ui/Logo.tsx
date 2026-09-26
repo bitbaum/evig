@@ -32,7 +32,7 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
     <Link
       href={href}
       aria-label={ORG.name}
-      className={cn('group inline-flex shrink-0 items-center gap-2', className)}
+      className={cn('group inline-flex min-h-touch shrink-0 items-center gap-2', className)}
     >
       <svg
         viewBox={EVIG_MARK.viewBox}
