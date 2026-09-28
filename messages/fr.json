@@ -322,6 +322,7 @@
     "openingHoursTueFri": "Mar–Ven : {hours}",
     "transparency": "Transparence",
     "changelog": "Changelog",
+    "roadmap": "Feuille de route",
     "locations": {
       "store": "Boutique",
       "warehouse": "Entrepôt",
@@ -7832,6 +7833,37 @@
     "command": {
       "label": "Démarrer en local",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "Feuille de route",
+      "description": "Ce qu’evig construit ensuite, dans quel ordre, et ce qui est déjà fait."
+    },
+    "hero": {
+      "title": "Feuille de route",
+      "subtitle": "Ce que nous construisons, dans quel ordre, et ce qui est déjà fait. Ce qui est prévu est écrit ici comme un plan, pas comme une promesse."
+    },
+    "status": {
+      "inProgress": "Maintenant",
+      "planned": "Ensuite",
+      "later": "Plus tard",
+      "done": "Terminé"
+    },
+    "empty": {
+      "title": "Rien d’enregistré pour l’instant",
+      "description": "Dès que la première entrée arrive dans le répertoire, elle apparaît ici."
+    },
+    "unavailable": {
+      "title": "Feuille de route temporairement indisponible",
+      "description": "Le répertoire que lit cette page ne répond pas pour le moment. Merci de réessayer plus tard."
+    },
+    "progress": "{percent} % terminé",
+    "target": "Objectif : {date}",
+    "milestones": "Jalons",
+    "links": {
+      "changelog": "Voir le changelog",
+      "profile": "Entrée dans le répertoire de la flotte"
     }
   },
   "kennzahlen": {

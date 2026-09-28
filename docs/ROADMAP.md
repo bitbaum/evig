@@ -1,4 +1,8 @@
-# RevampIT Build Roadmap
+# RevampIT Build Roadmap (working queue, July 2026)
+
+> The public roadmap is `ROADMAP.md` at the repository root — the record the
+> fleet map reads and `/roadmap` renders. This file is the July 2026 working
+> queue and is kept as history.
 
 Living queue of what we're building. Updated 2026-07-10. Keep in sync as items ship.
 
