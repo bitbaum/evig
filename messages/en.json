@@ -322,6 +322,7 @@
     "openingHoursTueFri": "Tue–Fri: {hours}",
     "transparency": "Transparency",
     "changelog": "Changelog",
+    "roadmap": "Roadmap",
     "locations": {
       "store": "Store",
       "warehouse": "Warehouse",
@@ -7832,6 +7833,37 @@
     "command": {
       "label": "Run locally",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "Roadmap",
+      "description": "What evig is building next, in what order, and what is already done."
+    },
+    "hero": {
+      "title": "Roadmap",
+      "subtitle": "What we are building, in what order, and what is already done. Planned things are written here as plans, not promises."
+    },
+    "status": {
+      "inProgress": "Now",
+      "planned": "Next",
+      "later": "Later",
+      "done": "Done"
+    },
+    "empty": {
+      "title": "Nothing recorded yet",
+      "description": "As soon as the first entry lands in the directory, it shows up here."
+    },
+    "unavailable": {
+      "title": "Roadmap temporarily unavailable",
+      "description": "The directory this page reads from is not answering right now. Please try again later."
+    },
+    "progress": "{percent}% done",
+    "target": "Target: {date}",
+    "milestones": "Milestones",
+    "links": {
+      "changelog": "See the changelog",
+      "profile": "Entry in the fleet directory"
     }
   },
   "kennzahlen": {

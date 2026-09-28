@@ -322,6 +322,7 @@
     "openingHoursTueFri": "화–금: {hours}",
     "transparency": "투명성",
     "changelog": "Changelog",
+    "roadmap": "로드맵",
     "locations": {
       "store": "매장",
       "warehouse": "창고",
@@ -7742,6 +7743,37 @@
     "command": {
       "label": "로컬에서 시작",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "로드맵",
+      "description": "evig가 다음에 무엇을 어떤 순서로 만들고, 무엇이 이미 완료되었는지."
+    },
+    "hero": {
+      "title": "로드맵",
+      "subtitle": "무엇을 어떤 순서로 만들고 있으며, 무엇이 이미 완료되었는지. 계획된 것은 약속이 아니라 계획으로 적혀 있습니다."
+    },
+    "status": {
+      "inProgress": "지금",
+      "planned": "다음",
+      "later": "나중에",
+      "done": "완료"
+    },
+    "empty": {
+      "title": "아직 기록된 내용이 없습니다",
+      "description": "첫 번째 항목이 디렉터리에 등록되면 여기에 표시됩니다."
+    },
+    "unavailable": {
+      "title": "로드맵을 일시적으로 사용할 수 없습니다",
+      "description": "이 페이지가 읽어오는 디렉터리가 현재 응답하지 않습니다. 잠시 후 다시 시도해 주세요."
+    },
+    "progress": "{percent}% 완료",
+    "target": "목표: {date}",
+    "milestones": "마일스톤",
+    "links": {
+      "changelog": "변경 내역 보기",
+      "profile": "플릿 디렉터리 항목"
     }
   },
   "kennzahlen": {

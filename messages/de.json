@@ -322,6 +322,7 @@
     "openingHoursTueFri": "Di–Fr: {hours}",
     "transparency": "Transparenz",
     "changelog": "Changelog",
+    "roadmap": "Roadmap",
     "locations": {
       "store": "Verkaufsstelle",
       "warehouse": "Lager",
@@ -7922,6 +7923,37 @@
     "command": {
       "label": "Lokal starten",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "Roadmap",
+      "description": "Was evig als Nächstes baut, in welcher Reihenfolge und was schon fertig ist."
+    },
+    "hero": {
+      "title": "Roadmap",
+      "subtitle": "Was wir bauen, in welcher Reihenfolge, und was schon fertig ist. Geplantes steht hier als Plan, nicht als Versprechen."
+    },
+    "status": {
+      "inProgress": "Jetzt",
+      "planned": "Als Nächstes",
+      "later": "Später",
+      "done": "Fertig"
+    },
+    "empty": {
+      "title": "Noch nichts festgehalten",
+      "description": "Sobald der erste Eintrag im Verzeichnis steht, erscheint er hier."
+    },
+    "unavailable": {
+      "title": "Roadmap vorübergehend nicht erreichbar",
+      "description": "Das Verzeichnis, aus dem diese Seite liest, antwortet gerade nicht. Bitte später noch einmal versuchen."
+    },
+    "progress": "{percent}% erledigt",
+    "target": "Ziel: {date}",
+    "milestones": "Meilensteine",
+    "links": {
+      "changelog": "Zum Changelog",
+      "profile": "Eintrag im Fleet-Verzeichnis"
     }
   },
   "payment": {

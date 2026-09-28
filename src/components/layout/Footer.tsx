@@ -157,6 +157,9 @@ export default function Footer() {
             <Link href={ROUTES.public.changelog} className={FOOTER_LEGAL_LINK}>
               {tFooter('changelog')}
             </Link>
+            <Link href={ROUTES.public.roadmap} className={FOOTER_LEGAL_LINK}>
+              {tFooter('roadmap')}
+            </Link>
             <Link href={ROUTES.public.mitgliedWerden} className={FOOTER_LEGAL_LINK}>
               {tNav('membership')}
             </Link>

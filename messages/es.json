@@ -322,6 +322,7 @@
     "openingHoursTueFri": "Mar–Vie: {hours}",
     "transparency": "Transparencia",
     "changelog": "Changelog",
+    "roadmap": "Hoja de ruta",
     "locations": {
       "store": "Tienda",
       "warehouse": "Almacén",
@@ -7830,6 +7831,37 @@
     "command": {
       "label": "Iniciar en local",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "Hoja de ruta",
+      "description": "Qué construye evig a continuación, en qué orden y qué está ya hecho."
+    },
+    "hero": {
+      "title": "Hoja de ruta",
+      "subtitle": "Qué estamos construyendo, en qué orden y qué está ya hecho. Lo planificado aparece aquí como plan, no como promesa."
+    },
+    "status": {
+      "inProgress": "Ahora",
+      "planned": "A continuación",
+      "later": "Más adelante",
+      "done": "Hecho"
+    },
+    "empty": {
+      "title": "Todavía no hay nada registrado",
+      "description": "En cuanto la primera entrada llegue al directorio, aparecerá aquí."
+    },
+    "unavailable": {
+      "title": "Hoja de ruta temporalmente no disponible",
+      "description": "El directorio del que lee esta página no responde ahora mismo. Inténtalo de nuevo más tarde."
+    },
+    "progress": "{percent}% completado",
+    "target": "Objetivo: {date}",
+    "milestones": "Hitos",
+    "links": {
+      "changelog": "Ver el changelog",
+      "profile": "Entrada en el directorio de la flota"
     }
   },
   "kennzahlen": {

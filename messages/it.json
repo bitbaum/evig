@@ -322,6 +322,7 @@
     "openingHoursTueFri": "Mar–Ven: {hours}",
     "transparency": "Trasparenza",
     "changelog": "Changelog",
+    "roadmap": "Roadmap",
     "locations": {
       "store": "Negozio",
       "warehouse": "Magazzino",
@@ -7830,6 +7831,37 @@
     "command": {
       "label": "Avvia in locale",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "Roadmap",
+      "description": "Cosa evig costruisce adesso, in che ordine, e cosa è già fatto."
+    },
+    "hero": {
+      "title": "Roadmap",
+      "subtitle": "Cosa stiamo costruendo, in che ordine, e cosa è già fatto. Ciò che è pianificato è scritto qui come piano, non come promessa."
+    },
+    "status": {
+      "inProgress": "Adesso",
+      "planned": "Prossimamente",
+      "later": "Più avanti",
+      "done": "Fatto"
+    },
+    "empty": {
+      "title": "Ancora nulla registrato",
+      "description": "Appena la prima voce arriva nel registro, compare qui."
+    },
+    "unavailable": {
+      "title": "Roadmap temporaneamente non disponibile",
+      "description": "Il registro da cui legge questa pagina al momento non risponde. Riprova più tardi."
+    },
+    "progress": "{percent}% completato",
+    "target": "Obiettivo: {date}",
+    "milestones": "Tappe",
+    "links": {
+      "changelog": "Vai al changelog",
+      "profile": "Voce nel registro della flotta"
     }
   },
   "kennzahlen": {
