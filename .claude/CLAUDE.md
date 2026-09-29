@@ -357,6 +357,24 @@ export async function GET(request: NextRequest) {
 
 ## Authentication & Authorization
 
+### Sign in with OrangeCat (2026-09-29)
+
+OrangeCat is the fleet's identity root (orangecat `docs/architecture/adr/ADR-0009`).
+With `ORANGECAT_OAUTH_CLIENT_ID/SECRET` set, `/auth/login` shows "Mit OrangeCat
+anmelden" beside the password form and the profile page offers "OrangeCat
+verbinden". The rules live in `src/lib/auth/orangecat.ts` (pure, tested):
+
+- `users.orangecat_actor_id` (migration 141) is the ONLY cross-product key.
+  **Never link by email**: OrangeCat's password sign-up does not verify the
+  address, so an email match would let anyone who registers the victim's
+  address there walk in here.
+- A new person gets an evig account (email unverified, like a fresh password
+  registration). An existing unlinked account with that email is refused with
+  a message that names the way forward: sign in with the password, then
+  "Connect OrangeCat" from the profile (a signed ten-minute cookie proves the
+  intent came from that session).
+- Staff is untouched: `is_staff` stays the sole grant, whatever the sign-in.
+
 ### Simplified Permission System (v2)
 
 The auth system uses a simple, extensible approach:

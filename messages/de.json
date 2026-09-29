@@ -2824,7 +2824,12 @@
       "pageTitle": "Anmelden | evig",
       "errorLocked": "Konto vorübergehend gesperrt. Bitte versuche es in einigen Minuten erneut.",
       "errorNoPassword": "Für dieses Konto ist noch kein Passwort gesetzt. Nutze «Passwort vergessen», um dein Konto zu aktivieren.",
-      "errorUnverified": "Bitte bestätige zuerst deine E-Mail-Adresse. Überprüfe deinen Posteingang."
+      "errorUnverified": "Bitte bestätige zuerst deine E-Mail-Adresse. Überprüfe deinen Posteingang.",
+      "or": "oder",
+      "signInWithOrangeCat": "Mit OrangeCat anmelden",
+      "errorOrangeCatNotLinked": "Für diese E-Mail gibt es bereits ein evig-Konto. Melde dich mit deinem Passwort an und verbinde OrangeCat danach in deinem Profil.",
+      "errorOrangeCatNoEmail": "Dein OrangeCat-Konto hat keine E-Mail-Adresse. Füge bei OrangeCat eine hinzu und versuche es erneut.",
+      "errorOrangeCatAlreadyLinked": "Dieses OrangeCat-Konto ist bereits mit einem anderen evig-Konto verbunden."
     },
     "register": {
       "title": "Registrieren",
@@ -4937,6 +4942,13 @@
         "emailReadOnly": "E-Mail kann nicht geändert werden",
         "phoneLabel": "Telefon",
         "mobileLabel": "Mobiltelefon"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "Verbinde dein evig-Konto mit OrangeCat: ein Konto für OrangeCat, Loki, Solon und evig – Anmeldung per Code, Google oder Passkey, und du brauchst hier kein eigenes Passwort mehr.",
+        "connect": "OrangeCat verbinden",
+        "connected": "Mit OrangeCat verbunden",
+        "error": "Verbindung konnte nicht gestartet werden. Bitte versuche es erneut."
       }
     },
     "emailVerification": {

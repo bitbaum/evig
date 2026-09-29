@@ -25,6 +25,7 @@ import { AvatarUpload } from '@/components/profile/AvatarUpload';
 import { PersonalInfoSection } from './components/PersonalInfoSection';
 import { PublicProfileSection } from './components/PublicProfileSection';
 import { ServiceProviderSection } from './components/ServiceProviderSection';
+import { OrangeCatSection } from './components/OrangeCatSection';
 
 export default function ProfilePage() {
   const t = useTranslations('dashboard.profile');
@@ -139,6 +140,7 @@ export default function ProfilePage() {
 
           <PublicProfileSection profile={profile} handleChange={handleChange} />
           <PersonalInfoSection profile={profile} handleChange={handleChange} />
+          <OrangeCatSection />
           {isServiceProvider && (
             <ServiceProviderSection profile={profile} handleChange={handleChange} />
           )}
