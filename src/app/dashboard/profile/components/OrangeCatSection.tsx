@@ -23,10 +23,10 @@ export function OrangeCatSection() {
 
   useEffect(() => {
     let cancelled = false;
-    apiFetch<{ data: { enabled: boolean; linked: boolean } }>('/api/user/orangecat')
+    apiFetch<{ enabled: boolean; linked: boolean }>('/api/user/orangecat')
       .then((res) => {
         if (!cancelled) {
-          setState(res?.data ?? { enabled: false, linked: false });
+          setState(res.success && res.data ? res.data : { enabled: false, linked: false });
         }
       })
       .catch(() => {
@@ -47,7 +47,10 @@ export function OrangeCatSection() {
     setBusy(true);
     setError(null);
     try {
-      await apiFetch('/api/user/orangecat', { method: 'POST' });
+      const intent = await apiFetch('/api/user/orangecat', { method: 'POST' });
+      if (!intent.success) {
+        throw new Error(intent.error);
+      }
       await signIn('orangecat', { callbackUrl: '/dashboard/profile?orangecat=linked' });
     } catch {
       setError(t('error'));

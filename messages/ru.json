@@ -2839,7 +2839,12 @@
       "pageTitle": "Войти | evig",
       "errorLocked": "Аккаунт временно заблокирован. Пожалуйста, повторите попытку через несколько минут.",
       "errorNoPassword": "Для этого аккаунта ещё не задан пароль. Воспользуйтесь функцией «Забыли пароль», чтобы активировать аккаунт.",
-      "errorUnverified": "Пожалуйста, сначала подтвердите свой адрес электронной почты. Проверьте входящие."
+      "errorUnverified": "Пожалуйста, сначала подтвердите свой адрес электронной почты. Проверьте входящие.",
+      "or": "или",
+      "signInWithOrangeCat": "Войти через OrangeCat",
+      "errorOrangeCatNotLinked": "Учётная запись evig с этим адресом уже существует. Войдите с паролем, затем привяжите OrangeCat в профиле.",
+      "errorOrangeCatNoEmail": "В вашей учётной записи OrangeCat нет адреса эл. почты. Добавьте его в OrangeCat и попробуйте снова.",
+      "errorOrangeCatAlreadyLinked": "Эта учётная запись OrangeCat уже привязана к другой учётной записи evig."
     },
     "register": {
       "title": "Регистрация",
@@ -4879,6 +4884,13 @@
         "emailReadOnly": "Электронную почту изменить нельзя",
         "phoneLabel": "Телефон",
         "mobileLabel": "Мобильный телефон"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "Привяжите учётную запись evig к OrangeCat: одна учётная запись для OrangeCat, Loki, Solon и evig — вход по коду, через Google или passkey, без отдельного пароля здесь.",
+        "connect": "Привязать OrangeCat",
+        "connected": "Привязано к OrangeCat",
+        "error": "Не удалось начать привязку. Попробуйте снова."
       }
     },
     "emailVerification": {
