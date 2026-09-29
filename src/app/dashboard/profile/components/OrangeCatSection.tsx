@@ -26,7 +26,7 @@ export function OrangeCatSection() {
     apiFetch<{ data: { enabled: boolean; linked: boolean } }>('/api/user/orangecat')
       .then((res) => {
         if (!cancelled) {
-          setState(res.data);
+          setState(res?.data ?? { enabled: false, linked: false });
         }
       })
       .catch(() => {
