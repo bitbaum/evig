@@ -2824,7 +2824,12 @@
       "pageTitle": "Sign in | evig",
       "errorLocked": "Account temporarily locked. Please try again in a few minutes.",
       "errorNoPassword": "No password has been set for this account yet. Use «Forgot password» to activate your account.",
-      "errorUnverified": "Please confirm your email address first. Check your inbox."
+      "errorUnverified": "Please confirm your email address first. Check your inbox.",
+      "or": "or",
+      "signInWithOrangeCat": "Sign in with OrangeCat",
+      "errorOrangeCatNotLinked": "An evig account with this email already exists. Sign in with your password, then connect OrangeCat from your profile.",
+      "errorOrangeCatNoEmail": "Your OrangeCat account has no email address. Add one at OrangeCat and try again.",
+      "errorOrangeCatAlreadyLinked": "This OrangeCat account is already connected to another evig account."
     },
     "register": {
       "title": "Register",
@@ -4864,6 +4869,13 @@
         "emailReadOnly": "Email cannot be changed",
         "phoneLabel": "Phone",
         "mobileLabel": "Mobile"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "Connect your evig account to OrangeCat: one account for OrangeCat, Loki, Solon and evig — sign in by code, Google or passkey, and you no longer need a separate password here.",
+        "connect": "Connect OrangeCat",
+        "connected": "Connected to OrangeCat",
+        "error": "Could not start the connection. Please try again."
       }
     },
     "emailVerification": {

@@ -35,6 +35,8 @@ export interface DbUser {
   staff_permissions: string[];
   is_super_admin: boolean;
   dashboard_mode: 'coordinator' | 'lead' | 'volunteer';
+  /** OrangeCat actor id (id_token sub) once the account is an OrangeCat account. */
+  orangecat_actor_id: string | null;
   // JWT staleness counter — bumped by admin permission-change routes;
   // compared in the Auth.js jwt callback to detect when a token's
   // cached permissions have been invalidated by an admin action.
@@ -178,6 +180,7 @@ function mapUserToDbUser(row: User): DbUser {
     is_super_admin: row.isSuperAdmin ?? false,
     dashboard_mode: (row.dashboardMode as 'coordinator' | 'lead' | 'volunteer') ?? 'coordinator',
     token_version: row.tokenVersion ?? 0,
+    orangecat_actor_id: row.orangecatActorId ?? null,
   };
 }
 
@@ -249,6 +252,26 @@ export async function getUserByEmail(email: string): Promise<DbUser | null> {
 }
 
 /**
+ * Get user by OrangeCat actor id — the cross-product identity key.
+ */
+export async function getUserByOrangeCatActorId(actorId: string): Promise<DbUser | null> {
+  const rows = await db.select().from(users).where(eq(users.orangecatActorId, actorId)).limit(1);
+  return rows[0] ? mapUserToDbUser(rows[0]) : null;
+}
+
+/**
+ * Make an account an OrangeCat account. The column is unique, so linking an
+ * actor that already belongs to another user throws — callers check first
+ * and treat the throw as the same refusal.
+ */
+export async function setUserOrangeCatActorId(id: string, actorId: string): Promise<void> {
+  await db
+    .update(users)
+    .set({ orangecatActorId: actorId, updatedAt: new Date().toISOString() })
+    .where(eq(users.id, id));
+}
+
+/**
  * Get user by ID
  */
 export async function getUserById(id: string): Promise<DbUser | null> {
@@ -272,6 +295,8 @@ export async function createUser(data: {
   // New simplified auth fields
   is_staff?: boolean;
   staff_permissions?: string[];
+  /** Set when the account is created by an OrangeCat sign-in. */
+  orangecat_actor_id?: string;
 }): Promise<DbUser> {
   const rows = await db
     .insert(users)
@@ -284,6 +309,7 @@ export async function createUser(data: {
       emailVerified: data.emailVerified ? new Date().toISOString() : null,
       isStaff: data.is_staff ?? false,
       staffPermissions: data.staff_permissions ?? [],
+      orangecatActorId: data.orangecat_actor_id ?? null,
     })
     .returning();
 

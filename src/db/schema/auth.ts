@@ -45,6 +45,9 @@ export const users = pgTable(
     tokenVersion: integer('token_version').notNull().default(0),
     // Dashboard layout preference (Phase 6)
     dashboardMode: text('dashboard_mode').notNull().default('coordinator'),
+    // "Sign in with OrangeCat" (141): the person's OrangeCat actor id
+    // (id_token sub) — the one cross-product identity key. Never email.
+    orangecatActorId: uuid('orangecat_actor_id').unique(),
     // Verein membership (062)
     isMember: boolean('is_member').default(false),
     memberSince: timestamp('member_since', { withTimezone: true, mode: 'string' }),

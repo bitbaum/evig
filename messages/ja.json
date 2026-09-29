@@ -366,7 +366,12 @@
       "pageTitle": "ログイン | evig",
       "errorLocked": "アカウントが一時的にロックされています。数分後にもう一度お試しください。",
       "errorNoPassword": "このアカウントにはまだパスワードが設定されていません。「パスワードをお忘れの方」からアカウントを有効化してください。",
-      "errorUnverified": "まずメールアドレスを確認してください。受信トレイをご確認ください。"
+      "errorUnverified": "まずメールアドレスを確認してください。受信トレイをご確認ください。",
+      "or": "または",
+      "signInWithOrangeCat": "OrangeCatでサインイン",
+      "errorOrangeCatNotLinked": "このメールアドレスのevigアカウントはすでに存在します。パスワードでサインインしてから、プロフィールでOrangeCatを連携してください。",
+      "errorOrangeCatNoEmail": "OrangeCatアカウントにメールアドレスがありません。OrangeCatで追加してからもう一度お試しください。",
+      "errorOrangeCatAlreadyLinked": "このOrangeCatアカウントはすでに別のevigアカウントに連携されています。"
     },
     "register": {
       "title": "新規登録",
@@ -4844,6 +4849,13 @@
         "emailReadOnly": "メールアドレスは変更できません",
         "phoneLabel": "電話番号",
         "mobileLabel": "携帯電話"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "evigアカウントをOrangeCatと連携：OrangeCat、Loki、Solon、evigで1つのアカウント。コード、Google、パスキーでサインインでき、ここでの別パスワードは不要です。",
+        "connect": "OrangeCatを連携",
+        "connected": "OrangeCatと連携済み",
+        "error": "連携を開始できませんでした。もう一度お試しください。"
       }
     },
     "emailVerification": {

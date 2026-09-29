@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff, Cat } from 'lucide-react';
 import { sanitizeReturnTo } from '@/lib/utils/safe-redirect';
 import Heading from '@/components/ui/Heading';
 import { Button } from '@/components/ui/button';
@@ -44,7 +44,14 @@ const AUTH_ERROR_I18N_KEY: Record<
  */
 const LOGIN_CODE_I18N_KEY: Record<
   string,
-  'errorCredentials' | 'errorLocked' | 'errorNoPassword' | 'errorUnverified' | 'errorConnection'
+  | 'errorCredentials'
+  | 'errorLocked'
+  | 'errorNoPassword'
+  | 'errorUnverified'
+  | 'errorConnection'
+  | 'errorOrangeCatNotLinked'
+  | 'errorOrangeCatNoEmail'
+  | 'errorOrangeCatAlreadyLinked'
 > = {
   invalid_credentials: 'errorCredentials',
   missing_fields: 'errorCredentials',
@@ -52,6 +59,10 @@ const LOGIN_CODE_I18N_KEY: Record<
   no_password: 'errorNoPassword',
   email_unverified: 'errorUnverified',
   db_unavailable: 'errorConnection',
+  // "Sign in with OrangeCat" (lib/auth/orangecat.ts): each one names the way forward.
+  orangecat_not_linked: 'errorOrangeCatNotLinked',
+  orangecat_no_email: 'errorOrangeCatNoEmail',
+  orangecat_already_linked: 'errorOrangeCatAlreadyLinked',
 };
 
 export function LoginForm() {
@@ -60,6 +71,24 @@ export function LoginForm() {
   // Open-redirect guard: only same-origin paths pass through.
   const callbackUrl = sanitizeReturnTo(searchParams.get('callbackUrl'), '/dashboard');
   const queryError = searchParams.get('error');
+  // Auth.js lists the providers it actually mounted; the OrangeCat button
+  // appears only when the pair is configured, so it can never be a dead end.
+  const [orangecatAvailable, setOrangecatAvailable] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/auth/providers')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((providers: Record<string, unknown> | null) => {
+        if (!cancelled) {
+          setOrangecatAvailable(Boolean(providers && 'orangecat' in providers));
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const [orangecatBusy, setOrangecatBusy] = useState(false);
   const verified = searchParams.get('verified');
   const reset = searchParams.get('reset');
 
@@ -244,6 +273,39 @@ export function LoginForm() {
             )}
           </Button>
         </form>
+
+        {orangecatAvailable && (
+          <>
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-strong" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-surface-base text-text-tertiary">{t('or')}</span>
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="w-full font-semibold"
+              disabled={orangecatBusy}
+              onClick={() => {
+                setOrangecatBusy(true);
+                void signIn('orangecat', { callbackUrl });
+              }}
+            >
+              {orangecatBusy ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <Cat className="w-5 h-5 mr-2" />
+                  {t('signInWithOrangeCat')}
+                </>
+              )}
+            </Button>
+          </>
+        )}
 
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">

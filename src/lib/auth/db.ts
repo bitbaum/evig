@@ -26,6 +26,8 @@ export {
   createUser,
   updateUser,
   getOrCreateProfile,
+  getUserByOrangeCatActorId,
+  setUserOrangeCatActorId,
   updateProfile,
 } from './db-users';
 
