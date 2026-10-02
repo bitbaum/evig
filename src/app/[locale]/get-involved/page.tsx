@@ -25,14 +25,6 @@ const INVOLVEMENT_HREFS = [
   '/mitglied-werden',
 ];
 
-// Partner institution URLs (names come from translations)
-const PARTNER_URLS = [
-  'https://www.integration-uster.ch',
-  'https://www.rueti.ch',
-  'https://www.heks.ch/',
-  'https://www.stadt-zuerich.ch/aoz/de/index.html',
-];
-
 interface GetInvolvedPageProps {
   params: Promise<{ locale: string }>;
 }
@@ -61,7 +53,6 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
     features: string[];
     cta: string;
   }>;
-  const partnerNames = t.raw('partners.names') as string[];
 
   return (
     <main className="min-h-screen">
@@ -151,44 +142,6 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                   {option.cta}
                 </Button>
               </article>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* Partner Institutions */}
-      <Section density="spacious" contained={false}>
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <Eyebrow as="div">{t('partners.heading').toUpperCase()}</Eyebrow>
-            <h2 className="ui-public-display-lg mt-4">{t('partners.heading')}</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {partnerNames.map((name, index) => (
-              <a
-                key={index}
-                href={PARTNER_URLS[index]}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ui-public-card flex-row items-center gap-3 hover:border-strong group"
-              >
-                <svg
-                  className="w-5 h-5 text-action shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span className="ui-public-card-body mt-0 group-hover:text-action transition-colors">
-                  {name}
-                </span>
-              </a>
             ))}
           </div>
         </div>

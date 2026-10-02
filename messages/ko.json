@@ -79,7 +79,7 @@
       "myListingsDesc": "판매 목록 및 거래 관리",
       "itHelp": "IT 지원",
       "findHelp": "도움 찾기",
-      "findHelpDesc": "가까운 커뮤니티 기술자 찾기",
+      "findHelpDesc": "수리나 IT 도움 요청",
       "findTechnician": "기술자 찾기",
       "findTechnicianDesc": "커뮤니티 및 전문 기술자",
       "becomeTechnician": "기술자 되기",
@@ -87,7 +87,7 @@
       "learn": "배우기",
       "learnDesc": "워크숍, 가이드 및 리소스",
       "workshops": "워크숍",
-      "workshopsDesc": "현장 강좌 예약",
+      "workshopsDesc": "리눅스, 수리, 지속 가능한 IT 강좌",
       "blog": "블로그",
       "blogDesc": "팁과 이야기",
       "getInvolved": "참여하기",
@@ -732,8 +732,7 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "{legalForm}({foundingYear}년 설립)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께.",
-      "text": "{description} {legalForm}({foundingYear}년 설립)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께."
+      "body": "설립 준비 중인 협회({foundingYear}년부터)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께."
     },
     "stats": {
       "title": "Facts & Figures",
@@ -750,17 +749,17 @@
       "platforms": [
         {
           "title": "Marketplace",
-          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell.",
           "href": "/marketplace"
         },
         {
           "title": "IT Help",
-          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
+          "description": "컴퓨터 수리 매칭. 요청을 올리고 제안을 받으세요. 지역 내 사람과 사람 사이의 도움.",
           "href": "/it-hilfe"
         },
         {
           "title": "Workshops",
-          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other – in person in Zurich.",
+          "description": "Linux, 하드웨어, 프로그래밍 및 AI 강좌. 지식을 나누고 서로 배우기.",
           "href": "/workshops"
         }
       ]
@@ -768,17 +767,17 @@
     "platforms": [
       {
         "title": "마켓플레이스",
-        "description": "중고 IT 기기를 위한 커뮤니티 플랫폼. 수수료 없이 광고 게시, 구매, 판매가 가능합니다.",
+        "description": "중고 IT 기기를 위한 커뮤니티 플랫폼. 광고 게시, 구매, 판매가 가능합니다.",
         "href": "/marketplace"
       },
       {
         "title": "IT 도움",
-        "description": "컴퓨터 수리를 위한 자원봉사 기술자 매칭. 지역 내 사람과 사람 사이의 도움.",
+        "description": "컴퓨터 수리 매칭. 요청을 올리고 제안을 받으세요. 지역 내 사람과 사람 사이의 도움.",
         "href": "/it-hilfe"
       },
       {
         "title": "워크숍",
-        "description": "Linux, 하드웨어, 프로그래밍 및 AI 강좌. 취리히에서 지식을 나누고 서로 배우기.",
+        "description": "Linux, 하드웨어, 프로그래밍 및 AI 강좌. 지식을 나누고 서로 배우기.",
         "href": "/workshops"
       }
     ],
@@ -906,7 +905,7 @@
       "yearsExperience": "년의 경험",
       "quote": "AI와 로보틱스에 대한 접근은 누가 참여할 수 있는지를 결정합니다. 그것이 지갑 사정에 좌우되어서는 안 됩니다.",
       "paragraph1": "evig는 지능에 대한 접근을 누구나 감당할 수 있게 만듭니다. <strong>엄선한 기술과 AI, 로보틱스</strong>를 합리적인 가격에. 설립 준비 중인 비영리 단체로, 시장과 품질의 모델로 운영합니다. 기술이 쓰레기가 되지 않고 순환 속에 머물기에, 좋으면서도 저렴할 수 있습니다.",
-      "paragraph2": "여기에 정말로 손닿는 수리가 더해집니다. 작업장, 리페어 카페, 그리고 기술자 네트워크. 또한 검증된 중고 기술을 위한 순환 마켓플레이스도. 작동하는 것은 계속 순환해야 합니다.",
+      "paragraph2": "여기에 IT 도움에서 요청할 수 있는 수리가 더해집니다. 또한 검증된 중고 기술을 위한 순환 마켓플레이스도. 작동하는 것은 계속 순환해야 합니다.",
       "imageAlt": "evig의 엄선한 기술"
     },
     "impactAreas": {
@@ -918,7 +917,7 @@
       },
       "openSource": {
         "title": "모두를 위한 수리",
-        "description": "수리는 간단하고 저렴해야 합니다. 작업장과 리페어 카페, 기술자 네트워크가 기기를 살려 둡니다. 필요한 곳에서는 리눅스와 오픈 소스와 함께."
+        "description": "기기가 계속 살아 있도록 수리는 간단하고 저렴해야 합니다. 필요한 곳에서는 리눅스와 오픈 소스와 함께."
       },
       "community": {
         "title": "순환 마켓플레이스",
@@ -1207,14 +1206,6 @@
               "href": "/services/data-recovery-transfer",
               "label": "데이터 복구 & 전송"
             }
-          },
-          {
-            "q": "예약 없이 방문할 수 있나요?",
-            "a": "물론입니다. 복잡한 경우나 비즈니스 약속의 경우 사전에 간단히 연락해 주시면 좋습니다.",
-            "link": {
-              "href": "/contact",
-              "label": "연락처 & 영업 시간"
-            }
           }
         ]
       },
@@ -1227,7 +1218,7 @@
           },
           {
             "q": "오래된 기기를 받나요?",
-            "a": "네, 재사용이나 전문적인 재활용이 가능한 경우에. 현장에서 기기를 검사하고 재사용 또는 해체에 대해 투명하게 결정합니다."
+            "a": "네, 재사용이나 전문적인 재활용이 가능한 경우에. 기기를 하나하나 검사하고 재사용 또는 해체에 대해 투명하게 결정합니다."
           },
           {
             "q": "중고 부품을 사용하나요?",
@@ -1417,15 +1408,6 @@
         }
       ]
     },
-    "partners": {
-      "heading": "우리의 파트너 조직",
-      "names": [
-        "Verein für berufliche und soziale Integration Bezirk Uster",
-        "Arbeitsintegrationsstelle der Gemeinde Rüti",
-        "HEKS",
-        "AOZ (Asylorganisation Zürich)"
-      ]
-    },
     "cta": {
       "heading": "변화를 만들 준비가 됐나요?",
       "body": "변화를 이끄는 우리 커뮤니티에 참여하여 기술을 통해 더 지속 가능한 미래를 만드는 데 도움을 주세요.",
@@ -1571,8 +1553,6 @@
           "title": "참여 혜택",
           "items": [
             "진정한 영향을 만드는 의미 있는 프로젝트에 참여",
-            "다양한 전문가 팀과 협업",
-            "작업장 및 테스트 시설 접근",
             "다른 사람을 지도하고 멘토링할 기회",
             "유연한 기여 방식"
           ]
@@ -2054,7 +2034,7 @@
       ],
       "impact": {
         "tier1Title": "기기 1대 구조",
-        "tier1Description": "전자 폐기물에서 노트북 1대 구조 + CO₂ 285kg 방지.",
+        "tier1Description": "전자 폐기물에서 노트북 1대 구조.",
         "tier2Title": "기기 2대 + 워크숍 자리",
         "tier2Description": "기기 2대 재정비 + 감당할 수 없는 사람을 위한 Linux 워크숍 자리 한 개.",
         "tier3Title": "기업 기부 — 기기 10대",
@@ -2088,12 +2068,12 @@
       "subtitle": "이용하든, 돕든, 지원하든 — 모든 기여가 중요합니다.",
       "use": {
         "title": "이용하기",
-        "desc": "구매, 판매, 수리 — 무료",
+        "desc": "구매, 판매, 수리",
         "cta": "매장으로"
       },
       "volunteer": {
         "title": "자원봉사",
-        "desc": "자원봉사 기술자로 지식을 나눠주세요",
+        "desc": "기술자로 지식을 나눠주세요",
         "cta": "참여하기"
       },
       "donate": {
@@ -2114,7 +2094,7 @@
       "service1Name": "검사된 중고 하드웨어",
       "service1Desc": "진짜 일에도 AI에도 충분한 노트북, GPU, 주변기기",
       "service2Name": "수리와 IT 도움",
-      "service2Desc": "예약을 기다리는 대신 가까운 기술자를 찾기",
+      "service2Desc": "수리나 IT 도움을 요청하고 제안 받기",
       "service3Name": "현장의 AI와 로보틱스",
       "service3Desc": "도입을 위한 교육, 재교육, 그리고 동행"
     },
@@ -2123,7 +2103,7 @@
       "heading": "AI로 가는 가장 저렴한 길은 좋은 중고 한 대입니다",
       "subtitle": "누군가 검사하고 제대로 설정해 둔 노트북은 받는 날부터 당신이 필요로 한 일을 해냅니다. 다시 만들어질 필요 없이.",
       "button": "기기 보기",
-      "note": "고장 났나요? IT 도움에서 가까운 기술자를 찾을 수 있습니다."
+      "note": "고장 났나요? IT 도움에서 요청을 올리세요."
     },
     "newsletter": {
       "title": "최신 소식 받기",
@@ -2139,7 +2119,7 @@
   "itHelp": {
     "meta": {
       "title": "기술자 찾기 — 가까운 곳의 수리와 IT 도움",
-      "description": "문제를 올리면 가까운 기술자들의 제안이 옵니다. 수리, 재설치, 데이터 복구, 일상적인 IT 도움 — 커뮤니티를 통해 무료로, 또는 정당한 보수로.",
+      "description": "문제를 올리면 제안이 옵니다. 수리, 재설치, 데이터 복구, 일상적인 IT 도움 — 커뮤니티를 통해 무료로, 또는 정당한 보수로.",
       "layoutTitle": "기술자 찾기 — 수리와 IT 도움",
       "detailTitle": "{title} | IT 지원 | {orgName}",
       "detailDescription": "IT 지원 요청: {title}{location}. 커뮤니티 기반 기술 수리 지원.",
@@ -2519,7 +2499,7 @@
     "hub": {
       "eyebrow": "기술자 찾기",
       "title": "고쳐 줄 사람을 찾기",
-      "subtitle": "evig가 가까운 기술자와 연결해 드립니다 — 커뮤니티를 통해 무료로, 또는 정당한 보수로.",
+      "subtitle": "요청을 올리고 제안을 받으세요 — 커뮤니티를 통해 무료로, 또는 정당한 보수로.",
       "paths": {
         "request": {
           "title": "Request help",
@@ -4036,7 +4016,7 @@
   "techniker": {
     "meta": {
       "title": "기술자 찾기",
-      "description": "가까운 커뮤니티 및 전문 기술자를 찾으세요. 무료 도움, KulturLegi 요금, 유료 IT 서비스 모두 한 플랫폼에서."
+      "description": "수리와 IT 도움을 위한 기술자 디렉터리. 무료 도움, KulturLegi 요금, 유료 IT 서비스 모두 한 플랫폼에서."
     },
     "list": {
       "title": "기술자",
@@ -4438,7 +4418,7 @@
       "positioning": "후원 · 순환 경제 · 취리히",
       "titleSecondary": "즉시 효과적.",
       "lede": "모든 기부는 장치를 전자 폐기물에서 구해내고, 그렇지 않으면 살 수 없는 사람들에게 기술을 제공합니다.",
-      "sublede": "계좌로 송금하거나 작업장에 장치를 가져오시면 — 둘 다 직접적인 도움이 됩니다.",
+      "sublede": "계좌로 송금하거나 아직 쓸 수 있는 기기를 기부하세요 — 둘 다 직접적인 도움이 됩니다.",
       "ctaMoney": "돈 기부하기",
       "ctaDevice": "장치 기부하기"
     },
@@ -4455,11 +4435,11 @@
       "items": [
         {
           "title": "기기 1대 구조",
-          "description": "전자 폐기물에서 노트북 1대 구조 + 285 kg CO₂ 절감."
+          "description": "전자 폐기물에서 노트북 1대 구조."
         },
         {
-          "title": "기기 2대 + 워크숍 자리",
-          "description": "기기 2대 재생 + 감당할 수 없는 분을 위한 리눅스 워크숍 자리."
+          "title": "기기 2대 재생",
+          "description": "기기 2대를 재생해 감당하기 어려운 분께 전달합니다."
         },
         {
           "title": "기업 기부 — 기기 10대",
@@ -4497,7 +4477,7 @@
     },
     "dropoff": {
       "heading": "기기 반납 신청",
-      "intro": "어떤 기기를 가져오실지 간단히 알려주세요 — 이메일로 확인 후 현장에 담당자가 있도록 준비하겠습니다.",
+      "intro": "어떤 기기를 가져오실지 간단히 알려주세요 — 전달 장소와 시간을 이메일로 함께 정하겠습니다.",
       "nameLabel": "이름",
       "emailLabel": "이메일",
       "phoneLabel": "전화번호 (선택)",
@@ -4522,19 +4502,19 @@
       "money": {
         "eyebrow": "돈",
         "title": "2분이면 끝나는 은행 송금.",
-        "body": "수령인, IBAN, 목적 — 모두 아래에 있어 복사할 수 있습니다. 요청 시 기부 영수증. 제3자 없음, 거래 수수료 없음."
+        "body": "수령인, IBAN, 목적 — 모두 아래에 있어 복사할 수 있습니다. 제3자 없음, 거래 수수료 없음."
       },
       "device": {
         "eyebrow": "장치",
         "title": "노트북, 데스크탑, 모니터를 가져오세요.",
-        "body": "작동하거나 수리 가능한 장치를 받고, 재정비하여 전달합니다. 개인 데이터는 현장에서 삭제해 드릴 수 있습니다."
+        "body": "작동하거나 수리 가능한 장치를 받고, 재정비하여 전달합니다. 개인 데이터는 요청 시 삭제해 드립니다."
       }
     },
     "wishlist": {
       "prefillTemplate": "다음을 기부하고 싶습니다: {title}",
       "eyebrow": "현재 필요한 구체적 물품",
       "heading": "우리의 위시리스트",
-      "intro": "작업장을 계속 운영하고 되살린 기기를 손보기 위해 우리는 특정 공구나 부품을 정기적으로 필요로 합니다. 실제 물품을 기부하거나 그 구매 비용을 지원하는 방식으로 우리를 도울 수 있습니다.",
+      "intro": "되살린 기기를 손보기 위해 우리는 특정 공구나 부품을 정기적으로 필요로 합니다. 실제 물품을 기부하거나 그 구매 비용을 지원하는 방식으로 우리를 도울 수 있습니다.",
       "donateItem": "물품 기부하기",
       "fundItem": "구매 비용 지원하기",
       "funded": "{target} 중 {amount} 지원됨",
@@ -5574,7 +5554,6 @@
     "geschichteSection": {
       "badge": "evig가 존재하는 이유",
       "milestoneTitle": "주요 이정표",
-      "milestoneDesc": "작은 공방에서 스위스 지속 가능한 IT 선도 기관으로.",
       "currentTitle": "현재",
       "yearsActive": "년간 활동",
       "teamMembers": "팀원",
@@ -5583,7 +5562,7 @@
         "title": "신념에서 태어난 스핀오프",
         "subtitle": "같은 뿌리, 더 대담한 길",
         "p1": "evig는 {foundingYear}년 취리히에서 태어났습니다. 취리히의 순환형 IT에서, <a>Revamp-IT</a>를 모체로 하여. 이 비영리 협회는 2003년부터 낡은 하드웨어를 다시 쓸 수 있는 컴퓨터로 되살려 왔습니다. 고치고, Linux와 자유 소프트웨어로 새로 설치하고, 폐기하는 대신 다음 사람에게 건네며 — 그렇게 적은 예산을 가진 이들에게도 기술로 향하는 문을 열어 왔습니다. 좋고 소중한 일이자, evig가 자라난 토양입니다.",
-        "p2": "그 일에서 우리는 플랫폼을 만들었습니다 — 마켓플레이스, AI 어시스턴트, 작업장을. 그리고 기술 낙관주의적 비전을. 지능으로, AI와 로보틱스로 향하는 접근을 모두가 감당할 수 있게 만드는 것. 빠르게, 그리고 취리히를 넘어서. Revamp-IT는 자신이 잘하는 일 — 수리와 재사용 — 에 지역에 뿌리내린 차분한 속도로 머뭅니다. 다른 목표, 다른 템포입니다.",
+        "p2": "그 일에서 우리는 플랫폼을 만들었습니다 — 마켓플레이스, AI 어시스턴트, IT 도움을. 그리고 기술 낙관주의적 비전을. 지능으로, AI와 로보틱스로 향하는 접근을 모두가 감당할 수 있게 만드는 것. 빠르게, 그리고 취리히를 넘어서. Revamp-IT는 자신이 잘하는 일 — 수리와 재사용 — 에 지역에 뿌리내린 차분한 속도로 머뭅니다. 다른 목표, 다른 템포입니다.",
         "p3": "그래서 우리는 우리의 길을 스스로 걷습니다. evig는 순환 경제의 뿌리를 지키면서, 그것을 지능의 시대로 향하게 합니다 — 온전한 책임, 설득해야 할 위원회도 없이, 열려 있고 독립적인, 진정한 시장과 품질의 모델로서. Revamp-IT의 역사는 Revamp-IT의 것으로 남고, evig는 자신의 역사를 씁니다."
       }
     },
@@ -7750,7 +7729,7 @@
       "eyebrow": "evig",
       "badge": "라이브",
       "title": "변경 로그",
-      "subtitle": "evig.ch에 적용하는 최신 수정 사항, 기능 및 개선 사항입니다."
+      "subtitle": "적용하는 최신 수정 사항, 기능 및 개선 사항입니다."
     },
     "latest": {
       "label": "최신"
@@ -7760,7 +7739,7 @@
     },
     "command": {
       "label": "로컬에서 시작",
-      "text": "npm run d"
+      "text": "pnpm run d"
     }
   },
   "roadmap": {
@@ -8017,19 +7996,15 @@
     },
     "fit": {
       "heading": "{org}의 수리 서비스",
-      "intro": "{org}는 {year}년부터 {city} 도심에서 컴퓨터와 IT 기기를 수리해 왔습니다. 이러한 수리는 정확히 보너스 지원 품목 중 하나에 해당합니다.",
+      "intro": "{org}의 IT 도움에서 {city}의 컴퓨터와 IT 기기 수리를 요청할 수 있습니다. 이러한 수리는 정확히 보너스 지원 품목 중 하나에 해당합니다.",
       "note": "중요: 이 페이지는 취리히시의 프로그램을 설명합니다. 현재 어떤 업체가 참여하고 보너스를 처리하는지는 {platform}에서 매일 최신 정보로 확인할 수 있습니다. 원하는 업체가 등록되어 있는지 그곳에서 확인하세요.",
       "category": {
         "title": "컴퓨터는 전기·전자 기기입니다",
         "body": "노트북, 데스크톱, 모니터 또는 주변 기기 — {org}의 수리는 전기·전자 기기 품목에 속하며 따라서 지원 대상 서비스에 해당합니다."
       },
-      "location": {
-        "title": "취리히시 도심 한가운데",
-        "body": "저희 작업장과 매장은 {address}에 있습니다 — 보너스가 적용되는 시내 지역입니다."
-      },
       "mission": {
         "title": "버리지 말고 수리하기",
-        "body": "바로 그것을 위해 {org}가 20년 넘게 존재해 왔습니다. 수리 보너스는 저희가 늘 해오던 일을 여러분께 더욱 저렴하게 만들어 줍니다."
+        "body": "바로 그것을 위해 {org}가 존재합니다. 수리 보너스는 저희가 늘 해오던 일을 여러분께 더욱 저렴하게 만들어 줍니다."
       }
     },
     "impact": {
@@ -8077,7 +8052,7 @@
     },
     "cta": {
       "heading": "수리는 이득입니다",
-      "body": "{platform}에서 수리 업체를 찾거나, 기기를 직접 {org}로 가져오세요.",
+      "body": "{platform}에서 수리 업체를 찾아보세요.",
       "platform": "{platform}로 이동",
       "repair": "{org}에서 수리",
       "contact": "문의하기"
@@ -8262,7 +8237,7 @@
       },
       "technicians": {
         "tagline": "고쳐 줄 사람을 찾기",
-        "description": "요청을 올리고, 가까운 기술자들의 제안을 받고, 고르세요. 망가진 키보드부터 부팅되지 않는 시스템까지.",
+        "description": "요청을 올리고, 제안을 받고, 수락하세요. 망가진 키보드부터 부팅되지 않는 시스템까지.",
         "cta": "기술자 찾기"
       },
       "ai": {
