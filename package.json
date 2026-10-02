@@ -106,7 +106,7 @@
     "@bitbaum/ai-kit": "^1.11.0",
     "@bitbaum/mail-kit": "^0.1.1",
     "@fleet/ai-forms": "github:bitbaum/ai-forms#v0.1.2",
-    "@sentry/nextjs": "^10.75.0",
+    "@sentry/nextjs": "^11.1.0",
     "@tiptap/core": "^3.31.3",
     "@tiptap/extension-link": "^3.31.3",
     "@tiptap/extension-table": "^3.31.3",
