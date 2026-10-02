@@ -360,9 +360,12 @@ export async function GET(request: NextRequest) {
 ### Sign in with OrangeCat (2026-09-29)
 
 OrangeCat is the fleet's identity root (ADR-0009 "One account for every door" in the orangecat repository).
-With `ORANGECAT_OAUTH_CLIENT_ID/SECRET` set, `/auth/login` shows "Mit OrangeCat
-anmelden" beside the password form and the profile page offers "OrangeCat
-verbinden". The rules live in `src/lib/auth/orangecat.ts` (pure, tested):
+With `ORANGECAT_OAUTH_CLIENT_ID/SECRET` set, "Mit OrangeCat anmelden" is the
+PRIMARY action on `/auth/login` and "Konto mit OrangeCat erstellen" on
+`/auth/register` (`src/components/auth/OrangeCatSignIn.tsx`); the password form and
+the password wizard sit one click behind "Mit E-Mail …" so existing accounts
+keep their way in. Without the pair the pages fall back to the password form
+alone. The profile page offers "OrangeCat verbinden". The rules live in `src/lib/auth/orangecat.ts` (pure, tested):
 
 - `users.orangecat_actor_id` (migration 141) is the ONLY cross-product key.
   **Never link by email**: OrangeCat's password sign-up does not verify the

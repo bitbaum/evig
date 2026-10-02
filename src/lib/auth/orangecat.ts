@@ -21,7 +21,9 @@
  */
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
-export const ORANGECAT_PROVIDER_ID = 'orangecat';
+import { ORANGECAT_PROVIDER_ID } from './orangecat-provider-id';
+
+export { ORANGECAT_PROVIDER_ID };
 export const ORANGECAT_SIGN_IN_SCOPE = 'openid profile email';
 /** Cookie that proves "this signed-in evig user asked to connect OrangeCat". */
 export const ORANGECAT_LINK_COOKIE = 'evig-oc-link';

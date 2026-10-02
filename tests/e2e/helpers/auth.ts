@@ -73,8 +73,6 @@ export function getTechnicianCredentials(): { email: string; password: string } 
 /** Session file from `npx playwright codegen --save-storage=tests/e2e/.auth/user.json` */
 export const SAVED_SESSION_PATH = 'tests/e2e/.auth/user.json';
 
-const LOGIN_SUBMIT = /sign in|anmelden|se connecter|accedi|iniciar sesión/i;
-
 function stripLocalePrefix(pathname: string): string {
   return pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/';
 }
@@ -166,9 +164,19 @@ export async function ensureAuthenticated(
   await page.goto(callbackUrl);
   await page.waitForLoadState('domcontentloaded');
   if (page.url().includes('/auth/login')) {
+    // With OrangeCat configured, "Mit OrangeCat anmelden" leads and the
+    // password form sits behind a disclosure; open it when it is closed.
+    const disclosure = page.locator('button[aria-controls="email-login"]');
+    if (
+      (await disclosure.count()) > 0 &&
+      (await disclosure.getAttribute('aria-expanded')) !== 'true'
+    ) {
+      await disclosure.click();
+    }
     await page.locator('#email').fill(email);
     await page.locator('#password').fill(password);
-    await page.getByRole('button', { name: LOGIN_SUBMIT }).click();
+    // Several buttons now say "anmelden"; the form's own submit is the one.
+    await page.locator('#email-login button[type="submit"]').click();
     await page.waitForURL((url) => pathMatchesCallback(url.pathname, url.search, callbackUrl), {
       timeout: 60_000,
     });

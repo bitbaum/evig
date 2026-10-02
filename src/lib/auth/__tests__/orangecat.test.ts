@@ -115,6 +115,8 @@ describe('provider config', () => {
       ORANGECAT_OAUTH_CLIENT_ID: 'evig',
       ORANGECAT_OAUTH_CLIENT_SECRET: 's',
     });
+    // OrangeCat registers /api/auth/callback/orangecat for this client.
+    expect(p.id).toBe('orangecat');
     expect(p.client.token_endpoint_auth_method).toBe('client_secret_post');
     expect(p.checks).toEqual(['pkce', 'state']);
     expect(p.issuer).toBe('https://orangecat.ch');
