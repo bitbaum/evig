@@ -726,7 +726,7 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "{legalForm}({foundingYear}년 설립)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께.",
+      "body": "{legalForm} 협회({foundingYear}년부터)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께.",
       "text": "{description} {legalForm}({foundingYear}년 설립)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께."
     },
     "stats": {
@@ -744,12 +744,12 @@
       "platforms": [
         {
           "title": "Marketplace",
-          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell.",
           "href": "/marketplace"
         },
         {
           "title": "IT Help",
-          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
+          "description": "Connecting technicians for computer repairs. Human-to-human help, local and straightforward.",
           "href": "/it-hilfe"
         },
         {
@@ -762,12 +762,12 @@
     "platforms": [
       {
         "title": "마켓플레이스",
-        "description": "중고 IT 기기를 위한 커뮤니티 플랫폼. 수수료 없이 광고 게시, 구매, 판매가 가능합니다.",
+        "description": "중고 IT 기기를 위한 커뮤니티 플랫폼. 광고 게시, 구매, 판매가 가능합니다.",
         "href": "/marketplace"
       },
       {
         "title": "IT 도움",
-        "description": "컴퓨터 수리를 위한 자원봉사 기술자 매칭. 지역 내 사람과 사람 사이의 도움.",
+        "description": "컴퓨터 수리를 위한 기술자 매칭. 지역 내 사람과 사람 사이의 도움.",
         "href": "/it-hilfe"
       },
       {
@@ -900,7 +900,7 @@
       "yearsExperience": "년의 경험",
       "quote": "AI와 로보틱스에 대한 접근은 누가 참여할 수 있는지를 결정합니다. 그것이 지갑 사정에 좌우되어서는 안 됩니다.",
       "paragraph1": "evig는 지능에 대한 접근을 누구나 감당할 수 있게 만듭니다. <strong>엄선한 기술과 AI, 로보틱스</strong>를 합리적인 가격에. 설립 준비 중인 비영리 단체로, 시장과 품질의 모델로 운영합니다. 기술이 쓰레기가 되지 않고 순환 속에 머물기에, 좋으면서도 저렴할 수 있습니다.",
-      "paragraph2": "여기에 정말로 손닿는 수리가 더해집니다. 작업장, 리페어 카페, 그리고 기술자 네트워크. 또한 검증된 중고 기술을 위한 순환 마켓플레이스도. 작동하는 것은 계속 순환해야 합니다.",
+      "paragraph2": "여기에 기술자 네트워크를 통한 정말로 손닿는 수리가 더해집니다. 또한 검증된 중고 기술을 위한 순환 마켓플레이스도. 작동하는 것은 계속 순환해야 합니다.",
       "imageAlt": "evig의 엄선한 기술"
     },
     "impactAreas": {
@@ -912,7 +912,7 @@
       },
       "openSource": {
         "title": "모두를 위한 수리",
-        "description": "수리는 간단하고 저렴해야 합니다. 작업장과 리페어 카페, 기술자 네트워크가 기기를 살려 둡니다. 필요한 곳에서는 리눅스와 오픈 소스와 함께."
+        "description": "수리는 간단하고 저렴해야 합니다. 기술자 네트워크가 기기를 살려 둡니다. 필요한 곳에서는 리눅스와 오픈 소스와 함께."
       },
       "community": {
         "title": "순환 마켓플레이스",
@@ -1201,14 +1201,6 @@
               "href": "/services/data-recovery-transfer",
               "label": "데이터 복구 & 전송"
             }
-          },
-          {
-            "q": "예약 없이 방문할 수 있나요?",
-            "a": "물론입니다. 복잡한 경우나 비즈니스 약속의 경우 사전에 간단히 연락해 주시면 좋습니다.",
-            "link": {
-              "href": "/contact",
-              "label": "연락처 & 영업 시간"
-            }
           }
         ]
       },
@@ -1409,15 +1401,6 @@
           "author": "G.",
           "role": "자원봉사자"
         }
-      ]
-    },
-    "partners": {
-      "heading": "우리의 파트너 조직",
-      "names": [
-        "Verein für berufliche und soziale Integration Bezirk Uster",
-        "Arbeitsintegrationsstelle der Gemeinde Rüti",
-        "HEKS",
-        "AOZ (Asylorganisation Zürich)"
       ]
     },
     "cta": {
@@ -2048,7 +2031,7 @@
       ],
       "impact": {
         "tier1Title": "기기 1대 구조",
-        "tier1Description": "전자 폐기물에서 노트북 1대 구조 + CO₂ 285kg 방지.",
+        "tier1Description": "전자 폐기물에서 노트북 1대 구조.",
         "tier2Title": "기기 2대 + 워크숍 자리",
         "tier2Description": "기기 2대 재정비 + 감당할 수 없는 사람을 위한 Linux 워크숍 자리 한 개.",
         "tier3Title": "기업 기부 — 기기 10대",
@@ -2082,12 +2065,12 @@
       "subtitle": "이용하든, 돕든, 지원하든 — 모든 기여가 중요합니다.",
       "use": {
         "title": "이용하기",
-        "desc": "구매, 판매, 수리 — 무료",
+        "desc": "구매, 판매, 수리",
         "cta": "매장으로"
       },
       "volunteer": {
         "title": "자원봉사",
-        "desc": "자원봉사 기술자로 지식을 나눠주세요",
+        "desc": "기술자로 지식을 나눠주세요",
         "cta": "참여하기"
       },
       "donate": {
@@ -4449,7 +4432,7 @@
       "items": [
         {
           "title": "기기 1대 구조",
-          "description": "전자 폐기물에서 노트북 1대 구조 + 285 kg CO₂ 절감."
+          "description": "전자 폐기물에서 노트북 1대 구조."
         },
         {
           "title": "기기 2대 + 워크숍 자리",
@@ -4516,7 +4499,7 @@
       "money": {
         "eyebrow": "돈",
         "title": "2분이면 끝나는 은행 송금.",
-        "body": "수령인, IBAN, 목적 — 모두 아래에 있어 복사할 수 있습니다. 요청 시 기부 영수증. 제3자 없음, 거래 수수료 없음."
+        "body": "수령인, IBAN, 목적 — 모두 아래에 있어 복사할 수 있습니다. 제3자 없음, 거래 수수료 없음."
       },
       "device": {
         "eyebrow": "장치",
@@ -7744,7 +7727,7 @@
       "eyebrow": "evig",
       "badge": "라이브",
       "title": "변경 로그",
-      "subtitle": "evig.ch에 적용하는 최신 수정 사항, 기능 및 개선 사항입니다."
+      "subtitle": "적용하는 최신 수정 사항, 기능 및 개선 사항입니다."
     },
     "latest": {
       "label": "최신"
@@ -7754,7 +7737,7 @@
     },
     "command": {
       "label": "로컬에서 시작",
-      "text": "npm run d"
+      "text": "pnpm run d"
     }
   },
   "roadmap": {
@@ -8011,19 +7994,15 @@
     },
     "fit": {
       "heading": "{org}의 수리 서비스",
-      "intro": "{org}는 {year}년부터 {city} 도심에서 컴퓨터와 IT 기기를 수리해 왔습니다. 이러한 수리는 정확히 보너스 지원 품목 중 하나에 해당합니다.",
+      "intro": "{org}를 통해 {city}에서 컴퓨터와 IT 기기를 수리하는 기술자를 찾을 수 있습니다. 이러한 수리는 정확히 보너스 지원 품목 중 하나에 해당합니다.",
       "note": "중요: 이 페이지는 취리히시의 프로그램을 설명합니다. 현재 어떤 업체가 참여하고 보너스를 처리하는지는 {platform}에서 매일 최신 정보로 확인할 수 있습니다. 원하는 업체가 등록되어 있는지 그곳에서 확인하세요.",
       "category": {
         "title": "컴퓨터는 전기·전자 기기입니다",
         "body": "노트북, 데스크톱, 모니터 또는 주변 기기 — {org}의 수리는 전기·전자 기기 품목에 속하며 따라서 지원 대상 서비스에 해당합니다."
       },
-      "location": {
-        "title": "취리히시 도심 한가운데",
-        "body": "저희 작업장과 매장은 {address}에 있습니다 — 보너스가 적용되는 시내 지역입니다."
-      },
       "mission": {
         "title": "버리지 말고 수리하기",
-        "body": "바로 그것을 위해 {org}가 20년 넘게 존재해 왔습니다. 수리 보너스는 저희가 늘 해오던 일을 여러분께 더욱 저렴하게 만들어 줍니다."
+        "body": "바로 그것을 위해 {org}가 존재합니다. 수리 보너스는 저희가 늘 해오던 일을 여러분께 더욱 저렴하게 만들어 줍니다."
       }
     },
     "impact": {
@@ -8071,7 +8050,7 @@
     },
     "cta": {
       "heading": "수리는 이득입니다",
-      "body": "{platform}에서 수리 업체를 찾거나, 기기를 직접 {org}로 가져오세요.",
+      "body": "{platform}에서 수리 업체를 찾아보세요.",
       "platform": "{platform}로 이동",
       "repair": "{org}에서 수리",
       "contact": "문의하기"

@@ -726,7 +726,7 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "{legalForm}（{foundingYear} 年設立）として、私たちは AI とロボティクスが誰にとっても手の届くものになるよう取り組んでいます。循環し続けるからこそ手が届くハードウェア、ベンダーに縛られないオープンなソフトウェア、そしてその道具を自分の意思で使い、持ち続けるための知識とともに。",
+      "body": "{legalForm}の協会（{foundingYear} 年から）として、私たちは AI とロボティクスが誰にとっても手の届くものになるよう取り組んでいます。循環し続けるからこそ手が届くハードウェア、ベンダーに縛られないオープンなソフトウェア、そしてその道具を自分の意思で使い、持ち続けるための知識とともに。",
       "text": "{description} {legalForm}（{foundingYear} 年設立）として、私たちは AI とロボティクスが誰にとっても手の届くものになるよう取り組んでいます。循環し続けるからこそ手が届くハードウェア、ベンダーに縛られないオープンなソフトウェア、そしてその道具を自分の意思で使い、持ち続けるための知識とともに。"
     },
     "stats": {
@@ -744,12 +744,12 @@
       "platforms": [
         {
           "title": "Marketplace",
-          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell.",
           "href": "/marketplace"
         },
         {
           "title": "IT Help",
-          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
+          "description": "Connecting technicians for computer repairs. Human-to-human help, local and straightforward.",
           "href": "/it-hilfe"
         },
         {
@@ -762,12 +762,12 @@
     "platforms": [
       {
         "title": "マーケットプレイス",
-        "description": "中古ITデバイスのコミュニティプラットフォーム。手数料なしで出品・売買ができます。",
+        "description": "中古ITデバイスのコミュニティプラットフォーム。出品・売買ができます。",
         "href": "/marketplace"
       },
       {
         "title": "ITサポート",
-        "description": "コンピューター修理のためのボランティア技術者のマッチング。地域での人と人とのサポート。",
+        "description": "コンピューター修理のための技術者のマッチング。地域での人と人とのサポート。",
         "href": "/it-hilfe"
       },
       {
@@ -900,7 +900,7 @@
       "yearsExperience": "年の経験",
       "quote": "AI とロボティクスへのアクセスは、誰が参加できるかを左右します。それが財布の中身で決まってはなりません。",
       "paragraph1": "evig は知能へのアクセスを手の届くものにします。<strong>厳選したテクノロジー、AI、ロボティクス</strong>を適正価格で。設立準備中の非営利団体として、市場と品質のモデルで運営しています。テクノロジーをゴミにせず循環させ続けるからこそ、良くて手頃なのです。",
-      "paragraph2": "さらに、本当に手の届く修理を。工房、リペアカフェ、技術者ネットワーク。そして、検査済みの中古テクノロジーのための循環型マーケットプレイス。使えるものは、循環し続けるべきです。",
+      "paragraph2": "さらに、技術者ネットワークによる本当に手の届く修理を。そして、検査済みの中古テクノロジーのための循環型マーケットプレイス。使えるものは、循環し続けるべきです。",
       "imageAlt": "evig の厳選したテクノロジー"
     },
     "impactAreas": {
@@ -912,7 +912,7 @@
       },
       "openSource": {
         "title": "すべての人に修理を",
-        "description": "修理は、シンプルで手頃であるべきです。工房、リペアカフェ、技術者ネットワークが機器を生かし続けます。理にかなう場面では Linux やオープンソースとともに。"
+        "description": "修理は、シンプルで手頃であるべきです。技術者ネットワークが機器を生かし続けます。理にかなう場面では Linux やオープンソースとともに。"
       },
       "community": {
         "title": "循環型マーケットプレイス",
@@ -1201,14 +1201,6 @@
               "href": "/services/data-recovery-transfer",
               "label": "データ復旧・転送"
             }
-          },
-          {
-            "q": "予約なしで来店できますか？",
-            "a": "もちろんです。複雑な場合やビジネス予約には、事前に簡単にご連絡いただくことをお勧めします。",
-            "link": {
-              "href": "/contact",
-              "label": "お問い合わせ・営業時間"
-            }
           }
         ]
       },
@@ -1414,15 +1406,6 @@
           "author": "G.",
           "role": "ボランティア"
         }
-      ]
-    },
-    "partners": {
-      "heading": "私たちのパートナー組織",
-      "names": [
-        "Verein für berufliche und soziale Integration Bezirk Uster",
-        "Arbeitsintegrationsstelle der Gemeinde Rüti",
-        "HEKS",
-        "AOZ (Asylorganisation Zürich)"
       ]
     },
     "cta": {
@@ -2057,7 +2040,7 @@
       ],
       "impact": {
         "tier1Title": "1台のデバイスを救出",
-        "tier1Description": "電子廃棄物から1台のラップトップを救出 + 285kgのCO₂を削減。",
+        "tier1Description": "電子廃棄物から1台のラップトップを救出。",
         "tier2Title": "2台のデバイス + ワークショップ席",
         "tier2Description": "2台のデバイスを整備 + 費用を負担できない人のためのLinuxワークショップの席一つ。",
         "tier3Title": "企業寄付 — 10台のデバイス",
@@ -2091,12 +2074,12 @@
       "subtitle": "利用する、協力する、支援する — すべての貢献が大切です。",
       "use": {
         "title": "利用する",
-        "desc": "購入、販売、修理 — 無料",
+        "desc": "購入、販売、修理",
         "cta": "ショップへ"
       },
       "volunteer": {
         "title": "協力する",
-        "desc": "ボランティア技術者として知識を共有する",
+        "desc": "技術者として知識を共有する",
         "cta": "参加する"
       },
       "donate": {
@@ -4517,7 +4500,7 @@
       "items": [
         {
           "title": "デバイス1台救済",
-          "description": "電子廃棄物からラップトップ1台を救済 + 285 kg CO₂回避。"
+          "description": "電子廃棄物からラップトップ1台を救済。"
         },
         {
           "title": "デバイス2台 + ワークショップ席",
@@ -4584,7 +4567,7 @@
       "money": {
         "eyebrow": "金銭",
         "title": "2分でできる銀行振込。",
-        "body": "受取人、IBAN、目的 — すべて下にあり、コピー可能。寄付証明書はご要望に応じて発行。第三者なし、取引手数料なし。"
+        "body": "受取人、IBAN、目的 — すべて下にあり、コピー可能。第三者なし、取引手数料なし。"
       },
       "device": {
         "eyebrow": "デバイス",
@@ -7812,7 +7795,7 @@
       "eyebrow": "evig",
       "badge": "Live",
       "title": "変更履歴",
-      "subtitle": "evig.chに展開している最新の修正、機能、改善。"
+      "subtitle": "展開している最新の修正、機能、改善。"
     },
     "latest": {
       "label": "最新"
@@ -7822,7 +7805,7 @@
     },
     "command": {
       "label": "ローカルで起動",
-      "text": "npm run d"
+      "text": "pnpm run d"
     }
   },
   "roadmap": {
@@ -8079,19 +8062,15 @@
     },
     "fit": {
       "heading": "{org}での修理",
-      "intro": "{org}は{year}年から{city}の中心でコンピューターやIT機器を修理してきました。これらの修理は、まさにボーナス対象カテゴリーの1つに該当します。",
+      "intro": "{org}を通じて、{city}でコンピューターやIT機器を修理する技術者を見つけられます。これらの修理は、まさにボーナス対象カテゴリーの1つに該当します。",
       "note": "重要: このページはチューリッヒ市のプログラムについて説明しています。現在どの事業者が参加し、ボーナスを取り扱っているかは、{platform}で最新の情報をご確認いただけます。ご希望の事業者が登録されているか、そちらでお確かめください。",
       "category": {
         "title": "コンピューターは電化製品です",
         "body": "ノートパソコン、デスクトップ、モニター、周辺機器 — {org}による修理は電化製品カテゴリーに属し、したがって補助対象となります。"
       },
-      "location": {
-        "title": "チューリッヒ市の中心で",
-        "body": "私たちの工房と販売店は{address}にあります。ボーナスが適用される市域内です。"
-      },
       "mission": {
         "title": "捨てるのではなく修理する",
-        "body": "まさにそのために、{org}は20年以上にわたって存在してきました。修理ボーナスは、私たちがもともと行っていることを、あなたにとってさらにお得にします。"
+        "body": "まさにそのために{org}は存在します。修理ボーナスは、私たちがもともと行っていることを、あなたにとってさらにお得にします。"
       }
     },
     "impact": {
@@ -8139,7 +8118,7 @@
     },
     "cta": {
       "heading": "修理はお得です",
-      "body": "{platform}で修理事業者を探すか、機器を直接{org}へお持ちください。",
+      "body": "{platform}で修理事業者を探しましょう。",
       "platform": "{platform}へ",
       "repair": "{org}で修理する",
       "contact": "お問い合わせ"

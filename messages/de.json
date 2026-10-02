@@ -352,12 +352,12 @@
       "subtitle": "Ob nutzen, mithelfen oder unterstützen — jeder Beitrag zählt.",
       "use": {
         "title": "Nutzen",
-        "desc": "Kaufen, verkaufen, reparieren — kostenlos",
+        "desc": "Kaufen, verkaufen, reparieren lassen",
         "cta": "Zum Shop"
       },
       "volunteer": {
         "title": "Mithelfen",
-        "desc": "Teile dein Wissen als freiwilliger Techniker",
+        "desc": "Teile dein Wissen als Technikerin oder Techniker",
         "cta": "Mitmachen"
       },
       "donate": {
@@ -2053,7 +2053,7 @@
       "yearsExperience": "Jahre Erfahrung",
       "quote": "Der Zugang zu KI und Robotik entscheidet über Teilhabe — er darf nicht vom Geldbeutel abhängen.",
       "paragraph1": "evig macht den Zugang zu Intelligenz bezahlbar: <strong>kuratierte Technik, KI und Robotik</strong> zu fairen Preisen. Ein gemeinnütziger Verein in Gründung, geführt nach einem Markt- und Qualitätsmodell — gut und günstig, weil Technik im Kreislauf bleibt statt im Müll zu landen.",
-      "paragraph2": "Dazu kommt wirklich zugängliche Reparatur — Werkstatt, Repair-Café und ein Techniker-Netzwerk — und ein Kreislauf-Marktplatz für geprüfte gebrauchte Technik. Was funktioniert, soll im Umlauf bleiben.",
+      "paragraph2": "Dazu kommt wirklich zugängliche Reparatur über ein Techniker-Netzwerk — und ein Kreislauf-Marktplatz für geprüfte gebrauchte Technik. Was funktioniert, soll im Umlauf bleiben.",
       "imageAlt": "Kuratierte Technik bei evig"
     },
     "team": "Das Team",
@@ -2073,7 +2073,7 @@
       },
       "openSource": {
         "title": "Reparatur für alle",
-        "description": "Reparatur soll einfach und bezahlbar sein. Werkstatt, Repair-Café und ein Techniker-Netzwerk halten Geräte am Leben — mit Linux und Open Source, wo es Sinn macht."
+        "description": "Reparatur soll einfach und bezahlbar sein. Ein Techniker-Netzwerk hält Geräte am Leben — mit Linux und Open Source, wo es Sinn macht."
       },
       "community": {
         "title": "Kreislauf-Marktplatz",
@@ -3149,15 +3149,6 @@
         }
       ]
     },
-    "partners": {
-      "heading": "Unsere Partnerorganisationen",
-      "names": [
-        "Verein für berufliche und soziale Integration Bezirk Uster",
-        "Arbeitsintegrationsstelle der Gemeinde Rüti",
-        "HEKS",
-        "AOZ (Asylorganisation Zürich)"
-      ]
-    },
     "cta": {
       "heading": "Bereit, einen Unterschied zu machen?",
       "body": "Schliess dich unserer Gemeinschaft von Veränderern an und hilf uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.",
@@ -3790,7 +3781,7 @@
       ],
       "impact": {
         "tier1Title": "1 Gerät gerettet",
-        "tier1Description": "1 Laptop vor dem Elektroschrott gerettet + 285 kg CO₂ vermieden.",
+        "tier1Description": "1 Laptop vor dem Elektroschrott gerettet.",
         "tier2Title": "2 Geräte + Workshop-Platz",
         "tier2Description": "2 Geräte aufbereitet + ein Platz in unserem Linux-Workshop für jemanden, der es sich nicht leisten könnte.",
         "tier3Title": "Firmenspende — 10 Geräte",
@@ -4078,7 +4069,7 @@
     },
     "mission": {
       "title": "Unsere Mission",
-      "body": "Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können.",
+      "body": "Als Verein {legalForm} (seit {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können.",
       "text": "{description} Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können."
     },
     "stats": {
@@ -4096,12 +4087,12 @@
       "platforms": [
         {
           "title": "Marktplatz",
-          "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen – ohne Gebühren.",
+          "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen.",
           "href": "/marketplace"
         },
         {
           "title": "IT-Hilfe",
-          "description": "Vermittlung von freiwilligen Technikern für Computer-Reparaturen. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
+          "description": "Vermittlung von Technikerinnen und Technikern für Computer-Reparaturen. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
           "href": "/it-hilfe"
         },
         {
@@ -4114,12 +4105,12 @@
     "platforms": [
       {
         "title": "Marktplatz",
-        "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen — ohne Gebühren.",
+        "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen.",
         "href": "/marketplace"
       },
       {
         "title": "IT-Hilfe",
-        "description": "Vermittlung von freiwilligen Technikern für Computer-Reparaturen. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
+        "description": "Vermittlung von Technikerinnen und Technikern für Computer-Reparaturen. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
         "href": "/it-hilfe"
       },
       {
@@ -4431,7 +4422,7 @@
             "a": "Open Source stärkt Selbstbestimmung und Reparierbarkeit. Es reduziert Abhängigkeiten und ermöglicht, Geräte länger zu nutzen – zentrale Hebel gegen Elektroschrott."
           },
           {
-            "q": "Was bedeutet „Right to Repairâ für euch?",
+            "q": "Was bedeutet „Right to Repair“ für euch?",
             "a": "Wir setzen auf reparierbare Hardware, dokumentierte Prozesse und verfügbare Ersatzteile. So verlängern wir die Lebensdauer von Geräten und schonen Ressourcen."
           }
         ]
@@ -4478,14 +4469,6 @@
             "link": {
               "href": "/services/data-recovery-transfer",
               "label": "Datenrettung & Übertragung"
-            }
-          },
-          {
-            "q": "Kann ich ohne Termin vorbeikommen?",
-            "a": "Gerne. Für komplexe Fälle oder Business-Termine empfehlen wir eine kurze Kontaktaufnahme vorab.",
-            "link": {
-              "href": "/contact",
-              "label": "Kontakt & Öffnungszeiten"
             }
           }
         ]
@@ -4584,7 +4567,7 @@
       "money": {
         "eyebrow": "GELD",
         "title": "Banküberweisung in zwei Minuten.",
-        "body": "Empfänger, IBAN, Verwendungszweck — alles unten zum Kopieren. Spendenquittung auf Anfrage. Kein Drittanbieter, keine Transaktionsgebühr."
+        "body": "Empfänger, IBAN, Verwendungszweck — alles unten zum Kopieren. Kein Drittanbieter, keine Transaktionsgebühr."
       },
       "device": {
         "eyebrow": "GERÄT",
@@ -4607,7 +4590,7 @@
       "items": [
         {
           "title": "1 Gerät gerettet",
-          "description": "1 Laptop vor dem Elektroschrott gerettet + 285 kg CO₂ vermieden."
+          "description": "1 Laptop vor dem Elektroschrott gerettet."
         },
         {
           "title": "2 Geräte + Workshop-Platz",
@@ -7924,7 +7907,7 @@
       "eyebrow": "evig",
       "badge": "Live",
       "title": "Changelog",
-      "subtitle": "Die neuesten Fixes, Features und Verbesserungen, die wir auf evig.ch ausrollen."
+      "subtitle": "Die neuesten Fixes, Features und Verbesserungen, die wir ausrollen."
     },
     "latest": {
       "label": "Neueste"
@@ -7934,7 +7917,7 @@
     },
     "command": {
       "label": "Lokal starten",
-      "text": "npm run d"
+      "text": "pnpm run d"
     }
   },
   "roadmap": {
@@ -8046,19 +8029,15 @@
     },
     "fit": {
       "heading": "Reparaturen bei {org}",
-      "intro": "{org} repariert seit {year} Computer und IT-Geräte mitten in {city}. Diese Reparaturen fallen genau in eine der bonusberechtigten Kategorien.",
+      "intro": "Über {org} findest du Technikerinnen und Techniker in {city}, die Computer und IT-Geräte reparieren. Diese Reparaturen fallen genau in eine der bonusberechtigten Kategorien.",
       "note": "Wichtig: Diese Seite erklärt das Programm der Stadt Zürich. Welche Betriebe aktuell teilnehmen und den Bonus abwickeln, siehst du tagesaktuell auf {platform}. Prüfe dort, ob dein Wunschbetrieb registriert ist.",
       "category": {
         "title": "Computer sind Elektrogeräte",
         "body": "Laptop, Desktop, Bildschirm oder Peripherie — die Reparaturen von {org} gehören zur Kategorie Elektrogeräte und damit zu den förderbaren Leistungen."
       },
-      "location": {
-        "title": "Mitten in der Stadt Zürich",
-        "body": "Unsere Werkstatt und Verkaufsstelle liegen an der {address} — im Stadtgebiet, in dem der Bonus gilt."
-      },
       "mission": {
         "title": "Reparieren statt wegwerfen",
-        "body": "Genau dafür gibt es {org} seit über zwei Jahrzehnten. Der Reparaturbonus macht das, was wir ohnehin tun, für dich noch günstiger."
+        "body": "Genau dafür gibt es {org}. Der Reparaturbonus macht das, was wir ohnehin tun, für dich noch günstiger."
       }
     },
     "impact": {
@@ -8106,7 +8085,7 @@
     },
     "cta": {
       "heading": "Reparieren lohnt sich",
-      "body": "Finde einen Reparaturbetrieb auf {platform} — oder bring dein Gerät direkt zu {org}.",
+      "body": "Finde einen Reparaturbetrieb auf {platform}.",
       "platform": "Zu {platform}",
       "repair": "Reparatur bei {org}",
       "contact": "Frag uns"

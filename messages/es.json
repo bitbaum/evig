@@ -726,7 +726,7 @@
     },
     "mission": {
       "title": "Nuestra misión",
-      "body": "Como {legalForm} (fundada en {foundingYear}), trabajamos para que la IA y la robótica estén al alcance de todos: con hardware asequible porque permanece en circulación, con software abierto en lugar de dependencia de un proveedor, y con el conocimiento para usar y conservar esas herramientas de forma autónoma.",
+      "body": "Como asociación {legalForm} (desde {foundingYear}), trabajamos para que la IA y la robótica estén al alcance de todos: con hardware asequible porque permanece en circulación, con software abierto en lugar de dependencia de un proveedor, y con el conocimiento para usar y conservar esas herramientas de forma autónoma.",
       "text": "{description} Como {legalForm} (fundada en {foundingYear}), trabajamos para que la IA y la robótica estén al alcance de todos: con hardware asequible porque permanece en circulación, con software abierto en lugar de dependencia de un proveedor, y con el conocimiento para usar y conservar esas herramientas de forma autónoma."
     },
     "stats": {
@@ -744,12 +744,12 @@
       "platforms": [
         {
           "title": "Mercado",
-          "description": "Plataforma comunitaria de equipos TI de segunda mano. Los usuarios pueden crear anuncios, comprar y vender — sin comisiones.",
+          "description": "Plataforma comunitaria de equipos TI de segunda mano. Los usuarios pueden crear anuncios, comprar y vender.",
           "href": "/marketplace"
         },
         {
           "title": "Ayuda TI",
-          "description": "Ponemos en contacto a voluntarios técnicos con personas que necesitan reparar su ordenador. Ayuda de persona a persona, local y sin complicaciones.",
+          "description": "Ponemos en contacto a técnicos con personas que necesitan reparar su ordenador. Ayuda de persona a persona, local y sin complicaciones.",
           "href": "/it-hilfe"
         },
         {
@@ -762,12 +762,12 @@
     "platforms": [
       {
         "title": "Mercado",
-        "description": "Plataforma comunitaria para dispositivos IT usados. Los usuarios pueden crear anuncios, comprar y vender — sin comisiones.",
+        "description": "Plataforma comunitaria para dispositivos IT usados. Los usuarios pueden crear anuncios, comprar y vender.",
         "href": "/marketplace"
       },
       {
         "title": "Ayuda IT",
-        "description": "Conexión de técnicos voluntarios para reparaciones informáticas. Ayuda de persona a persona, local y sin complicaciones.",
+        "description": "Conexión de técnicos para reparaciones informáticas. Ayuda de persona a persona, local y sin complicaciones.",
         "href": "/it-hilfe"
       },
       {
@@ -900,7 +900,7 @@
       "yearsExperience": "años de experiencia",
       "quote": "El acceso a la IA y la robótica determina quién puede participar, y no debe depender del bolsillo.",
       "paragraph1": "evig hace que el acceso a la inteligencia sea asequible: <strong>tecnología seleccionada, IA y robótica</strong> a precios justos. Una asociación sin ánimo de lucro en constitución, gestionada con un modelo de mercado y calidad: bueno y económico porque la tecnología permanece en circulación en lugar de terminar en la basura.",
-      "paragraph2": "A esto se suma una reparación realmente accesible —taller, café de reparación y una red de técnicos— y un mercado circular de tecnología usada y verificada. Lo que funciona debe seguir en circulación.",
+      "paragraph2": "A esto se suma una reparación realmente accesible a través de una red de técnicos, y un mercado circular de tecnología usada y verificada. Lo que funciona debe seguir en circulación.",
       "imageAlt": "Tecnología seleccionada en evig"
     },
     "impactAreas": {
@@ -912,7 +912,7 @@
       },
       "openSource": {
         "title": "Reparación para todos",
-        "description": "Reparar debería ser sencillo y asequible. Taller, café de reparación y una red de técnicos mantienen vivos los dispositivos, con Linux y código abierto donde tiene sentido."
+        "description": "Reparar debería ser sencillo y asequible. Una red de técnicos mantiene vivos los dispositivos, con Linux y código abierto donde tiene sentido."
       },
       "community": {
         "title": "Mercado circular",
@@ -1201,14 +1201,6 @@
               "href": "/services/data-recovery-transfer",
               "label": "Recuperación y transferencia de datos"
             }
-          },
-          {
-            "q": "¿Puedo ir sin cita previa?",
-            "a": "Con mucho gusto. Para casos complejos o citas empresariales, recomendamos contactarnos brevemente antes.",
-            "link": {
-              "href": "/contact",
-              "label": "Contacto y horarios"
-            }
           }
         ]
       },
@@ -1424,15 +1416,6 @@
           "author": "G.",
           "role": "Voluntario"
         }
-      ]
-    },
-    "partners": {
-      "heading": "Nuestras organizaciones asociadas",
-      "names": [
-        "Verein für berufliche und soziale Integration Bezirk Uster",
-        "Arbeitsintegrationsstelle der Gemeinde Rüti",
-        "HEKS",
-        "AOZ (Asylorganisation Zürich)"
       ]
     },
     "cta": {
@@ -2067,7 +2050,7 @@
       ],
       "impact": {
         "tier1Title": "1 dispositivo rescatado",
-        "tier1Description": "1 portátil rescatado de los residuos electrónicos + 285 kg de CO₂ evitados.",
+        "tier1Description": "1 portátil rescatado de los residuos electrónicos.",
         "tier2Title": "2 dispositivos + plaza en taller",
         "tier2Description": "2 dispositivos reacondicionados + una plaza en nuestro taller de Linux para alguien que no podría permitírselo.",
         "tier3Title": "Donación empresarial — 10 dispositivos",
@@ -2101,12 +2084,12 @@
       "subtitle": "Ya sea usando, colaborando o apoyando — cada aportación cuenta.",
       "use": {
         "title": "Usar",
-        "desc": "Comprar, vender, reparar — gratis",
+        "desc": "Comprar, vender, reparar",
         "cta": "A la tienda"
       },
       "volunteer": {
         "title": "Colaborar",
-        "desc": "Comparte tu conocimiento como técnico voluntario",
+        "desc": "Comparte tu conocimiento como técnico",
         "cta": "Participar"
       },
       "donate": {
@@ -4537,7 +4520,7 @@
       "items": [
         {
           "title": "1 dispositivo rescatado",
-          "description": "1 laptop salvada de los residuos electrónicos + 285 kg CO₂ evitados."
+          "description": "1 laptop salvada de los residuos electrónicos."
         },
         {
           "title": "2 dispositivos + plaza en taller",
@@ -4604,7 +4587,7 @@
       "money": {
         "eyebrow": "DINERO",
         "title": "Transferencia bancaria en dos minutos.",
-        "body": "Beneficiario, IBAN, concepto — todo abajo, listo para copiar. Recibo de donación bajo petición. Sin terceros, sin comisión de transacción."
+        "body": "Beneficiario, IBAN, concepto — todo abajo, listo para copiar. Sin terceros, sin comisión de transacción."
       },
       "device": {
         "eyebrow": "DISPOSITIVO",
@@ -7832,7 +7815,7 @@
       "eyebrow": "evig",
       "badge": "En vivo",
       "title": "Registro de cambios",
-      "subtitle": "Las últimas correcciones, funciones y mejoras que desplegamos en evig.ch."
+      "subtitle": "Las últimas correcciones, funciones y mejoras que desplegamos."
     },
     "latest": {
       "label": "Más recientes"
@@ -7842,7 +7825,7 @@
     },
     "command": {
       "label": "Iniciar en local",
-      "text": "npm run d"
+      "text": "pnpm run d"
     }
   },
   "roadmap": {
@@ -8099,19 +8082,15 @@
     },
     "fit": {
       "heading": "Reparaciones en {org}",
-      "intro": "{org} repara ordenadores y equipos informáticos en pleno centro de {city} desde {year}. Estas reparaciones encajan justo en una de las categorías subvencionables.",
+      "intro": "A través de {org} encuentras técnicos en {city} que reparan ordenadores y equipos informáticos. Estas reparaciones encajan justo en una de las categorías subvencionables.",
       "note": "Importante: esta página explica el programa de la ciudad de Zúrich. Qué negocios participan actualmente y gestionan el bono puedes verlo actualizado a diario en {platform}. Comprueba allí si el negocio que quieres está registrado.",
       "category": {
         "title": "Los ordenadores son aparatos eléctricos",
         "body": "Portátil, sobremesa, pantalla o periféricos — las reparaciones de {org} pertenecen a la categoría de aparatos eléctricos y, por tanto, a las prestaciones subvencionables."
       },
-      "location": {
-        "title": "En pleno centro de la ciudad de Zúrich",
-        "body": "Nuestro taller y punto de venta están en {address} — dentro del área urbana donde rige el bono."
-      },
       "mission": {
         "title": "Reparar en vez de tirar",
-        "body": "Precisamente para eso existe {org} desde hace más de dos décadas. El bono de reparación hace aún más barato para ti lo que ya hacemos de todos modos."
+        "body": "Precisamente para eso existe {org}. El bono de reparación hace aún más barato para ti lo que ya hacemos de todos modos."
       }
     },
     "impact": {
@@ -8159,7 +8138,7 @@
     },
     "cta": {
       "heading": "Reparar vale la pena",
-      "body": "Encuentra un negocio de reparación en {platform} — o trae tu aparato directamente a {org}.",
+      "body": "Encuentra un negocio de reparación en {platform}.",
       "platform": "Ir a {platform}",
       "repair": "Reparación en {org}",
       "contact": "Pregúntanos"

@@ -351,12 +351,12 @@
       "subtitle": "Use it, contribute, or support — every bit counts.",
       "use": {
         "title": "Use",
-        "desc": "Buy, sell, repair — for free",
+        "desc": "Buy, sell, get repairs",
         "cta": "To the shop"
       },
       "volunteer": {
         "title": "Volunteer",
-        "desc": "Share your knowledge as a volunteer technician",
+        "desc": "Share your knowledge as a technician",
         "cta": "Get involved"
       },
       "donate": {
@@ -2053,7 +2053,7 @@
       "yearsExperience": "years of experience",
       "quote": "Access to AI and robotics decides who gets to take part — it must not depend on your wallet.",
       "paragraph1": "evig makes access to intelligence affordable: <strong>curated tech, AI and robotics</strong> at fair prices. A non-profit association in formation, run on a market-and-quality model — good and affordable because tech stays in circulation instead of ending up as waste.",
-      "paragraph2": "On top of that comes repair that's truly within reach — workshop, repair café and a technician network — and a circular marketplace for tested second-hand tech. What works should stay in circulation.",
+      "paragraph2": "On top of that comes repair that's truly within reach through a technician network — and a circular marketplace for tested second-hand tech. What works should stay in circulation.",
       "imageAlt": "Curated tech at evig"
     },
     "team": "The team",
@@ -2073,7 +2073,7 @@
       },
       "openSource": {
         "title": "Repair for everyone",
-        "description": "Repair should be simple and affordable. Workshop, repair café and a technician network keep devices alive — with Linux and open source where it makes sense."
+        "description": "Repair should be simple and affordable. A technician network keeps devices alive — with Linux and open source where it makes sense."
       },
       "community": {
         "title": "Circular marketplace",
@@ -3081,14 +3081,6 @@
               "href": "/services/data-recovery-transfer",
               "label": "Data Recovery & Transfer"
             }
-          },
-          {
-            "q": "Can I just drop in without an appointment?",
-            "a": "Absolutely. For complex cases or business appointments, a quick message in advance is helpful.",
-            "link": {
-              "href": "/contact",
-              "label": "Contact & Opening Hours"
-            }
           }
         ]
       },
@@ -3304,15 +3296,6 @@
           "author": "G.",
           "role": "Volunteer"
         }
-      ]
-    },
-    "partners": {
-      "heading": "Our partner organizations",
-      "names": [
-        "Verein für berufliche und soziale Integration Bezirk Uster",
-        "Arbeitsintegrationsstelle der Gemeinde Rüti",
-        "HEKS",
-        "AOZ (Asylorganisation Zürich)"
       ]
     },
     "cta": {
@@ -3947,7 +3930,7 @@
       ],
       "impact": {
         "tier1Title": "1 device saved",
-        "tier1Description": "1 laptop rescued from e-waste + 285 kg CO₂ avoided.",
+        "tier1Description": "1 laptop rescued from e-waste.",
         "tier2Title": "2 devices + workshop place",
         "tier2Description": "2 devices refurbished + a place in our Linux workshop for someone who couldn't otherwise afford it.",
         "tier3Title": "Corporate donation — 10 devices",
@@ -4296,7 +4279,7 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "As a {legalForm} (founded {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms.",
+      "body": "As an association {legalForm} (since {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms.",
       "text": "{description} As a {legalForm} (founded in {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms."
     },
     "stats": {
@@ -4314,12 +4297,12 @@
       "platforms": [
         {
           "title": "Marketplace",
-          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell.",
           "href": "/marketplace"
         },
         {
           "title": "IT Help",
-          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
+          "description": "Connecting technicians for computer repairs. Human-to-human help, local and straightforward.",
           "href": "/it-hilfe"
         },
         {
@@ -4332,12 +4315,12 @@
     "platforms": [
       {
         "title": "Marketplace",
-        "description": "Community platform for used IT devices. Users can create listings, buy and sell — without fees.",
+        "description": "Community platform for used IT devices. Users can create listings, buy and sell.",
         "href": "/marketplace"
       },
       {
         "title": "IT Help",
-        "description": "Connecting volunteer technicians for computer repairs. Help from person to person, local and straightforward.",
+        "description": "Connecting technicians for computer repairs. Help from person to person, local and straightforward.",
         "href": "/it-hilfe"
       },
       {
@@ -4537,7 +4520,7 @@
       "items": [
         {
           "title": "1 device rescued",
-          "description": "1 laptop saved from e-waste + 285 kg CO₂ avoided."
+          "description": "1 laptop saved from e-waste."
         },
         {
           "title": "2 devices + workshop place",
@@ -4604,7 +4587,7 @@
       "money": {
         "eyebrow": "MONEY",
         "title": "Bank transfer in two minutes.",
-        "body": "Recipient, IBAN, reference — all below, ready to copy. Donation receipt on request. No third party, no transaction fee."
+        "body": "Recipient, IBAN, reference — all below, ready to copy. No third party, no transaction fee."
       },
       "device": {
         "eyebrow": "DEVICE",
@@ -7834,7 +7817,7 @@
       "eyebrow": "evig",
       "badge": "Live",
       "title": "Changelog",
-      "subtitle": "The latest fixes, features, and improvements we ship to evig.ch."
+      "subtitle": "The latest fixes, features, and improvements we ship."
     },
     "latest": {
       "label": "Latest"
@@ -7844,7 +7827,7 @@
     },
     "command": {
       "label": "Run locally",
-      "text": "npm run d"
+      "text": "pnpm run d"
     }
   },
   "roadmap": {
@@ -8021,19 +8004,15 @@
     },
     "fit": {
       "heading": "Repairs at {org}",
-      "intro": "{org} has repaired computers and IT equipment in the heart of {city} since {year}. Those repairs fall squarely into one of the eligible categories.",
+      "intro": "Through {org} you find technicians in {city} who repair computers and IT equipment. Those repairs fall squarely into one of the eligible categories.",
       "note": "Important: this page explains the City of Zurich's programme. Which businesses currently take part and settle the bonus is shown, up to date, on {platform}. Check there whether your preferred business is registered.",
       "category": {
         "title": "Computers are electrical appliances",
         "body": "Laptop, desktop, monitor or peripheral — repairs by {org} belong to the electrical-appliances category and are therefore eligible."
       },
-      "location": {
-        "title": "In the heart of Zurich",
-        "body": "Our workshop and shop are at {address} — inside the city area where the bonus applies."
-      },
       "mission": {
         "title": "Repair instead of discard",
-        "body": "That is exactly why {org} has existed for over two decades. The repair bonus makes what we already do even cheaper for you."
+        "body": "That is exactly why {org} exists. The repair bonus makes what we already do even cheaper for you."
       }
     },
     "impact": {
@@ -8081,7 +8060,7 @@
     },
     "cta": {
       "heading": "Repairing pays off",
-      "body": "Find a repair business on {platform} — or bring your device straight to {org}.",
+      "body": "Find a repair business on {platform}.",
       "platform": "Go to {platform}",
       "repair": "Repair at {org}",
       "contact": "Ask us"

@@ -178,15 +178,11 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
             {t('fit.heading', { org: ORG.name })}
           </Heading>
           <p className="mt-3 text-text-secondary">
-            {t('fit.intro', {
-              org: ORG.name,
-              year: String(ORG.foundingYear),
-              city: BASE_REGION.city,
-            })}
+            {t('fit.intro', { org: ORG.name, city: BASE_REGION.city })}
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
           {REVAMPIT_FIT.map((item) => (
             <Card key={item.id} className="h-full p-6">
               <IconBadge icon={item.icon} theme="services" size="lg" />
@@ -194,10 +190,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
                 {t(`fit.${item.id}.title` as never)}
               </Heading>
               <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-                {t(
-                  `fit.${item.id}.body` as never,
-                  { org: ORG.name, address: BASE_REGION.full } as never,
-                )}
+                {t(`fit.${item.id}.body` as never, { org: ORG.name } as never)}
               </p>
             </Card>
           ))}
