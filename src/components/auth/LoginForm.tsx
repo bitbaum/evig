@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff, Cat } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { sanitizeReturnTo } from '@/lib/utils/safe-redirect';
 import Heading from '@/components/ui/Heading';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { StatusBanner } from '@/components/ui/status-banner';
 import { ORG } from '@/config/org';
 import { ROUTES } from '@/config/routes';
+import { OrangeCatFirst, useOrangeCatAvailability } from './OrangeCatSignIn';
 
 /**
  * NextAuth error codes that map to translation keys for the user.
@@ -71,26 +72,15 @@ export function LoginForm() {
   // Open-redirect guard: only same-origin paths pass through.
   const callbackUrl = sanitizeReturnTo(searchParams.get('callbackUrl'), '/dashboard');
   const queryError = searchParams.get('error');
-  // Auth.js lists the providers it actually mounted; the OrangeCat button
-  // appears only when the pair is configured, so it can never be a dead end.
-  const [orangecatAvailable, setOrangecatAvailable] = useState(false);
-  useEffect(() => {
-    let cancelled = false;
-    fetch('/api/auth/providers')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((providers: Record<string, unknown> | null) => {
-        if (!cancelled) {
-          setOrangecatAvailable(Boolean(providers && 'orangecat' in providers));
-        }
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-  const [orangecatBusy, setOrangecatBusy] = useState(false);
+  // OrangeCat is the primary way in (Google, GitHub, email — all on its side).
+  // The password form stays for the accounts that already have one.
+  const orangecat = useOrangeCatAvailability();
   const verified = searchParams.get('verified');
   const reset = searchParams.get('reset');
+  // Arriving from a verify/reset link or with an error means the password
+  // path is the one in play, so it opens rather than hiding behind a click.
+  const [emailOpen, setEmailOpen] = useState(Boolean(verified || reset || queryError));
+  const showEmailForm = orangecat === 'off' || emailOpen;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -191,121 +181,108 @@ export function LoginForm() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1.5 text-text-secondary">
-              {t('email')}
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                placeholder={t('emailPlaceholder')}
-                aria-invalid={!!errorMessage}
-                aria-describedby={errorMessage ? 'login-error' : undefined}
-                className="pl-11 pr-4 py-3 min-h-touch"
-              />
-            </div>
-          </div>
+        <OrangeCatFirst
+          availability={orangecat}
+          label={t('signInWithOrangeCat')}
+          hint={t('orangecatHint')}
+          callbackUrl={callbackUrl}
+          emailLabel={t('signInWithEmail')}
+          emailOpen={emailOpen}
+          onToggleEmail={() => setEmailOpen((open) => !open)}
+          emailPanelId="email-login"
+        />
 
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="password" className="block text-sm font-medium text-text-secondary">
-                {t('password')}
+        <div
+          id="email-login"
+          hidden={!showEmailForm}
+          className={orangecat === 'off' ? undefined : 'mt-4'}
+        >
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium mb-1.5 text-text-secondary"
+              >
+                {t('email')}
               </label>
-              <Link
-                href={ROUTES.public.forgotPassword}
-                className="text-sm text-action hover:text-action"
-              >
-                {t('forgotPassword')}
-              </Link>
-            </div>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-                placeholder="••••••••"
-                aria-invalid={!!errorMessage}
-                aria-describedby={errorMessage ? 'login-error' : undefined}
-                className="pl-11 pr-12 py-3 min-h-touch"
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-pressed={showPassword}
-                aria-label={showPassword ? t('hidePassword') : t('showPassword')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary h-auto w-auto p-0 bg-transparent hover:bg-transparent"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </Button>
-            </div>
-          </div>
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            disabled={isLoading}
-            className="w-full gap-2 font-semibold"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>{t('signingIn')}</span>
-              </>
-            ) : (
-              <>
-                <span>{t('submit')}</span>
-                <ArrowRight className="w-5 h-5" />
-              </>
-            )}
-          </Button>
-        </form>
-
-        {orangecatAvailable && (
-          <>
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-strong" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-surface-base text-text-tertiary">{t('or')}</span>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  placeholder={t('emailPlaceholder')}
+                  aria-invalid={!!errorMessage}
+                  aria-describedby={errorMessage ? 'login-error' : undefined}
+                  className="pl-11 pr-4 py-3 min-h-touch"
+                />
               </div>
             </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-text-secondary">
+                  {t('password')}
+                </label>
+                <Link
+                  href={ROUTES.public.forgotPassword}
+                  className="text-sm text-action hover:text-action"
+                >
+                  {t('forgotPassword')}
+                </Link>
+              </div>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  aria-invalid={!!errorMessage}
+                  aria-describedby={errorMessage ? 'login-error' : undefined}
+                  className="pl-11 pr-12 py-3 min-h-touch"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-pressed={showPassword}
+                  aria-label={showPassword ? t('hidePassword') : t('showPassword')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary h-auto w-auto p-0 bg-transparent hover:bg-transparent"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </Button>
+              </div>
+            </div>
+
             <Button
-              type="button"
-              variant="outline"
+              type="submit"
+              variant={orangecat === 'off' ? 'primary' : 'secondary'}
               size="lg"
-              className="w-full font-semibold"
-              disabled={orangecatBusy}
-              onClick={() => {
-                setOrangecatBusy(true);
-                void signIn('orangecat', { callbackUrl });
-              }}
+              disabled={isLoading}
+              className="w-full gap-2 font-semibold"
             >
-              {orangecatBusy ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>{t('signingIn')}</span>
+                </>
               ) : (
                 <>
-                  <Cat className="w-5 h-5 mr-2" />
-                  {t('signInWithOrangeCat')}
+                  <span>{t('submit')}</span>
+                  <ArrowRight className="w-5 h-5" />
                 </>
               )}
             </Button>
-          </>
-        )}
+          </form>
+        </div>
 
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
