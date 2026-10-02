@@ -79,7 +79,7 @@
       "myListingsDesc": "Gestisci annunci e vendite",
       "itHelp": "Assistenza IT",
       "findHelp": "Cerca aiuto",
-      "findHelpDesc": "Tecnici community vicino a te",
+      "findHelpDesc": "Richiedere una riparazione o aiuto informatico",
       "findTechnician": "Trova un tecnico",
       "findTechnicianDesc": "Tecnici community e professionali",
       "becomeTechnician": "Diventa tecnico",
@@ -87,7 +87,7 @@
       "learn": "Impara",
       "learnDesc": "Workshop, guide e risorse",
       "workshops": "Workshop",
-      "workshopsDesc": "Corsi in presenza da prenotare",
+      "workshopsDesc": "Corsi su Linux, riparazione e informatica sostenibile",
       "blog": "Blog",
       "blogDesc": "Consigli e storie",
       "getInvolved": "Partecipa",
@@ -726,8 +726,7 @@
     },
     "mission": {
       "title": "La nostra missione",
-      "body": "In quanto associazione {legalForm} (dal {foundingYear}), lavoriamo perché IA e robotica siano alla portata di tutti: con hardware accessibile perché resta in circolazione, con software aperto invece della dipendenza da un fornitore, e con le conoscenze per usare e conservare questi strumenti in autonomia.",
-      "text": "{description} In quanto {legalForm} (fondata nel {foundingYear}), lavoriamo perché IA e robotica siano alla portata di tutti: con hardware accessibile perché resta in circolazione, con software aperto invece della dipendenza da un fornitore, e con le conoscenze per usare e conservare questi strumenti in autonomia."
+      "body": "In quanto associazione in via di costituzione (dal {foundingYear}), lavoriamo perché IA e robotica siano alla portata di tutti: con hardware accessibile perché resta in circolazione, con software aperto invece della dipendenza da un fornitore, e con le conoscenze per usare e conservare questi strumenti in autonomia."
     },
     "stats": {
       "title": "Numeri e fatti",
@@ -749,12 +748,12 @@
         },
         {
           "title": "Assistenza IT",
-          "description": "Messa in contatto con tecnici per riparazioni di computer. Aiuto da persona a persona, locale e senza complicazioni.",
+          "description": "Intermediazione di riparazioni informatiche: pubblichi una richiesta, ricevi un'offerta. Aiuto da persona a persona, locale e senza complicazioni.",
           "href": "/it-hilfe"
         },
         {
           "title": "Workshop",
-          "description": "Corsi su Linux, hardware, programmazione e IA. Condividere conoscenze e imparare insieme — di persona a Zurigo.",
+          "description": "Corsi su Linux, hardware, programmazione e IA. Condividere le conoscenze e imparare gli uni dagli altri.",
           "href": "/workshops"
         }
       ]
@@ -767,12 +766,12 @@
       },
       {
         "title": "Assistenza IT",
-        "description": "Collegamento di tecnici per riparazioni informatiche. Aiuto da persona a persona, locale e senza complicazioni.",
+        "description": "Intermediazione di riparazioni informatiche: pubblichi una richiesta, ricevi un'offerta. Aiuto da persona a persona, locale e senza complicazioni.",
         "href": "/it-hilfe"
       },
       {
         "title": "Workshop",
-        "description": "Corsi su Linux, hardware, programmazione e IA. Condividere le conoscenze e imparare gli uni dagli altri — in loco a Zurigo.",
+        "description": "Corsi su Linux, hardware, programmazione e IA. Condividere le conoscenze e imparare gli uni dagli altri.",
         "href": "/workshops"
       }
     ],
@@ -900,7 +899,7 @@
       "yearsExperience": "anni di esperienza",
       "quote": "L'accesso all'IA e alla robotica decide chi può partecipare — non deve dipendere dal portafoglio.",
       "paragraph1": "evig rende l'accesso all'intelligenza accessibile: <strong>tecnologia selezionata, IA e robotica</strong> a prezzi equi. Un'associazione senza scopo di lucro in costituzione, gestita con un modello di mercato e qualità — buono ed economico perché la tecnologia resta in circolazione invece di finire nella spazzatura.",
-      "paragraph2": "A questo si aggiunge una riparazione davvero accessibile tramite una rete di tecnici — e un mercato circolare di tecnologia usata e verificata. Ciò che funziona deve restare in circolazione.",
+      "paragraph2": "A questo si aggiunge la riparazione che puoi richiedere tramite l'aiuto informatico — e un mercato circolare di tecnologia usata e verificata. Ciò che funziona deve restare in circolazione.",
       "imageAlt": "Tecnologia selezionata da evig"
     },
     "impactAreas": {
@@ -912,7 +911,7 @@
       },
       "openSource": {
         "title": "Riparazione per tutti",
-        "description": "Riparare dovrebbe essere semplice ed economico. Una rete di tecnici tiene in vita i dispositivi — con Linux e l'open source dove ha senso."
+        "description": "Riparare dovrebbe essere semplice ed economico, perché i dispositivi restino in vita — con Linux e l'open source dove ha senso."
       },
       "community": {
         "title": "Mercato circolare",
@@ -1213,7 +1212,7 @@
           },
           {
             "q": "Accettate vecchi dispositivi?",
-            "a": "Sì, se è possibile il riutilizzo o il riciclo professionale. Valutiamo i dispositivi sul posto e decidiamo in modo trasparente tra riutilizzo e smontaggio."
+            "a": "Sì, se è possibile il riutilizzo o il riciclo professionale. Valutiamo ogni dispositivo e decidiamo in modo trasparente tra riutilizzo e smontaggio."
           },
           {
             "q": "Usate ricambi usati?",
@@ -1567,8 +1566,6 @@
           "title": "Vantaggi della partecipazione",
           "items": [
             "Lavora a progetti significativi con un impatto reale",
-            "Collabora con un team di esperti variegato",
-            "Accesso al nostro laboratorio e ai nostri impianti di test",
             "Opportunità di leadership e mentoring",
             "Possibilità flessibili di contribuzione"
           ]
@@ -2110,7 +2107,7 @@
       "service1Name": "Hardware usato e testato",
       "service1Desc": "Portatili, GPU e accessori che bastano per lavorare sul serio e per l'IA",
       "service2Name": "Riparazione e aiuto informatico",
-      "service2Desc": "Trovare un tecnico vicino invece di aspettare un appuntamento",
+      "service2Desc": "Richiedere una riparazione o aiuto informatico e ricevere un'offerta",
       "service3Name": "IA e robotica nel lavoro",
       "service3Desc": "Formazione, riqualificazione e accompagnamento nella loro introduzione"
     },
@@ -2119,7 +2116,7 @@
       "heading": "La via più economica verso l'IA è una buona macchina usata",
       "subtitle": "Un portatile che qualcuno ha testato e configurato bene fa ciò per cui lo hai preso già dal giorno in cui lo ricevi, senza dover essere costruito una seconda volta.",
       "button": "Vedi i dispositivi",
-      "note": "Qualcosa si è rotto? Trova un tecnico vicino a te tramite l'aiuto informatico."
+      "note": "Qualcosa si è rotto? Pubblica una richiesta nell'aiuto informatico."
     },
     "newsletter": {
       "title": "Rimani aggiornato",
@@ -2135,7 +2132,7 @@
   "itHelp": {
     "meta": {
       "title": "Trovare un tecnico — riparazione e aiuto informatico vicino a te",
-      "description": "Descrivi il guasto e ricevi offerte da tecniche e tecnici vicini. Riparazione, reinstallazione, recupero dati e aiuto informatico quotidiano: gratis tramite la community o pagato equamente.",
+      "description": "Descrivi il guasto e ricevi un'offerta. Riparazione, reinstallazione, recupero dati e aiuto informatico quotidiano: gratis tramite la community o pagato equamente.",
       "layoutTitle": "Trovare un tecnico — riparazione e aiuto informatico",
       "detailTitle": "{title} | Assistenza IT | {orgName}",
       "detailDescription": "Richiesta di assistenza IT: {title}{location}. Supporto comunitario per la riparazione tecnologica.",
@@ -2515,7 +2512,7 @@
     "hub": {
       "eyebrow": "Trovare un tecnico",
       "title": "Trovare qualcuno che lo ripari",
-      "subtitle": "evig ti mette in contatto con tecniche e tecnici vicino a te: gratis tramite la community o pagato equamente.",
+      "subtitle": "Pubblica la tua richiesta e ricevi un'offerta: gratis tramite la community o pagato equamente.",
       "paths": {
         "request": {
           "title": "Request help",
@@ -4101,7 +4098,7 @@
   "techniker": {
     "meta": {
       "title": "Trova un tecnico",
-      "description": "Trova tecnici community e professionali vicino a te. Aiuto gratuito, tariffe KulturLegi e servizi IT a pagamento su un'unica piattaforma."
+      "description": "L'elenco dei tecnici per riparazioni e aiuto informatico: aiuto gratuito, tariffe KulturLegi e servizi IT a pagamento su un'unica piattaforma."
     },
     "list": {
       "title": "Tecnici",
@@ -4503,7 +4500,7 @@
       "positioning": "Sostieni · Economia circolare · Zurigo",
       "titleSecondary": "Immediatamente efficace.",
       "lede": "Ogni donazione salva dispositivi dai rifiuti elettronici e dà la tecnologia a chi altrimenti non potrebbe permettersela.",
-      "sublede": "Denaro sul nostro conto o un dispositivo alla nostra officina — entrambi aiutano direttamente.",
+      "sublede": "Denaro sul nostro conto o un dispositivo che può ancora servire — entrambi aiutano direttamente.",
       "ctaMoney": "Dona denaro",
       "ctaDevice": "Dona un dispositivo"
     },
@@ -4523,8 +4520,8 @@
           "description": "1 laptop salvato dai rifiuti elettronici."
         },
         {
-          "title": "2 dispositivi + posto workshop",
-          "description": "2 dispositivi ricondizionati + un posto nel nostro workshop Linux per qualcuno che non potrebbe permetterselo."
+          "title": "2 dispositivi ricondizionati",
+          "description": "2 dispositivi ricondizionati e consegnati a qualcuno che non potrebbe permetterseli."
         },
         {
           "title": "Donazione aziendale — 10 dispositivi",
@@ -4562,7 +4559,7 @@
     },
     "dropoff": {
       "heading": "Annunciare una consegna di dispositivi",
-      "intro": "Dicci brevemente cosa vuoi portare — confermeremo via e-mail e ci assicureremo che qualcuno sia in loco.",
+      "intro": "Dicci brevemente cosa vuoi portare — ti risponderemo via e-mail per concordare luogo e orario della consegna.",
       "nameLabel": "Nome",
       "emailLabel": "E-mail",
       "phoneLabel": "Telefono (opzionale)",
@@ -4592,14 +4589,14 @@
       "device": {
         "eyebrow": "DISPOSITIVO",
         "title": "Consegna un portatile, fisso o monitor.",
-        "body": "Accettiamo dispositivi funzionanti o riparabili, li ricondizioniamo e li passiamo. Possiamo cancellare i tuoi dati personali sul posto."
+        "body": "Accettiamo dispositivi funzionanti o riparabili, li ricondizioniamo e li passiamo. Possiamo cancellare i tuoi dati personali su richiesta."
       }
     },
     "wishlist": {
       "prefillTemplate": "Vorrei donare quanto segue: {title}",
       "eyebrow": "ESIGENZE SPECIFICHE ATTUALI",
       "heading": "La nostra lista dei desideri",
-      "intro": "Per mantenere in funzione la nostra officina e rimettere a nuovo i dispositivi salvati, abbiamo regolarmente bisogno di determinati attrezzi o componenti. Puoi sostenerci donando l'oggetto fisico oppure finanziandone l'acquisto.",
+      "intro": "Per rimettere a nuovo i dispositivi salvati, abbiamo regolarmente bisogno di determinati attrezzi o componenti. Puoi sostenerci donando l'oggetto fisico oppure finanziandone l'acquisto.",
       "donateItem": "Dona l'oggetto",
       "fundItem": "Finanzia l'acquisto",
       "funded": "{amount} di {target} finanziati",
@@ -5639,7 +5636,6 @@
     "geschichteSection": {
       "badge": "Perché evig esiste",
       "milestoneTitle": "Tappe",
-      "milestoneDesc": "Da un piccolo laboratorio all'organizzazione leader per l'IT sostenibile in Svizzera.",
       "currentTitle": "Oggi",
       "yearsActive": "Anni di attività",
       "teamMembers": "Membri del team",
@@ -5648,7 +5644,7 @@
         "title": "Uno spin-off per convinzione",
         "subtitle": "Le stesse radici, una strada più coraggiosa",
         "p1": "evig è nata nel {foundingYear} a Zurigo — come spin-off dell'IT circolare zurighese, nata da <a>Revamp-IT</a>. Dal 2003 quell'associazione senza scopo di lucro trasforma il vecchio hardware in computer di nuovo utilizzabili: ripararli, reinstallarli con Linux e software libero, cederli invece di rottamarli — aprendo così l'accesso alla tecnologia a chi ha un piccolo budget. Un lavoro prezioso e importante, e il terreno da cui evig è cresciuta.",
-        "p2": "Da quel lavoro abbiamo costruito la piattaforma — mercato, assistente IA, laboratorio — e una visione tecno-ottimista: rendere l'accesso all'intelligenza, all'IA e alla robotica, alla portata di tutti, in fretta e oltre Zurigo. Revamp-IT resta fedele a ciò che sa fare bene — riparazione e riuso, a un ritmo locale e tranquillo. Un obiettivo diverso, un tempo diverso.",
+        "p2": "Da quel lavoro abbiamo costruito la piattaforma — mercato, assistente IA, aiuto informatico — e una visione tecno-ottimista: rendere l'accesso all'intelligenza, all'IA e alla robotica, alla portata di tutti, in fretta e oltre Zurigo. Revamp-IT resta fedele a ciò che sa fare bene — riparazione e riuso, a un ritmo locale e tranquillo. Un obiettivo diverso, un tempo diverso.",
         "p3": "Così proseguiamo la nostra strada in autonomia. evig mantiene le radici dell'economia circolare e le orienta verso l'era dell'intelligenza — piena responsabilità, nessun comitato da convincere, un autentico modello di mercato e qualità, aperto e indipendente. La storia di Revamp-IT resta di Revamp-IT; evig scrive la propria."
       }
     },
@@ -8082,7 +8078,7 @@
     },
     "fit": {
       "heading": "Riparazioni da {org}",
-      "intro": "Tramite {org} trovi tecnici a {city} che riparano computer e apparecchi informatici. Queste riparazioni rientrano esattamente in una delle categorie idonee al bonus.",
+      "intro": "Tramite l'aiuto informatico di {org} puoi richiedere a {city} la riparazione di computer e apparecchi informatici. Queste riparazioni rientrano esattamente in una delle categorie idonee al bonus.",
       "note": "Importante: questa pagina spiega il programma della Città di Zurigo. Quali attività partecipano attualmente e gestiscono il bonus lo vedi, sempre aggiornato, su {platform}. Verifica lì se l'attività che preferisci è registrata.",
       "category": {
         "title": "I computer sono apparecchi elettrici",
@@ -8323,7 +8319,7 @@
       },
       "technicians": {
         "tagline": "Trovare qualcuno che lo ripari",
-        "description": "Descrivi il guasto, ricevi offerte da tecnici vicini e scegli: dalla tastiera rotta al sistema che non si avvia più.",
+        "description": "Descrivi il guasto, ricevi un'offerta e accettala: dalla tastiera rotta al sistema che non si avvia più.",
         "cta": "Trovare un tecnico"
       },
       "ai": {

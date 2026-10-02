@@ -4520,7 +4520,7 @@
     {
       "file": "src/config/analyse/metrics.ts",
       "line": 143,
-      "snippet": "Geräte gerettet × 285kg CO2/Gerät"
+      "snippet": "Σ Geräte gerettet × CO2-Faktor der Kategorie (config/co2-impact.ts)"
     },
     {
       "file": "src/config/analyse/metrics.ts",

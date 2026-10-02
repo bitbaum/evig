@@ -140,7 +140,7 @@ export const METRICS: Record<string, MetricDefinition> = {
     status: 'needs_data',
     unit: 'kg',
     target: '500t/Jahr',
-    formula: 'Geräte gerettet × 285kg CO2/Gerät',
+    formula: 'Σ Geräte gerettet × CO2-Faktor der Kategorie (config/co2-impact.ts)',
     dataNeeded: 'Abhängig von "Geräte gerettet"',
     responsibleTeam: 'Operations',
   },

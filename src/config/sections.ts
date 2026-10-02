@@ -319,7 +319,7 @@ export const SECTIONS = {
     path: SERVICE_APPOINTMENT_ROUTES.list,
     ui: {
       label: 'Service-Termine',
-      description: 'Termin bei der evig Werkstatt buchen',
+      description: 'Service-Termin anfragen',
       icon: Calendar,
       emoji: '📅',
       color: 'warning',

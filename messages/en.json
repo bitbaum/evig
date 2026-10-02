@@ -92,13 +92,13 @@
       "storeDesc": "Browse in person and get advice",
       "createListingDesc": "Sell your own devices — for free",
       "myListingsDesc": "Manage listings and sales",
-      "findHelpDesc": "Community technicians near you",
+      "findHelpDesc": "Request a repair or IT help",
       "findTechnicianDesc": "Browse technician profiles and get in touch",
       "becomeTechnicianDesc": "Share IT knowledge and help others",
       "aboPools": "Share subscriptions",
       "aboPoolsDesc": "One AI subscription split four ways — everyone pays their share",
       "learnDesc": "Workshops, guides and resources",
-      "workshopsDesc": "Book in-person courses",
+      "workshopsDesc": "Courses on Linux, repair and sustainable IT",
       "blogDesc": "Tips and stories",
       "getInvolvedDesc": "Become part of the movement",
       "volunteerDesc": "Contribute your time and skills",
@@ -377,7 +377,7 @@
       "service1Name": "Tested used hardware",
       "service1Desc": "Laptops, GPUs and accessories good enough for real work and for AI",
       "service2Name": "Repair and IT help",
-      "service2Desc": "Find a technician nearby instead of waiting for an appointment",
+      "service2Desc": "Request a repair or IT help and get an offer",
       "service3Name": "AI and robotics at work",
       "service3Desc": "Training, retraining, and support for adopting AI and robotics in organisations"
     },
@@ -386,7 +386,7 @@
       "heading": "The cheapest way into AI is a good used machine",
       "subtitle": "A laptop somebody tested and set up properly can do what you got it for on the day you receive it — without having to be built again.",
       "button": "See devices",
-      "note": "Something broken? Find a technician near you through IT help."
+      "note": "Something broken? Post a request in IT help."
     },
     "newsletter": {
       "title": "Stay up to date",
@@ -2053,7 +2053,7 @@
       "yearsExperience": "years of experience",
       "quote": "Access to AI and robotics decides who gets to take part — it must not depend on your wallet.",
       "paragraph1": "evig makes access to intelligence affordable: <strong>curated tech, AI and robotics</strong> at fair prices. A non-profit association in formation, run on a market-and-quality model — good and affordable because tech stays in circulation instead of ending up as waste.",
-      "paragraph2": "On top of that comes repair that's truly within reach through a technician network — and a circular marketplace for tested second-hand tech. What works should stay in circulation.",
+      "paragraph2": "On top of that comes repair you can request through IT help — and a circular marketplace for tested second-hand tech. What works should stay in circulation.",
       "imageAlt": "Curated tech at evig"
     },
     "team": "The team",
@@ -2073,7 +2073,7 @@
       },
       "openSource": {
         "title": "Repair for everyone",
-        "description": "Repair should be simple and affordable. A technician network keeps devices alive — with Linux and open source where it makes sense."
+        "description": "Repair should be simple and affordable, so devices stay alive — with Linux and open source where it makes sense."
       },
       "community": {
         "title": "Circular marketplace",
@@ -2224,7 +2224,7 @@
   "itHelp": {
     "meta": {
       "title": "Find a technician — repair and IT help nearby",
-      "description": "Describe the problem and get offers from technicians nearby. Repair, reinstallation, data recovery and everyday IT help — free through the community or fairly paid.",
+      "description": "Describe the problem and get an offer. Repair, reinstallation, data recovery and everyday IT help — free through the community or fairly paid.",
       "layoutTitle": "Find a technician — repair and IT help",
       "detailTitle": "{title} | IT Help | {orgName}",
       "detailDescription": "IT Help request: {title}{location}. Community-based tech repair support.",
@@ -2604,7 +2604,7 @@
     "hub": {
       "eyebrow": "Find a technician",
       "title": "Find someone who will fix it",
-      "subtitle": "evig connects you with technicians near you — free through the community or fairly paid.",
+      "subtitle": "Post your request and get an offer — free through the community or fairly paid.",
       "paths": {
         "request": {
           "title": "Request help",
@@ -3018,7 +3018,7 @@
       "title": "Frequently Asked Questions",
       "subtitle": "Our answers on Linux & Open Source, repair, sustainability and responsible use of resources – in the spirit of our mission against e-waste."
     },
-    "notListed": "Can't find your question? We're happy to help in person.",
+    "notListed": "Can't find your question? We're happy to help personally.",
     "contactTeam": "Contact our team",
     "groups": [
       {
@@ -3093,7 +3093,7 @@
           },
           {
             "q": "Do you accept old devices?",
-            "a": "Yes, provided reuse or responsible recycling is possible. We inspect devices on the spot and decide transparently whether they'll be reused or dismantled."
+            "a": "Yes, provided reuse or responsible recycling is possible. We inspect each device and decide transparently whether they'll be reused or dismantled."
           },
           {
             "q": "Do you use second-hand spare parts?",
@@ -3447,8 +3447,6 @@
           "title": "Membership benefits",
           "items": [
             "Work on meaningful projects with real impact",
-            "Collaboration with a diverse team of experts",
-            "Access to our workshop and testing facilities",
             "Opportunities for leadership and mentoring others",
             "Flexible contribution options"
           ]
@@ -4010,7 +4008,7 @@
   "techniker": {
     "meta": {
       "title": "Find a technician",
-      "description": "Find community and professional technicians near you. Free help, KulturLegi rates, and paid IT services — all in one place."
+      "description": "The technician directory for repair and IT help: free help, KulturLegi rates and paid IT services — all in one place."
     },
     "list": {
       "title": "Technicians",
@@ -4279,8 +4277,7 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "As an association {legalForm} (since {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms.",
-      "text": "{description} As a {legalForm} (founded in {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms."
+      "body": "As an association in formation (since {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms."
     },
     "stats": {
       "title": "Facts & Figures",
@@ -4302,12 +4299,12 @@
         },
         {
           "title": "IT Help",
-          "description": "Connecting technicians for computer repairs. Human-to-human help, local and straightforward.",
+          "description": "Matching computer repair requests: post a request, get an offer. Human-to-human help, local and straightforward.",
           "href": "/it-hilfe"
         },
         {
           "title": "Workshops",
-          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other – in person in Zurich.",
+          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other.",
           "href": "/workshops"
         }
       ]
@@ -4320,12 +4317,12 @@
       },
       {
         "title": "IT Help",
-        "description": "Connecting technicians for computer repairs. Help from person to person, local and straightforward.",
+        "description": "Matching computer repair requests: post a request, get an offer. Human-to-human help, local and straightforward.",
         "href": "/it-hilfe"
       },
       {
         "title": "Workshops",
-        "description": "Courses on Linux, hardware, programming and AI. Share knowledge and learn from each other — on-site in Zurich.",
+        "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other.",
         "href": "/workshops"
       }
     ],
@@ -4503,7 +4500,7 @@
       "positioning": "Support · Circular economy · Zürich",
       "titleSecondary": "Immediately effective.",
       "lede": "Every donation rescues devices from e-waste and gives technology to people who otherwise could not afford it.",
-      "sublede": "Money to our account or a device to our workshop — both help directly.",
+      "sublede": "Money to our account or a device that can live on — both help directly.",
       "ctaMoney": "Donate money",
       "ctaDevice": "Donate a device"
     },
@@ -4523,8 +4520,8 @@
           "description": "1 laptop saved from e-waste."
         },
         {
-          "title": "2 devices + workshop place",
-          "description": "2 devices refurbished + a place in our Linux workshop for someone who couldn't afford it."
+          "title": "2 devices refurbished",
+          "description": "2 devices refurbished and passed on to someone who couldn't afford them."
         },
         {
           "title": "Corporate donation — 10 devices",
@@ -4562,7 +4559,7 @@
     },
     "dropoff": {
       "heading": "Schedule a drop-off",
-      "intro": "Tell us briefly what you'd like to bring — we'll confirm by email and make sure someone is on site.",
+      "intro": "Tell us briefly what you'd like to bring — we'll reply by email to agree on a place and time for the hand-over.",
       "nameLabel": "Name",
       "emailLabel": "Email",
       "phoneLabel": "Phone (optional)",
@@ -4592,14 +4589,14 @@
       "device": {
         "eyebrow": "DEVICE",
         "title": "Drop off a laptop, desktop or monitor.",
-        "body": "We accept working or repairable devices, refurbish them and pass them on. We can erase your personal data on site."
+        "body": "We accept working or repairable devices, refurbish them and pass them on. We can erase your personal data on request."
       }
     },
     "wishlist": {
       "prefillTemplate": "I'd like to donate the following: {title}",
       "eyebrow": "CURRENT SPECIFIC NEEDS",
       "heading": "Our wishlist",
-      "intro": "To keep our workshop running and to bring rescued devices back into shape, we regularly need certain tools or components. You can support us either by donating the physical item or by funding its purchase.",
+      "intro": "To bring rescued devices back into shape, we regularly need certain tools or components. You can support us either by donating the physical item or by funding its purchase.",
       "donateItem": "Donate the item",
       "fundItem": "Fund the purchase",
       "funded": "{amount} of {target} funded",
@@ -5641,12 +5638,11 @@
         "title": "A spin-off born of conviction",
         "subtitle": "The same roots, a bolder path",
         "p1": "evig was founded in {foundingYear} in Zurich — as a spin-off from Zurich's circular-IT scene, out of <a>Revamp-IT</a>. Since 2003, that non-profit association has been turning old hardware back into usable computers: repairing them, reinstalling Linux and free software, passing them on instead of scrapping them — and opening access to technology for people on a small budget. Good, important work, and the ground evig grew from.",
-        "p2": "Out of that work we built the platform — marketplace, AI assistant, workshop — and a techno-optimist vision: making access to intelligence, to AI and robotics, affordable for everyone, fast and beyond Zurich. Revamp-IT stays with what it does well — repair and reuse, at a calm, local pace. A different goal, a different tempo.",
+        "p2": "Out of that work we built the platform — marketplace, AI assistant, IT help — and a techno-optimist vision: making access to intelligence, to AI and robotics, affordable for everyone, fast and beyond Zurich. Revamp-IT stays with what it does well — repair and reuse, at a calm, local pace. A different goal, a different tempo.",
         "p3": "So we walk our path independently. evig keeps the roots of the circular economy and aims them at the age of intelligence — full ownership, no committee to convince, a genuine market-and-quality model, open and independent. Revamp-IT's history stays Revamp-IT's; evig writes its own."
       },
       "badge": "Why evig exists",
       "milestoneTitle": "Milestones",
-      "milestoneDesc": "From a small workshop to the leading organization for sustainable IT in Switzerland.",
       "currentTitle": "Today",
       "yearsActive": "Years active",
       "teamMembers": "Team members",
@@ -8004,7 +8000,7 @@
     },
     "fit": {
       "heading": "Repairs at {org}",
-      "intro": "Through {org} you find technicians in {city} who repair computers and IT equipment. Those repairs fall squarely into one of the eligible categories.",
+      "intro": "Through {org}'s IT help you can request a computer or IT repair in {city}. Those repairs fall squarely into one of the eligible categories.",
       "note": "Important: this page explains the City of Zurich's programme. Which businesses currently take part and settle the bonus is shown, up to date, on {platform}. Check there whether your preferred business is registered.",
       "category": {
         "title": "Computers are electrical appliances",
@@ -8428,7 +8424,7 @@
       },
       "technicians": {
         "tagline": "Find someone who will fix it",
-        "description": "Post a request, get offers from technicians nearby, choose one — from a broken keyboard to a system that will not boot.",
+        "description": "Post a request, get an offer, accept it — from a broken keyboard to a system that will not boot.",
         "cta": "Find a technician"
       },
       "ai": {
