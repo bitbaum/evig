@@ -42,7 +42,7 @@ import { cookies } from 'next/headers';
 import {
   ORANGECAT_LINK_COOKIE,
   ORANGECAT_PROVIDER_ID,
-  isOrangeCatEnabled,
+  orangecatClient,
   orangecatProvider,
   readLinkToken,
   resolveOrangeCatSignIn,
@@ -60,7 +60,9 @@ import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui';
 declare module 'next-auth' {
   interface User {
     id: string;
-    email: string;
+    // Optional: the OrangeCat provider's user deliberately carries no email
+    // (an unverified address must never be an identity). Every evig row has one.
+    email?: string | null;
     name?: string | null;
     image?: string | null;
     role?: string; // Legacy - kept for backward compatibility
@@ -98,6 +100,9 @@ declare module 'next-auth' {
 // JWT sessions are stored in cookies, not database, so adapter is only needed for OAuth
 // For now, we skip the adapter to avoid blocking on database connection issues
 // The adapter can be added later when OAuth providers are needed
+// Absent, not broken, until the box holds the OrangeCat client pair.
+const orangecat = orangecatClient();
+
 export const authConfig = {
   // Secret for signing cookies and tokens
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
@@ -258,7 +263,7 @@ export const authConfig = {
     // "Sign in with OrangeCat" — the fleet's identity root (orangecat ADR-0009,
     // D8). Mounted only with the client pair set; the login form asks Auth.js
     // which providers exist, so the button can never outrun the config.
-    ...(isOrangeCatEnabled() ? [orangecatProvider()] : []),
+    ...(orangecat ? [orangecatProvider(orangecat)] : []),
   ],
 
   callbacks: {
