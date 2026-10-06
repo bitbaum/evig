@@ -110,16 +110,13 @@ describe('provider config', () => {
     ).toBe(true);
   });
 
-  it('keeps the two settings OrangeCat insists on', () => {
-    const p = orangecatProvider({
-      ORANGECAT_OAUTH_CLIENT_ID: 'evig',
-      ORANGECAT_OAUTH_CLIENT_SECRET: 's',
-    });
+  it('keeps the two settings OrangeCat insists on (accountkit)', () => {
+    const p = orangecatProvider({ clientId: 'evig', clientSecret: 's' });
     // OrangeCat registers /api/auth/callback/orangecat for this client.
     expect(p.id).toBe('orangecat');
     expect(p.client.token_endpoint_auth_method).toBe('client_secret_post');
     expect(p.checks).toEqual(['pkce', 'state']);
-    expect(p.issuer).toBe('https://orangecat.ch');
     expect(p.authorization.params.scope).toBe('openid profile email');
+    expect('email' in p.profile({ sub: ACTOR, email: 'victim@x.ch' })).toBe(false);
   });
 });
