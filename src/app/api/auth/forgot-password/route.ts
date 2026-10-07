@@ -4,6 +4,7 @@
  */
 
 import { NextRequest } from 'next/server';
+import { mayReceivePasswordReset } from '@bitbaum/accountkit/orangecat';
 import { getUserByEmail, createPasswordResetToken } from '@/lib/auth/db';
 import { sendEmail } from '@/lib/email';
 import { apiError, apiSuccess, apiRateLimited } from '@/lib/api/helpers';
@@ -34,7 +35,17 @@ export async function POST(request: NextRequest) {
 
     // Check if user exists
     const user = await getUserByEmail(email);
-    if (!user) {
+    // An account "Sign in with OrangeCat" created has no password, and its
+    // address came from OrangeCat unverified: a reset link would give whoever
+    // owns that address a password on that person's account. Same answer.
+    if (
+      !user ||
+      !mayReceivePasswordReset({
+        email: user.email,
+        hasPassword: Boolean(user.password_hash),
+        orangecatLinked: Boolean(user.orangecat_actor_id),
+      })
+    ) {
       // Don't reveal if email exists or not for security
       return apiSuccess({
         message:

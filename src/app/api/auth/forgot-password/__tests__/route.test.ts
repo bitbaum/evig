@@ -136,6 +136,18 @@ describe('POST /api/auth/forgot-password — user not found (enumeration protect
     expect(mockCreatePasswordResetToken).not.toHaveBeenCalled();
   });
 
+  it('sends no reset link to an account OrangeCat created (unverified address)', async () => {
+    mockGetUserByEmail.mockResolvedValueOnce({
+      ...MOCK_USER,
+      password_hash: null,
+      orangecat_actor_id: '0a4a0e2e-1111-4222-8333-444455556666',
+    });
+    const res = await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(res.status).toBe(200);
+    expect(mockCreatePasswordResetToken).not.toHaveBeenCalled();
+    expect(mockSendEmail).not.toHaveBeenCalled();
+  });
+
   it('response message is identical whether user exists or not', async () => {
     mockGetUserByEmail.mockResolvedValueOnce(null);
     const notFoundResponse = await POST(makeRequest({ email: 'nope@example.com' }));

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { Stepper } from '@/components/ui/Stepper';
 import { AccountStep, VerifyStep } from './steps';
 import { RegistrationCompletionScreen } from './RegistrationCompletionScreen';
+import { OrangeCatFirst, useOrangeCatAvailability } from './OrangeCatSignIn';
 import { useRegistration } from '@/hooks/useRegistration';
 import { REGISTRATION_STORAGE_KEY } from '@/config/auth-ui';
 import { ROUTES } from '@/config/routes';
@@ -101,6 +102,12 @@ export function RegistrationWizard() {
     if (prefillEmail) return 1;
     return 0;
   });
+
+  // OrangeCat leads; the password wizard is the second way in. Someone already
+  // mid-registration (a code was sent) stays on the path they chose.
+  const orangecat = useOrangeCatAvailability();
+  const [emailChosen, setEmailChosen] = useState(() => currentStep !== 0);
+  const showWizard = orangecat === 'off' || emailChosen;
 
   const [state, setState] = useState<RegistrationState>(() => ({
     name: savedData?.name || '',
@@ -222,41 +229,73 @@ export function RegistrationWizard() {
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="card-shell rounded-2xl p-6 sm:p-8">
-        <div className="mb-8">
-          <Stepper steps={steps} currentStep={currentStep} onStepClick={handleStepClick} />
-        </div>
-
         {currentStep === 0 && (
-          <AccountStep
-            name={state.name}
-            email={state.email}
-            password={state.password}
-            confirmPassword={state.confirmPassword}
-            acceptTerms={state.acceptTerms}
-            onNameChange={(name) => setState((prev) => ({ ...prev, name }))}
-            onEmailChange={(email) => setState((prev) => ({ ...prev, email }))}
-            onPasswordChange={(password) => setState((prev) => ({ ...prev, password }))}
-            onConfirmPasswordChange={(confirmPassword) =>
-              setState((prev) => ({ ...prev, confirmPassword }))
+          <OrangeCatFirst
+            availability={orangecat}
+            label={t('signUpWithOrangeCat')}
+            hint={t('orangecatHint')}
+            footnote={
+              <>
+                {t('orangecatTerms')}{' '}
+                <Link href="/agb" className="text-action hover:underline">
+                  {t('agb')}
+                </Link>{' '}
+                {t('termsAnd')}{' '}
+                <Link href="/datenschutz" className="text-action hover:underline">
+                  {t('datenschutz')}
+                </Link>
+                .
+              </>
             }
-            onAcceptTermsChange={(acceptTerms) => setState((prev) => ({ ...prev, acceptTerms }))}
-            onNext={handleAccountNext}
-            isLoading={isLoading}
-            errors={errors}
+            callbackUrl="/dashboard"
+            emailLabel={t('signUpWithEmail')}
+            emailOpen={emailChosen}
+            onToggleEmail={() => setEmailChosen((open) => !open)}
+            emailPanelId="email-register"
           />
         )}
 
-        {currentStep === 1 && (
-          <VerifyStep
-            email={state.email}
-            onVerify={handleVerify}
-            onResend={handleResendCode}
-            onSkip={handleSkipVerification}
-            onEditEmail={handleEditEmail}
-            error={verifyError}
-            emailSendFailed={emailSendFailed}
-          />
-        )}
+        <div
+          id="email-register"
+          hidden={!showWizard}
+          className={orangecat === 'off' || currentStep !== 0 ? undefined : 'mt-6'}
+        >
+          <div className="mb-8">
+            <Stepper steps={steps} currentStep={currentStep} onStepClick={handleStepClick} />
+          </div>
+
+          {currentStep === 0 && (
+            <AccountStep
+              name={state.name}
+              email={state.email}
+              password={state.password}
+              confirmPassword={state.confirmPassword}
+              acceptTerms={state.acceptTerms}
+              onNameChange={(name) => setState((prev) => ({ ...prev, name }))}
+              onEmailChange={(email) => setState((prev) => ({ ...prev, email }))}
+              onPasswordChange={(password) => setState((prev) => ({ ...prev, password }))}
+              onConfirmPasswordChange={(confirmPassword) =>
+                setState((prev) => ({ ...prev, confirmPassword }))
+              }
+              onAcceptTermsChange={(acceptTerms) => setState((prev) => ({ ...prev, acceptTerms }))}
+              onNext={handleAccountNext}
+              isLoading={isLoading}
+              errors={errors}
+            />
+          )}
+
+          {currentStep === 1 && (
+            <VerifyStep
+              email={state.email}
+              onVerify={handleVerify}
+              onResend={handleResendCode}
+              onSkip={handleSkipVerification}
+              onEditEmail={handleEditEmail}
+              error={verifyError}
+              emailSendFailed={emailSendFailed}
+            />
+          )}
+        </div>
 
         <div className="mt-8 pt-6 border-t border-strong text-center">
           <p className="text-sm text-text-secondary dark:text-text-muted">
