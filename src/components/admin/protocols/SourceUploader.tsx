@@ -30,7 +30,6 @@ import { Upload, FileText, Mic, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   classifyFile,
-  getAcceptString,
   validateUpload,
   PROTOCOL_UPLOAD_KIND,
   PROTOCOL_UPLOAD_LIMITS,
@@ -171,7 +170,8 @@ export function SourceUploader({ value, onChange, onError, disabled }: SourceUpl
         <input
           ref={inputRef}
           type="file"
-          accept={getAcceptString()}
+          // No accept: a mixed audio+text list makes a phone offer capture
+          // apps and no file browser. classifyFile rejects the rest after.
           multiple
           onChange={handlePicked}
           className="hidden"

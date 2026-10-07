@@ -4,9 +4,10 @@
  * exercises the new text + dispatch behaviour and the classifier.
  */
 
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import {
   classifyFile,
-  getAcceptString,
   validateTextUpload,
   validateUpload,
   PROTOCOL_UPLOAD_KIND,
@@ -64,18 +65,16 @@ describe('classifyFile', () => {
   });
 });
 
-describe('getAcceptString', () => {
-  it('contains both audio + text extensions', () => {
-    const accept = getAcceptString();
-    expect(accept).toContain('.mp3');
-    expect(accept).toContain('.txt');
-    expect(accept).toContain('.json');
-  });
-
-  it('is comma-separated with no spaces', () => {
-    const accept = getAcceptString();
-    expect(accept).not.toMatch(/,\s/);
-    expect(accept.split(',').every((ext) => ext.startsWith('.'))).toBe(true);
+describe('the protocol picker', () => {
+  // A mixed audio+text accept hid recordings and notes behind a capture-app
+  // chooser on Android. The uploader opens the plain file browser instead.
+  it('does not ask a phone for a mixed accept', () => {
+    const src = readFileSync(
+      join(process.cwd(), 'src/components/admin/protocols/SourceUploader.tsx'),
+      'utf8',
+    );
+    expect(src).not.toMatch(/accept=\{/);
+    expect(src).not.toMatch(/accept="[^"]*,/);
   });
 });
 

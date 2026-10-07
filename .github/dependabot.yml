@@ -13,6 +13,12 @@ updates:
     # tiptap's packages share one version and break TypeScript's command
     # augmentation when bumped separately — they must move as one PR.
     groups:
+      # The fleet's own packages (chatkit, ai-kit, accountkit…) arrive as ONE
+      # PR the week they release, so a fix made once reaches this app without
+      # anyone remembering to bump it.
+      bitbaum:
+        patterns:
+          - '@bitbaum/*'
       tiptap:
         patterns:
           - '@tiptap/*'
