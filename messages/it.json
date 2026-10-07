@@ -8451,5 +8451,84 @@
         "cta": "Fissare un colloquio"
       }
     }
+  },
+  "problems": {
+    "eyebrow": "COSA RISOLVE",
+    "heading": "Problemi concreti, risposte concrete",
+    "subtitle": "Che il tuo portatile sia diventato troppo lento o che un’intera società butti via dispositivi ancora funzionanti: ecco cosa fa evig oggi — e dove puoi occupartene tu stesso.",
+    "solutionLabel": "Cosa fa evig:",
+    "scales": {
+      "people": {
+        "title": "Per te",
+        "subtitle": "Situazioni in cui molte persone si trovano proprio questo mese."
+      },
+      "society": {
+        "title": "Per tutti",
+        "subtitle": "Problemi che nessuno risolve da solo — e su cui ogni dispositivo che resta in uso cambia qualcosa."
+      }
+    },
+    "items": {
+      "slowLaptop": {
+        "problem": "«Il mio portatile è diventato lentissimo, e uno nuovo non me lo posso permettere.»",
+        "solution": "Spesso basta un SSD più veloce o un sistema più leggero. Descrivi il problema in una richiesta: tecniche e tecnici vicino a te ti inviano offerte, e tu ne scegli una.",
+        "cta": "Invia una richiesta"
+      },
+      "whoRepairs": {
+        "problem": "«Il mio dispositivo è rotto e non so chi possa ripararlo.»",
+        "solution": "Nell’elenco vedi tecniche e tecnici con le loro competenze. Cerca la tua città e contatta direttamente la persona adatta al tuo problema.",
+        "cta": "Vedi i tecnici"
+      },
+      "schoolComputer": {
+        "problem": "«Mio figlio ha bisogno di un computer per la scuola, ma uno nuovo costa troppo.»",
+        "solution": "Nel marketplace trovi portatili usati che bastano per la scuola e i compiti. Ogni annuncio indica se evig ha controllato il dispositivo — e se no, lo dice altrettanto chiaramente.",
+        "cta": "Portatili nel marketplace"
+      },
+      "aiTooExpensive": {
+        "problem": "«Vorrei lavorare con l’IA, ma da solo non posso permettermi l’abbonamento.»",
+        "solution": "Condividi un abbonamento con altre persone della community. Qualcuno apre un pool, altri si uniscono, e ognuno paga solo la propria quota.",
+        "cta": "Vedi i pool di abbonamenti"
+      },
+      "aiAtWork": {
+        "problem": "«Al lavoro devo improvvisamente usare l’IA, e nessuno mi mostra come.»",
+        "solution": "Nei workshop lo impari insieme ad altri, dalle competenze digitali fino all’IA. Vedi cosa è in programma adesso, con date e posti liberi.",
+        "cta": "Vedi i workshop"
+      },
+      "drawerDevice": {
+        "problem": "«Nel mio cassetto c’è un portatile che nessuno usa più.»",
+        "solution": "Mettilo nel marketplace. Così continua a lavorare per qualcuno che ne ha bisogno invece di prendere polvere — e tu ne ricavi qualcosa.",
+        "cta": "Vendi un dispositivo"
+      },
+      "eWaste": {
+        "problem": "Dispositivi funzionanti finiscono tra i rifiuti, anche se un portatile produce gran parte della sua CO₂ già durante la fabbricazione.",
+        "solution": "Ogni dispositivo rivenduto tramite evig è uno che non deve essere costruito di nuovo. Mostriamo apertamente quanta CO₂ si risparmia, con le fonti — e solo dove esistono cifre verificabili.",
+        "cta": "Vedi il calcolo della CO₂"
+      },
+      "intelligenceGap": {
+        "problem": "Chi può permettersi l’IA impara più in fretta e lavora meglio. Il divario con tutti gli altri cresce da solo.",
+        "solution": "evig tratta l’accesso all’IA come l’hardware accessibile: abbonamenti condivisi invece del prezzo individuale, e dispositivi usati che bastano per lavorarci.",
+        "cta": "Accesso all’intelligenza"
+      },
+      "updatesEnd": {
+        "problem": "Quando il produttore smette di fornire aggiornamenti, un computer funzionante diventa all’improvviso «obsoleto» — e viene sostituito.",
+        "solution": "Con Linux continua a funzionare, con aggiornamenti di sicurezza attuali e senza costi di licenza. evig lo installa e lo configura, per privati e organizzazioni.",
+        "cta": "Fai installare Linux"
+      },
+      "licenceCosts": {
+        "problem": "Le licenze software costose escludono scuole, associazioni ed economie domestiche che non hanno i soldi.",
+        "solution": "Per la maggior parte dei programmi noti esistono alternative open source. Il nostro elenco le presenta onestamente — con punti di forza, limiti e consigli per il passaggio.",
+        "cta": "Trova alternative"
+      },
+      "repairSkills": {
+        "problem": "Chi sa riparare fatica a trovare clienti, e chi ha bisogno di aiuto non trova nessuno. Così si butta invece di riparare.",
+        "solution": "Nell’aiuto IT le richieste aperte nelle vicinanze sono visibili a tutti. Chi può aiutare invia un’offerta — gratuita dalla community o pagata in modo equo.",
+        "cta": "Vedi le richieste aperte"
+      }
+    },
+    "cta": {
+      "heading": "Il tuo problema non c’è?",
+      "body": "Descrivilo in una richiesta, oppure scrivici cosa ti blocca.",
+      "primary": "Invia una richiesta",
+      "secondary": "Contattaci"
+    }
   }
 }

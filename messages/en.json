@@ -8556,5 +8556,84 @@
         "cta": "Arrange a conversation"
       }
     }
+  },
+  "problems": {
+    "eyebrow": "WHAT IT SOLVES",
+    "heading": "Concrete problems, concrete answers",
+    "subtitle": "Whether your laptop has become too slow or a whole society throws away devices that still work: here is what evig does about it today — and where you can take it into your own hands.",
+    "solutionLabel": "What evig does:",
+    "scales": {
+      "people": {
+        "title": "For you",
+        "subtitle": "Situations many people are in this very month."
+      },
+      "society": {
+        "title": "For everyone",
+        "subtitle": "Problems nobody solves alone — and that every device kept in use changes a little."
+      }
+    },
+    "items": {
+      "slowLaptop": {
+        "problem": "“My laptop has become so slow, and I can’t afford a new one.”",
+        "solution": "Often all it needs is a faster SSD or a lighter system. Describe the problem in a request: technicians near you send you offers, and you pick one.",
+        "cta": "Make a request"
+      },
+      "whoRepairs": {
+        "problem": "“My device is broken, and I don’t know who can fix it.”",
+        "solution": "The directory shows technicians with their skills. Search for your city and contact the person who fits your problem directly.",
+        "cta": "See technicians"
+      },
+      "schoolComputer": {
+        "problem": "“My child needs a computer for school, but a new one costs too much.”",
+        "solution": "The marketplace has used notebooks that are good enough for school and homework. Every listing says whether evig has tested the device — and if not, it says that too.",
+        "cta": "Notebooks in the marketplace"
+      },
+      "aiTooExpensive": {
+        "problem": "“I’d like to work with AI, but I can’t afford the subscription on my own.”",
+        "solution": "Share a subscription with others from the community. Someone opens a pool, others join, and everyone pays only their own share.",
+        "cta": "See subscription pools"
+      },
+      "aiAtWork": {
+        "problem": "“At work I’m suddenly supposed to use AI, and nobody shows me how.”",
+        "solution": "In the workshops you learn it together with others, from digital skills to AI. You can see what is on offer right now, with dates and free places.",
+        "cta": "See workshops"
+      },
+      "drawerDevice": {
+        "problem": "“There’s a notebook in my drawer that nobody uses any more.”",
+        "solution": "Put it on the marketplace. That way it keeps working for someone who needs it instead of gathering dust — and you get something for it.",
+        "cta": "Sell a device"
+      },
+      "eWaste": {
+        "problem": "Working devices end up as waste, even though a notebook causes most of its CO₂ before it is ever switched on — when it is made.",
+        "solution": "Every device resold through evig is one that does not have to be built again. We show openly how much CO₂ that saves, with sources — and only where there are figures we can back up.",
+        "cta": "See the CO₂ calculation"
+      },
+      "intelligenceGap": {
+        "problem": "Whoever can afford AI learns faster and works better. The gap to everyone else widens on its own.",
+        "solution": "evig treats access to AI like affordable hardware: shared subscriptions instead of paying alone, and used devices that are good enough to work with it.",
+        "cta": "Access to intelligence"
+      },
+      "updatesEnd": {
+        "problem": "When the manufacturer stops the updates, a working computer is suddenly “outdated” — and gets replaced.",
+        "solution": "With Linux it keeps running, with current security updates and no licence fees. evig installs and sets it up, for individuals and organisations alike.",
+        "cta": "Get Linux installed"
+      },
+      "licenceCosts": {
+        "problem": "Expensive software licences shut out schools, associations and households that do not have the money.",
+        "solution": "Most well-known programs have open alternatives. Our directory shows them honestly — with strengths, limits and tips for switching.",
+        "cta": "Find alternatives"
+      },
+      "repairSkills": {
+        "problem": "People who can repair struggle to find customers, and people who need help find nobody. So things get thrown away instead of repaired.",
+        "solution": "In IT help, open requests from nearby are visible to everyone. Anyone who can help sends an offer — free from the community or fairly paid.",
+        "cta": "See open requests"
+      }
+    },
+    "cta": {
+      "heading": "Your problem isn’t listed?",
+      "body": "Describe it in a request, or write to us about what is holding you back.",
+      "primary": "Make a request",
+      "secondary": "Get in touch"
+    }
   }
 }

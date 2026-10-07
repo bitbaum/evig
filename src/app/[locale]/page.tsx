@@ -9,6 +9,7 @@ import { ROUTES } from '@/config/routes';
 import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys';
 import { EVIG_DIVISIONS } from '@/config/divisions';
 import { EVIG_PILLARS } from '@/config/pillars';
+import { ProblemsSection } from '@/components/home/ProblemsSection';
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -197,6 +198,12 @@ export default async function Home() {
           render in the hero rail above, the footer column, the nav and the
           /ai page; they just do not need a card grid competing with the
           section that states what evig actually does. */}
+
+      {/* ── What it solves (SSOT: config/problems-we-solve.ts) ────────
+          Starts from the reader's problem — one person's, then everyone's —
+          and answers each with what evig does today and where. The pillars
+          below then name the work behind those answers. */}
+      <ProblemsSection />
 
       {/* ── The five pillars (SSOT: config/pillars.ts) ───────────────
           This replaced two bands that told the circular-IT story of the

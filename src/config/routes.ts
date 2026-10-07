@@ -102,6 +102,8 @@ export const ROUTES = {
     /** Online shop canonical route. Legacy /shop URLs redirect here. */
     shop: '/marketplace',
     services: '/services',
+    linuxOpenSource: '/services/linux-open-source',
+    openSourceSolutions: '/services/open-source-solutions',
     soFunktioniert: '/so-funktionierts',
     reparaturbonus: '/reparaturbonus',
     marketplace: '/marketplace',

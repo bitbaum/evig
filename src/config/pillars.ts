@@ -64,7 +64,7 @@ export const EVIG_PILLARS: readonly Pillar[] = [
   },
   {
     id: 'software',
-    href: '/services/linux-open-source',
+    href: ROUTES.public.linuxOpenSource,
     icon: Terminal,
   },
   {
