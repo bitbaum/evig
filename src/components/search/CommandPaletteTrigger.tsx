@@ -24,7 +24,7 @@ export function CommandPaletteTrigger({ className }: { className?: string }) {
       onClick={openCommandPalette}
       aria-label={t('triggerAria')}
       className={cn(
-        'flex h-9 w-9 items-center justify-center rounded-lg p-0 text-text-tertiary hover:bg-surface-raised sm:w-auto sm:gap-2 sm:px-3',
+        'flex h-11 w-11 items-center justify-center rounded-lg p-0 text-text-tertiary hover:bg-surface-raised sm:w-auto sm:gap-2 sm:px-3',
         className,
       )}
     >

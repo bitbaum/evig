@@ -322,6 +322,7 @@
     "openingHoursTueFri": "Mar–Vie: {hours}",
     "transparency": "Transparencia",
     "changelog": "Changelog",
+    "roadmap": "Hoja de ruta",
     "locations": {
       "store": "Tienda",
       "warehouse": "Almacén",
@@ -365,7 +366,14 @@
       "pageTitle": "Iniciar sesión | evig",
       "errorLocked": "Cuenta bloqueada temporalmente. Vuelve a intentarlo en unos minutos.",
       "errorNoPassword": "Esta cuenta aún no tiene contraseña. Usa «¿Olvidaste tu contraseña?» para activar tu cuenta.",
-      "errorUnverified": "Primero confirma tu dirección de correo electrónico. Revisa tu bandeja de entrada."
+      "errorUnverified": "Primero confirma tu dirección de correo electrónico. Revisa tu bandeja de entrada.",
+      "or": "o",
+      "signInWithOrangeCat": "Iniciar sesión con OrangeCat",
+      "orangecatHint": "Con Google, GitHub o correo – una sola cuenta de OrangeCat para todo.",
+      "signInWithEmail": "Iniciar sesión con correo y contraseña",
+      "errorOrangeCatNotLinked": "Ya existe una cuenta evig con este correo. Inicia sesión con tu contraseña y luego vincula OrangeCat desde tu perfil.",
+      "errorOrangeCatNoEmail": "Tu cuenta de OrangeCat no tiene dirección de correo. Añade una en OrangeCat e inténtalo de nuevo.",
+      "errorOrangeCatAlreadyLinked": "Esta cuenta de OrangeCat ya está vinculada a otra cuenta evig."
     },
     "register": {
       "title": "Crear cuenta",
@@ -405,6 +413,10 @@
       "passwordMismatch": "Las contraseñas no coinciden",
       "termsI": "Acepto los",
       "termsAnd": "y la",
+      "signUpWithOrangeCat": "Crear una cuenta con OrangeCat",
+      "orangecatHint": "Google, GitHub o correo – en un solo paso.",
+      "signUpWithEmail": "Registrarse con correo y contraseña",
+      "orangecatTerms": "Al continuar aceptas los",
       "agb": "Términos de servicio",
       "datenschutz": "Política de privacidad",
       "back": "Atrás",
@@ -4863,6 +4875,13 @@
         "emailReadOnly": "El correo electrónico no se puede cambiar",
         "phoneLabel": "Teléfono",
         "mobileLabel": "Teléfono Móvil"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "Vincula tu cuenta evig con OrangeCat: una sola cuenta para OrangeCat, Loki, Solon y evig — inicio de sesión con código, Google o llave de acceso, sin contraseña aparte aquí.",
+        "connect": "Vincular OrangeCat",
+        "connected": "Vinculado a OrangeCat",
+        "error": "No se pudo iniciar la vinculación. Inténtalo de nuevo."
       }
     },
     "emailVerification": {
@@ -7830,6 +7849,37 @@
     "command": {
       "label": "Iniciar en local",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "Hoja de ruta",
+      "description": "Qué construye evig a continuación, en qué orden y qué está ya hecho."
+    },
+    "hero": {
+      "title": "Hoja de ruta",
+      "subtitle": "Qué estamos construyendo, en qué orden y qué está ya hecho. Lo planificado aparece aquí como plan, no como promesa."
+    },
+    "status": {
+      "inProgress": "Ahora",
+      "planned": "A continuación",
+      "later": "Más adelante",
+      "done": "Hecho"
+    },
+    "empty": {
+      "title": "Todavía no hay nada registrado",
+      "description": "En cuanto la primera entrada llegue al directorio, aparecerá aquí."
+    },
+    "unavailable": {
+      "title": "Hoja de ruta temporalmente no disponible",
+      "description": "El directorio del que lee esta página no responde ahora mismo. Inténtalo de nuevo más tarde."
+    },
+    "progress": "{percent}% completado",
+    "target": "Objetivo: {date}",
+    "milestones": "Hitos",
+    "links": {
+      "changelog": "Ver el changelog",
+      "profile": "Entrada en el directorio de la flota"
     }
   },
   "kennzahlen": {

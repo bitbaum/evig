@@ -32,7 +32,21 @@ import {
 import { hashPassword, verifyPassword } from '@/lib/auth/password';
 import { ROLES, isStaffEmail, getInitialStaffPermissions, isSuperAdmin } from '@/lib/constants';
 import { isAccountLockedDb, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/lockout';
-import { updateUser } from '@/lib/auth/db';
+import {
+  updateUser,
+  getUserById,
+  getUserByOrangeCatActorId,
+  setUserOrangeCatActorId,
+} from '@/lib/auth/db';
+import { cookies } from 'next/headers';
+import {
+  ORANGECAT_LINK_COOKIE,
+  ORANGECAT_PROVIDER_ID,
+  orangecatClient,
+  orangecatProvider,
+  readLinkToken,
+  resolveOrangeCatSignIn,
+} from '@/lib/auth/orangecat';
 import { logger } from '@/lib/logger';
 import { SESSION_MAX_AGE_SECONDS, SESSION_UPDATE_AGE_SECONDS } from '@/config/security';
 import { sendEmail } from '@/lib/email';
@@ -46,7 +60,9 @@ import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui';
 declare module 'next-auth' {
   interface User {
     id: string;
-    email: string;
+    // Optional: the OrangeCat provider's user deliberately carries no email
+    // (an unverified address must never be an identity). Every evig row has one.
+    email?: string | null;
     name?: string | null;
     image?: string | null;
     role?: string; // Legacy - kept for backward compatibility
@@ -84,6 +100,9 @@ declare module 'next-auth' {
 // JWT sessions are stored in cookies, not database, so adapter is only needed for OAuth
 // For now, we skip the adapter to avoid blocking on database connection issues
 // The adapter can be added later when OAuth providers are needed
+// Absent, not broken, until the box holds the OrangeCat client pair.
+const orangecat = orangecatClient();
+
 export const authConfig = {
   // Secret for signing cookies and tokens
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
@@ -241,6 +260,10 @@ export const authConfig = {
     //   server: process.env.EMAIL_SERVER,
     //   from: process.env.EMAIL_FROM,
     // }),
+    // "Sign in with OrangeCat" — the fleet's identity root (orangecat ADR-0009,
+    // D8). Mounted only with the client pair set; the login form asks Auth.js
+    // which providers exist, so the button can never outrun the config.
+    ...(orangecat ? [orangecatProvider(orangecat)] : []),
   ],
 
   callbacks: {
@@ -267,7 +290,9 @@ export const authConfig = {
     async jwt({
       token,
       user,
+      account,
     }: {
+      account?: { provider?: string; providerAccountId?: string } | null;
       token: JWT & {
         id?: string;
         role?: string;
@@ -280,6 +305,35 @@ export const authConfig = {
       };
       user?: User;
     }) {
+      // Path 0: an OrangeCat sign-in. `user` here is OrangeCat's profile (its
+      // id is the actor id, not an evig row), so the claims come from the evig
+      // user the signIn callback resolved or created for that actor.
+      if (account?.provider === ORANGECAT_PROVIDER_ID && account.providerAccountId) {
+        const dbUser = await getUserByOrangeCatActorId(account.providerAccountId);
+        if (dbUser) {
+          const emailVerified = !!dbUser.emailVerified;
+          const userIsStaff = emailVerified ? Boolean(dbUser.is_staff) : false;
+          token.id = dbUser.id;
+          token.email = dbUser.email;
+          token.name = dbUser.name ?? token.name;
+          token.picture = dbUser.image ?? token.picture;
+          token.role = dbUser.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER);
+          token.emailVerified = emailVerified;
+          token.isStaff = userIsStaff;
+          token.staffPermissions = dbUser.staff_permissions?.length
+            ? dbUser.staff_permissions
+            : userIsStaff
+              ? getInitialStaffPermissions(dbUser.email)
+              : [];
+          token.isSuperAdmin = emailVerified
+            ? Boolean(dbUser.is_super_admin) || isSuperAdmin(dbUser.email)
+            : false;
+          token.dashboardMode = dbUser.dashboard_mode ?? 'coordinator';
+          token.tokenVersion = dbUser.token_version ?? 0;
+        }
+        return token;
+      }
+
       // Path 1: initial sign-in
       if (user) {
         token.id = user.id;
@@ -376,7 +430,22 @@ export const authConfig = {
       return session;
     },
 
-    async signIn({ user }: { user: User }) {
+    async signIn({
+      user,
+      account,
+      profile,
+    }: {
+      user: User;
+      account?: { provider?: string; providerAccountId?: string } | null;
+      profile?: { email?: string | null; name?: string | null; picture?: string | null };
+    }) {
+      if (account?.provider === ORANGECAT_PROVIDER_ID) {
+        const actorId = account.providerAccountId;
+        if (!actorId) {
+          return false;
+        }
+        return signInWithOrangeCat(actorId, profile ?? {});
+      }
       // Create profile on first sign in
       if (user.id) {
         try {
@@ -392,6 +461,61 @@ export const authConfig = {
   // Enable debug mode in development
   debug: process.env.NODE_ENV === 'development',
 };
+
+/**
+ * What an OrangeCat identity means here, applied: see lib/auth/orangecat.ts
+ * for the rules. Returns true to continue (the jwt callback then reads the
+ * evig user by actor id) or a login URL carrying the reason.
+ */
+async function signInWithOrangeCat(
+  actorId: string,
+  profile: { email?: string | null; name?: string | null; picture?: string | null },
+): Promise<true | string> {
+  const email = profile.email?.trim().toLowerCase() || null;
+  let linkFor: { id: string; orangecat_actor_id: string | null } | null = null;
+  try {
+    const jar = await cookies();
+    const linkedUserId = readLinkToken(
+      jar.get(ORANGECAT_LINK_COOKIE)?.value,
+      process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || '',
+    );
+    if (linkedUserId) {
+      linkFor = await getUserById(linkedUserId);
+      jar.delete(ORANGECAT_LINK_COOKIE);
+    }
+  } catch (error) {
+    logger.warn('OrangeCat link cookie unreadable; treating as a plain sign-in', { error });
+  }
+  const [byActor, byEmail] = await Promise.all([
+    getUserByOrangeCatActorId(actorId),
+    email ? getUserByEmail(email) : Promise.resolve(null),
+  ]);
+  const decision = resolveOrangeCatSignIn({ actorId, email, byActor, byEmail, linkFor });
+  switch (decision.kind) {
+    case 'existing':
+      return true;
+    case 'link':
+      await setUserOrangeCatActorId(decision.userId, actorId);
+      logger.info('OrangeCat account connected', { userId: decision.userId });
+      return true;
+    case 'create': {
+      // The email is OrangeCat's word, not proven to evig: it stays unverified
+      // here, exactly like a fresh password registration before its code.
+      const created = await createUser({
+        email: decision.email,
+        name: profile.name ?? undefined,
+        image: profile.picture ?? undefined,
+        orangecat_actor_id: actorId,
+      });
+      await getOrCreateProfile(created.id);
+      logger.info('Account created by OrangeCat sign-in', { userId: created.id });
+      return true;
+    }
+    case 'refuse':
+      logger.info('OrangeCat sign-in refused', { code: decision.code });
+      return `${authConfig.pages.signIn}?error=${decision.code}`;
+  }
+}
 
 // Export Auth.js helpers for App Router
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

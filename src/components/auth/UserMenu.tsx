@@ -79,7 +79,7 @@ export function UserMenu() {
   // on laptop widths (the full nav + actions are tight at ≤1440px).
   if (status === 'loading' || !session?.user) {
     return (
-      <Button href={ROUTES.public.login} variant="primary" size="sm">
+      <Button href={ROUTES.public.login} variant="primary" size="sm" className="min-h-touch">
         {t('login')}
         <ArrowRight className="w-3.5 h-3.5" />
       </Button>
@@ -132,7 +132,7 @@ export function UserMenu() {
           className={cn(
             // No always-on ring halo — on phones the pale ring read as a large
             // green blob next to the compact icon buttons. Feedback on hover/open.
-            'flex items-center gap-2 p-1 rounded-full h-auto',
+            'flex min-h-touch min-w-touch items-center justify-center gap-2 p-1 rounded-full h-auto',
             isOpen
               ? 'bg-action-muted/10 ring-2 ring-action/20 dark:ring-action/30'
               : 'hover:bg-action-muted/10 hover:ring-2 hover:ring-action/20 dark:hover:ring-action/30',

@@ -131,11 +131,13 @@ export const BASE_REGION = {
  * catalogue of 200+ live listings with online payment deliberately switched off
  * and no phone number configured. The one route to a human was a dead end.
  *
- * Gmail is not the long-term brand address; it is the one that works today.
- * When evig.ch is registered and its mail is authenticated (Brevo SPF+DKIM),
- * change this ONE line back — everything user-facing reads it from here.
+ * It then pointed at a personal Gmail inbox, which worked but published a
+ * private address on every public page. cato@orangecat.ch is the studio's
+ * receiving mailbox (orangecat.ch has MX). When evig.ch is registered and its
+ * mail is authenticated (Brevo SPF+DKIM), change this ONE line — everything
+ * user-facing reads it from here.
  */
-const DEFAULT_CONTACT_EMAIL = 'butaeff@gmail.com' as const;
+const DEFAULT_CONTACT_EMAIL = 'cato@orangecat.ch' as const;
 
 export const CONTACT = {
   email: DEFAULT_CONTACT_EMAIL,

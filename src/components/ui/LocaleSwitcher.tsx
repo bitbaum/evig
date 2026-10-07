@@ -121,7 +121,7 @@ export function LocaleSwitcher({
         aria-haspopup="listbox"
         aria-expanded={open}
         className={cn(
-          'flex items-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium uppercase tracking-wide',
+          'flex min-h-touch min-w-touch items-center justify-center gap-1 px-2 rounded-md text-xs font-medium uppercase tracking-wide',
           'text-text-tertiary hover:text-text-primary hover:bg-surface-raised transition-colors',
           'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action',
           isPending && 'opacity-50 cursor-wait',
@@ -152,7 +152,7 @@ export function LocaleSwitcher({
               aria-selected={loc === locale}
               onClick={() => switchLocale(loc)}
               className={cn(
-                'w-full flex items-center gap-2 px-3 py-1.5 text-sm text-left',
+                'w-full flex min-h-touch items-center gap-2 px-3 text-sm text-left',
                 'hover:bg-surface-raised transition-colors',
                 loc === locale
                   ? 'text-action font-semibold bg-action-muted'

@@ -151,6 +151,8 @@ export const ROUTES = {
     partnerships: '/get-involved/partnerships',
     contact: '/contact',
     changelog: '/changelog',
+    // Public roadmap — rendered from the fleet map, whose producer is ROADMAP.md.
+    roadmap: '/roadmap',
     // The founding vision / manifesto — a full-bleed dark brand surface.
     vision: '/vision',
     // evig divisions that own a page (SSOT: src/config/divisions.ts). The other

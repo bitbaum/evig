@@ -322,6 +322,7 @@
     "openingHoursTueFri": "Tue–Fri: {hours}",
     "transparency": "Transparency",
     "changelog": "Changelog",
+    "roadmap": "Roadmap",
     "locations": {
       "store": "Store",
       "warehouse": "Warehouse",
@@ -2823,7 +2824,14 @@
       "pageTitle": "Sign in | evig",
       "errorLocked": "Account temporarily locked. Please try again in a few minutes.",
       "errorNoPassword": "No password has been set for this account yet. Use «Forgot password» to activate your account.",
-      "errorUnverified": "Please confirm your email address first. Check your inbox."
+      "errorUnverified": "Please confirm your email address first. Check your inbox.",
+      "or": "or",
+      "signInWithOrangeCat": "Sign in with OrangeCat",
+      "orangecatHint": "With Google, GitHub or email – one OrangeCat account for everything.",
+      "signInWithEmail": "Sign in with email and password",
+      "errorOrangeCatNotLinked": "An evig account with this email already exists. Sign in with your password, then connect OrangeCat from your profile.",
+      "errorOrangeCatNoEmail": "Your OrangeCat account has no email address. Add one at OrangeCat and try again.",
+      "errorOrangeCatAlreadyLinked": "This OrangeCat account is already connected to another evig account."
     },
     "register": {
       "title": "Register",
@@ -2863,6 +2871,10 @@
       "passwordMismatch": "Passwords do not match",
       "termsI": "I accept the",
       "termsAnd": "and the",
+      "signUpWithOrangeCat": "Create an account with OrangeCat",
+      "orangecatHint": "Google, GitHub or email – in one step.",
+      "signUpWithEmail": "Register with email and password",
+      "orangecatTerms": "By continuing you accept the",
       "agb": "Terms of Service",
       "datenschutz": "Privacy Policy",
       "back": "Back",
@@ -4863,6 +4875,13 @@
         "emailReadOnly": "Email cannot be changed",
         "phoneLabel": "Phone",
         "mobileLabel": "Mobile"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "Connect your evig account to OrangeCat: one account for OrangeCat, Loki, Solon and evig — sign in by code, Google or passkey, and you no longer need a separate password here.",
+        "connect": "Connect OrangeCat",
+        "connected": "Connected to OrangeCat",
+        "error": "Could not start the connection. Please try again."
       }
     },
     "emailVerification": {
@@ -7832,6 +7851,37 @@
     "command": {
       "label": "Run locally",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "Roadmap",
+      "description": "What evig is building next, in what order, and what is already done."
+    },
+    "hero": {
+      "title": "Roadmap",
+      "subtitle": "What we are building, in what order, and what is already done. Planned things are written here as plans, not promises."
+    },
+    "status": {
+      "inProgress": "Now",
+      "planned": "Next",
+      "later": "Later",
+      "done": "Done"
+    },
+    "empty": {
+      "title": "Nothing recorded yet",
+      "description": "As soon as the first entry lands in the directory, it shows up here."
+    },
+    "unavailable": {
+      "title": "Roadmap temporarily unavailable",
+      "description": "The directory this page reads from is not answering right now. Please try again later."
+    },
+    "progress": "{percent}% done",
+    "target": "Target: {date}",
+    "milestones": "Milestones",
+    "links": {
+      "changelog": "See the changelog",
+      "profile": "Entry in the fleet directory"
     }
   },
   "kennzahlen": {

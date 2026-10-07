@@ -322,6 +322,7 @@
     "openingHoursTueFri": "화–금: {hours}",
     "transparency": "투명성",
     "changelog": "Changelog",
+    "roadmap": "로드맵",
     "locations": {
       "store": "매장",
       "warehouse": "창고",
@@ -365,7 +366,14 @@
       "pageTitle": "로그인 | evig",
       "errorLocked": "계정이 일시적으로 잠겼습니다. 몇 분 후에 다시 시도해 주세요.",
       "errorNoPassword": "이 계정에는 아직 비밀번호가 설정되지 않았습니다. «비밀번호 찾기»를 사용해 계정을 활성화하세요.",
-      "errorUnverified": "먼저 이메일 주소를 인증해 주세요. 받은 편지함을 확인하세요."
+      "errorUnverified": "먼저 이메일 주소를 인증해 주세요. 받은 편지함을 확인하세요.",
+      "or": "또는",
+      "signInWithOrangeCat": "OrangeCat으로 로그인",
+      "orangecatHint": "Google, GitHub 또는 이메일로 – OrangeCat 계정 하나로 모두.",
+      "signInWithEmail": "이메일과 비밀번호로 로그인",
+      "errorOrangeCatNotLinked": "이 이메일로 된 evig 계정이 이미 있습니다. 비밀번호로 로그인한 뒤 프로필에서 OrangeCat을 연결하세요.",
+      "errorOrangeCatNoEmail": "OrangeCat 계정에 이메일 주소가 없습니다. OrangeCat에서 추가한 뒤 다시 시도하세요.",
+      "errorOrangeCatAlreadyLinked": "이 OrangeCat 계정은 이미 다른 evig 계정에 연결되어 있습니다."
     },
     "register": {
       "title": "회원가입",
@@ -405,6 +413,10 @@
       "passwordMismatch": "비밀번호가 일치하지 않습니다",
       "termsI": "다음에 동의합니다",
       "termsAnd": "및",
+      "signUpWithOrangeCat": "OrangeCat으로 계정 만들기",
+      "orangecatHint": "Google, GitHub 또는 이메일 – 한 번에.",
+      "signUpWithEmail": "이메일과 비밀번호로 가입",
+      "orangecatTerms": "계속하면 다음에 동의하게 됩니다:",
       "agb": "이용약관",
       "datenschutz": "개인정보 처리방침",
       "back": "뒤로",
@@ -4775,6 +4787,13 @@
         "emailReadOnly": "이메일은 변경할 수 없습니다",
         "phoneLabel": "전화번호",
         "mobileLabel": "휴대폰"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "evig 계정을 OrangeCat과 연결하세요. OrangeCat, Loki, Solon, evig에서 하나의 계정으로 코드, Google, 패스키로 로그인할 수 있으며 별도의 비밀번호가 필요 없습니다.",
+        "connect": "OrangeCat 연결",
+        "connected": "OrangeCat과 연결됨",
+        "error": "연결을 시작할 수 없습니다. 다시 시도하세요."
       }
     },
     "emailVerification": {
@@ -7742,6 +7761,37 @@
     "command": {
       "label": "로컬에서 시작",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "로드맵",
+      "description": "evig가 다음에 무엇을 어떤 순서로 만들고, 무엇이 이미 완료되었는지."
+    },
+    "hero": {
+      "title": "로드맵",
+      "subtitle": "무엇을 어떤 순서로 만들고 있으며, 무엇이 이미 완료되었는지. 계획된 것은 약속이 아니라 계획으로 적혀 있습니다."
+    },
+    "status": {
+      "inProgress": "지금",
+      "planned": "다음",
+      "later": "나중에",
+      "done": "완료"
+    },
+    "empty": {
+      "title": "아직 기록된 내용이 없습니다",
+      "description": "첫 번째 항목이 디렉터리에 등록되면 여기에 표시됩니다."
+    },
+    "unavailable": {
+      "title": "로드맵을 일시적으로 사용할 수 없습니다",
+      "description": "이 페이지가 읽어오는 디렉터리가 현재 응답하지 않습니다. 잠시 후 다시 시도해 주세요."
+    },
+    "progress": "{percent}% 완료",
+    "target": "목표: {date}",
+    "milestones": "마일스톤",
+    "links": {
+      "changelog": "변경 내역 보기",
+      "profile": "플릿 디렉터리 항목"
     }
   },
   "kennzahlen": {

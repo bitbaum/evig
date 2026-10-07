@@ -322,6 +322,7 @@
     "openingHoursTueFri": "火–金: {hours}",
     "transparency": "透明性",
     "changelog": "Changelog",
+    "roadmap": "ロードマップ",
     "locations": {
       "store": "店舗",
       "warehouse": "倉庫",
@@ -365,7 +366,14 @@
       "pageTitle": "ログイン | evig",
       "errorLocked": "アカウントが一時的にロックされています。数分後にもう一度お試しください。",
       "errorNoPassword": "このアカウントにはまだパスワードが設定されていません。「パスワードをお忘れの方」からアカウントを有効化してください。",
-      "errorUnverified": "まずメールアドレスを確認してください。受信トレイをご確認ください。"
+      "errorUnverified": "まずメールアドレスを確認してください。受信トレイをご確認ください。",
+      "or": "または",
+      "signInWithOrangeCat": "OrangeCatでサインイン",
+      "orangecatHint": "Google、GitHub、またはメールで – OrangeCat アカウントひとつで。",
+      "signInWithEmail": "メールとパスワードでログイン",
+      "errorOrangeCatNotLinked": "このメールアドレスのevigアカウントはすでに存在します。パスワードでサインインしてから、プロフィールでOrangeCatを連携してください。",
+      "errorOrangeCatNoEmail": "OrangeCatアカウントにメールアドレスがありません。OrangeCatで追加してからもう一度お試しください。",
+      "errorOrangeCatAlreadyLinked": "このOrangeCatアカウントはすでに別のevigアカウントに連携されています。"
     },
     "register": {
       "title": "新規登録",
@@ -405,6 +413,10 @@
       "passwordMismatch": "パスワードが一致しません",
       "termsI": "利用規約に同意します",
       "termsAnd": "および",
+      "signUpWithOrangeCat": "OrangeCat でアカウントを作成",
+      "orangecatHint": "Google、GitHub、またはメールで – ワンステップ。",
+      "signUpWithEmail": "メールとパスワードで登録",
+      "orangecatTerms": "続行すると、次に同意したことになります:",
       "agb": "利用規約",
       "datenschutz": "プライバシーポリシー",
       "back": "戻る",
@@ -4843,6 +4855,13 @@
         "emailReadOnly": "メールアドレスは変更できません",
         "phoneLabel": "電話番号",
         "mobileLabel": "携帯電話"
+      },
+      "orangecat": {
+        "title": "OrangeCat",
+        "description": "evigアカウントをOrangeCatと連携：OrangeCat、Loki、Solon、evigで1つのアカウント。コード、Google、パスキーでサインインでき、ここでの別パスワードは不要です。",
+        "connect": "OrangeCatを連携",
+        "connected": "OrangeCatと連携済み",
+        "error": "連携を開始できませんでした。もう一度お試しください。"
       }
     },
     "emailVerification": {
@@ -7810,6 +7829,37 @@
     "command": {
       "label": "ローカルで起動",
       "text": "npm run d"
+    }
+  },
+  "roadmap": {
+    "meta": {
+      "title": "ロードマップ",
+      "description": "evigが次に何を、どの順番で作り、何がすでに完了しているか。"
+    },
+    "hero": {
+      "title": "ロードマップ",
+      "subtitle": "何を、どの順番で作り、何がすでに完了しているか。計画中のものは約束ではなく計画として書いています。"
+    },
+    "status": {
+      "inProgress": "現在",
+      "planned": "次に",
+      "later": "その後",
+      "done": "完了"
+    },
+    "empty": {
+      "title": "まだ記録がありません",
+      "description": "最初の項目がディレクトリに登録され次第、ここに表示されます。"
+    },
+    "unavailable": {
+      "title": "ロードマップは一時的に利用できません",
+      "description": "このページが読み込むディレクトリが現在応答していません。しばらくしてからもう一度お試しください。"
+    },
+    "progress": "{percent}% 完了",
+    "target": "目標: {date}",
+    "milestones": "マイルストーン",
+    "links": {
+      "changelog": "変更履歴を見る",
+      "profile": "フリートディレクトリの項目"
     }
   },
   "kennzahlen": {

@@ -141,7 +141,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         href={item.href}
         aria-current={pathname === item.href ? 'page' : undefined}
         className={cn(
-          'relative px-4 py-2 text-sm font-medium whitespace-nowrap rounded-lg',
+          'relative inline-flex min-h-touch items-center px-4 text-sm font-medium whitespace-nowrap rounded-lg',
           'transition-colors duration-200',
           designPrimitive.focus,
           isActive
@@ -173,7 +173,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         onKeyDown={handleTriggerKeyDown}
         aria-current={pathname === item.href ? 'page' : undefined}
         className={cn(
-          'group relative inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap',
+          'group relative inline-flex min-h-touch items-center gap-1.5 px-4 text-sm font-medium rounded-lg whitespace-nowrap',
           'transition-all duration-200',
           isOpen
             ? 'text-text-primary bg-surface-raised dark:bg-surface-base/6'

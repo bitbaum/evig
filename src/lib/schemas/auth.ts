@@ -60,10 +60,10 @@ export const UserRoleSchema = z.enum(['customer', 'seller', 'repairer', 'staff']
 export type UserRole = z.infer<typeof UserRoleSchema>;
 
 // Registration schema
-// Note: no `role` field. Roles are derived server-side from the email
-// domain (@revamp-it.ch → staff, else customer) inside registerUser.
-// The dropped field was always overwritten anyway; carrying it through
-// the request was confusing and YAGNI.
+// Note: no `role` field. Every new account is a regular customer; staff is
+// never derived from the email domain (an @revamp-it.ch address proves only
+// that the registrant can receive mail there). Staff is granted explicitly
+// by a super admin or the HR hire flow — see registerUser in src/auth.ts.
 export const RegisterSchema = z.object({
   email: emailSchema,
   password: passwordSchema,

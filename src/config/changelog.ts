@@ -4,6 +4,11 @@
  * Add a new entry at the top after each meaningful deploy. Keep bullets
  * concise and user-facing (fixes, features, improvements). UI chrome lives
  * in the `changelog` namespace of messages/{locale}.json; release copy lives here.
+ *
+ * CHANGELOG.md at the repo root is the canonical record the fleet map
+ * (loki.orangecat.ch/api/fleet/map) reads, in Keep-a-Changelog form with one
+ * language. It must be updated in the same PR as this file, so the /changelog
+ * page (which renders this array) and the fleet's record never disagree.
  */
 
 export interface LocalizedCopy {

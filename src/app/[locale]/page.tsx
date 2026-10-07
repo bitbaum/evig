@@ -170,13 +170,13 @@ export default async function Home() {
               …") and drifted every time the org changed shape. */}
           <nav
             aria-label={tDivisions('overview.eyebrow')}
-            className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
+            className="mt-10 flex flex-wrap items-center justify-center gap-x-1"
           >
             {EVIG_DIVISIONS.map((division) => (
               <Link
                 key={division.id}
                 href={division.href}
-                className="ui-public-eyebrow hover:text-text-primary transition-colors"
+                className="ui-public-eyebrow inline-flex min-h-touch items-center px-2 hover:text-text-primary transition-colors"
               >
                 {division.wordmark}
               </Link>
