@@ -8453,5 +8453,84 @@
         "cta": "Convenir d’un entretien"
       }
     }
+  },
+  "problems": {
+    "eyebrow": "CE QUE ÇA RÉSOUT",
+    "heading": "Des problèmes concrets, des réponses concrètes",
+    "subtitle": "Que ton ordinateur portable soit devenu trop lent ou qu’une société entière jette des appareils qui fonctionnent encore : voici ce qu’evig fait aujourd’hui — et où tu peux t’en occuper toi-même.",
+    "solutionLabel": "Ce que fait evig :",
+    "scales": {
+      "people": {
+        "title": "Pour toi",
+        "subtitle": "Des situations que beaucoup vivent ce mois-ci."
+      },
+      "society": {
+        "title": "Pour tout le monde",
+        "subtitle": "Des problèmes que personne ne résout seul — et sur lesquels chaque appareil gardé en service change quelque chose."
+      }
+    },
+    "items": {
+      "slowLaptop": {
+        "problem": "« Mon ordinateur portable est devenu si lent, et je ne peux pas m’en offrir un neuf. »",
+        "solution": "Souvent, il suffit d’un SSD plus rapide ou d’un système plus léger. Décris le problème dans une demande : des techniciennes et techniciens près de chez toi t’envoient des offres, et tu en choisis une.",
+        "cta": "Faire une demande"
+      },
+      "whoRepairs": {
+        "problem": "« Mon appareil est en panne, et je ne sais pas qui peut le réparer. »",
+        "solution": "L’annuaire montre les techniciennes et techniciens avec leurs compétences. Cherche ta ville et contacte directement la personne qui correspond à ton problème.",
+        "cta": "Voir les techniciens"
+      },
+      "schoolComputer": {
+        "problem": "« Mon enfant a besoin d’un ordinateur pour l’école, mais un neuf coûte trop cher. »",
+        "solution": "Sur la place de marché, tu trouves des portables d’occasion qui suffisent pour l’école et les devoirs. Chaque annonce indique si evig a contrôlé l’appareil — et sinon, elle le dit aussi.",
+        "cta": "Portables sur la place de marché"
+      },
+      "aiTooExpensive": {
+        "problem": "« J’aimerais travailler avec l’IA, mais je ne peux pas payer l’abonnement seul. »",
+        "solution": "Partage un abonnement avec d’autres membres de la communauté. Quelqu’un ouvre un pool, d’autres le rejoignent, et chacun ne paie que sa part.",
+        "cta": "Voir les pools d’abonnements"
+      },
+      "aiAtWork": {
+        "problem": "« Au travail, je dois soudain utiliser l’IA, et personne ne me montre comment. »",
+        "solution": "Dans les ateliers, tu l’apprends avec d’autres, des compétences numériques jusqu’à l’IA. Tu vois ce qui est proposé en ce moment, avec les dates et les places libres.",
+        "cta": "Voir les ateliers"
+      },
+      "drawerDevice": {
+        "problem": "« Dans mon tiroir, il y a un portable dont plus personne ne se sert. »",
+        "solution": "Mets-le sur la place de marché. Il continue ainsi de servir à quelqu’un qui en a besoin au lieu de prendre la poussière — et tu en tires quelque chose.",
+        "cta": "Vendre un appareil"
+      },
+      "eWaste": {
+        "problem": "Des appareils qui fonctionnent finissent à la poubelle, alors qu’un portable émet l’essentiel de son CO₂ dès sa fabrication.",
+        "solution": "Chaque appareil revendu via evig est un appareil qu’il ne faut pas fabriquer à nouveau. Nous montrons ouvertement le CO₂ ainsi évité, avec nos sources — et seulement là où il existe des chiffres vérifiables.",
+        "cta": "Voir le calcul du CO₂"
+      },
+      "intelligenceGap": {
+        "problem": "Qui peut se payer l’IA apprend plus vite et travaille mieux. L’écart avec tous les autres se creuse tout seul.",
+        "solution": "evig traite l’accès à l’IA comme du matériel abordable : des abonnements partagés au lieu d’un prix individuel, et des appareils d’occasion suffisants pour travailler avec.",
+        "cta": "Accès à l’intelligence"
+      },
+      "updatesEnd": {
+        "problem": "Quand le fabricant arrête les mises à jour, un ordinateur qui fonctionne devient soudain « dépassé » — et il est remplacé.",
+        "solution": "Avec Linux, il continue de tourner, avec des mises à jour de sécurité actuelles et sans frais de licence. evig l’installe et le configure, pour les particuliers comme pour les organisations.",
+        "cta": "Faire installer Linux"
+      },
+      "licenceCosts": {
+        "problem": "Les licences logicielles coûteuses excluent les écoles, les associations et les ménages qui n’en ont pas les moyens.",
+        "solution": "La plupart des logiciels connus ont des alternatives libres. Notre répertoire les présente honnêtement — avec leurs forces, leurs limites et des conseils pour changer.",
+        "cta": "Trouver des alternatives"
+      },
+      "repairSkills": {
+        "problem": "Qui sait réparer peine à trouver des clients, et qui a besoin d’aide ne trouve personne. Alors on jette au lieu de réparer.",
+        "solution": "Dans l’aide informatique, les demandes ouvertes à proximité sont visibles par tous. Qui peut aider envoie une offre — gratuite via la communauté ou rémunérée équitablement.",
+        "cta": "Voir les demandes ouvertes"
+      }
+    },
+    "cta": {
+      "heading": "Ton problème n’y figure pas ?",
+      "body": "Décris-le dans une demande, ou écris-nous ce qui te bloque.",
+      "primary": "Faire une demande",
+      "secondary": "Nous contacter"
+    }
   }
 }
