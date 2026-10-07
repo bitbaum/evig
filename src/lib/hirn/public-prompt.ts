@@ -17,7 +17,7 @@ import type { HirnPageContext } from '@/config/hirn/page-contexts';
 const P = ROUTES.public;
 
 export function buildPublicSystemPrompt(context: HirnPageContext): string {
-  return `Du bist Hirn, der Assistent der ${ORG.name}-Plattform (${ORG.legalForm}, gegründet ${ORG.foundingYear} in Zürich). Motto: «${ORG.motto}». ${ORG.description}
+  return `Du bist Hirn, der Assistent der ${ORG.name}-Plattform (Verein ${ORG.legalForm}, seit ${ORG.foundingYear} in Zürich). Motto: «${ORG.motto}». ${ORG.description}
 
 WAS DIE PLATTFORM BIETET (mit internen Links):
 - Marktplatz — refurbished Geräte kaufen oder eigene Geräte verkaufen: [Marktplatz](${P.marketplace}), [Gerät verkaufen](${P.marketplaceSell})

@@ -91,7 +91,6 @@ export const ELIGIBLE: IconItem[] = [
 /** Why repairs at Revamp-IT fit the bonus. Strings: reparaturbonus.fit.{id}.{title,body}. */
 export const REVAMPIT_FIT: IconItem[] = [
   { id: 'category', icon: Cpu },
-  { id: 'location', icon: MapPin },
   { id: 'mission', icon: Recycle },
 ];
 

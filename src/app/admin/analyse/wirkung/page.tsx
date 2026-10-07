@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { AnalyseTabs, MissingDataBanner } from '@/components/analyse';
 import Heading from '@/components/admin/AdminHeading';
 import { ROUTES } from '@/config/routes';
+import { estimateCO2Savings, REFURB_OVERHEAD_SHARE } from '@/config/co2-impact';
 
 function ImpactCard({ metric }: { metric: MetricDefinition }) {
   const needsData = metric.status === 'needs_data';
@@ -203,12 +204,13 @@ export default async function WirkungPage() {
                 CO2-Einsparung
               </Heading>
               <p className="text-sm text-muted-foreground mb-2">
-                Pro wiederverwendetem Gerät werden durchschnittlich <strong>285 kg CO2</strong>{' '}
-                eingespart. Diese Zahl basiert auf Studien zur Herstellungsenergie von
-                Elektronikgeräten.
+                Pro wiederverwendetem Gerät zählt der Faktor seiner Kategorie (ADEME 2025, abzüglich{' '}
+                {Math.round(REFURB_OVERHEAD_SHARE * 100)} % Aufbereitung) — ein Laptop z. B. ~
+                {estimateCO2Savings('10')} kg. Kategorien ohne belegbaren Faktor zählen nicht.
+                Quelle: <code>config/co2-impact.ts</code>, öffentlich unter /transparenz/co2.
               </p>
               <code className="text-xs bg-surface-raised p-2 rounded-sm block">
-                CO2 = Geräte × 285 kg
+                CO2 = Σ Geräte × Faktor der Kategorie
               </code>
             </div>
             <div>

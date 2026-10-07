@@ -3,7 +3,7 @@
 > Intelligenz, für alle bezahlbar — gute, langlebige Technik, kuratiert statt Ramsch.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000.svg)](https://nextjs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Self--hosted-336791.svg)](https://www.postgresql.org/)
 
@@ -39,7 +39,7 @@ The application is a single Next.js 16 app with App Router for both pages and AP
 
 ### TABLE_NAMES as Single Source of Truth
 
-`src/config/database.ts` defines ~130 table name constants. Every database query references `TABLE_NAMES` -- never a hardcoded string. The constants are organized into logical groups:
+`src/config/database.ts` defines every table name as a constant. Every database query references `TABLE_NAMES` -- never a hardcoded string. The constants are organized into logical groups:
 
 ```
 User & Auth | Inventory | Messaging | Services | Workshops | Locations
@@ -179,7 +179,7 @@ src/
     api/            # API route handlers
   components/       # React components (UI only, no business logic)
   config/
-    database.ts     # TABLE_NAMES SSOT (~130 constants)
+    database.ts     # TABLE_NAMES SSOT
     org.ts          # Org-wide data SSOT (name, address, email, hours)
   lib/
     auth/           # NextAuth v5 wiring, permissions, staff detection

@@ -79,7 +79,7 @@
       "myListingsDesc": "Inserate und Verkäufe verwalten",
       "itHelp": "IT-Hilfe",
       "findHelp": "Hilfe suchen",
-      "findHelpDesc": "Community-Techniker in deiner Nähe",
+      "findHelpDesc": "Reparatur oder IT-Hilfe anfragen",
       "findTechnician": "Techniker finden",
       "findTechnicianDesc": "Techniker-Profile durchsuchen und kontaktieren",
       "becomeTechnician": "Techniker werden",
@@ -87,7 +87,7 @@
       "learn": "Lernen",
       "learnDesc": "Workshops, Guides und Ressourcen",
       "workshops": "Workshops",
-      "workshopsDesc": "Kurse vor Ort buchen",
+      "workshopsDesc": "Kurse zu Linux, Reparatur und nachhaltiger IT",
       "blog": "Blog",
       "blogDesc": "Tipps und Geschichten",
       "getInvolved": "Mitmachen",
@@ -352,12 +352,12 @@
       "subtitle": "Ob nutzen, mithelfen oder unterstützen — jeder Beitrag zählt.",
       "use": {
         "title": "Nutzen",
-        "desc": "Kaufen, verkaufen, reparieren — kostenlos",
+        "desc": "Kaufen, verkaufen, reparieren lassen",
         "cta": "Zum Shop"
       },
       "volunteer": {
         "title": "Mithelfen",
-        "desc": "Teile dein Wissen als freiwilliger Techniker",
+        "desc": "Teile dein Wissen als Technikerin oder Techniker",
         "cta": "Mitmachen"
       },
       "donate": {
@@ -376,7 +376,7 @@
       "heading": "Der günstigste Zugang zu KI ist ein gutes gebrauchtes Gerät",
       "subtitle": "Ein Notebook, das jemand geprüft und richtig eingerichtet hat, kann am Tag der Übergabe das, wofür du es geholt hast — ohne neu gekauft werden zu müssen.",
       "button": "Geräte ansehen",
-      "note": "Etwas ist kaputt? Technikerinnen und Techniker in der Nähe findest du über die IT-Hilfe."
+      "note": "Etwas ist kaputt? Stell eine Anfrage in der IT-Hilfe."
     },
     "jsonld": {
       "description": "Bezahlbarer Zugang zu KI und Robotik: geprüfte gebrauchte Hardware, Reparatur und IT-Hilfe, Linux und offene Software, Weiterbildung und Begleitung von Organisationen.",
@@ -384,7 +384,7 @@
       "service1Name": "Geprüfte gebrauchte Hardware",
       "service1Desc": "Notebooks, GPUs und Zubehör, die für echte Arbeit und für KI reichen",
       "service2Name": "Reparatur und IT-Hilfe",
-      "service2Desc": "Technikerinnen und Techniker in der Nähe finden, statt auf einen Termin zu warten",
+      "service2Desc": "Reparatur oder IT-Hilfe anfragen und ein Angebot erhalten",
       "service3Name": "KI und Robotik im Betrieb",
       "service3Desc": "Weiterbildung, Umschulung und Begleitung bei der Einführung in Organisationen"
     },
@@ -2053,7 +2053,7 @@
       "yearsExperience": "Jahre Erfahrung",
       "quote": "Der Zugang zu KI und Robotik entscheidet über Teilhabe — er darf nicht vom Geldbeutel abhängen.",
       "paragraph1": "evig macht den Zugang zu Intelligenz bezahlbar: <strong>kuratierte Technik, KI und Robotik</strong> zu fairen Preisen. Ein gemeinnütziger Verein in Gründung, geführt nach einem Markt- und Qualitätsmodell — gut und günstig, weil Technik im Kreislauf bleibt statt im Müll zu landen.",
-      "paragraph2": "Dazu kommt wirklich zugängliche Reparatur — Werkstatt, Repair-Café und ein Techniker-Netzwerk — und ein Kreislauf-Marktplatz für geprüfte gebrauchte Technik. Was funktioniert, soll im Umlauf bleiben.",
+      "paragraph2": "Dazu kommt Reparatur, die man über die IT-Hilfe anfragen kann — und ein Kreislauf-Marktplatz für geprüfte gebrauchte Technik. Was funktioniert, soll im Umlauf bleiben.",
       "imageAlt": "Kuratierte Technik bei evig"
     },
     "team": "Das Team",
@@ -2073,7 +2073,7 @@
       },
       "openSource": {
         "title": "Reparatur für alle",
-        "description": "Reparatur soll einfach und bezahlbar sein. Werkstatt, Repair-Café und ein Techniker-Netzwerk halten Geräte am Leben — mit Linux und Open Source, wo es Sinn macht."
+        "description": "Reparatur soll einfach und bezahlbar sein, damit Geräte am Leben bleiben — mit Linux und Open Source, wo es Sinn macht."
       },
       "community": {
         "title": "Kreislauf-Marktplatz",
@@ -2224,7 +2224,7 @@
   "itHelp": {
     "meta": {
       "title": "Techniker finden — Reparatur und IT-Hilfe in der Nähe",
-      "description": "Beschreibe dein Problem und erhalte Angebote von Technikerinnen und Technikern in der Nähe. Reparatur, Neuinstallation, Datenrettung und alltägliche IT-Hilfe — über die Community gratis oder fair bezahlt.",
+      "description": "Beschreibe dein Problem und erhalte ein Angebot. Reparatur, Neuinstallation, Datenrettung und alltägliche IT-Hilfe — über die Community gratis oder fair bezahlt.",
       "layoutTitle": "Techniker finden — Reparatur und IT-Hilfe",
       "detailTitle": "{title} | IT-Hilfe | {orgName}",
       "detailDescription": "IT-Hilfe Anfrage: {title}{location}. Community-basierte Tech-Reparaturhilfe.",
@@ -2604,7 +2604,7 @@
     "hub": {
       "eyebrow": "Techniker finden",
       "title": "Jemanden finden, der es repariert",
-      "subtitle": "evig verbindet dich mit Technikerinnen und Technikern in deiner Nähe — über die Community gratis oder fair bezahlt.",
+      "subtitle": "Stell deine Anfrage und erhalte ein Angebot — über die Community gratis oder fair bezahlt.",
       "paths": {
         "request": {
           "title": "Hilfe anfragen",
@@ -3155,15 +3155,6 @@
         }
       ]
     },
-    "partners": {
-      "heading": "Unsere Partnerorganisationen",
-      "names": [
-        "Verein für berufliche und soziale Integration Bezirk Uster",
-        "Arbeitsintegrationsstelle der Gemeinde Rüti",
-        "HEKS",
-        "AOZ (Asylorganisation Zürich)"
-      ]
-    },
     "cta": {
       "heading": "Bereit, einen Unterschied zu machen?",
       "body": "Schliess dich unserer Gemeinschaft von Veränderern an und hilf uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.",
@@ -3313,8 +3304,6 @@
           "title": "Vorteile der Mitgliedschaft",
           "items": [
             "Arbeite an sinnvollen Projekten, die eine echte Wirkung haben",
-            "Zusammenarbeit mit einem vielfältigen Expertenteam",
-            "Zugang zu unserer Werkstatt und unseren Testeinrichtungen",
             "Möglichkeiten zur Führung und Betreuung anderer",
             "Flexible Beitragsmöglichkeiten"
           ]
@@ -3796,7 +3785,7 @@
       ],
       "impact": {
         "tier1Title": "1 Gerät gerettet",
-        "tier1Description": "1 Laptop vor dem Elektroschrott gerettet + 285 kg CO₂ vermieden.",
+        "tier1Description": "1 Laptop vor dem Elektroschrott gerettet.",
         "tier2Title": "2 Geräte + Workshop-Platz",
         "tier2Description": "2 Geräte aufbereitet + ein Platz in unserem Linux-Workshop für jemanden, der es sich nicht leisten könnte.",
         "tier3Title": "Firmenspende — 10 Geräte",
@@ -4084,8 +4073,7 @@
     },
     "mission": {
       "title": "Unsere Mission",
-      "body": "Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können.",
-      "text": "{description} Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können."
+      "body": "Als Verein {legalForm} (seit {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können."
     },
     "stats": {
       "title": "Zahlen & Fakten",
@@ -4102,17 +4090,17 @@
       "platforms": [
         {
           "title": "Marktplatz",
-          "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen – ohne Gebühren.",
+          "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen.",
           "href": "/marketplace"
         },
         {
           "title": "IT-Hilfe",
-          "description": "Vermittlung von freiwilligen Technikern für Computer-Reparaturen. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
+          "description": "Vermittlung von Computer-Reparaturen: Anfrage stellen, Angebot erhalten. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
           "href": "/it-hilfe"
         },
         {
           "title": "Workshops",
-          "description": "Kurse zu Linux, Hardware, Programmierung und KI. Wissen teilen und voneinander lernen – vor Ort in Zürich.",
+          "description": "Kurse zu Linux, Hardware, Programmierung und KI. Wissen teilen und voneinander lernen.",
           "href": "/workshops"
         }
       ]
@@ -4120,17 +4108,17 @@
     "platforms": [
       {
         "title": "Marktplatz",
-        "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen — ohne Gebühren.",
+        "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen.",
         "href": "/marketplace"
       },
       {
         "title": "IT-Hilfe",
-        "description": "Vermittlung von freiwilligen Technikern für Computer-Reparaturen. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
+        "description": "Vermittlung von Computer-Reparaturen: Anfrage stellen, Angebot erhalten. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
         "href": "/it-hilfe"
       },
       {
         "title": "Workshops",
-        "description": "Kurse zu Linux, Hardware, Programmierung und KI. Wissen teilen und voneinander lernen — vor Ort in Zürich.",
+        "description": "Kurse zu Linux, Hardware, Programmierung und KI. Wissen teilen und voneinander lernen.",
         "href": "/workshops"
       }
     ],
@@ -4291,7 +4279,7 @@
   "techniker": {
     "meta": {
       "title": "Techniker finden",
-      "description": "Finde Community- und professionelle Techniker in deiner Nähe. Gratis-Hilfe, KulturLegi-Tarife und bezahlte IT-Dienstleistungen auf einer Plattform."
+      "description": "Das Techniker-Verzeichnis für Reparatur und IT-Hilfe: Gratis-Hilfe, KulturLegi-Tarife und bezahlte IT-Dienstleistungen auf einer Plattform."
     },
     "list": {
       "title": "Techniker",
@@ -4437,7 +4425,7 @@
             "a": "Open Source stärkt Selbstbestimmung und Reparierbarkeit. Es reduziert Abhängigkeiten und ermöglicht, Geräte länger zu nutzen – zentrale Hebel gegen Elektroschrott."
           },
           {
-            "q": "Was bedeutet „Right to Repairâ für euch?",
+            "q": "Was bedeutet „Right to Repair“ für euch?",
             "a": "Wir setzen auf reparierbare Hardware, dokumentierte Prozesse und verfügbare Ersatzteile. So verlängern wir die Lebensdauer von Geräten und schonen Ressourcen."
           }
         ]
@@ -4485,14 +4473,6 @@
               "href": "/services/data-recovery-transfer",
               "label": "Datenrettung & Übertragung"
             }
-          },
-          {
-            "q": "Kann ich ohne Termin vorbeikommen?",
-            "a": "Gerne. Für komplexe Fälle oder Business-Termine empfehlen wir eine kurze Kontaktaufnahme vorab.",
-            "link": {
-              "href": "/contact",
-              "label": "Kontakt & Öffnungszeiten"
-            }
           }
         ]
       },
@@ -4505,7 +4485,7 @@
           },
           {
             "q": "Nehmt ihr alte Geräte an?",
-            "a": "Ja, sofern Wiederverwendung oder fachgerechtes Recycling möglich sind. Wir prüfen Geräte vor Ort und entscheiden transparent über Weiterverwendung oder Zerlegung."
+            "a": "Ja, sofern Wiederverwendung oder fachgerechtes Recycling möglich sind. Wir prüfen jedes Gerät und entscheiden transparent über Weiterverwendung oder Zerlegung."
           },
           {
             "q": "Verwendet ihr gebrauchte Ersatzteile?",
@@ -4580,7 +4560,7 @@
       "title": "Direkt helfen.",
       "titleSecondary": "Sofort wirksam.",
       "lede": "Jede Spende rettet Geräte vor dem Elektroschrott und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.",
-      "sublede": "Geld an unser Konto oder ein Gerät an unsere Werkstatt — beides hilft direkt.",
+      "sublede": "Geld an unser Konto oder ein Gerät, das weiterleben kann — beides hilft direkt.",
       "ctaMoney": "Geld spenden",
       "ctaDevice": "Gerät abgeben",
       "body": "Jede Spende rettet Geräte vor dem Elektroschrott, verlängert Lebenszyklen und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.",
@@ -4590,12 +4570,12 @@
       "money": {
         "eyebrow": "GELD",
         "title": "Banküberweisung in zwei Minuten.",
-        "body": "Empfänger, IBAN, Verwendungszweck — alles unten zum Kopieren. Spendenquittung auf Anfrage. Kein Drittanbieter, keine Transaktionsgebühr."
+        "body": "Empfänger, IBAN, Verwendungszweck — alles unten zum Kopieren. Kein Drittanbieter, keine Transaktionsgebühr."
       },
       "device": {
         "eyebrow": "GERÄT",
         "title": "Laptop, Desktop oder Monitor abgeben.",
-        "body": "Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter. Persönliche Daten löschen wir auf Wunsch vor Ort."
+        "body": "Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter. Persönliche Daten löschen wir auf Wunsch."
       }
     },
     "transparency": {
@@ -4613,11 +4593,11 @@
       "items": [
         {
           "title": "1 Gerät gerettet",
-          "description": "1 Laptop vor dem Elektroschrott gerettet + 285 kg CO₂ vermieden."
+          "description": "1 Laptop vor dem Elektroschrott gerettet."
         },
         {
-          "title": "2 Geräte + Workshop-Platz",
-          "description": "2 Geräte aufbereitet + ein Platz in unserem Linux-Workshop für jemanden, der es sich nicht leisten könnte."
+          "title": "2 Geräte aufbereitet",
+          "description": "2 Geräte aufbereitet und an jemanden weitergegeben, der sie sich nicht leisten könnte."
         },
         {
           "title": "Firmenspende — 10 Geräte",
@@ -4654,7 +4634,7 @@
     "dropoff": {
       "eyebrow": "TERMIN ANMELDEN",
       "heading": "Geräte-Abgabe anmelden",
-      "intro": "Sag uns kurz, was du bringen möchtest — wir bestätigen den Termin per E-Mail und stellen sicher, dass jemand vor Ort ist.",
+      "intro": "Sag uns kurz, was du bringen möchtest — wir melden uns per E-Mail, um Ort und Zeit der Übergabe abzusprechen.",
       "nameLabel": "Name",
       "emailLabel": "E-Mail",
       "phoneLabel": "Telefon (optional)",
@@ -4678,7 +4658,7 @@
       "prefillTemplate": "Ich möchte folgendes spenden: {title}",
       "eyebrow": "AKTUELLE SPEZIFISCHE BEDARFE",
       "heading": "Unsere Wunschliste",
-      "intro": "Um unsere Werkstatt am Laufen zu halten und gerettete Geräte aufzubessern, benötigen wir regelmässig bestimmte Werkzeuge oder Komponenten. Du kannst uns unterstützen, indem du entweder den physischen Gegenstand spendest oder dessen Kauf finanzierst.",
+      "intro": "Um gerettete Geräte aufzubessern, benötigen wir regelmässig bestimmte Werkzeuge oder Komponenten. Du kannst uns unterstützen, indem du entweder den physischen Gegenstand spendest oder dessen Kauf finanzierst.",
       "donateItem": "Gegenstand spenden",
       "fundItem": "Kauf finanzieren",
       "funded": "{amount} von {target} finanziert",
@@ -5737,12 +5717,11 @@
         "title": "Ein Spin-off aus Überzeugung",
         "subtitle": "Dieselben Wurzeln, ein mutigerer Weg",
         "p1": "evig entstand {foundingYear} in Zürich — als Spin-off aus der Zürcher Kreislauf-IT, aus <a>Revamp-IT</a>. Der gemeinnützige Verein macht seit 2003 aus alter Hardware wieder brauchbare Computer: reparieren, mit Linux und freier Software neu aufsetzen, weitergeben statt verschrotten — und so Menschen mit kleinem Budget den Zugang zur Technik öffnen. Gute, wichtige Arbeit, und der Boden, auf dem evig gewachsen ist.",
-        "p2": "Aus dieser Arbeit heraus haben wir die Plattform gebaut — Marktplatz, KI-Assistent, Werkstatt — und eine techno-optimistische Vision: den Zugang zu Intelligenz, zu KI und Robotik, für alle bezahlbar machen, schnell und über Zürich hinaus. Revamp-IT bleibt bei dem, was es gut kann — Reparatur und Reuse, im ruhigen, lokalen Takt. Ein anderes Ziel, ein anderes Tempo.",
+        "p2": "Aus dieser Arbeit heraus haben wir die Plattform gebaut — Marktplatz, KI-Assistent, IT-Hilfe — und eine techno-optimistische Vision: den Zugang zu Intelligenz, zu KI und Robotik, für alle bezahlbar machen, schnell und über Zürich hinaus. Revamp-IT bleibt bei dem, was es gut kann — Reparatur und Reuse, im ruhigen, lokalen Takt. Ein anderes Ziel, ein anderes Tempo.",
         "p3": "Also gehen wir den Weg eigenständig. evig behält die Wurzeln der Kreislaufwirtschaft und richtet sie auf das Zeitalter der Intelligenz aus — volle Verantwortung, kein Komitee zu überzeugen, ein echtes Markt- und Qualitätsmodell, offen und unabhängig. Die Geschichte von Revamp-IT bleibt Revamp-IT; evig schreibt seine eigene."
       },
       "badge": "Warum es evig gibt",
       "milestoneTitle": "Meilensteine",
-      "milestoneDesc": "Von der kleinen Werkstatt zur führenden Organisation für nachhaltige IT in der Schweiz.",
       "currentTitle": "Heute",
       "yearsActive": "Jahre aktiv",
       "teamMembers": "Teammitglieder",
@@ -7930,7 +7909,7 @@
       "eyebrow": "evig",
       "badge": "Live",
       "title": "Changelog",
-      "subtitle": "Die neuesten Fixes, Features und Verbesserungen, die wir auf evig.ch ausrollen."
+      "subtitle": "Die neuesten Fixes, Features und Verbesserungen, die wir ausrollen."
     },
     "latest": {
       "label": "Neueste"
@@ -7940,7 +7919,7 @@
     },
     "command": {
       "label": "Lokal starten",
-      "text": "npm run d"
+      "text": "pnpm run d"
     }
   },
   "roadmap": {
@@ -8052,19 +8031,15 @@
     },
     "fit": {
       "heading": "Reparaturen bei {org}",
-      "intro": "{org} repariert seit {year} Computer und IT-Geräte mitten in {city}. Diese Reparaturen fallen genau in eine der bonusberechtigten Kategorien.",
+      "intro": "Über die IT-Hilfe von {org} kannst du in {city} eine Reparatur von Computern und IT-Geräten anfragen. Diese Reparaturen fallen genau in eine der bonusberechtigten Kategorien.",
       "note": "Wichtig: Diese Seite erklärt das Programm der Stadt Zürich. Welche Betriebe aktuell teilnehmen und den Bonus abwickeln, siehst du tagesaktuell auf {platform}. Prüfe dort, ob dein Wunschbetrieb registriert ist.",
       "category": {
         "title": "Computer sind Elektrogeräte",
         "body": "Laptop, Desktop, Bildschirm oder Peripherie — die Reparaturen von {org} gehören zur Kategorie Elektrogeräte und damit zu den förderbaren Leistungen."
       },
-      "location": {
-        "title": "Mitten in der Stadt Zürich",
-        "body": "Unsere Werkstatt und Verkaufsstelle liegen an der {address} — im Stadtgebiet, in dem der Bonus gilt."
-      },
       "mission": {
         "title": "Reparieren statt wegwerfen",
-        "body": "Genau dafür gibt es {org} seit über zwei Jahrzehnten. Der Reparaturbonus macht das, was wir ohnehin tun, für dich noch günstiger."
+        "body": "Genau dafür gibt es {org}. Der Reparaturbonus macht das, was wir ohnehin tun, für dich noch günstiger."
       }
     },
     "impact": {
@@ -8112,7 +8087,7 @@
     },
     "cta": {
       "heading": "Reparieren lohnt sich",
-      "body": "Finde einen Reparaturbetrieb auf {platform} — oder bring dein Gerät direkt zu {org}.",
+      "body": "Finde einen Reparaturbetrieb auf {platform}.",
       "platform": "Zu {platform}",
       "repair": "Reparatur bei {org}",
       "contact": "Frag uns"
@@ -8480,7 +8455,7 @@
       },
       "technicians": {
         "tagline": "Jemanden finden, der es repariert",
-        "description": "Anfrage stellen, Angebote von Technikerinnen und Technikern in der Nähe erhalten, auswählen — von der defekten Tastatur bis zum System, das nicht mehr startet.",
+        "description": "Anfrage stellen, ein Angebot erhalten, annehmen — von der defekten Tastatur bis zum System, das nicht mehr startet.",
         "cta": "Techniker finden"
       },
       "ai": {
