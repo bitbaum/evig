@@ -184,6 +184,9 @@ importers:
         specifier: ^4.6.2
         version: 4.6.2
     devDependencies:
+      '@bitbaum/chatkit':
+        specifier: github:bitbaum/chatkit#70824785e86189704aeb7cc92c33bc198ad17cda
+        version: https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda(react@19.3.0)
       '@eslint/eslintrc':
         specifier: ^3.3.7
         version: 3.3.7(supports-color@10.2.2)
@@ -500,6 +503,14 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+
+  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda':
+    resolution: {gitHosted: true, integrity: sha512-pXQzKbAgHR/g5TcAESsYBFVkS/WAmy06SAHThY8aLXSVzL8qdhFU6+bHvekZdVPi0//dgFIkigS5tn5k3Oc2qw==, tarball: https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda}
+    version: 0.4.1
+    engines: {node: '>=20'}
+    hasBin: true
+    peerDependencies:
+      react: '>=18'
 
   '@bitbaum/mail-kit@0.1.1':
     resolution: {integrity: sha512-3JfaeuwkI+8TVGeSDrr8/esaWkv2d7UAcNg1Xu5HHu6k3cBzuSaLGhuzHp0KlAJgGa2QEQIqtE7W1+PosKFOjw==}
@@ -6641,6 +6652,10 @@ snapshots:
     dependencies:
       ai-forms: 0.1.2(react@19.3.0)
     optionalDependencies:
+      react: 19.3.0
+
+  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda(react@19.3.0)':
+    dependencies:
       react: 19.3.0
 
   '@bitbaum/mail-kit@0.1.1': {}

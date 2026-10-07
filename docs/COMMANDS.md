@@ -50,6 +50,7 @@ pnpm run build          # Production build (Next.js + sitemap)
 pnpm run start          # Start production server
 pnpm run typecheck      # TypeScript validation (run before commits!)
 pnpm run lint           # ESLint check
+pnpm run check:file-inputs  # No file input mixes image + document types (Android hides the file browser)
 pnpm run i18n:businessplan  # Business plan i18n shape/invariant parity (8 locales)
 ```
 

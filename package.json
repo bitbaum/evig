@@ -31,6 +31,7 @@
     "build": "NODE_ENV=production next build --webpack",
     "start": "next start",
     "lint": "eslint .",
+    "check:file-inputs": "chatkit-check-file-inputs src",
     "lint:umlauts": "bash scripts/lint-umlauts.sh src",
     "lint:chrome": "bash scripts/ci/card-shell-ratchet.sh",
     "lint:docs": "bash scripts/ci/docs-paths-exist.sh",
@@ -78,7 +79,7 @@
     "deploy:selfhost": "bash scripts/selfhost-deploy-evig.sh",
     "ship": "bash scripts/ship.sh",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "verify": "pnpm run format:check && pnpm run lint && pnpm run lint:umlauts && pnpm run lint:chrome && pnpm run lint:docs && pnpm run lint:ops && pnpm run test:ops && pnpm run compliance:ci && pnpm run typecheck && pnpm run test && pnpm run build",
+    "verify": "pnpm run format:check && pnpm run lint && pnpm run check:file-inputs && pnpm run lint:umlauts && pnpm run lint:chrome && pnpm run lint:docs && pnpm run lint:ops && pnpm run test:ops && pnpm run compliance:ci && pnpm run typecheck && pnpm run test && pnpm run build",
     "prod:build": "docker build -f Dockerfile.prod -t revampit-app:latest .",
     "prod:up": "docker compose -f docker-compose.prod.yml up -d",
     "prod:down": "docker compose -f docker-compose.prod.yml down",
@@ -159,6 +160,7 @@
     "*.{ts,tsx,js,jsx}": "eslint --fix"
   },
   "devDependencies": {
+    "@bitbaum/chatkit": "github:bitbaum/chatkit#70824785e86189704aeb7cc92c33bc198ad17cda",
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
