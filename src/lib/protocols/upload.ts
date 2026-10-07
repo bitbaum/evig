@@ -68,15 +68,12 @@ export function classifyFile(file: ClassifiableFile): ProtocolUploadKind | null 
   return null;
 }
 
-// ─── getAcceptString ───────────────────────────────────────────────────
-/**
- * Build the <input type="file" accept="..."> attribute value covering
- * every supported extension. Single source — if extensions change here,
- * the picker updates automatically.
- */
-export function getAcceptString(): string {
-  return [...AUDIO_EXTENSIONS, ...TEXT_EXTENSIONS].join(',');
-}
+// No accept-string builder on purpose. One `accept` spanning audio AND text
+// is what a phone answers with a chooser of capture apps (Camera, Recorder,
+// "Photos & Videos") instead of its file browser, so a recording or a notes
+// file was out of reach (2026-10-05). SourceUploader opens the plain file
+// browser and classifyFile decides after the pick. CI enforces the rule
+// (chatkit-check-file-inputs).
 
 // ─── Validators ────────────────────────────────────────────────────────
 /**
