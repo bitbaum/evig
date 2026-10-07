@@ -74,7 +74,7 @@ source "$SRC/scripts/db/migration-order.sh"
 
 for mig in $(migration_files); do
   fname="$(basename "$mig")"
-  printf '%s\n' "$applied_list" | grep -qxF "$fname" && continue
+  grep -qxF "$fname" <<<"$applied_list" && continue
   echo "  → applying $fname"
   if ! { echo "BEGIN;"; cat "$mig"; printf "INSERT INTO schema_migrations(filename) VALUES('%s') ON CONFLICT DO NOTHING; COMMIT;\n" "$fname"; } \
        | prod_psql "-v ON_ERROR_STOP=1 -q"; then
