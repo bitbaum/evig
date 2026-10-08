@@ -69,6 +69,28 @@ describe('Input', () => {
 // Textarea
 // ============================================================================
 
+describe('Input — dates', () => {
+  it('shows a date in words in the design-system control, with the real input kept', () => {
+    const { container } = render(
+      <Input type="date" value="2026-10-11" onChange={() => {}} required min="2026-10-01" />,
+    );
+    const box = container.querySelector('.wk-input');
+    expect(box).toBeInTheDocument();
+    expect(box).toHaveClass(...designPrimitive.form.input.split(' ').filter(Boolean));
+    const real = container.querySelector('input[type="date"]') as HTMLInputElement;
+    expect(real).toBeRequired();
+    expect(real).toHaveAttribute('min', '2026-10-01');
+    expect(real.value).toBe('2026-10-11');
+    expect(box?.textContent).toMatch(/2026/);
+  });
+
+  it('keeps every other type a plain input', () => {
+    const { container } = render(<Input type="text" />);
+    expect(container.querySelector('.wk-input')).not.toBeInTheDocument();
+    expect(container.querySelector('input[type="text"]')).toBeInTheDocument();
+  });
+});
+
 describe('Textarea', () => {
   it('renders a textarea element', () => {
     render(<Textarea />);
