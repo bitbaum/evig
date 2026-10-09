@@ -7900,12 +7900,19 @@
     "emptyTitle": "Come posso aiutarti?",
     "emptyHint": "Scegli un suggerimento o fai la tua domanda.",
     "suggestionsLabel": "Suggerimenti",
+    "suggestedReplies": "Risposte suggerite",
     "quickActionsLabel": "Link utili",
     "loginPrompt": "Accedi per chattare con Hirn — l'assistente di {orgName}.",
     "loginCta": "Accedi",
     "rateLimited": "Troppe richieste — riprova più tardi.",
     "error": "Hirn al momento non è raggiungibile. Riprova più tardi.",
-    "proactiveDismiss": "Chiudi l'avviso"
+    "proactiveDismiss": "Chiudi l'avviso",
+    "deliverableChat": {
+      "title": "Chiedi a Hirn",
+      "hint": "Fai domande sul codice e sul contenuto di questa consegna.",
+      "inputPlaceholder": "Una domanda sul codice o sul contenuto…",
+      "send": "Invia domanda"
+    }
   },
   "invite": {
     "title": "Invita gli amici",

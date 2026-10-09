@@ -7812,12 +7812,19 @@
     "emptyTitle": "무엇을 도와드릴까요?",
     "emptyHint": "제안을 고르거나 직접 질문해 보세요.",
     "suggestionsLabel": "제안",
+    "suggestedReplies": "추천 답장",
     "quickActionsLabel": "관련 링크",
     "loginPrompt": "{orgName}의 어시스턴트 Hirn과 대화하려면 로그인하세요.",
     "loginCta": "로그인",
     "rateLimited": "요청이 너무 많습니다 — 나중에 다시 시도해 주세요.",
     "error": "Hirn에 지금 연결할 수 없습니다. 나중에 다시 시도해 주세요.",
-    "proactiveDismiss": "알림 닫기"
+    "proactiveDismiss": "알림 닫기",
+    "deliverableChat": {
+      "title": "Hirn에게 묻기",
+      "hint": "이 결과물의 코드와 내용에 대해 질문하세요.",
+      "inputPlaceholder": "코드나 내용에 대한 질문…",
+      "send": "질문 보내기"
+    }
   },
   "invite": {
     "title": "친구 초대하기",

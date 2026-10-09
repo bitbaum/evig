@@ -8,6 +8,7 @@
  *   - returns 401 when not authenticated
  *   - returns 400 when body is invalid
  *   - returns 200 with AI response content
+ *   - asks for suggested replies and passes them through
  *   - returns 500 when chat service throws
  */
 
@@ -143,6 +144,15 @@ describe('POST /api/admin/hirn/chat — success', () => {
     const body = await response.json();
     expect(body.data.content).toBe('Die Reparatur läuft gut.');
     expect(body.data.provider).toBe('groq');
+  });
+
+  it('asks the model for suggested replies and passes them through', async () => {
+    mockChat.mockResolvedValueOnce({ ...MOCK_CHAT_RESPONSE, replies: ['Ja', 'Später'] });
+    const response = await POST(makeRequest());
+    const body = await response.json();
+    expect(body.data.replies).toEqual(['Ja', 'Später']);
+    const options = mockChat.mock.calls[0][1] as { systemPrompt: string };
+    expect(options.systemPrompt).toContain('```quick_replies');
   });
 
   it('returns 200 with empty actions array when response has no actions', async () => {

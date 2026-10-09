@@ -7902,12 +7902,19 @@
     "emptyTitle": "How can I help?",
     "emptyHint": "Pick a suggestion or ask your own question.",
     "suggestionsLabel": "Suggestions",
+    "suggestedReplies": "Suggested replies",
     "quickActionsLabel": "Relevant links",
     "loginPrompt": "Sign in to chat with Hirn — the assistant from {orgName}.",
     "loginCta": "Sign in",
     "rateLimited": "Too many requests — please try again later.",
     "error": "Hirn isn't reachable right now. Please try again later.",
-    "proactiveDismiss": "Dismiss hint"
+    "proactiveDismiss": "Dismiss hint",
+    "deliverableChat": {
+      "title": "Ask Hirn",
+      "hint": "Ask about the code and content of this deliverable.",
+      "inputPlaceholder": "A question about the code or content…",
+      "send": "Send question"
+    }
   },
   "invite": {
     "title": "Invite friends",

@@ -1,6 +1,6 @@
 /**
  * Ask Hirn about a deliverable (admin / logged-in).
- * POST /api/deliverables/[id]/ask  { message, history? } → { reply }
+ * POST /api/deliverables/[id]/ask  { message, history? } → { reply, replies }
  */
 
 import { NextRequest } from 'next/server';
@@ -39,12 +39,12 @@ export const POST = withAdmin<RouteParams>(
       const deliverable = await getDeliverable(id);
       if (!deliverable) return apiNotFound('Liefergegenstand');
 
-      const reply = await answerDeliverableQuestion(
+      const { text: reply, replies } = await answerDeliverableQuestion(
         deliverable,
         result.data.message,
         result.data.history,
       );
-      return apiSuccess({ reply });
+      return apiSuccess({ reply, replies });
     } catch (error) {
       logger.error('Deliverable ask error', { error, userId: session.user.id });
       return apiError(error, 'Hirn ist gerade nicht erreichbar. Bitte versuche es später erneut.');

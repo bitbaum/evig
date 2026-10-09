@@ -1476,3 +1476,31 @@
     display: none;
   }
 }
+
+/* ─── @bitbaum/chatkit → evig tokens ──────────────────────────────────────────
+ * chatkit's stylesheet (imported by the components that use it, e.g.
+ * components/hirn/SuggestedReplies.tsx) reads only --ck-* variables, and by
+ * default derives them from HSL-triplet tokens. evig's tokens are full colours,
+ * so they are mapped here, once. Deliberately UNLAYERED: chatkit sets its
+ * defaults unlayered at zero specificity, and an unlayered rule beats any
+ * @layer rule — a mapping inside @layer base would silently lose. The tokens
+ * flip under .dark on the same names, so dark mode needs no second block.
+ * ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  --ck-bg: var(--surface-base);
+  --ck-raised: var(--surface-raised);
+  --ck-overlay: var(--surface-overlay);
+  --ck-fg: var(--text-primary);
+  --ck-fg-2: var(--text-secondary);
+  --ck-fg-3: var(--text-tertiary);
+  --ck-muted: var(--text-muted);
+  --ck-line: var(--border-default);
+  --ck-line-2: var(--border-strong);
+  --ck-accent: var(--accent-action);
+  --ck-on-accent: var(--accent-action-text);
+  --ck-danger: var(--color-error-600);
+  --ck-warning: var(--color-warning-600);
+  --ck-radius-sm: var(--radius-md);
+  --ck-font: var(--font-sans);
+  --ck-mono: var(--font-mono);
+}

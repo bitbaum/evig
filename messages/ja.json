@@ -7880,12 +7880,19 @@
     "emptyTitle": "どうお手伝いしましょう？",
     "emptyHint": "候補を選ぶか、自分で質問してみてください。",
     "suggestionsLabel": "候補",
+    "suggestedReplies": "返信の候補",
     "quickActionsLabel": "関連リンク",
     "loginPrompt": "{orgName}のアシスタントHirnとチャットするには、ログインしてください。",
     "loginCta": "ログイン",
     "rateLimited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
     "error": "Hirnは現在ご利用いただけません。しばらくしてからもう一度お試しください。",
-    "proactiveDismiss": "お知らせを閉じる"
+    "proactiveDismiss": "お知らせを閉じる",
+    "deliverableChat": {
+      "title": "Hirnに質問",
+      "hint": "この成果物のコードと内容について質問できます。",
+      "inputPlaceholder": "コードや内容についての質問…",
+      "send": "質問を送信"
+    }
   },
   "invite": {
     "title": "友だちを招待",

@@ -21,10 +21,13 @@ import { withClientCsrfHeader } from '@/lib/api/csrf-client';
 import { ORG } from '@/config/org';
 import { ROUTES } from '@/config/routes';
 import type { HirnPageContext } from '@/config/hirn/page-contexts';
+import { SuggestedReplies } from './SuggestedReplies';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
+  /** Suggested next messages (assistant only) — never sent back as history. */
+  replies?: string[];
 }
 
 interface HirnChatPanelProps {
@@ -135,7 +138,7 @@ export function HirnChatPanel({
         body: JSON.stringify({
           message,
           pathname,
-          history: messages.slice(-10),
+          history: messages.slice(-10).map(({ role, content }) => ({ role, content })),
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -149,7 +152,14 @@ export function HirnChatPanel({
         return;
       }
 
-      setMessages([...nextMessages, { role: 'assistant', content: data.data.reply }]);
+      setMessages([
+        ...nextMessages,
+        {
+          role: 'assistant',
+          content: data.data.reply,
+          replies: Array.isArray(data.data.replies) ? data.data.replies : [],
+        },
+      ]);
     } catch {
       setError(t('error'));
     } finally {
@@ -275,6 +285,10 @@ export function HirnChatPanel({
                     </div>
                   </div>
                 ))
+              )}
+
+              {!loading && lastMessage?.role === 'assistant' && (
+                <SuggestedReplies replies={lastMessage.replies} onPick={send} />
               )}
 
               {showQuickActionsAfterReply && context.quickActions && (

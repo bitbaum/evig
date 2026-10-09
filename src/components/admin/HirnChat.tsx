@@ -13,6 +13,7 @@ import { logger } from '@/lib/logger';
 import { ORG } from '@/config/org';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { IconBadge } from '@/components/ui/IconBadge';
+import { SuggestedReplies } from '@/components/hirn/SuggestedReplies';
 
 interface HirnActionCard {
   id: string;
@@ -32,6 +33,8 @@ interface Message {
   model?: string;
   provider?: string;
   actions?: HirnActionCard[];
+  /** Suggested next messages — shown only under the latest answer. */
+  replies?: string[];
 }
 
 interface HirnChatProps {
@@ -57,8 +60,15 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       setLoadingHistory(true);
       try {
         const result = await apiFetch<
-          { id: string; role: string; content: string; created_at?: string; createdAt?: string }[]
-        >(`/api/admin/hirn/history?sessionId=${sessionId}`);
+          {
+            id: string;
+            role: string;
+            content: string;
+            created_at?: string;
+            createdAt?: string;
+            replies?: string[];
+          }[]
+        >(`/api/admin/hirn/history?sessionId=${encodeURIComponent(sessionId)}`);
         if (result.success && result.data) {
           setMessages(
             result.data.map((m) => ({
@@ -93,14 +103,16 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     return tCtx.has(key as never) ? tCtx(key as never) : fallback;
   });
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || loading) return;
+  // One send path for the composer and the suggested replies, so a tapped
+  // reply is exactly a typed one.
+  const send = async (text: string) => {
+    const content = text.trim();
+    if (!content || loading) return;
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
       role: 'user',
-      content: input.trim(),
+      content,
       createdAt: new Date(),
     };
 
@@ -112,6 +124,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     try {
       const result = await apiFetch<{
         content: string;
+        replies?: string[];
         model?: string;
         provider?: string;
         actions?: HirnActionCard[];
@@ -138,6 +151,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         model: responseData.model || undefined,
         provider: responseData.provider || undefined,
         actions: responseData.actions || [],
+        replies: responseData.replies || [],
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -153,7 +167,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
   const doClearSession = async () => {
     try {
-      await apiFetch<void>(`/api/admin/hirn/history?sessionId=${sessionId}`, {
+      await apiFetch<void>(`/api/admin/hirn/history?sessionId=${encodeURIComponent(sessionId)}`, {
         method: 'DELETE',
       });
       setMessages([]);
@@ -252,7 +266,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             )}
           </div>
         ) : (
-          messages.map((message) => (
+          messages.map((message, index) => (
             <div
               key={message.id}
               className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
@@ -297,6 +311,10 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                   </div>
                 )}
 
+                {message.role === 'assistant' && index === messages.length - 1 && !loading && (
+                  <SuggestedReplies replies={message.replies} onPick={send} />
+                )}
+
                 {message.role === 'assistant' && message.model && (
                   <p className="mt-2 text-xs text-text-muted">
                     via {message.provider}/{message.model}
@@ -306,7 +324,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
               {message.role === 'user' && (
                 <div className="shrink-0 w-8 h-8 rounded-full bg-action flex items-center justify-center">
-                  <User className="w-4 h-4 text-white" />
+                  <User className="w-4 h-4 text-action-text" />
                 </div>
               )}
             </div>
@@ -348,7 +366,13 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       </div>
 
       {/* Input */}
-      <form onSubmit={sendMessage} className={`border-t border ${compact ? 'p-3' : 'p-4'}`}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          send(input);
+        }}
+        className={`border-t border ${compact ? 'p-3' : 'p-4'}`}
+      >
         <div className="flex gap-2">
           <Input
             type="text"

@@ -12,10 +12,12 @@
  *   - does not throw when DB history save fails (best-effort)
  *   - returns cleaned content (action block stripped)
  *   - returns parsed action cards
+ *   - returns suggested replies, with their block removed from the content
  *
  *   getChatHistory
  *   - returns empty array when no history
  *   - returns mapped history rows
+ *   - strips machine blocks from stored assistant answers (never shown raw)
  *
  *   getUserSessions
  *   - calls db.execute and maps result rows
@@ -198,6 +200,28 @@ describe('chat', () => {
     expect(result.content).toBe('Bereinigte Antwort');
   });
 
+  it('returns suggested replies and removes their block from the content', async () => {
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
+    mockGetChatResponse.mockResolvedValueOnce({
+      content: 'Soll ich den Task anlegen?\n\n```quick_replies\n["Ja, anlegen", "Nein"]\n```',
+      provider: 'groq',
+      model: 'groq:llama-3.3-70b',
+    });
+
+    const result = await chat('Frage', { sessionId: SESSION_ID });
+
+    expect(result.content).toBe('Soll ich den Task anlegen?');
+    expect(result.replies).toEqual(['Ja, anlegen', 'Nein']);
+  });
+
+  it('returns no replies when the answer has none', async () => {
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
+
+    const result = await chat('Frage', { sessionId: SESSION_ID });
+
+    expect(result.replies).toEqual([]);
+  });
+
   it('returns parsed action cards from response', async () => {
     mockDbSelect.mockImplementationOnce(() => makeChain([]));
     (parseActionEnvelope as Mock).mockReturnValueOnce({
@@ -244,6 +268,24 @@ describe('getChatHistory', () => {
     expect(result[0].role).toBe('assistant');
     expect(result[0].provider).toBe('groq');
     expect(result[0].model).toBe('groq:llama');
+  });
+
+  it('strips the replies block from stored assistant answers, not from user turns', async () => {
+    const raw = 'Passt das so?\n```quick_replies\n["Ja", "Nein"]\n```';
+    mockDbSelect.mockImplementationOnce(() =>
+      makeChain([
+        makeHistoryRow({ role: 'user', content: raw }),
+        makeHistoryRow({ role: 'assistant', content: raw }),
+      ]),
+    );
+
+    const result = await getChatHistory(SESSION_ID, USER_ID);
+
+    expect(result[0].content).toBe(raw);
+    expect(result[0].replies).toBeUndefined();
+    expect(result[1].content).toBe('Passt das so?');
+    expect(result[1].replies).toEqual(['Ja', 'Nein']);
+    expect(stripActionBlock).toHaveBeenCalledWith(raw);
   });
 
   it('returns undefined for provider/model when null in DB', async () => {
