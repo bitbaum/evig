@@ -702,6 +702,35 @@
   }
 }
 
+/* ─── @bitbaum/whenkit → evig tokens ──────────────────────────────────────────
+ * whenkit's stylesheet (imported once by components/ui/date-input.tsx, so every
+ * date field in evig) reads only --wk-* variables, and by default derives them
+ * as hsl(var(--surface-base)) etc. — HSL triplets. evig's tokens are full
+ * colours, so hsl(#ffffff) is invalid and the property falls back to its
+ * initial value; --accent-primary does not exist here, so the focus ring fell
+ * back to whenkit's #ff5c00 orange. Mapped here, once. Deliberately UNLAYERED:
+ * whenkit sets its defaults unlayered in :where(:root), and an unlayered rule
+ * beats any @layer rule — a mapping inside @layer base would silently lose.
+ * The tokens flip under .dark on the same names, so dark mode needs no second
+ * block. --wk-text / --wk-small / --wk-target are sizes, not tokens, and keep
+ * whenkit's defaults (16px text so iOS does not zoom; 44px touch targets).
+ * ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  --wk-bg: var(--surface-base);
+  --wk-raised: var(--surface-raised);
+  --wk-fg: var(--text-primary);
+  --wk-fg-2: var(--text-secondary);
+  --wk-muted: var(--text-muted);
+  --wk-line: var(--border-subtle);
+  --wk-line-2: var(--border-default);
+  --wk-accent: var(--accent-action);
+  --wk-on-accent: var(--accent-action-text);
+  --wk-accent-soft: var(--accent-action-muted);
+  --wk-radius: var(--radius-md);
+  --wk-font: var(--font-sans);
+  --wk-danger: var(--color-error-600);
+}
+
 @layer utilities {
   @media (prefers-reduced-motion: reduce) {
     * {
