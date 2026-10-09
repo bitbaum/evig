@@ -7900,12 +7900,19 @@
     "emptyTitle": "¿En qué puedo ayudarte?",
     "emptyHint": "Elige una sugerencia o haz tu propia pregunta.",
     "suggestionsLabel": "Sugerencias",
+    "suggestedReplies": "Respuestas sugeridas",
     "quickActionsLabel": "Enlaces relacionados",
     "loginPrompt": "Inicia sesión para chatear con Hirn, el asistente de {orgName}.",
     "loginCta": "Iniciar sesión",
     "rateLimited": "Demasiadas solicitudes. Vuelve a intentarlo más tarde.",
     "error": "Hirn no está disponible en este momento. Vuelve a intentarlo más tarde.",
-    "proactiveDismiss": "Cerrar aviso"
+    "proactiveDismiss": "Cerrar aviso",
+    "deliverableChat": {
+      "title": "Preguntar a Hirn",
+      "hint": "Pregunta sobre el código y el contenido de este entregable.",
+      "inputPlaceholder": "Una pregunta sobre el código o el contenido…",
+      "send": "Enviar pregunta"
+    }
   },
   "invite": {
     "title": "Invitar a amigos",

@@ -7902,12 +7902,19 @@
     "emptyTitle": "Comment puis-je aider ?",
     "emptyHint": "Choisis une suggestion ou pose ta propre question.",
     "suggestionsLabel": "Suggestions",
+    "suggestedReplies": "Réponses suggérées",
     "quickActionsLabel": "Liens utiles",
     "loginPrompt": "Connecte-toi pour discuter avec Hirn — l'assistant de {orgName}.",
     "loginCta": "Se connecter",
     "rateLimited": "Trop de requêtes — réessaie plus tard.",
     "error": "Hirn n'est pas joignable pour le moment. Réessaie plus tard.",
-    "proactiveDismiss": "Fermer l'indication"
+    "proactiveDismiss": "Fermer l'indication",
+    "deliverableChat": {
+      "title": "Demander à Hirn",
+      "hint": "Pose des questions sur le code et le contenu de ce livrable.",
+      "inputPlaceholder": "Une question sur le code ou le contenu…",
+      "send": "Envoyer la question"
+    }
   },
   "invite": {
     "title": "Inviter des amis",

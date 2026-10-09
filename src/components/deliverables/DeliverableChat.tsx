@@ -1,16 +1,22 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Sparkles, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { apiFetch } from '@/lib/api/client';
+import { SuggestedReplies } from '@/components/hirn/SuggestedReplies';
 
 interface Turn {
   role: 'user' | 'assistant';
   content: string;
+  /** Suggested next messages (assistant only) — never sent back as history. */
+  replies?: string[];
+  /** An error shown in the thread — not something Hirn said, so never history. */
+  failed?: boolean;
 }
 
 /**
@@ -26,6 +32,7 @@ export default function DeliverableChat({
   endpoint: string;
   suggestions?: string[];
 }) {
+  const t = useTranslations('hirn');
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -38,25 +45,24 @@ export default function DeliverableChat({
   async function ask(question: string) {
     const q = question.trim();
     if (!q || busy) return;
-    const history = turns.slice(-8);
-    setTurns((t) => [...t, { role: 'user', content: q }]);
+    const history = turns
+      .filter((turn) => !turn.failed)
+      .slice(-8)
+      .map(({ role, content }) => ({ role, content }));
+    setTurns((prev) => [...prev, { role: 'user', content: q }]);
     setInput('');
     setBusy(true);
 
-    const res = await apiFetch<{ reply: string }>(endpoint, {
+    const res = await apiFetch<{ reply: string; replies?: string[] }>(endpoint, {
       method: 'POST',
       body: { message: q, history },
     });
 
-    setTurns((t) => [
-      ...t,
-      {
-        role: 'assistant',
-        content:
-          res.success && res.data
-            ? res.data.reply
-            : res.error || 'Hirn ist gerade nicht erreichbar.',
-      },
+    setTurns((prev) => [
+      ...prev,
+      res.success && res.data
+        ? { role: 'assistant', content: res.data.reply, replies: res.data.replies ?? [] }
+        : { role: 'assistant', content: res.error || t('error'), failed: true },
     ]);
     setBusy(false);
   }
@@ -65,25 +71,23 @@ export default function DeliverableChat({
     <Card className="p-5">
       <h2 className="flex items-center gap-2 font-semibold text-text-primary mb-1">
         <Sparkles className="w-4 h-4 text-action" />
-        Hirn fragen
+        {t('deliverableChat.title')}
       </h2>
-      <p className="text-xs text-text-secondary mb-4">
-        Stell Fragen zum Code und Inhalt dieses Liefergegenstands.
-      </p>
+      <p className="text-xs text-text-secondary mb-4">{t('deliverableChat.hint')}</p>
 
       {turns.length > 0 && (
         <div ref={scrollRef} className="max-h-80 overflow-y-auto space-y-3 mb-3 pr-1">
-          {turns.map((t, i) => (
-            <div key={i} className={t.role === 'user' ? 'text-right' : 'text-left'}>
+          {turns.map((turn, i) => (
+            <div key={i} className={turn.role === 'user' ? 'text-right' : 'text-left'}>
               <div
                 className={`inline-block rounded-lg px-3 py-2 text-sm text-left max-w-[85%] ${
-                  t.role === 'user'
+                  turn.role === 'user'
                     ? 'bg-action text-action-text whitespace-pre-wrap'
                     : 'bg-surface-raised text-text-primary'
                 }`}
               >
-                {t.role === 'user' ? (
-                  t.content
+                {turn.role === 'user' ? (
+                  turn.content
                 ) : (
                   <div className="space-y-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:list-decimal [&_ol]:pl-4 [&_a]:text-action [&_a]:underline">
                     <ReactMarkdown
@@ -104,17 +108,20 @@ export default function DeliverableChat({
                         pre: ({ children }) => <pre className="my-0">{children}</pre>,
                       }}
                     >
-                      {t.content}
+                      {turn.content}
                     </ReactMarkdown>
                   </div>
                 )}
               </div>
+              {turn.role === 'assistant' && i === turns.length - 1 && !busy && (
+                <SuggestedReplies replies={turn.replies} onPick={ask} />
+              )}
             </div>
           ))}
           {busy && (
             <div className="text-left">
               <div className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm bg-surface-raised text-text-secondary">
-                <Loader2 className="w-4 h-4 animate-spin" /> denkt nach…
+                <Loader2 className="w-4 h-4 animate-spin" /> {t('thinking')}
               </div>
             </div>
           )}
@@ -148,7 +155,7 @@ export default function DeliverableChat({
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Frage zum Code oder Inhalt…"
+          placeholder={t('deliverableChat.inputPlaceholder')}
           className="flex-1 min-w-0 border rounded-md px-3 py-2 text-sm bg-surface-base focus:outline-none focus:ring-2 focus:ring-action/40"
         />
         <Button
@@ -157,7 +164,7 @@ export default function DeliverableChat({
           size="icon"
           disabled={busy || !input.trim()}
           className="shrink-0"
-          aria-label="Frage senden"
+          aria-label={t('deliverableChat.send')}
         >
           {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         </Button>

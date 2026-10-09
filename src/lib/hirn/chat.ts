@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger';
 import { getChatResponse, type Message } from './providers';
 import { SYSTEM_PROMPT } from './system-prompt';
 import { parseActionEnvelope, stripActionBlock, type HirnActionCard } from './action-cockpit';
+import { splitSuggestedReplies, type AnswerWithReplies } from './replies';
 import { API_DEFAULTS } from '@/config/api-defaults';
 
 export interface ChatOptions {
@@ -23,6 +24,8 @@ export interface ChatOptions {
 
 export interface ChatResponse {
   content: string;
+  /** Suggested next messages (see ./replies); empty when none. */
+  replies: string[];
   actions?: HirnActionCard[];
   usage?: {
     promptTokens: number;
@@ -31,6 +34,15 @@ export interface ChatResponse {
   };
   model: string;
   provider: string;
+}
+
+/**
+ * What a person sees of a stored assistant answer: the machine blocks it may
+ * carry (action envelope, suggested replies) taken out. History keeps the raw
+ * answer so the model sees its own format on the next turn.
+ */
+function presentAssistantAnswer(raw: string): AnswerWithReplies {
+  return splitSuggestedReplies(stripActionBlock(raw));
 }
 
 /**
@@ -106,7 +118,7 @@ export async function chat(message: string, options: ChatOptions): Promise<ChatR
   }
 
   const parsedActions = parseActionEnvelope(response.content);
-  const cleanedContent = stripActionBlock(response.content);
+  const { text: cleanedContent, replies } = presentAssistantAnswer(response.content);
 
   logger.info('Chat response generated', {
     sessionId,
@@ -119,6 +131,7 @@ export async function chat(message: string, options: ChatOptions): Promise<ChatR
 
   return {
     content: cleanedContent,
+    replies,
     actions: parsedActions.actions,
     usage: response.usage,
     model: response.model,
@@ -140,6 +153,7 @@ export async function getChatHistory(
     createdAt: string;
     provider?: string;
     model?: string;
+    replies?: string[];
   }>
 > {
   const rows = await db
@@ -157,14 +171,20 @@ export async function getChatHistory(
     .where(and(eq(hirnChatHistory.sessionId, sessionId), eq(hirnChatHistory.userId, userId)))
     .orderBy(asc(hirnChatHistory.createdAt));
 
-  return rows.map((r) => ({
-    id: r.id,
-    role: r.role,
-    content: r.content,
-    createdAt: r.createdAt!,
-    provider: r.provider || undefined,
-    model: r.model || undefined,
-  }));
+  return rows.map((r) => {
+    // Stored assistant answers are raw: without this the history view showed
+    // the action envelope's JSON (and now the replies block) as message text.
+    const shown = r.role === 'assistant' ? presentAssistantAnswer(r.content) : null;
+    return {
+      id: r.id,
+      role: r.role,
+      content: shown ? shown.text : r.content,
+      createdAt: r.createdAt!,
+      provider: r.provider || undefined,
+      model: r.model || undefined,
+      ...(shown ? { replies: shown.replies } : {}),
+    };
+  });
 }
 
 /**

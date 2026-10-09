@@ -1,6 +1,6 @@
 /**
  * Ask Hirn about a shared deliverable (public / no login).
- * POST /api/public/share/[token]/ask  { message, history? } → { reply }
+ * POST /api/public/share/[token]/ask  { message, history? } → { reply, replies }
  *
  * Under /api/public/* so CSRF is not enforced. Grounded strictly in the
  * deliverable's own files, so an unauthenticated viewer gets
@@ -40,12 +40,12 @@ export async function POST(request: NextRequest, { params }: RouteContext): Prom
       return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors);
     }
 
-    const reply = await answerDeliverableQuestion(
+    const { text: reply, replies } = await answerDeliverableQuestion(
       deliverable,
       result.data.message,
       result.data.history,
     );
-    return apiSuccess({ reply });
+    return apiSuccess({ reply, replies });
   } catch (error) {
     logger.error('Public deliverable ask error', { error });
     return apiError(error, 'Hirn ist gerade nicht erreichbar. Bitte versuche es später erneut.');

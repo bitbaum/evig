@@ -4824,12 +4824,19 @@
     "emptyTitle": "Wie kann ich helfen?",
     "emptyHint": "Wähle einen Vorschlag oder stelle deine eigene Frage.",
     "suggestionsLabel": "Vorschläge",
+    "suggestedReplies": "Antwortvorschläge",
     "quickActionsLabel": "Passende Links",
     "loginPrompt": "Melde dich an, um mit Hirn zu chatten — dem Assistenten von {orgName}.",
     "loginCta": "Anmelden",
     "rateLimited": "Zu viele Anfragen — bitte versuche es später erneut.",
     "error": "Hirn ist gerade nicht erreichbar. Bitte versuche es später erneut.",
-    "proactiveDismiss": "Hinweis schliessen"
+    "proactiveDismiss": "Hinweis schliessen",
+    "deliverableChat": {
+      "title": "Hirn fragen",
+      "hint": "Stell Fragen zum Code und Inhalt dieses Liefergegenstands.",
+      "inputPlaceholder": "Frage zum Code oder Inhalt…",
+      "send": "Frage senden"
+    }
   },
   "dashboard": {
     "profile": {

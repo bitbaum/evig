@@ -17,6 +17,7 @@ import { NextRequest } from 'next/server';
 import { withAuth } from '@/lib/api/middleware';
 import { getChatResponse, type Message } from '@/lib/hirn/providers';
 import { buildPublicSystemPrompt } from '@/lib/hirn/public-prompt';
+import { withSuggestedReplies, splitSuggestedReplies } from '@/lib/hirn/replies';
 import { resolveHirnContext } from '@/config/hirn/page-contexts';
 import { apiSuccess, apiError, apiRateLimited } from '@/lib/api/helpers';
 import { rateLimiters } from '@/lib/security/rate-limit';
@@ -40,7 +41,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     const context = resolveHirnContext(pathname, 'public');
 
     const messages: Message[] = [
-      { role: 'system', content: buildPublicSystemPrompt(context) },
+      { role: 'system', content: withSuggestedReplies(buildPublicSystemPrompt(context)) },
       ...(history ?? []).slice(-HISTORY_LIMIT),
       { role: 'user', content: message },
     ];
@@ -56,7 +57,8 @@ export const POST = withAuth(async (request: NextRequest, session) => {
       model: response.model,
     });
 
-    return apiSuccess({ reply: response.content });
+    const { text: reply, replies } = splitSuggestedReplies(response.content);
+    return apiSuccess({ reply, replies });
   } catch (error) {
     logger.error('Public Hirn chat error', {
       error: error instanceof Error ? error.message : 'Unbekannter Fehler',

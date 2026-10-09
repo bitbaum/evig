@@ -16,6 +16,11 @@ import { readFile } from 'node:fs/promises';
 import { getChatResponse, type Message } from '@/lib/hirn/providers';
 import { ingestDocument } from '@/lib/hirn/ingestion';
 import { searchSimilar, formatContext } from '@/lib/hirn/retrieval';
+import {
+  withSuggestedReplies,
+  splitSuggestedReplies,
+  type AnswerWithReplies,
+} from '@/lib/hirn/replies';
 import { isTextFile } from '@/config/deliverables';
 import { ORG } from '@/config/org';
 import { logger } from '@/lib/logger';
@@ -137,7 +142,7 @@ export async function answerDeliverableQuestion(
   deliverable: DeliverableDetail,
   message: string,
   history: AskTurn[] = [],
-): Promise<string> {
+): Promise<AnswerWithReplies> {
   const { header, files } = await collectDeliverableText(deliverable);
 
   const fileBlocks = files.length
@@ -177,7 +182,7 @@ REGELN:
 - Fasse dich klar und hilfreich.`;
 
   const messages: Message[] = [
-    { role: 'system', content: systemPrompt },
+    { role: 'system', content: withSuggestedReplies(systemPrompt) },
     ...history.slice(-8),
     { role: 'user', content: message },
   ];
@@ -185,5 +190,7 @@ REGELN:
   const response = await getChatResponse({ messages, temperature: 0.3, maxTokens: 900 });
   // Enforce Swiss German deterministically — the model doesn't always honour the
   // «ss statt ß» rule from the prompt. Safe: ß→ss is always correct in de-CH.
-  return response.content.replace(/ß/g, 'ss');
+  const { text, replies } = splitSuggestedReplies(response.content);
+  const swiss = (s: string) => s.replace(/ß/g, 'ss');
+  return { text: swiss(text), replies: replies.map(swiss) };
 }

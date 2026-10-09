@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server';
 import { withAdmin } from '@/lib/api/middleware';
 import { chat } from '@/lib/hirn';
 import { buildSystemPrompt } from '@/lib/hirn/system-prompt';
+import { withSuggestedReplies } from '@/lib/hirn/replies';
 import { resolveHirnContext } from '@/config/hirn/page-contexts';
 import { apiSuccess, apiError, apiRateLimited } from '@/lib/api/helpers';
 import { rateLimiters } from '@/lib/security/rate-limit';
@@ -45,11 +46,12 @@ export const POST = withAdmin('hirn', async (request: NextRequest, session) => {
       userId: session.user.id,
       temperature,
       maxTokens,
-      systemPrompt: buildSystemPrompt(pageContext, uiLocale),
+      systemPrompt: withSuggestedReplies(buildSystemPrompt(pageContext, uiLocale)),
     });
 
     return apiSuccess({
       content: response.content,
+      replies: response.replies,
       actions: response.actions || [],
       usage: response.usage,
       model: response.model,

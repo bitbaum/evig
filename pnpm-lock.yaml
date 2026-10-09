@@ -36,6 +36,9 @@ importers:
       '@bitbaum/ai-kit':
         specifier: ^1.11.0
         version: 1.11.0(react@19.3.0)
+      '@bitbaum/chatkit':
+        specifier: github:bitbaum/chatkit#163c879163d22c6eb633314b3bd4e25712a01899
+        version: https://codeload.github.com/bitbaum/chatkit/tar.gz/163c879163d22c6eb633314b3bd4e25712a01899(react@19.3.0)
       '@bitbaum/mail-kit':
         specifier: ^0.1.1
         version: 0.1.1
@@ -187,9 +190,6 @@ importers:
         specifier: ^4.6.2
         version: 4.6.2
     devDependencies:
-      '@bitbaum/chatkit':
-        specifier: github:bitbaum/chatkit#70824785e86189704aeb7cc92c33bc198ad17cda
-        version: https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda(react@19.3.0)
       '@eslint/eslintrc':
         specifier: ^3.3.7
         version: 3.3.7(supports-color@10.2.2)
@@ -507,9 +507,9 @@ packages:
       react:
         optional: true
 
-  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda':
-    resolution: {gitHosted: true, integrity: sha512-pXQzKbAgHR/g5TcAESsYBFVkS/WAmy06SAHThY8aLXSVzL8qdhFU6+bHvekZdVPi0//dgFIkigS5tn5k3Oc2qw==, tarball: https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda}
-    version: 0.4.1
+  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/163c879163d22c6eb633314b3bd4e25712a01899':
+    resolution: {gitHosted: true, integrity: sha512-10vpid0EqPJzrO+SdfSvTbClrrhngc1Sb+OxLblNlH5Ji+BcBKXmYrvA5UxtB9LZvQ+HLdAa6ceJieqxdkpfvw==, tarball: https://codeload.github.com/bitbaum/chatkit/tar.gz/163c879163d22c6eb633314b3bd4e25712a01899}
+    version: 0.6.0
     engines: {node: '>=20'}
     hasBin: true
     peerDependencies:
@@ -6676,7 +6676,7 @@ snapshots:
     optionalDependencies:
       react: 19.3.0
 
-  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/70824785e86189704aeb7cc92c33bc198ad17cda(react@19.3.0)':
+  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/163c879163d22c6eb633314b3bd4e25712a01899(react@19.3.0)':
     dependencies:
       react: 19.3.0
 
