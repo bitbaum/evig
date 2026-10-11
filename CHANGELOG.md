@@ -2,6 +2,64 @@
 
 What changed on evig, newest first, in the words of someone using it. This file is the canonical record the fleet map reads; the site renders the same releases at `/changelog` from `src/config/changelog.ts`, and the two are updated in the same PR.
 
+## [0.5.1] - 2026-10-11
+
+- **The roadmap says when each step shipped.**
+- Each finished step on `/roadmap` links to the release on `/changelog` that delivered it, and the changelog covers everything since June instead of stopping at 0.1.4. {#public-roadmap}
+
+## [0.5.0] - 2026-10-09
+
+- **Sign in with OrangeCat.**
+- "Mit OrangeCat anmelden" is the first way in on the login and registration pages; the password form is one click behind it, and an existing account can connect OrangeCat from the profile. An account made through OrangeCat gets no password-reset link, because it has no password here (#523, #526, #534).
+- The homepage says what evig solves — concrete problems, for one person and for everyone — instead of describing itself (#536).
+- The site stopped claiming a workshop, partners, donation receipts and an evig.ch address that evig does not have (#531).
+- Dates in forms read in words, and Hirn offers suggested replies in every chat (#545, #546).
+- On a phone, choosing a source file for a protocol opens the file browser instead of a camera-app chooser (#537).
+- Next.js 16.3.8 closes a critical remote-code-execution hole in image generation and a request-forgery hole in image optimisation (#527).
+
+## [0.4.0] - 2026-09-28
+
+- **A public roadmap, and the record behind it.**
+- `/roadmap` shows what evig is building, read from the same `ROADMAP.md` and `CHANGELOG.md` the fleet map reads (#522). {#public-roadmap}
+- The contact address is cato@orangecat.ch instead of a personal mailbox (#511).
+- Navigation targets are 44px tall, and the Hirn button no longer sits under the cookie banner (#510).
+- Every page sends the five baseline security headers; the payment throttle no longer trusts a header the caller writes (#492, #493).
+- Blog articles render through typed blocks; database content was rendered without a sanitiser (#466). Changing a slug no longer deletes seven of the eight translations (#464).
+- Mail goes out through Resend; the old SMTP credential had died and mail was silently lost (#448, #449).
+- `/api/health/ai` reports whether the AI actually answers, instead of calling an unobserved AI "healthy"; "Rate-Limit erreicht" now appears only when it is true (#452, #463).
+
+## [0.3.0] - 2026-08-26
+
+- **Three divisions, five pillars, and what did not work.**
+- evig is stated as three divisions — computers, technicians, ai — from one list that drives the wordmarks, the navigation, the footer and the division pages (#300, #389). {#divisions-one-list}
+- evig repairs became evig technicians: post a request, get offers from technicians nearby, choose one; evig stopped asking for printers (#382). {#evig-technicians}
+- The homepage states the five pillars instead of a donation funnel, and no longer says the same thing three times (#381, #385). {#five-pillars}
+- The "not a charity" line is gone — it contradicted the legal page; evig architecture and evig health moved to their own projects (#379). {#not-a-charity}
+- The donate buttons funded another organisation; they fund evig now, and two navigation entries that went nowhere were removed (#388).
+- The address printed on the site did not receive mail; it does now (#376).
+- Invoices charged the pre-2024 VAT rate; one rate is used everywhere (#368). Paid marketplace listings no longer stay reserved forever, and the order page stopped showing a CHF 0.00 service fee (#369, #373).
+- Eight dialogs trap focus and close with Escape (#372).
+- Money routes require the finance permission, cron routes deny by default, and a vote is cast by whoever proves it rather than whoever types an email address (#305, #322, #358). The one live decision can be voted on again (#308).
+- Staff can fill the category form from a sentence and then change it by talking to it (#279).
+
+## [0.2.0] - 2026-07-28
+
+- **Revamp-IT becomes evig.**
+- New name, identity and canonical address: evig.orangecat.ch (#247, #248, #256).
+- Every page says what is true: evig is a Verein in Gründung, not a recognised non-profit. {#verein-in-gruendung}
+- The invented track record, metrics and testimonials are gone, and so are the donation-receipt and charity claims evig cannot make yet. {#no-false-receipts}
+- The physical store address, opening hours and Revamp-IT's projects and social accounts were removed — evig is not Revamp-IT.
+- Feedback goes through the fleet's embeddable widget.
+
+## [0.1.5] - 2026-07-17
+
+- **Checked before it is sold.**
+- A device whose required test fails cannot reach the shop; staff can still publish without QC in one audited click, and the listing then carries no Prüfsiegel so buyers see it is untested. {#qc-skip}
+- Final QA keeps the four-eyes rule, with an audited one-click solo override. {#four-eyes}
+- Every CO₂ figure comes from per-category ADEME open data, minus 15% for refurbishment, floored at 5 kg; categories without a defensible factor show no claim. {#co2-open-data}
+- The methodology is public at `/transparenz/co2` and linked under "Über uns". {#co2-methodology}
+- Removing a listing returns the device to the pipeline, and the pipeline shows what is live in the shop.
+
 ## [0.1.4] - 2026-06-16
 
 - **Fewer clicks, faster paths.**

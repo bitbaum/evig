@@ -7743,6 +7743,7 @@
     }
   },
   "roadmap": {
+    "shipped": "출시",
     "meta": {
       "title": "로드맵",
       "description": "evig가 다음에 무엇을 어떤 순서로 만들고, 무엇이 이미 완료되었는지."

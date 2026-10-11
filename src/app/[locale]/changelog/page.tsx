@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { changeAnchor } from 'bip-kit';
 import { getTranslations } from 'next-intl/server';
 import { ChangelogHero } from '@/components/changelog/ChangelogHero';
 import { ChangelogLatestBar } from '@/components/changelog/ChangelogLatestBar';
@@ -60,8 +61,17 @@ export default async function ChangelogPage({ params }: ChangelogPageProps) {
         <div className="lg:grid lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-10">
           <ChangelogVersionRail label={t('nav.label')} items={navItems} />
           <main className="min-w-0 max-w-3xl">
-            {releases.map((release) => (
-              <ChangelogRelease key={release.id} release={release} locale={locale} />
+            {releases.map((release, i) => (
+              <ChangelogRelease
+                key={release.id}
+                release={release}
+                locale={locale}
+                dateAnchor={
+                  releases.findIndex((r) => r.date === release.date) === i
+                    ? changeAnchor(release.date)
+                    : undefined
+                }
+              />
             ))}
           </main>
         </div>

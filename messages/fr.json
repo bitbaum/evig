@@ -7833,6 +7833,7 @@
     }
   },
   "roadmap": {
+    "shipped": "Livré",
     "meta": {
       "title": "Feuille de route",
       "description": "Ce qu’evig construit ensuite, dans quel ordre, et ce qui est déjà fait."

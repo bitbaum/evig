@@ -28,6 +28,208 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
+    id: 'v0-5-1',
+    version: '0.5.1',
+    date: '2026-10-11',
+    title: {
+      de: 'Die Roadmap sagt, wann jeder Schritt kam',
+      en: 'The roadmap says when each step shipped',
+    },
+    changes: [
+      {
+        de: 'Jeder erledigte Schritt auf /roadmap verlinkt die Version im Changelog, die ihn geliefert hat, und der Changelog reicht jetzt bis heute statt bei 0.1.4 aufzuhören',
+        en: 'Each finished step on /roadmap links to the release on /changelog that delivered it, and the changelog covers everything since June instead of stopping at 0.1.4',
+      },
+    ],
+  },
+  {
+    id: 'v0-5-0',
+    version: '0.5.0',
+    date: '2026-10-09',
+    title: {
+      de: 'Mit OrangeCat anmelden',
+      en: 'Sign in with OrangeCat',
+    },
+    changes: [
+      {
+        de: '«Mit OrangeCat anmelden» ist der erste Weg auf der Login- und Registrierungsseite; das Passwortformular liegt einen Klick dahinter, und ein bestehendes Konto verbindet OrangeCat im Profil. Ein über OrangeCat erstelltes Konto erhält keinen Link zum Zurücksetzen des Passworts, weil es hier keines hat',
+        en: '"Sign in with OrangeCat" is the first way in on the login and registration pages; the password form is one click behind it, and an existing account connects OrangeCat from the profile. An account made through OrangeCat gets no password-reset link, because it has no password here',
+      },
+      {
+        de: 'Die Startseite sagt, was evig löst — konkrete Probleme, für eine Person und für alle — statt sich selbst zu beschreiben',
+        en: 'The homepage says what evig solves — concrete problems, for one person and for everyone — instead of describing itself',
+      },
+      {
+        de: 'Die Website behauptet keine Werkstatt, keine Partner, keine Spendenbescheinigungen und keine evig.ch-Adresse mehr, die evig nicht hat',
+        en: 'The site stopped claiming a workshop, partners, donation receipts and an evig.ch address that evig does not have',
+      },
+      {
+        de: 'Daten in Formularen stehen in Worten, und Hirn schlägt in jedem Chat Antworten vor',
+        en: 'Dates in forms read in words, and Hirn offers suggested replies in every chat',
+      },
+      {
+        de: 'Auf dem Handy öffnet die Dateiauswahl für ein Protokoll den Dateibrowser statt einer Kamera-App-Auswahl',
+        en: 'On a phone, choosing a source file for a protocol opens the file browser instead of a camera-app chooser',
+      },
+      {
+        de: 'Next.js 16.3.8 schliesst eine kritische Lücke zur Codeausführung in der Bilderzeugung und eine Lücke bei der Bildoptimierung',
+        en: 'Next.js 16.3.8 closes a critical remote-code-execution hole in image generation and a request-forgery hole in image optimisation',
+      },
+    ],
+  },
+  {
+    id: 'v0-4-0',
+    version: '0.4.0',
+    date: '2026-09-28',
+    title: {
+      de: 'Eine öffentliche Roadmap, und die Aufzeichnung dahinter',
+      en: 'A public roadmap, and the record behind it',
+    },
+    changes: [
+      {
+        de: '/roadmap zeigt, woran evig baut, gelesen aus denselben ROADMAP.md und CHANGELOG.md, die auch die Flottenkarte liest',
+        en: '/roadmap shows what evig is building, read from the same ROADMAP.md and CHANGELOG.md the fleet map reads',
+      },
+      {
+        de: 'Die Kontaktadresse ist cato@orangecat.ch statt eines persönlichen Postfachs',
+        en: 'The contact address is cato@orangecat.ch instead of a personal mailbox',
+      },
+      {
+        de: 'Navigationsziele sind 44px hoch, und der Hirn-Knopf liegt nicht mehr unter dem Cookie-Banner',
+        en: 'Navigation targets are 44px tall, and the Hirn button no longer sits under the cookie banner',
+      },
+      {
+        de: 'Jede Seite sendet die fünf grundlegenden Sicherheits-Header; die Zahlungsbremse vertraut keinem Header mehr, den der Aufrufer selbst setzt',
+        en: 'Every page sends the five baseline security headers; the payment throttle no longer trusts a header the caller writes',
+      },
+      {
+        de: 'Blogartikel werden über typisierte Blöcke dargestellt — Inhalte aus der Datenbank liefen vorher ohne Bereinigung durch; eine Slug-Änderung löscht nicht mehr sieben der acht Übersetzungen',
+        en: 'Blog articles render through typed blocks — database content was rendered without a sanitiser; changing a slug no longer deletes seven of the eight translations',
+      },
+      {
+        de: 'E-Mails gehen über Resend hinaus; der alte SMTP-Zugang war abgelaufen und Mails gingen still verloren',
+        en: 'Mail goes out through Resend; the old SMTP credential had died and mail was silently lost',
+      },
+      {
+        de: '/api/health/ai meldet, ob die KI wirklich antwortet, statt eine unbeobachtete KI «gesund» zu nennen; «Rate-Limit erreicht» erscheint nur noch, wenn es stimmt',
+        en: '/api/health/ai reports whether the AI actually answers, instead of calling an unobserved AI "healthy"; "Rate-Limit erreicht" now appears only when it is true',
+      },
+    ],
+  },
+  {
+    id: 'v0-3-0',
+    version: '0.3.0',
+    date: '2026-08-26',
+    title: {
+      de: 'Drei Bereiche, fünf Säulen — und was nicht funktionierte',
+      en: 'Three divisions, five pillars — and what did not work',
+    },
+    changes: [
+      {
+        de: 'evig zeigt sich in drei Bereichen — computers, technicians, ai — aus einer einzigen Liste, die Wortmarken, Navigation, Fusszeile und Bereichsseiten speist',
+        en: 'evig is stated as three divisions — computers, technicians, ai — from one list that drives the wordmarks, the navigation, the footer and the division pages',
+      },
+      {
+        de: 'Aus evig repairs wird evig technicians: Anfrage stellen, Angebote von Technikerinnen und Technikern in der Nähe erhalten, eines wählen; evig sammelt keine Drucker mehr',
+        en: 'evig repairs became evig technicians: post a request, get offers from technicians nearby, choose one; evig stopped asking for printers',
+      },
+      {
+        de: 'Die Startseite nennt die fünf Säulen statt eines Spendentrichters und sagt nicht mehr dreimal dasselbe',
+        en: 'The homepage states the five pillars instead of a donation funnel, and no longer says the same thing three times',
+      },
+      {
+        de: 'Der Satz «keine Wohltätigkeitsorganisation» ist weg — er widersprach der Rechtsseite; evig architecture und evig health sind eigene Projekte geworden',
+        en: 'The "not a charity" line is gone — it contradicted the legal page; evig architecture and evig health moved to their own projects',
+      },
+      {
+        de: 'Die Spendenknöpfe finanzierten eine andere Organisation; jetzt finanzieren sie evig, und zwei Navigationseinträge ins Leere sind entfernt',
+        en: 'The donate buttons funded another organisation; they fund evig now, and two navigation entries that went nowhere were removed',
+      },
+      {
+        de: 'Die auf der Website angegebene Adresse empfing keine Post; jetzt schon',
+        en: 'The address printed on the site did not receive mail; it does now',
+      },
+      {
+        de: 'Rechnungen verwendeten den Mehrwertsteuersatz von vor 2024; jetzt gilt überall ein Satz. Bezahlte Inserate bleiben nicht mehr für immer reserviert, und die Bestellseite zeigt keine Servicegebühr von CHF 0.00 mehr',
+        en: 'Invoices charged the pre-2024 VAT rate; one rate is used everywhere. Paid listings no longer stay reserved forever, and the order page stopped showing a CHF 0.00 service fee',
+      },
+      {
+        de: 'Acht Dialoge halten den Fokus und schliessen mit Escape',
+        en: 'Eight dialogs trap focus and close with Escape',
+      },
+      {
+        de: 'Geldrouten verlangen die Finanzberechtigung, Cron-Routen verweigern standardmässig, und eine Stimme gibt ab, wer sich ausweist — nicht, wer eine E-Mail-Adresse eintippt. Über den laufenden Entscheid kann wieder abgestimmt werden',
+        en: 'Money routes require the finance permission, cron routes deny by default, and a vote is cast by whoever proves it rather than whoever types an email address. The one live decision can be voted on again',
+      },
+      {
+        de: 'Mitarbeitende füllen das Kategorienformular aus einem Satz und ändern es im Gespräch',
+        en: 'Staff can fill the category form from a sentence and then change it by talking to it',
+      },
+    ],
+  },
+  {
+    id: 'v0-2-0',
+    version: '0.2.0',
+    date: '2026-07-28',
+    title: {
+      de: 'Aus Revamp-IT wird evig',
+      en: 'Revamp-IT becomes evig',
+    },
+    changes: [
+      {
+        de: 'Neuer Name, neues Erscheinungsbild und eine neue Adresse: evig.orangecat.ch',
+        en: 'New name, identity and canonical address: evig.orangecat.ch',
+      },
+      {
+        de: 'Jede Seite sagt, was stimmt: evig ist ein Verein in Gründung, keine anerkannte gemeinnützige Organisation',
+        en: 'Every page says what is true: evig is a Verein in Gründung, not a recognised non-profit',
+      },
+      {
+        de: 'Die erfundene Erfolgsbilanz, Kennzahlen und Kundenstimmen sind weg, ebenso Spendenbescheinigungen und Gemeinnützigkeit, die evig noch nicht beanspruchen kann',
+        en: 'The invented track record, metrics and testimonials are gone, and so are the donation-receipt and charity claims evig cannot make yet',
+      },
+      {
+        de: 'Ladenadresse, Öffnungszeiten sowie die Projekte und Social-Media-Konten von Revamp-IT sind entfernt — evig ist nicht Revamp-IT',
+        en: "The physical store address, opening hours and Revamp-IT's projects and social accounts were removed — evig is not Revamp-IT",
+      },
+      {
+        de: 'Rückmeldungen laufen über das einbettbare Widget der Flotte',
+        en: "Feedback goes through the fleet's embeddable widget",
+      },
+    ],
+  },
+  {
+    id: 'v0-1-5',
+    version: '0.1.5',
+    date: '2026-07-17',
+    title: {
+      de: 'Geprüft, bevor es verkauft wird',
+      en: 'Checked before it is sold',
+    },
+    changes: [
+      {
+        de: 'Ein Gerät mit einem fehlgeschlagenen Pflichttest erreicht den Shop nicht; Mitarbeitende können ohne Qualitätskontrolle mit einem protokollierten Klick veröffentlichen — das Inserat trägt dann kein Prüfsiegel, und Käufer sehen, dass es ungeprüft ist',
+        en: 'A device whose required test fails cannot reach the shop; staff can still publish without QC in one audited click, and the listing then carries no Prüfsiegel so buyers see it is untested',
+      },
+      {
+        de: 'Die Schlussprüfung behält das Vier-Augen-Prinzip, mit einer protokollierten Ein-Klick-Ausnahme',
+        en: 'Final QA keeps the four-eyes rule, with an audited one-click solo override',
+      },
+      {
+        de: 'Jede CO₂-Zahl stammt aus offenen ADEME-Daten pro Kategorie, abzüglich 15 % für die Aufbereitung, mindestens 5 kg; Kategorien ohne belastbaren Faktor zeigen keine Angabe',
+        en: 'Every CO₂ figure comes from per-category ADEME open data, minus 15% for refurbishment, floored at 5 kg; categories without a defensible factor show no claim',
+      },
+      {
+        de: 'Die Methode ist öffentlich unter /transparenz/co2 und unter «Über uns» verlinkt',
+        en: 'The methodology is public at /transparenz/co2 and linked under "Über uns"',
+      },
+      {
+        de: 'Wird ein Inserat entfernt, kehrt das Gerät in die Pipeline zurück, und die Pipeline zeigt, was im Shop live ist',
+        en: 'Removing a listing returns the device to the pipeline, and the pipeline shows what is live in the shop',
+      },
+    ],
+  },
+  {
     id: 'v0-1-4',
     version: '0.1.4',
     date: '2026-06-16',

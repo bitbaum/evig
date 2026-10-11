@@ -7831,6 +7831,7 @@
     }
   },
   "roadmap": {
+    "shipped": "Consegnato",
     "meta": {
       "title": "Roadmap",
       "description": "Cosa evig costruisce adesso, in che ordine, e cosa è già fatto."

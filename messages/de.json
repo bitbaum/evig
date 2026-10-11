@@ -7930,6 +7930,7 @@
     }
   },
   "roadmap": {
+    "shipped": "Geliefert",
     "meta": {
       "title": "Roadmap",
       "description": "Was evig als Nächstes baut, in welcher Reihenfolge und was schon fertig ist."

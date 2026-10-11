@@ -4,9 +4,14 @@ import { formatChangelogDate, formatChangelogDateShort, pickLocalized } from '@/
 interface ChangelogReleaseProps {
   release: ChangelogReleaseType;
   locale: string;
+  /**
+   * `change-<date>` on the first release of its day — what a roadmap step
+   * links to when CHANGELOG.md says that day delivered it (bip-kit 0.6.0).
+   */
+  dateAnchor?: string;
 }
 
-export function ChangelogRelease({ release, locale }: ChangelogReleaseProps) {
+export function ChangelogRelease({ release, locale, dateAnchor }: ChangelogReleaseProps) {
   const title = pickLocalized(locale, release.title);
   const dateLong = formatChangelogDate(release.date, locale);
   const dateShort = formatChangelogDateShort(release.date, locale);
@@ -16,6 +21,7 @@ export function ChangelogRelease({ release, locale }: ChangelogReleaseProps) {
       id={release.id}
       className="scroll-mt-36 border-t border-subtle py-12 first:border-t-0 first:pt-8"
     >
+      {dateAnchor && <span id={dateAnchor} aria-hidden="true" className="block scroll-mt-36" />}
       <div className="grid gap-6 lg:grid-cols-[7.5rem_minmax(0,1fr)] lg:gap-10">
         <div className="font-mono text-xs tabular-nums text-text-tertiary lg:sticky lg:top-[calc(var(--header-offset,4rem)+6rem)] lg:self-start">
           <time dateTime={release.date} className="hidden sm:block">

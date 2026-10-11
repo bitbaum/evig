@@ -1,6 +1,6 @@
 import { Check, Circle, ListChecks, Unplug } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import type { DevelopmentProfile } from 'bip-kit';
+import { linkDevelopment, readRefs, type DevelopmentProfile, type LinkedGoal } from 'bip-kit';
 import { Link } from '@/i18n/navigation';
 import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -43,6 +43,10 @@ export async function RoadmapRecord({ profile, locale }: RoadmapRecordProps) {
   }
 
   const groups = groupRoadmap(profile.roadmap);
+  // `{#id}` on a ROADMAP.md step and the CHANGELOG.md line that delivered it
+  // links the two (bip-kit linkDevelopment). Goals come back in roadmap order.
+  const linked = linkDevelopment(profile);
+  const goalOf = new Map(profile.roadmap.map((item, i) => [item, linked.goals[i]]));
   if (groups.length === 0) {
     return (
       <EmptyState
@@ -69,6 +73,8 @@ export async function RoadmapRecord({ profile, locale }: RoadmapRecordProps) {
                 progressLabel={t('progress', { percent: roadmapProgress(item) ?? 0 })}
                 targetLabel={item.targetDate ? t('target', { date: item.targetDate }) : null}
                 milestonesLabel={t('milestones')}
+                goal={goalOf.get(item)}
+                shippedLabel={t('shipped')}
               />
             ))}
           </div>
@@ -84,16 +90,26 @@ interface RoadmapCardProps {
   progressLabel: string;
   targetLabel: string | null;
   milestonesLabel: string;
+  /** The same goal, linked to the changelog days that delivered its steps. */
+  goal: LinkedGoal | undefined;
+  shippedLabel: string;
 }
 
-function RoadmapCard({ item, progressLabel, targetLabel, milestonesLabel }: RoadmapCardProps) {
+function RoadmapCard({
+  item,
+  progressLabel,
+  targetLabel,
+  milestonesLabel,
+  goal,
+  shippedLabel,
+}: RoadmapCardProps) {
   const progress = roadmapProgress(item);
   const rows = milestoneRows(item.milestones);
   return (
     <Card className="flex flex-col gap-4 p-5">
       <div className="space-y-1">
         <Heading level={3} variant="admin" className="text-base text-text-primary">
-          {item.title}
+          {readRefs(item.title).text}
         </Heading>
         {targetLabel && <p className={designPrimitive.type.meta}>{targetLabel}</p>}
       </div>
@@ -118,22 +134,51 @@ function RoadmapCard({ item, progressLabel, targetLabel, milestonesLabel }: Road
         <div>
           <p className={cn(designPrimitive.type.tableHeader, 'mb-2')}>{milestonesLabel}</p>
           <ul className="space-y-1.5">
-            {rows.map((row) => (
-              <li
-                key={row.title}
-                className={cn(
-                  'flex items-start gap-2 text-sm',
-                  row.done ? 'text-text-tertiary' : 'text-text-secondary',
-                )}
-              >
-                {row.done ? (
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-action" aria-hidden="true" />
-                ) : (
-                  <Circle className="mt-0.5 h-4 w-4 shrink-0 text-text-muted" aria-hidden="true" />
-                )}
-                <span className={row.done ? 'line-through' : undefined}>{row.title}</span>
-              </li>
-            ))}
+            {rows.map((row, i) => {
+              const step = goal?.steps[i];
+              const days = (step?.deliveredIn ?? []).filter(
+                (c, k, all) => all.findIndex((r) => r.anchor === c.anchor) === k,
+              );
+              return (
+                <li
+                  key={row.title}
+                  id={step?.anchor ?? undefined}
+                  className={cn(
+                    'flex items-start gap-2 text-sm',
+                    row.done ? 'text-text-tertiary' : 'text-text-secondary',
+                  )}
+                >
+                  {row.done ? (
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-action" aria-hidden="true" />
+                  ) : (
+                    <Circle
+                      className="mt-0.5 h-4 w-4 shrink-0 text-text-muted"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="min-w-0">
+                    <span className={row.done ? 'line-through' : undefined}>
+                      {readRefs(row.title).text}
+                    </span>
+                    {days.length > 0 && (
+                      <span className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-text-tertiary">
+                        {shippedLabel}
+                        {days.map((c) => (
+                          <Link
+                            key={c.anchor}
+                            href={`${ROUTES.public.changelog}#${c.anchor}`}
+                            title={c.line}
+                            className="font-mono text-text-secondary hover:text-action hover:underline"
+                          >
+                            {c.date}
+                          </Link>
+                        ))}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
