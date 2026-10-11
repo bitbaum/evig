@@ -8,9 +8,9 @@ evig keeps something useful for longer: curated second-life computers, a technic
 
 evig is a gemeinnütziger Verein being founded. Until the association is registered and recognised as tax-exempt, the site says "in Gründung", issues no tax-deductible donation receipts, and claims no recognised non-profit status.
 
-- [x] Every public page states "Verein in Gründung" instead of a recognised status
-- [x] Donation-receipt claims and invented UIDs removed from the site
-- [x] The "not a charity" line removed — it contradicted the legal page
+- [x] Every public page states "Verein in Gründung" instead of a recognised status {#verein-in-gruendung}
+- [x] Donation-receipt claims and invented UIDs removed from the site {#no-false-receipts}
+- [x] The "not a charity" line removed — it contradicted the legal page {#not-a-charity}
 - [ ] Association registered
 - [ ] Cantonal recognition as gemeinnützig (only then do receipts become possible)
 
@@ -19,10 +19,10 @@ evig is a gemeinnütziger Verein being founded. Until the association is registe
 The brand is one organisation stated as three lenses — computers, technicians, ai — all derived from one config, never hand-typed.
 
 - [x] evig computers live on the marketplace with one checkout for refurbished stock and community listings
-- [x] evig technicians live on IT-Hilfe: post a request, receive offers from technicians nearby, choose one
+- [x] evig technicians live on IT-Hilfe: post a request, receive offers from technicians nearby, choose one {#evig-technicians}
 - [x] evig ai live with a stated boundary: not a research lab, no magic, no lock-in
-- [x] Division wordmarks, nav entries, footer column and division pages derive from one list
-- [x] Homepage states the five pillars instead of a donation funnel
+- [x] Division wordmarks, nav entries, footer column and division pages derive from one list {#divisions-one-list}
+- [x] Homepage states the five pillars instead of a donation funnel {#five-pillars}
 
 ### Quality control before anything reaches the shop
 
@@ -31,8 +31,8 @@ Devices arrive, get captured once, and pass a checklist before they are sold. A 
 - [x] One capture contract: text, photo, CSV/Excel and speech normalise into the same product schema
 - [x] Pass / fail / n.a. verdicts on every checklist item, serialised on a row lock
 - [x] A failed required item puts the device in the `failed` state and blocks the shop
-- [x] Audited one-click "publish without QC" path — the listing then carries no Prüfsiegel and buyers see the untested state
-- [x] Vier-Augen-Prinzip in final QA with an audited solo override
+- [x] Audited one-click "publish without QC" path — the listing then carries no Prüfsiegel and buyers see the untested state {#qc-skip}
+- [x] Vier-Augen-Prinzip in final QA with an audited solo override {#four-eyes}
 - [x] QR device labels linking the physical device to its pipeline record
 - [ ] Retire the legacy capture write endpoint and the Kivvi-only CSV import once caller telemetry shows zero use
 
@@ -40,8 +40,8 @@ Devices arrive, get captured once, and pass a checklist before they are sold. A 
 
 Every CO₂-avoidance number on the site derives from one config: per-category open-data factors, a 15% refurbishment deduction, a 5 kg floor. Categories without a defensible factor show no claim at all.
 
-- [x] Per-category factors from ADEME/ARCEP open data, guarded by a test that rejects uncited numbers
-- [x] Public methodology page with formula, sources and limits
+- [x] Per-category factors from ADEME/ARCEP open data, guarded by a test that rejects uncited numbers {#co2-open-data}
+- [x] Public methodology page with formula, sources and limits {#co2-methodology}
 - [x] CO₂ badge per marketplace listing, absent where the estimate would not be defensible
 - [ ] Extend factor coverage as further open data becomes available
 
@@ -51,7 +51,7 @@ The roadmap and changelog live in this repository as `ROADMAP.md` and `CHANGELOG
 
 - [x] Public changelog with versioned release notes
 - [x] Roadmap and changelog kept as plain records in the repository
-- [x] Public roadmap page rendering the fleet's canonical record
+- [x] Public roadmap page rendering the fleet's canonical record {#public-roadmap}
 
 ## Next
 

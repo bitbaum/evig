@@ -7811,6 +7811,7 @@
     }
   },
   "roadmap": {
+    "shipped": "リリース",
     "meta": {
       "title": "ロードマップ",
       "description": "evigが次に何を、どの順番で作り、何がすでに完了しているか。"

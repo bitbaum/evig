@@ -7833,6 +7833,7 @@
     }
   },
   "roadmap": {
+    "shipped": "Shipped",
     "meta": {
       "title": "Roadmap",
       "description": "What evig is building next, in what order, and what is already done."

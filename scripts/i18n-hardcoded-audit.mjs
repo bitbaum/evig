@@ -49,6 +49,10 @@ const SCAN_EXCLUDE = [
   /\.spec\.[jt]sx?$/,
   /\/messages\//,
   /\bmessages\.[a-z]+\.json$/,
+  // Release notes are stored translated, as `{ de, en }` pairs (LocalizedCopy)
+  // — the shape this audit asks UI strings to reach, not a hardcoded string.
+  // Scanning it flagged every release as a regression until it was baselined.
+  /\/src\/config\/changelog\.ts$/,
 ];
 
 // KNOWN BLIND SPOT (found by mutation-testing this gate, 2026-08):
