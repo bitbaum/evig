@@ -88,8 +88,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       cron-parser:
-        specifier: ^5.10.0
-        version: 5.10.0
+        specifier: ^5.10.2
+        version: 5.10.2
       csv-parse:
         specifier: ^7.0.2
         version: 7.0.2
@@ -3143,8 +3143,8 @@ packages:
     resolution: {integrity: sha512-ROF/tjJyyRdM8/6W0VqoN5Ql05xAGnkf5b7f3sTEl1bI5jTQQf8O918RD/V9tEb9pRY/TKcvJekDbJtniHyPtQ==}
     deprecated: Ownership of Critters has moved to the Nuxt team, who will be maintaining the project going forward. If you'd like to keep using Critters, please switch to the actively-maintained fork at https://github.com/danielroe/beasties
 
-  cron-parser@5.10.0:
-    resolution: {integrity: sha512-izNAxJyRWUP8ljBoDSub5WyrVOUlT4SLGShswE7eoRBpp6QUsSycYxLBMJlbshgPBMcPT/nrfgjNY2918ayv2A==}
+  cron-parser@5.10.2:
+    resolution: {integrity: sha512-JfAYMY0LZaWQTuict8PhtF/ksSnq8xefSDmQUnnoqvkPYkU/y3UP0DTWzJKFBz0P1IXsDG8q0vY3zHkoFZOhvw==}
     engines: {node: '>=18'}
 
   cross-spawn@6.0.6:
@@ -9087,7 +9087,7 @@ snapshots:
       postcss: 8.5.28
       postcss-media-query-parser: 0.2.3
 
-  cron-parser@5.10.0:
+  cron-parser@5.10.2:
     dependencies:
       luxon: 3.7.2
 
