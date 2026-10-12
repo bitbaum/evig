@@ -42,10 +42,33 @@ vi.mock('@/db', () => ({
 }));
 
 vi.mock('drizzle-orm', () => ({
-  sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
-    raw: (s: string) => ({ __raw: s }),
-  }),
+  sql: Object.assign(
+    (_strings: TemplateStringsArray, ...values: unknown[]) => ({ __sql: true, values }),
+    {
+      raw: (s: string) => ({ __raw: s }),
+      join: (items: unknown[]) => ({ __join: items }),
+    },
+  ),
 }));
+
+// Typo corrections come from cached per-table vocabularies (covered in
+// src/lib/search/__tests__/corrections.test.ts); here they are given.
+const mockCorrect = vi.fn();
+vi.mock('@/lib/search/admin-corrections', () => ({
+  adminCorrectors: {
+    users: { correct: (q: string) => mockCorrect('users', q) },
+    decisions: { correct: (q: string) => mockCorrect('decisions', q) },
+    listings: { correct: (q: string) => mockCorrect('listings', q) },
+  },
+}));
+
+/** Every string bound into a mocked sql`` call, however deeply nested. */
+function boundStrings(value: unknown): string[] {
+  if (typeof value === 'string') return [value];
+  if (Array.isArray(value)) return value.flatMap(boundStrings);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(boundStrings);
+  return [];
+}
 
 vi.mock('@/config/database', () => ({
   TABLE_NAMES: {
@@ -108,13 +131,17 @@ const MOCK_SESSION = {
   expires: '2027-01-01',
 };
 
-function makeRequest() {
-  return new NextRequest('http://localhost/api/admin/search-index', { method: 'GET' });
+function makeRequest(q?: string) {
+  const qs = q ? `?q=${encodeURIComponent(q)}` : '';
+  return new NextRequest(`http://localhost/api/admin/search-index${qs}`, { method: 'GET' });
 }
 
 beforeEach(() => {
   vi.resetAllMocks();
   mockAuth.mockResolvedValue(MOCK_SESSION);
+  mockCorrect.mockImplementation(async (_table: string, q: string) => [
+    { word: q.toLowerCase(), corrections: [] },
+  ]);
 
   // Three parallel db.execute calls via Promise.allSettled
   mockDbExecute
@@ -160,5 +187,33 @@ describe('GET /api/admin/search-index — authenticated', () => {
     expect(body.data.recentUsers).toHaveLength(0);
     expect(body.data.recentDecisions).toHaveLength(0);
     expect(body.data.recentListings).toHaveLength(0);
+  });
+});
+
+describe('GET /api/admin/search-index — typo-tolerant query', () => {
+  it('asks each table for what was typed AND its corrections', async () => {
+    mockCorrect.mockImplementation(async (table: string) =>
+      table === 'users' ? [{ word: 'mülller', corrections: ['müller'] }] : [],
+    );
+    const response = await GET(makeRequest('Mülller'));
+    expect(response.status).toBe(200);
+
+    const [usersQuery, decisionsQuery] = mockDbExecute.mock.calls.map((c) => boundStrings(c[0]));
+    expect(usersQuery).toEqual(expect.arrayContaining(['%Mülller%', '%müller%']));
+    // A correction from the users' words never widens another table.
+    expect(decisionsQuery).toContain('%Mülller%');
+    expect(decisionsQuery).not.toContain('%müller%');
+    expect(mockCorrect).toHaveBeenCalledWith('users', 'Mülller');
+  });
+
+  it('escapes LIKE wildcards in what was typed', async () => {
+    await GET(makeRequest('100%_sure'));
+    const usersQuery = boundStrings(mockDbExecute.mock.calls[0]![0]);
+    expect(usersQuery).toContain('%100\\%\\_sure%');
+  });
+
+  it('does not consult the vocabularies without a query', async () => {
+    await GET(makeRequest());
+    expect(mockCorrect).not.toHaveBeenCalled();
   });
 });

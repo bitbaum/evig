@@ -73,6 +73,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     }
   };
 
+  // searchkit not used: staff post list narrowed in place, in its own order; readers' blog search is typo-tolerant (searchBlogPosts).
   const filtered = useMemo(() => {
     return posts.filter((p) => {
       if (search.trim() && !p.title.toLowerCase().includes(search.toLowerCase())) return false;

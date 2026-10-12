@@ -8,6 +8,7 @@ import { apiFetch } from '@/lib/api/client';
 import { getErrorMessage } from '@/lib/utils/error';
 import { formatDateShort } from '@/lib/date-formats';
 import { todayLocalIso } from '@/lib/utils/date';
+import { peopleSpec, searchList } from '@/lib/search/list-search';
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist';
 import type { SourceValue } from '@/components/admin/protocols/SourceUploader';
 
@@ -84,11 +85,15 @@ export function useProtocolForm(
     }
   }, [content]);
 
-  const filteredTeamMembers = useMemo(() => {
-    if (!attendeeSearch.trim()) return teamMembers;
-    const search = attendeeSearch.toLowerCase();
-    return teamMembers.filter((m) => m.name.toLowerCase().includes(search));
-  }, [teamMembers, attendeeSearch]);
+  const filteredTeamMembers = useMemo(
+    () =>
+      searchList(
+        teamMembers,
+        peopleSpec((m) => m.name),
+        attendeeSearch,
+      ),
+    [teamMembers, attendeeSearch],
+  );
 
   const hasContent =
     sources.audio !== null || sources.textFiles.length > 0 || content.trim().length >= 20;

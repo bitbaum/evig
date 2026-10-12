@@ -28,6 +28,25 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
+    id: 'v0-5-2',
+    version: '0.5.2',
+    date: '2026-10-12',
+    title: {
+      de: 'Die Suche verzeiht einen Tippfehler',
+      en: 'Search forgives a typo',
+    },
+    changes: [
+      {
+        de: 'Ein Tippfehler pro Wort findet trotzdem, was gemeint war: im Marktplatz («Thinkpda» findet das ThinkPad), in der Technikerliste («Zurich» findet Zürich), in der Befehlsleiste (⌘K), im Blog, in der Open-Source-Liste und beim Auswählen von Personen',
+        en: 'One slip per word still finds what was meant: in the marketplace ("Thinkpda" finds the ThinkPad), in the technician directory ("Zurich" finds Zürich), in the command palette (⌘K), on the blog, in the open-source list and when picking people',
+      },
+      {
+        de: 'In der Befehlsleiste, im Blog und in der Open-Source-Liste steht der beste Treffer zuoberst, und die Befehlsleiste zeigt, welcher Teil gepasst hat',
+        en: 'In the command palette, on the blog and in the open-source list the best match comes first, and the command palette marks what matched',
+      },
+    ],
+  },
+  {
     id: 'v0-5-1',
     version: '0.5.1',
     date: '2026-10-11',

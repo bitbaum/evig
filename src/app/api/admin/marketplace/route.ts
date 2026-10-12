@@ -53,6 +53,7 @@ export const GET = withAdmin('marketplace', async (request) => {
       );
     }
 
+    // searchkit not used: moderation filter incl. seller e-mails; ⌘K (/api/admin/search-index) is the typo-tolerant listing search.
     if (search) {
       const pattern = `%${search}%`;
       conditions.push(

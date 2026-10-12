@@ -172,6 +172,7 @@ export async function listVacanciesAdmin(filters: {
   if (filters.status) conditions.push(eq(jobPostings.status, filters.status));
   if (filters.role_track) conditions.push(eq(jobPostings.roleTrack, filters.role_track));
   if (filters.department) conditions.push(eq(jobPostings.department, filters.department));
+  // searchkit not used: HR worklist filter over a handful of postings, typed as written.
   if (filters.search) {
     conditions.push(
       or(

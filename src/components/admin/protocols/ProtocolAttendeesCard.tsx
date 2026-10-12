@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { adminInteractive } from '@/lib/admin-ui';
+import { peopleSpec, searchList } from '@/lib/search/list-search';
 
 interface TeamMember {
   id: string;
@@ -37,11 +38,15 @@ export function ProtocolAttendeesCard({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const filtered = useMemo(() => {
-    if (!search.trim()) return teamMembers;
-    const q = search.toLowerCase();
-    return teamMembers.filter((m) => m.name.toLowerCase().includes(q));
-  }, [teamMembers, search]);
+  const filtered = useMemo(
+    () =>
+      searchList(
+        teamMembers,
+        peopleSpec((m) => m.name),
+        search,
+      ),
+    [teamMembers, search],
+  );
 
   async function save() {
     setSaving(true);

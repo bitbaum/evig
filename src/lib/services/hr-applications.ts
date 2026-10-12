@@ -161,6 +161,7 @@ export async function listApplicationsAdmin(filters: {
   if (filters.status) conditions.push(eq(jobApplications.status, filters.status));
   if (filters.job_posting_id)
     conditions.push(eq(jobApplications.jobPostingId, filters.job_posting_id));
+  // searchkit not used: HR worklist filter over applicant names/e-mails, typed as written.
   if (filters.search) {
     conditions.push(
       or(

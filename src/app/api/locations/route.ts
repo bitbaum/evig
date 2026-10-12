@@ -37,6 +37,7 @@ export const GET = withAuth(async (request: NextRequest, session) => {
       conditions.push(eq(locations.type, type));
     }
 
+    // searchkit not used: a city filter on a short admin list, not a search box.
     if (city) {
       conditions.push(ilike(locations.city, `%${city}%`));
     }

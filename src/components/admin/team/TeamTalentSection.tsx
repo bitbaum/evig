@@ -38,6 +38,7 @@ export function TeamTalentSection({
   onAddInterest,
   onRemoveInterest,
 }: Props) {
+  // searchkit not used: autocomplete over a short fixed skill list; free-text entry stays possible.
   const filteredSkillSuggestions = ALL_SKILL_SUGGESTIONS.filter(
     (skill) =>
       skill.toLowerCase().includes(skillInput.toLowerCase()) && !form.skills.includes(skill),

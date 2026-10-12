@@ -4,6 +4,7 @@
  */
 
 import { BLOG_CATEGORY_KEYS, type BlogCategoryKey } from '@/config/blog';
+import { searchList, type SearchSpec } from '@/lib/search/list-search';
 
 const WORDS_PER_MINUTE = 200;
 
@@ -74,4 +75,27 @@ export function paginateBlogIndex<T>(posts: T[], page: number, pageSize: number)
     totalPages,
     latestTotal: latest.length,
   };
+}
+
+/** What the blog search reads of a post. */
+export interface SearchablePost {
+  title: string;
+  excerpt?: string | null;
+  tags?: readonly string[] | null;
+}
+
+const BLOG_SEARCH_SPEC: SearchSpec<SearchablePost> = {
+  fields: [
+    { name: 'title', get: (post) => post.title },
+    { name: 'tags', get: (post) => post.tags },
+    { name: 'excerpt', get: (post) => post.excerpt },
+  ],
+};
+
+/**
+ * The blog search box: title before tags before excerpt, best match first,
+ * one slip per word forgiven ("reperatur" finds "Reparatur").
+ */
+export function searchBlogPosts<T extends SearchablePost>(posts: readonly T[], query: string): T[] {
+  return searchList(posts, BLOG_SEARCH_SPEC, query);
 }

@@ -49,6 +49,7 @@ export const GET = withAdmin('team', async (request, session) => {
       conditions.push(eq(teamProfiles.employmentType, filters.employment_type));
     if (filters.is_active !== 'all')
       conditions.push(eq(teamProfiles.isActive, filters.is_active === 'true'));
+    // searchkit not used: staff roster filter, typed as written; ⌘K finds people with typos.
     if (filters.search) {
       conditions.push(
         or(

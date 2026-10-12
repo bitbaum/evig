@@ -6,6 +6,7 @@ import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { adminInteractive } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
+import { SearchHighlight } from '@/components/search/SearchHighlight';
 import type { ResultItem } from './types';
 import type { CommandBarT } from './build-results';
 
@@ -67,7 +68,7 @@ export function ResultsList({
                   </span>
                   <span className="flex-1 min-w-0">
                     <span className="block font-medium text-sm leading-snug truncate">
-                      {item.label}
+                      <SearchHighlight text={item.label} ranges={item.marks} />
                     </span>
                     {item.sub && (
                       <span className="block text-xs text-text-muted truncate mt-0.5">

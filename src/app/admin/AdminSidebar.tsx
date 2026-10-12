@@ -60,6 +60,7 @@ export function AdminSidebar({
 
   // Quick filter — the sidebar carries 30+ destinations across 8 groups;
   // typing beats scanning. Matches label + group label, case/diacritic-light.
+  // searchkit not used: narrows the sidebar in sidebar order; ⌘K (CommandBar) is the typo-tolerant jump to a section.
   const [filterQuery, setFilterQuery] = useState('');
   const normalizedQuery = filterQuery.trim().toLowerCase();
   const filteredSections = useMemo(() => {

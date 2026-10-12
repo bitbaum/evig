@@ -123,6 +123,7 @@ export async function getProtocols(
   if (filters?.status) {
     conditions.push(sql`mp.status = ${filters.status}`);
   }
+  // searchkit not used: staff archive filter over protocol titles, typed as written; lib/search/corrections can widen it later.
   if (filters?.q) {
     conditions.push(sql`mp.title ILIKE '%' || ${filters.q} || '%'`);
   }

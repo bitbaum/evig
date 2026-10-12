@@ -9,7 +9,7 @@ import { getAllCategories, type BlogCategory } from '@/lib/blog-db';
 import { isListedPost } from '@/lib/blog';
 import { filterViewable, type BlogViewer } from '@/lib/blog-access';
 import { getMergedPosts } from '@/lib/blog-merge';
-import { paginateBlogIndex, slugifyCategory } from '@/lib/blog-utils';
+import { paginateBlogIndex, searchBlogPosts, slugifyCategory } from '@/lib/blog-utils';
 import { BLOG_PAGE_SIZE } from '@/config/blog';
 import { auth } from '@/auth';
 import BlogHero from '@/components/blog/BlogHero';
@@ -151,17 +151,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     );
   }
 
-  // Search — simple server-side match over title/excerpt/tags. With the current
-  // post volume this beats wiring a search engine (YAGNI); revisit at ~100+ posts.
+  // Search — server-side over title/tags/excerpt, best match first, one slip
+  // per word forgiven (lib/blog/search.ts). No search engine at this volume.
   const query = (q || '').trim();
   if (query) {
-    const needle = query.toLowerCase();
-    filteredPosts = filteredPosts.filter(
-      (post) =>
-        post.title.toLowerCase().includes(needle) ||
-        (post.excerpt || '').toLowerCase().includes(needle) ||
-        post.tags?.some((tg) => tg.toLowerCase().includes(needle)),
-    );
+    filteredPosts = searchBlogPosts(filteredPosts, query);
   }
 
   // Search/tag results read as a flat list; the magazine layout (hero +

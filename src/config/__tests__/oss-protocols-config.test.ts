@@ -54,6 +54,7 @@ describe('getFollowUpStatusColor', () => {
 // open-source-registry.ts — category, alternative, and proprietary lookups
 // ============================================================================
 
+import { evaluate, typoCases, words } from '@bitbaum/searchkit';
 import {
   getCategoryById,
   getAlternativeById,
@@ -259,7 +260,9 @@ describe('searchAlternatives', () => {
   });
 
   it('no match → returns empty array', () => {
-    const results = searchAlternatives('xyzzy-no-match-guaranteed');
+    // One word: a multi-word query sets an unmatched word aside and still
+    // answers with the rest (searchkit's relax), so it is not "no match".
+    const results = searchAlternatives('xyzzyqwv');
     expect(results).toEqual([]);
   });
 
@@ -279,6 +282,34 @@ describe('searchAlternatives', () => {
     for (const result of searchAlternatives('linux')) {
       expect(allIds.has(result.id)).toBe(true);
     }
+  });
+});
+
+describe('searchAlternatives — one slip still finds it', () => {
+  const ids = (q: string) => searchAlternatives(q).map((a) => a.id);
+
+  it('finds an alternative by the app it replaces, misspelled', () => {
+    const gimp = ids('Photshop');
+    expect(gimp.length).toBeGreaterThan(0);
+    expect(getAlternativesForApp('photoshop').map((a) => a.id)).toContain(gimp[0]);
+    expect(ids('libreofice')[0]).toBe('libreoffice');
+  });
+
+  it('passes the generated typo suite over every alternative name', async () => {
+    // Names as people type them: "WireGuard" is one word, not two.
+    const cases = typoCases(
+      getAllAlternatives().map((a) => ({ id: a.id, name: a.name })),
+      { fold: (name) => name.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [] },
+    ).filter((_, i) => i % 4 === 0); // every 4th: the full ~2400 take ~10 s
+    const report = await evaluate(cases, ids);
+    expect(cases.length).toBeGreaterThan(500);
+    // Not first today (604 cases, 2026-10): a wrong FIRST letter of a short
+    // name — "fimp" (GIMP), "mrita" (Krita), "kogseq" (Logseq) — ranks as two
+    // typos, so a one-typo hit in another entry's description can lead. Only
+    // "itea" (Gitea, g dropped) falls out of the top 3.
+    expect(report.successAt1).toBeGreaterThanOrEqual(0.98);
+    expect(report.successAt3).toBeGreaterThanOrEqual(0.99);
+    expect(report.misses.map((m) => m.query)).toEqual(['itea']);
   });
 });
 

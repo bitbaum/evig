@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiFetch } from '@/lib/api/client';
+import { peopleSpec, searchList } from '@/lib/search/list-search';
 import {
   DECISION_STATUS,
   DECISION_TYPE_DEFAULTS,
@@ -104,11 +105,14 @@ export function useDecisionForm() {
     });
   }, []);
 
-  const filteredMembers = teamMembers.filter((m) => {
-    if (!participantSearch) return true;
-    const q = participantSearch.toLowerCase();
-    return m.email.toLowerCase().includes(q) || (m.name && m.name.toLowerCase().includes(q));
-  });
+  const filteredMembers = searchList(
+    teamMembers,
+    peopleSpec<TeamMember>(
+      (m) => m.name,
+      (m) => m.email,
+    ),
+    participantSearch,
+  );
 
   function handleTypeChange(type: DecisionType) {
     setDecisionType(type);

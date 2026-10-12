@@ -20,6 +20,7 @@ import Heading from '@/components/ui/Heading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Drawer } from '@/components/ui/Drawer';
+import { peopleSpec, searchList } from '@/lib/search/list-search';
 
 interface Conversation {
   id: string;
@@ -126,10 +127,13 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
     }
   };
 
-  const filteredConversations = conversations.filter(
-    (conv) =>
-      conv.other_participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.title?.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredConversations = searchList(
+    conversations,
+    peopleSpec<Conversation>(
+      (conv) => conv.other_participant.name,
+      (conv) => conv.title,
+    ),
+    searchQuery,
   );
 
   return (

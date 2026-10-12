@@ -1,26 +1,22 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from '@/i18n/navigation';
-import {
-  Search,
-  ChevronRight,
-  Package,
-  ShoppingBag,
-  Heart,
-  Store,
-  GraduationCap,
-  ArrowRight,
-  Compass,
-} from 'lucide-react';
+import { Search, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { apiFetch } from '@/lib/api/client';
-import { getDashboardSections } from '@/config/sections';
 import { useTranslations } from 'next-intl';
 import { sectionLabel, type SectionsT } from '@/lib/section-labels';
+import { SearchHighlight } from './SearchHighlight';
+import {
+  buildResults,
+  type GroupLabels,
+  type ResultItem,
+  type SearchIndex,
+} from './user-palette-results';
 
 /**
  * Site-wide command palette for logged-in users (⌘K / tap). Mounted once in the
@@ -28,140 +24,12 @@ import { sectionLabel, type SectionsT } from '@/lib/section-labels';
  * pages (admin has its own palette). Searches the user's own listings/orders/
  * favorites + public marketplace listings + workshops, and jumps to any
  * dashboard destination — plus a "search the marketplace for X" hand-off.
+ * What it finds and in which order: ./user-palette-results.
  */
 /** Triggers dispatch this to open the single mounted palette dialog. */
 export const OPEN_COMMAND_PALETTE_EVENT = 'revampit:open-command-palette';
 export function openCommandPalette() {
   window.dispatchEvent(new Event(OPEN_COMMAND_PALETTE_EVENT));
-}
-
-interface IdTitleStatus {
-  id: string;
-  title: string;
-  status?: string;
-}
-interface SearchIndex {
-  myListings: IdTitleStatus[];
-  myOrders: IdTitleStatus[];
-  favorites: { id: string; title: string }[];
-  marketplace: { id: string; title: string; price_chf?: string | number }[];
-  workshops: { id: string; slug?: string; title: string }[];
-}
-
-interface ResultItem {
-  key: string;
-  label: string;
-  sub?: string;
-  href: string;
-  icon: ReactNode;
-  group: string;
-}
-
-function norm(s: string) {
-  return s.toLowerCase().trim();
-}
-
-interface GroupLabels {
-  goTo: string;
-  myListings: string;
-  myOrders: string;
-  favorites: string;
-  marketplace: string;
-  workshops: string;
-  search: string;
-  marketplaceSearch: (query: string) => string;
-  navLabel: (s: ReturnType<typeof getDashboardSections>[number]) => string;
-}
-
-function buildResults(index: SearchIndex | null, query: string, L: GroupLabels): ResultItem[] {
-  const q = norm(query);
-  const items: ResultItem[] = [];
-
-  // Navigation destinations (always available, filtered by query).
-  for (const s of getDashboardSections()) {
-    const label = L.navLabel(s);
-    if (q && !norm(label).includes(q)) continue;
-    items.push({
-      key: `nav:${s.id}`,
-      label,
-      href: s.path,
-      group: L.goTo,
-      icon: <Compass className="h-4 w-4" />,
-    });
-  }
-  // Cap nav results when no query so data results show.
-  const navItems = q ? items : items.slice(0, 4);
-  const out = [...navItems];
-
-  if (!index) return out;
-
-  const matches = (t: string) => !q || norm(t).includes(q);
-
-  for (const l of index.myListings) {
-    if (!matches(l.title)) continue;
-    out.push({
-      key: `ml:${l.id}`,
-      label: l.title,
-      sub: l.status,
-      href: `/marketplace/${l.id}`,
-      group: L.myListings,
-      icon: <Package className="h-4 w-4" />,
-    });
-  }
-  for (const o of index.myOrders) {
-    if (!matches(o.title)) continue;
-    out.push({
-      key: `mo:${o.id}`,
-      label: o.title,
-      sub: o.status,
-      href: `/dashboard/orders/${o.id}`,
-      group: L.myOrders,
-      icon: <ShoppingBag className="h-4 w-4" />,
-    });
-  }
-  for (const f of index.favorites) {
-    if (!matches(f.title)) continue;
-    out.push({
-      key: `fav:${f.id}`,
-      label: f.title,
-      href: `/marketplace/${f.id}`,
-      group: L.favorites,
-      icon: <Heart className="h-4 w-4" />,
-    });
-  }
-  for (const m of index.marketplace) {
-    if (!matches(m.title)) continue;
-    out.push({
-      key: `mk:${m.id}`,
-      label: m.title,
-      sub: m.price_chf != null ? `CHF ${m.price_chf}` : undefined,
-      href: `/marketplace/${m.id}`,
-      group: L.marketplace,
-      icon: <Store className="h-4 w-4" />,
-    });
-  }
-  for (const w of index.workshops) {
-    if (!matches(w.title)) continue;
-    out.push({
-      key: `ws:${w.id}`,
-      label: w.title,
-      href: `/workshops/${w.slug ?? w.id}`,
-      group: L.workshops,
-      icon: <GraduationCap className="h-4 w-4" />,
-    });
-  }
-
-  // Hand-off: full marketplace search for the typed query.
-  if (q) {
-    out.push({
-      key: 'mk-search',
-      label: L.marketplaceSearch(query.trim()),
-      href: `/marketplace?search=${encodeURIComponent(query.trim())}`,
-      group: L.search,
-      icon: <ArrowRight className="h-4 w-4" />,
-    });
-  }
-  return out;
 }
 
 export function UserCommandPalette() {
@@ -346,7 +214,7 @@ export function UserCommandPalette() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium leading-snug">
-                          {item.label}
+                          <SearchHighlight text={item.label} ranges={item.marks} />
                         </span>
                         {item.sub && (
                           <span className="mt-0.5 block truncate text-xs text-text-muted">

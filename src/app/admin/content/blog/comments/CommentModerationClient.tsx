@@ -60,6 +60,7 @@ export function CommentModerationClient({ comments }: { comments: ModComment[] }
     setBusyId(null);
   };
 
+  // searchkit not used: moderation filter over bodies and e-mails, kept in queue order.
   const filtered = useMemo(() => {
     return comments.filter((c) => {
       if (statusFilter && c.status !== statusFilter) return false;

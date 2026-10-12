@@ -224,6 +224,7 @@ export const GET = withAdmin('intake', async (request) => {
       conditions.push(sql`ap.category = ${category}`);
     }
 
+    // searchkit not used: intake look-up by brand/model as typed — a typo match would be a wrong device.
     if (search) {
       const pattern = `%${search}%`;
       conditions.push(sql`(ap.brand ILIKE ${pattern} OR ap.product_name ILIKE ${pattern})`);

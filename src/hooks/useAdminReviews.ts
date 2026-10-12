@@ -113,6 +113,7 @@ export function useAdminReviews() {
     setActionInProgress(null);
   };
 
+  // searchkit not used: moderation filter over bodies and e-mails, kept in queue order.
   const filteredReviews = reviews.filter(
     (review) =>
       searchQuery === '' ||

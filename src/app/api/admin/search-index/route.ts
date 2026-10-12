@@ -8,6 +8,11 @@ import { canAccessSection, toStaffUser } from '@/lib/permissions';
 import { logger } from '@/lib/logger';
 import { apiSuccess, apiError } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages';
+import { adminCorrectors } from '@/lib/search/admin-corrections';
+import { allCorrections, containsPattern, ilikeAny } from '@/lib/search/corrections';
+
+/** Rows fetched per table for a query: more than the palette shows, so ranking can choose. */
+const SEARCH_CANDIDATES = 25;
 
 export const GET = withAdmin(async (request: NextRequest, session) => {
   try {
@@ -21,39 +26,59 @@ export const GET = withAdmin(async (request: NextRequest, session) => {
     // With `?q=`, search the FULL tables (ILIKE) rather than just the most
     // recent rows — so old users/listings/decisions are findable, not only
     // whatever happens to be newest. No `q` → recent rows (initial/empty state).
+    // The typed text is widened with typo corrections from each table's own
+    // words ("Mülller" also asks for "müller"); exact matches sort first, and
+    // the palette ranks the candidates (command-bar/build-results).
     const q = new URL(request.url).searchParams.get('q')?.trim() ?? '';
-    const term = q ? `%${q.replace(/[%_\\]/g, (c) => `\\${c}`)}%` : '';
+    const term = containsPattern(q);
+    const patterns = async (table: keyof typeof adminCorrectors) =>
+      [q, ...allCorrections(await adminCorrectors[table].correct(q))].map(containsPattern);
 
     const [usersResult, decisionsResult, listingsResult] = await Promise.allSettled([
       canSeeUsers
-        ? db.execute(
-            q
-              ? sql`SELECT id, name, email FROM ${sql.raw(TABLE_NAMES.USERS)}
-                   WHERE name ILIKE ${term} OR email ILIKE ${term}
-                   ORDER BY "createdAt" DESC LIMIT 8`
-              : sql`SELECT id, name, email FROM ${sql.raw(TABLE_NAMES.USERS)}
+        ? q
+          ? patterns('users').then((p) =>
+              db.execute(
+                sql`SELECT id, name, email FROM ${sql.raw(TABLE_NAMES.USERS)}
+                   WHERE ${ilikeAny(sql`name`, p)} OR ${ilikeAny(sql`email`, p)}
+                   ORDER BY (name ILIKE ${term} OR email ILIKE ${term}) DESC, "createdAt" DESC
+                   LIMIT ${SEARCH_CANDIDATES}`,
+              ),
+            )
+          : db.execute(
+              sql`SELECT id, name, email FROM ${sql.raw(TABLE_NAMES.USERS)}
                    ORDER BY "createdAt" DESC LIMIT 8`,
-          )
+            )
         : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
       canSeeDecisions
-        ? db.execute(
-            q
-              ? sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
-                   WHERE title ILIKE ${term}
-                   ORDER BY created_at DESC LIMIT 8`
-              : sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
+        ? q
+          ? patterns('decisions').then((p) =>
+              db.execute(
+                sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
+                   WHERE ${ilikeAny(sql`title`, p)}
+                   ORDER BY (title ILIKE ${term}) DESC, created_at DESC
+                   LIMIT ${SEARCH_CANDIDATES}`,
+              ),
+            )
+          : db.execute(
+              sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
                    ORDER BY created_at DESC LIMIT 8`,
-          )
+            )
         : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
       canSeeListings
-        ? db.execute(
-            q
-              ? sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
-                   WHERE title ILIKE ${term}
-                   ORDER BY created_at DESC LIMIT 8`
-              : sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
+        ? q
+          ? patterns('listings').then((p) =>
+              db.execute(
+                sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
+                   WHERE ${ilikeAny(sql`title`, p)}
+                   ORDER BY (title ILIKE ${term}) DESC, created_at DESC
+                   LIMIT ${SEARCH_CANDIDATES}`,
+              ),
+            )
+          : db.execute(
+              sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
                    ORDER BY created_at DESC LIMIT 8`,
-          )
+            )
         : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
     ]);
 

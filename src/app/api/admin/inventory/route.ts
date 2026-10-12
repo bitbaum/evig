@@ -31,6 +31,7 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
     // Build conditions
     const conditions = [];
     if (status) conditions.push(eq(aiExtractedProducts.status, status));
+    // searchkit not used: inventory look-up by ID, model or part number — typed exactly, a typo match would be a wrong device.
     if (search) {
       const pattern = `%${search}%`;
       conditions.push(
