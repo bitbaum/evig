@@ -20,6 +20,7 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
     const conditions: SQL[] = [];
     if (status !== 'all') conditions.push(eq(workshopProposals.status, status));
     if (category) conditions.push(eq(workshopProposals.category, category));
+    // searchkit not used: staff review queue filter, typed as written; lib/search/corrections can widen it later.
     if (q) conditions.push(ilike(workshopProposals.title, `%${q}%`));
 
     const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined;

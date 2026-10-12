@@ -10,6 +10,8 @@
  *   3. Done — search, list, and detail pages update automatically
  */
 
+import { createListSearch, type ListHit } from '@/lib/search/list-search';
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -2050,26 +2052,31 @@ export function getAllProprietaryApps(): ProprietaryApp[] {
   return PROPRIETARY_APPS;
 }
 
+let registrySearch: ((query: string) => ListHit<OSSAlternative>[]) | null = null;
+
+/**
+ * The registry search box: an alternative's own name first, then the
+ * proprietary apps it replaces ("Photshop" finds GIMP), its tagline,
+ * category and description. Best match first, one slip per word forgiven.
+ */
 export function searchAlternatives(query: string): OSSAlternative[] {
-  const q = query.toLowerCase().trim();
-  if (!q) return OSS_ALTERNATIVES;
-
-  return OSS_ALTERNATIVES.filter((alt) => {
-    // Match name, tagline, description
-    if (alt.name.toLowerCase().includes(q)) return true;
-    if (alt.tagline.toLowerCase().includes(q)) return true;
-    if (alt.description.toLowerCase().includes(q)) return true;
-
-    // Match replaced app names
-    for (const r of alt.replaces) {
-      const app = PROPRIETARY_APPS.find((a) => a.id === r.appId);
-      if (app && app.name.toLowerCase().includes(q)) return true;
-    }
-
-    // Match category label
-    const cat = OSS_CATEGORIES.find((c) => c.id === alt.categoryId);
-    if (cat && cat.label.toLowerCase().includes(q)) return true;
-
-    return false;
+  registrySearch ??= createListSearch(OSS_ALTERNATIVES, {
+    fields: [
+      // Also as one lower-case word: camelCase splits "KeePassXC" into three,
+      // and one slip in the whole name ("keepasxc") would then find nothing.
+      { name: 'name', get: (alt) => [alt.name, alt.name.toLowerCase()] },
+      {
+        name: 'replaces',
+        get: (alt) =>
+          alt.replaces.map((r) => PROPRIETARY_APPS.find((a) => a.id === r.appId)?.name ?? ''),
+      },
+      { name: 'tagline', get: (alt) => alt.tagline },
+      {
+        name: 'category',
+        get: (alt) => OSS_CATEGORIES.find((c) => c.id === alt.categoryId)?.label,
+      },
+      { name: 'description', get: (alt) => alt.description },
+    ],
   });
+  return registrySearch(query).map((hit) => hit.item);
 }

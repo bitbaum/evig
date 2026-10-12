@@ -128,6 +128,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // searchkit not used: free text over request descriptions, no name vocabulary to correct towards (see lib/search/corrections).
     // Text search across title, description, device brand/model
     if (search && search.trim().length >= 2) {
       const searchPattern = `%${search.trim()}%`;

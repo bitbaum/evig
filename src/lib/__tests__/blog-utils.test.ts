@@ -11,9 +11,13 @@
  *   - returns correct ceil for content exceeding one minute
  *   - treats leading/trailing whitespace as empty for word splitting
  *   - returns 1 for a single word
+ *   searchBlogPosts (the blog search box)
+ *   - title before tags before excerpt; one slip per word still finds the post
+ *   - a word inside a compound ("Computerreparatur") still matches, after
  */
 
-import { getReadingTime, paginateBlogIndex, slugifyCategory } from '../blog-utils';
+import { evaluate, typoCases, words } from '@bitbaum/searchkit';
+import { getReadingTime, paginateBlogIndex, searchBlogPosts, slugifyCategory } from '../blog-utils';
 
 describe('getReadingTime', () => {
   it('returns 1 for a single word', () => {
@@ -109,5 +113,69 @@ describe('slugifyCategory', () => {
   it('matches the index page fallback slugification', () => {
     expect(slugifyCategory('Open Source')).toBe('open-source');
     expect(slugifyCategory('Nachhaltigkeit')).toBe('nachhaltigkeit');
+  });
+});
+
+describe('searchBlogPosts', () => {
+  const POSTS = [
+    {
+      id: 'cafe',
+      title: 'Reparatur-Café im Mai',
+      excerpt: 'Wir flicken, was kaputt ist.',
+      tags: ['Reparatur'],
+    },
+    {
+      id: 'linux',
+      title: 'Linux statt Windows: so gelingt der Umstieg',
+      excerpt: null,
+      tags: ['Open Source'],
+    },
+    {
+      id: 'privacy',
+      title: 'Datenschutz auf dem Smartphone',
+      excerpt: 'Apps, Tracker, Einstellungen.',
+      tags: [],
+    },
+    {
+      id: 'laptops',
+      title: 'Warum gebrauchte Laptops die bessere Wahl sind',
+      excerpt: 'Geprüft statt neu.',
+      tags: ['Nachhaltigkeit'],
+    },
+    {
+      id: 'battery',
+      title: 'Akku tauschen beim MacBook',
+      excerpt: 'Schritt für Schritt.',
+      tags: ['Anleitung'],
+    },
+    {
+      id: 'velo',
+      title: 'Velocomputer reparieren',
+      excerpt: 'Computerreparatur am Lenker.',
+      tags: null,
+    },
+  ];
+  const ids = (q: string) => searchBlogPosts(POSTS, q).map((p) => p.id);
+
+  it('puts a title match before a tag or excerpt match', () => {
+    expect(ids('reparatur')).toEqual(['cafe', 'velo']);
+  });
+
+  it('forgives one slip per word and folds umlauts', () => {
+    expect(ids('reperatur')[0]).toBe('cafe');
+    expect(ids('datenshutz')[0]).toBe('privacy');
+    expect(ids('nachhaltigkiet')).toEqual(['laptops']);
+    expect(ids('cafe')).toEqual(['cafe']);
+  });
+
+  it('passes the generated typo suite over the titles at success@1', async () => {
+    const cases = typoCases(
+      POSTS.map((p) => ({ id: p.id, name: p.title })),
+      { fold: words },
+    );
+    const report = await evaluate(cases, ids);
+    expect(cases.length).toBeGreaterThan(500);
+    expect(report.misses).toEqual([]);
+    expect(report.successAt1).toBe(1);
   });
 });

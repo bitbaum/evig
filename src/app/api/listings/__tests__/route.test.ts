@@ -134,6 +134,13 @@ vi.mock('@/lib/marketplace/listing-helpers', () => ({
   buildMeiliSpecs: vi.fn().mockReturnValue({}),
 }));
 
+// The typo-tolerant search condition is covered by
+// src/lib/marketplace/__tests__/listing-search.test.ts.
+const mockListingSearchCondition = vi.fn();
+vi.mock('@/lib/marketplace/listing-search', () => ({
+  listingSearchCondition: (search: string) => mockListingSearchCondition(search),
+}));
+
 vi.mock('@/lib/search/meilisearch', () => ({
   indexListing: vi.fn().mockResolvedValue(undefined),
   removeListing: vi.fn().mockResolvedValue(undefined),
@@ -452,6 +459,26 @@ describe('GET /api/listings — empty results', () => {
     await GET(makeGetRequest());
     // Only one select call (main query) — no specs query
     expect(mockSelect).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('GET /api/listings — search', () => {
+  it('filters by the typo-tolerant search condition', async () => {
+    const condition = { __sql: 'search' };
+    mockListingSearchCondition.mockResolvedValue(condition);
+    mockValidateQuery.mockReturnValue({
+      success: true,
+      data: { limit: 20, offset: 0, sort: 'newest', search: 'Thinkpda' },
+    });
+    const response = await GET(makeGetRequest({ search: 'Thinkpda' }));
+    expect(response.status).toBe(200);
+    expect(mockListingSearchCondition).toHaveBeenCalledWith('Thinkpda');
+    expect(mockWhere.mock.calls[0]![0].__and).toContain(condition);
+  });
+
+  it('does not build a search condition without a search', async () => {
+    await GET(makeGetRequest());
+    expect(mockListingSearchCondition).not.toHaveBeenCalled();
   });
 });
 

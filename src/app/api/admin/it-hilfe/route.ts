@@ -34,6 +34,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
       conditions.push(eq(itHilfeRequests.canton, canton));
     }
 
+    // searchkit not used: staff worklist filter, typed as written; lib/search/corrections can widen it later.
     if (search) {
       const pattern = `%${search}%`;
       conditions.push(

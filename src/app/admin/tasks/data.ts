@@ -125,6 +125,7 @@ export async function getTasks(
     params,
     paramIndex,
   ));
+  // searchkit not used: staff worklist filter, typed as written; lib/search/corrections can widen it later.
   if (q) {
     filterClause += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`;
     params.push(`%${q}%`);

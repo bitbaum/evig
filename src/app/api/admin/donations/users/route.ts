@@ -23,6 +23,7 @@ export const GET = withAdmin('donations', async (request: NextRequest, session) 
       return apiSuccess({ users: [] });
     }
 
+    // searchkit not used: donor picker by exact name/e-mail fragment; ⌘K is the typo-tolerant user search.
     const rows = await db
       .select({
         id: users.id,

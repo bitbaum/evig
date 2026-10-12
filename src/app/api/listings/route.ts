@@ -31,6 +31,7 @@ import {
 } from '@/lib/schemas';
 import { normalizeSpecValue } from '@/config/marketplace';
 import { indexListingInSearch, listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
+import { listingSearchCondition } from '@/lib/marketplace/listing-search';
 import {
   LISTING_STATUS,
   MARKETPLACE_SELLER_TYPE,
@@ -107,9 +108,7 @@ export async function GET(request: NextRequest) {
       conditions.push(sql`${listings.verifiedAt} IS NOT NULL`);
     }
     if (filters.search) {
-      conditions.push(
-        sql`to_tsvector('german', coalesce(${listings.title}, '') || ' ' || coalesce(${listings.description}, '') || ' ' || coalesce(${listings.brand}, '') || ' ' || coalesce(${listings.model}, '')) @@ plainto_tsquery('german', ${filters.search})`,
-      );
+      conditions.push(await listingSearchCondition(filters.search));
     }
 
     // Spec filters via subquery on listing_specs — key names from SPEC_QUERY_PARAM_KEYS config

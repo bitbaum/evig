@@ -54,6 +54,7 @@ export const GET = withAdmin('users', async (request, session) => {
     // Build dynamic filters
     const conditions: SQL[] = [];
 
+    // searchkit not used: exact name/e-mail fragment; ⌘K (/api/admin/search-index) is the typo-tolerant user search.
     if (filters.search) {
       conditions.push(
         or(ilike(users.name, `%${filters.search}%`), ilike(users.email, `%${filters.search}%`))!,

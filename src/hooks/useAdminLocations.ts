@@ -106,6 +106,7 @@ export function useAdminLocations() {
     }
   };
 
+  // searchkit not used: narrows the current admin page of locations in place, in its own order.
   const filteredLocations = searchName.trim()
     ? locations.filter(
         (l) =>

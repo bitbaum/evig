@@ -1,6 +1,7 @@
 // Shared types for the admin command palette: search-index payload + result rows.
 
 import type * as React from 'react';
+import type { Range } from '@/lib/search/list-search';
 
 export interface SearchSection {
   id: string;
@@ -37,6 +38,8 @@ export interface SearchIndex {
 export interface ResultItem {
   key: string;
   label: string;
+  /** What matched in `label`, for <SearchHighlight>. */
+  marks?: Range[];
   sub?: string;
   href: string;
   icon: React.ReactNode;

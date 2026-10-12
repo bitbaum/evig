@@ -18,6 +18,7 @@ import { getSkillIds } from '@/config/it-hilfe';
 import { technicianListConditionsForTier } from '@/lib/domain/technician-visibility';
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
 import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql';
+import { technicianSearchCondition } from '@/lib/it-hilfe/technician-search';
 
 /**
  * GET /api/technicians
@@ -64,10 +65,7 @@ export async function GET(request: NextRequest) {
     const conditions: SQL[] = technicianListConditionsForTier(tier);
 
     if (q) {
-      const pattern = `%${q}%`;
-      conditions.push(
-        sql`(${users.name} ILIKE ${pattern} OR ${repairerProfiles.description} ILIKE ${pattern} OR ${repairerProfiles.city} ILIKE ${pattern})`,
-      );
+      conditions.push(await technicianSearchCondition(q));
     }
 
     // Skills filter via subquery (avoids blowing up GROUP BY)

@@ -38,6 +38,7 @@ export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
     [decks],
   );
 
+  // searchkit not used: a handful of decks with their own sort control (title / newest).
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return decks

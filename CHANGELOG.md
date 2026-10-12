@@ -2,6 +2,12 @@
 
 What changed on evig, newest first, in the words of someone using it. This file is the canonical record the fleet map reads; the site renders the same releases at `/changelog` from `src/config/changelog.ts`, and the two are updated in the same PR.
 
+## [0.5.2] - 2026-10-12
+
+- **Search forgives a typo.**
+- One slip per word still finds what was meant: in the marketplace ("Thinkpda" finds the ThinkPad), in the technician directory ("Zurich" finds Zürich), in the command palette (⌘K), on the blog, in the open-source list and when picking people.
+- In the command palette, on the blog and in the open-source list the best match comes first, and the command palette marks what matched.
+
 ## [0.5.1] - 2026-10-11
 
 - **The roadmap says when each step shipped.**
