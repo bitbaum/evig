@@ -111,7 +111,7 @@
     "@bitbaum/searchkit": "github:bitbaum/orangecat#e6cda794af7eb8da0e88602bdce2c26283616498&path:packages/searchkit",
     "@bitbaum/whenkit": "github:bitbaum/whenkit#v0.3.2",
     "@fleet/ai-forms": "github:bitbaum/ai-forms#v0.1.2",
-    "@sentry/nextjs": "^10.75.0",
+    "@sentry/nextjs": "^11.6.0",
     "@tiptap/core": "^3.31.3",
     "@tiptap/extension-link": "^3.31.3",
     "@tiptap/extension-table": "^3.31.3",
