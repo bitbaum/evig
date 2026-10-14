@@ -68,6 +68,8 @@ import * as teamTemplates from './templates/teams';
 export const emailTemplates = {
   // Auth
   verificationCode: authTemplates.verificationCode,
+  emailAddressChange: authTemplates.emailAddressChange,
+  emailAddressChanged: authTemplates.emailAddressChanged,
   staffVerificationCode: authTemplates.staffVerificationCode,
   emailVerification: authTemplates.emailVerification,
   welcome: authTemplates.welcome,
