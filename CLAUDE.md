@@ -5,6 +5,9 @@ Affordable-intelligence platform — curated, durable hardware and digital acces
 @~/.claude/CLAUDE.md
 @.claude/CLAUDE.md
 
+Org rules are [bitbaum/fleet AGENTS.md](https://github.com/bitbaum/fleet/blob/main/AGENTS.md): packages by default (say why if you skip one), search through `@bitbaum/searchkit`, chat through `@bitbaum/chatkit`, shared names and the identity contract. Read that file. Do not restate it here.
+
+
 ## Brand architecture — the evig divisions (SSOT: `src/config/divisions.ts`)
 
 evig is one organisation stated as several divisions, all of them the same idea
