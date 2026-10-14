@@ -25,7 +25,7 @@ Curated reference for engineers, operators, and contributors. Everything in this
 - [PROJECT_PAGES_GUIDE.md](./PROJECT_PAGES_GUIDE.md) — community project pages
 - [SERVICE_PAGES_GUIDE.md](./SERVICE_PAGES_GUIDE.md) — paid service pages
 - [ADMIN_QUICK_REFERENCE.md](./ADMIN_QUICK_REFERENCE.md) — admin surface tour for staff
-- [AI_BOT_SYSTEM_PROMPT.md](./AI_BOT_SYSTEM_PROMPT.md) · [AI_BOT_SYSTEM_PROMPT_README.md](./AI_BOT_SYSTEM_PROMPT_README.md) — public chatbot system prompt + how to update it
+- [AI_BOT_SYSTEM_PROMPT.md](./AI_BOT_SYSTEM_PROMPT.md) — retired. It was Revamp-IT's shop bot, not evig's. Do not load it.
 
 ## Design
 

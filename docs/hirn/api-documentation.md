@@ -1,7 +1,7 @@
-# RevampIT API Documentation
+# evig API documentation
 
-This document describes all API endpoints available in the RevampIT platform.
-Auto-generated from source code analysis.
+This document describes API endpoints in the evig platform.
+Auto-generated from source code analysis. Staff is `users.is_staff`.
 
 ## Overview
 
@@ -13,7 +13,7 @@ Categories: admin, ai, appointments, auth, blog, debug, health, invoices, locati
 Most API endpoints use session-based authentication via Auth.js:
 - `auth()` - Get current session
 - Returns 401 if authentication required but not provided
-- Staff endpoints require `@revamp-it.ch` email
+- Staff endpoints require `users.is_staff`, granted by a super admin. The email domain grants nothing.
 
 ## Endpoints by Category
 

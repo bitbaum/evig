@@ -1,4 +1,4 @@
-# RevampIT Unified Authentication System
+# evig authentication
 
 **Created:** 2025-12-02  
 **Last Modified:** 2026-06-25  
@@ -8,7 +8,7 @@
 
 ## Overview
 
-RevampIT uses **one account** for everything on the platform:
+evig uses **one account** for everything on the platform:
 
 - Shop purchases and marketplace listings
 - Workshop registration
@@ -47,10 +47,10 @@ Implications:
 
 ### Staff and admin access
 
-Staff status is determined by:
-
-1. **`users.is_staff`** flag in the database (SSOT), or
-2. **`@revamp-it.ch` email domain** for initial auto-provisioning at registration.
+Staff status is the **`users.is_staff`** column. A super admin sets it
+(`PATCH /api/admin/users/[id]/permissions`) or the HR hire flow does. The email
+domain does not. `isStaffEmail` in `src/lib/permissions.ts` only picks which
+welcome email to send.
 
 Permissions live in **`users.staff_permissions`** (string array). See `src/lib/permissions.ts` for section access rules.
 

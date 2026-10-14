@@ -1,6 +1,6 @@
 # evig
 
-Affordable-intelligence platform — curated, durable hardware and digital access at a fair price (rebranded from Revamp-IT 2026-07-24; see `.claude/CLAUDE.md` for the Layer A/B rebrand rule — brand is `evig`, but infra identifiers like `is_revampit`/`revampit_cms`/`@revamp-it.ch` stay until the infra cutover).
+Affordable-intelligence platform — curated, durable hardware and digital access at a fair price (rebranded from Revamp-IT 2026-07-24; see `.claude/CLAUDE.md` for the Layer A/B rebrand rule). Brand is `evig`. Infra identifiers (`is_revampit`, the `revampit` database, deploy paths, the systemd unit) stay until a real cutover. The email domain does not grant staff — that rule is retired; see `src/lib/permissions.ts`.
 
 @~/.claude/CLAUDE.md
 @.claude/CLAUDE.md

@@ -1,55 +1,66 @@
-# AGENTS.md — Revamp-IT
+# AGENTS.md — evig
 
-Swiss non-profit tech platform: used computers repaired and rehomed, not landfilled.
-This file is the quick agent brief. The full engineering standards and repo rules
-live in `CLAUDE.md` (+ `.claude/CLAUDE.md` and the imported global standards) — read
-those before non-trivial work. Don't duplicate their content here; this is a pointer.
+Affordable intelligence. Curated, durable hardware, repair, and digital access
+at a fair price. Founded 2026 in Zürich, in formation. This repository is evig.
+It is not Revamp-IT.
+
+Revamp-IT (https://www.revamp-it.ch) is the Zürich non-profit evig grew out of.
+Its history, its shop, and its mail domain are its own. Do not brief them as
+evig's, and do not "fix" them back into this codebase.
+
+Identity (name, motto, site, contact) has one producer: `src/config/org.ts`.
+Who is staff has one producer: `src/lib/permissions.ts`. Do not restate either
+here. A sentence in this file that disagrees with those two is a bug.
+
+## What an agent gets wrong if it skips the code
+
+- Staff is the `users.is_staff` column, granted by a super admin. An email
+  domain grants nothing. `isStaffEmail` only picks a welcome-email template.
+- Production is one Next.js app on the Hetzner box at https://evig.orangecat.ch,
+  deployed by GitHub Actions (`deploy-selfhost.yml`) and systemd. There is no
+  separate CMS and no second frontend host. Vercel is not used.
+- `https://www.revamp-it.ch` is Revamp-IT's old Joomla site. Never smoke-test
+  a deploy there.
+
+Engineering rules: `CLAUDE.md` and `.claude/CLAUDE.md`. Retired claims the
+fleet must not repeat live in `bitbaum/fleet` `registers/retired.json`, and
+`pnpm run lint:claims` fails the build if this repo says them again.
 
 ## Stack
 
-- **Framework:** Next.js 16, TypeScript 5.3 (strict), Tailwind CSS 4
-- **DB:** PostgreSQL + Drizzle ORM. **Prod = self-hosted Postgres on Hetzner**
-  (`DATABASE_URL=…@localhost:5432/revampit`); dev points at its own DB. Neon is retired for prod.
-- **Auth:** NextAuth v5 (Auth.js) + `@auth/pg-adapter`. Staff = `@revamp-it.ch` email.
-- **Search:** Meilisearch · **Payments:** Payrexx
+- Next.js 16, TypeScript, Tailwind CSS 4
+- PostgreSQL + Drizzle. Prod is self-hosted Postgres on Hetzner. Neon is retired.
+- Auth: NextAuth v5 (Auth.js). See `src/lib/permissions.ts`.
+- Search: Meilisearch. Payments: Payrexx.
 
 ## Develop
 
 ```bash
-npm run d        # start everything (services + dev server)
-npm run dev      # frontend only
+pnpm run d        # services + dev server
+pnpm run dev      # the app only
 ```
 
 ## Verify — run before every commit
 
 ```bash
-npm run verify   # lint + typecheck + build (SSOT)
+pnpm run verify
 ```
 
-`verify` is the single gating check bundle. CI's `quality` job in
-`.github/workflows/ci.yml` calls `npm run verify` verbatim, so green locally ⇒ green
-CI for that gate. Do not re-inline lint/typecheck/build in CI — edit the `verify`
-script only. (i18n/umlaut/compliance helpers: `npm run compliance`, `npm run lint:umlauts`.)
+`verify` is what CI's `quality` job runs. Do not re-inline those checks.
 
 ## Database migrations
 
-- **Location:** `scripts/db/migrations/*.sql` — forward-only, ordered, protected (never delete/edit applied ones).
-- **`drizzle-kit push` is FORBIDDEN** against dev/prod. Add a new `.sql` migration instead.
-- Apply locally: `npm run db:migrate`. CI replays every migration from zero (Migration Drift job).
-- Deploy auto-applies unrecorded migrations to the prod DB before activating.
-- App enums live in `src/config/*` + zod at the write boundary, NOT in SQL CHECK constraints.
+- `scripts/db/migrations/*.sql` — forward-only. Never edit one that has applied.
+- `drizzle-kit push` is forbidden against dev and prod.
+- Apply locally: `pnpm run db:migrate`.
 
-## Deploy — self-hosted
+## Deploy
 
-- Production runs at **https://evig.orangecat.ch** (self-hosted Hetzner).
-  `https://www.revamp-it.ch` is the LEGACY Joomla site — never smoke-test deploys there.
-- Push to `main` → `.github/workflows/deploy-selfhost.yml` runs lint + typecheck +
-  i18n gate, then rsyncs the build to the box via `scripts/selfhost-deploy-revampit.sh`
-  and runs a read-only prod smoke. Health check: `/api/health`.
+- Push to `main` runs `.github/workflows/deploy-selfhost.yml`.
+- Health check: `/api/health` on https://evig.orangecat.ch.
 
-## Non-negotiables (see CLAUDE.md for the full list + rationale)
+## Non-negotiables
 
-- SSOT / DRY / SoC · no god files (>300 lines) · nothing hardcoded (labels, stats, colors)
-- `logger` not `console.log` · `TABLE_NAMES` + parameterized SQL · validate at boundaries
-- Swiss German: real umlauts ä/ö/ü, `ß`→`ss` (`npm run lint:umlauts`)
-- Design tokens only, no arbitrary hex (`grep -rn '\[#' src/` must be empty)
+- One fact, one producer. A copy in a doc is the bug.
+- Swiss German: real umlauts, `ß` → `ss` (`pnpm run lint:umlauts`).
+- Design tokens only, no arbitrary hex.
