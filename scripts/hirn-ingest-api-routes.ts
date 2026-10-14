@@ -154,10 +154,11 @@ function generateApiDocumentation(routes: RouteInfo[]): string {
     categories.set(category, existing);
   }
 
-  let markdown = `# RevampIT API Documentation
+  let markdown = `# evig API documentation
 
-This document describes all API endpoints available in the RevampIT platform.
-Auto-generated from source code analysis.
+This document describes API endpoints in the evig platform.
+Auto-generated from source code analysis. Do not edit the staff rule by hand —
+it is generated from this script, and the rule lives in src/lib/permissions.ts.
 
 ## Overview
 
@@ -169,7 +170,7 @@ Categories: ${Array.from(categories.keys()).join(', ')}
 Most API endpoints use session-based authentication via Auth.js:
 - \`auth()\` - Get current session
 - Returns 401 if authentication required but not provided
-- Staff endpoints require \`@revamp-it.ch\` email
+- Staff endpoints require \`users.is_staff\`, granted by a super admin. The email domain grants nothing.
 
 ## Endpoints by Category
 
@@ -263,7 +264,7 @@ async function main() {
   await ingestDocument({
     sourcePath: 'docs://api-documentation',
     sourceType: 'documentation',
-    title: 'RevampIT API Documentation',
+    title: 'evig API documentation',
     content: documentation,
     metadata: {
       type: 'api-docs',

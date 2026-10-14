@@ -26,7 +26,7 @@ export interface OnboardingChecklistState {
   hasListing: boolean;
   repairerProfileSetup: boolean;
   hasPublishedService: boolean;
-  // Staff (@revamp-it.ch) get a DIFFERENT checklist — their profile powers
+  // Staff (is_staff, never the email domain) get a DIFFERENT checklist — their profile powers
   // Zeiterfassung (schedule) + task-matching (skills/interests).
   isStaff: boolean;
   scheduleSet: boolean;

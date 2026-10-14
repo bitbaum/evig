@@ -31,12 +31,13 @@ mission; affordable pricing is the product, not a subsidy.
   page content, org identity in `src/config/org.ts`. Done on branch `rebrand/evig`.
 - **Layer B (infra identifiers)** → still literally carry the `revampit` name and
   MUST stay accurate to the running system until a deliberate infra refactor:
-  DB `revampit_cms` / prod DB `revampit`, the `is_revampit` column, staff-auth
-  domain `@revamp-it.ch`, deploy paths `/opt/revampit/app`, systemd `revampit-app`,
-  script `selfhost-deploy-revampit.sh`, host `revampit.orangecat.ch`. Renaming any
-  of these in docs/code without migrating the actual infra makes the docs LIE and
-  can lock the sole admin out (his login is `@revamp-it.ch`). Leave them until the
-  infra cutover is explicitly done.
+  DB `revampit_cms` / prod DB `revampit`, the `is_revampit` column, deploy paths
+  `/opt/revampit/app`, systemd `revampit-app`, script `selfhost-deploy-revampit.sh`,
+  host `revampit.orangecat.ch`. Renaming any of these in docs/code without migrating
+  the actual infra makes the docs LIE. The owner's bootstrap login is still
+  `georgy.butaev@revamp-it.ch` (`SUPER_ADMIN_EMAILS`) — that one address is a
+  lockout floor, not a domain rule. The domain does not grant staff. Leave the
+  infra names until the cutover is explicitly done.
 
 ---
 

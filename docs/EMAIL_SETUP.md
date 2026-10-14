@@ -1,4 +1,7 @@
-# Email Configuration Guide - RevampIT
+# Email
+
+> **Current.** Outbound mail in production is Brevo. The address people are told to write to is `CONTACT.email` in `src/config/org.ts` (today `cato@orangecat.ch`). `evig.ch` is not registered yet. `noreply@revamp-it.ch` is Revamp-IT's domain, not a mailbox this app should publish or send as. Do not copy an example below that names it — those examples predate the split and are wrong for evig.
+
 
 **Last Updated:** 2026-02-12
 
