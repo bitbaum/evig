@@ -75,6 +75,13 @@ export const rateLimiters = {
   // the vision providers.
   erfassungImage: createRateLimiter(ONE_HOUR_MS, 60),
 
+  // Account email change: a code to a new inbox. Tight, so a signed-in
+  // session cannot be used to spam arbitrary addresses.
+  emailChange: createRateLimiter(ONE_HOUR_MS, 5),
+
+  // Admin-access requests: one honest ask, not a flood of notifications.
+  adminAccessRequest: createRateLimiter(ONE_HOUR_MS, 5),
+
   // Reviews: 10 per hour per user
   reviewCreate: createRateLimiter(ONE_HOUR_MS, 10),
 

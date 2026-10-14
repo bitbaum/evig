@@ -1,6 +1,6 @@
 'use client';
 
-import { Mail, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Heading from '@/components/ui/Heading';
 import { Input } from '@/components/ui/input';
@@ -8,14 +8,23 @@ import { SETTINGS_CONFIG } from '@/config/profile';
 import { CONTACT } from '@/config/org';
 import { useTranslations } from 'next-intl';
 import type { ProfileData } from '../../profile/hooks/useProfileData';
+import { AccountAccess } from './AccountAccess';
 
 interface AccountSectionProps {
   profile: ProfileData;
   email: string;
+  isSuperAdmin: boolean;
+  emailVerified: boolean;
   handleChange: (field: keyof ProfileData, value: string) => void;
 }
 
-export function AccountSection({ profile, email, handleChange }: AccountSectionProps) {
+export function AccountSection({
+  profile,
+  email,
+  isSuperAdmin,
+  emailVerified,
+  handleChange,
+}: AccountSectionProps) {
   const labels = SETTINGS_CONFIG.labels.account;
   const t = useTranslations('dashboard.settings.account');
 
@@ -63,26 +72,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         </div>
       </div>
 
-      {/* Email (Read-only) */}
-      <div>
-        <label className="block text-sm font-medium text-text-secondary mb-2">{labels.email}</label>
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Mail className="h-5 w-5 text-text-muted" />
-          </div>
-          <Input type="email" value={email} readOnly className="pl-10 cursor-not-allowed" />
-        </div>
-        <p className="mt-2 text-sm text-text-tertiary">{labels.emailDescription}</p>
-      </div>
-
-      {/* Password Change Link */}
-      <div className="border-t-2 border pt-6">
-        <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
-          {labels.password}
-        </Heading>
-        <p className="text-sm text-text-secondary mb-4">{labels.passwordDescription}</p>
-        <p className="text-sm text-text-secondary">{t('passwordNote')}</p>
-      </div>
+      <AccountAccess email={email} isSuperAdmin={isSuperAdmin} emailVerified={emailVerified} />
 
       {/* Danger Zone */}
       <div className="border-t-2 border-error-200 dark:border-error-900 pt-6">
