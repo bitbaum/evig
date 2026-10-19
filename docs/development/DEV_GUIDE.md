@@ -44,7 +44,7 @@ last_modified_summary: Initial creation of comprehensive development guide for d
 ### For AI Agents
 1. **Read `docs/BEST_PRACTICES.md`** - Critical AI slop prevention guidelines
 2. **Review this guide** - Understand all principles
-3. **Check `DEVELOPMENT_GUIDELINES.md`** - File deletion protection and critical rules
+3. **Check `.claude/CLAUDE.md` ("Protected Files")** - File deletion protection and critical rules
 4. **Read agent-specific guide** - See agent-specific instructions below
 5. **Use semantic search** - Always search before creating new files
 
@@ -210,7 +210,7 @@ See `docs/BEST_PRACTICES.md` for detailed AI slop prevention guidelines.
 
 ### Next.js App Router Pattern
 
-All routes should follow Next.js 13+ App Router conventions:
+All routes should follow Next.js 16 App Router conventions:
 
 ```typescript
 // src/app/products/page.tsx - List page
@@ -831,7 +831,7 @@ Before suggesting a commit, verify:
 
 ### 5. File Deletion Protection
 
-**NEVER delete files without explicit user approval**. See `DEVELOPMENT_GUIDELINES.md` for critical file deletion protection rules.
+**NEVER delete files without explicit user approval**. See `.claude/CLAUDE.md` ("Protected Files") for critical file deletion protection rules.
 
 ### 6. Browser Automation
 
@@ -966,12 +966,13 @@ const { data } = await supabase.from(PRODUCT_TABLE).select('*');
 
 | File | Purpose |
 |------|---------|
-| `src/config/site.ts` | Site-wide configuration |
+| `src/config/org.ts` | Org identity: name, contact data, addresses |
+| `src/config/urls.ts` | Site and external URLs |
 | `src/lib/logger.ts` | Logging utility (use instead of console.log) |
 | `src/lib/utils.ts` | General utilities |
 | `docs/BEST_PRACTICES.md` | Comprehensive best practices |
 | `docs/guides/ARCHITECTURE.md` | System architecture |
-| `DEVELOPMENT_GUIDELINES.md` | File deletion protection and critical rules |
+| `.claude/CLAUDE.md` | Protected files and critical rules |
 
 ### Common Commands
 
@@ -1056,7 +1057,7 @@ export function useProductList() {
 ### Internal Documentation
 - [Best Practices](../BEST_PRACTICES.md) - Comprehensive best practices guide
 - [Architecture Guide](../guides/ARCHITECTURE.md) - System architecture
-- [Development Guidelines](../../DEVELOPMENT_GUIDELINES.md) - File deletion protection
+- [Protected files](../../.claude/CLAUDE.md) - File deletion protection (`.claude/CLAUDE.md`, "Protected Files")
 - [Contributing Guide](../../CONTRIBUTING.md) - Contribution guidelines
 
 ### Agent-Specific Guides

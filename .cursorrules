@@ -75,7 +75,7 @@ For detailed, modular rules, see:
 **Read BEFORE starting any task:**
 1. `docs/development/DEV_GUIDE.md` - Core principles (DRY, SSOT)
 2. `docs/BEST_PRACTICES.md` - AI slop prevention
-3. `DEVELOPMENT_GUIDELINES.md` - File protection rules
+3. `.claude/CLAUDE.md` ("Protected Files") - File protection rules
 
 **Project Context:**
 - `docs/SHARED_CONTEXT.md` - Tech stack, database, file structure, access points

@@ -84,52 +84,41 @@ Current public pages should prefer `ui-public-display-md` / `ui-public-display-l
 
 ## Reusable Components
 
-### ResponsiveSection
+The early `ResponsiveSection` / `ResponsiveHero` / `ResponsiveHeading` components
+were removed. Their jobs now belong to the shared layout primitives (see the
+"Chrome & Navigation" table in `CLAUDE.md`):
 
-Use this instead of manual section styling:
+### Section
 
 ```typescript
-import { ResponsiveSection } from '@/components/layout/ResponsiveSection'
+import { Section } from '@/components/layout/Section'
 
-<ResponsiveSection backgroundColor="gray" padding="default">
+<Section density="default" tone="tinted">
   <h2>Content</h2>
-</ResponsiveSection>
+</Section>
 ```
 
-**Props:**
-- `backgroundColor`: 'white' | 'gray' | 'green' | 'gradient'
-- `padding`: 'default' | 'large' | 'small'
-- `container`: boolean (default: true)
-- `maxWidth`: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
+**Props** (`src/components/layout/Section.tsx`):
+- `density`: 'compact' | 'default' | 'spacious' — the vertical rhythm SSOT
+- `tone`: 'canvas' | 'surface' | 'tinted' | 'inverse' — token-driven, flips in dark mode
+- `contained`: boolean (default: true) — content stays in the `max-w-7xl` container
 
-### ResponsiveHero
-
-Use this for hero sections:
+### PageHero
 
 ```typescript
-import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
+import { PageHero } from '@/components/layout/PageHero'
 
-<ResponsiveHero
-  title="Welcome"
-  subtitle="Subtitle"
-  description="Description text"
-  backgroundColor="green"
-  ctas={[
-    { text: 'Get Started', href: '/start', variant: 'primary' },
-    { text: 'Learn More', href: '/about', variant: 'outline' }
-  ]}
-/>
+<PageHero theme="about" title="Welcome" subtitle="Subtitle" size="display">
+  {/* CTAs */}
+</PageHero>
 ```
 
-### ResponsiveHeading & ResponsiveText
-
-Use these for consistent typography:
+### Heading
 
 ```typescript
-import { ResponsiveHeading, ResponsiveText } from '@/components/layout/ResponsiveSection'
+import Heading from '@/components/ui/Heading'
 
-<ResponsiveHeading level={2} align="center">Section Title</ResponsiveHeading>
-<ResponsiveText variant="lead" align="center">Description text</ResponsiveText>
+<Heading level={2} variant="site">Section Title</Heading>
 ```
 
 ## Migration Guide
@@ -148,10 +137,10 @@ import { ResponsiveHeading, ResponsiveText } from '@/components/layout/Responsiv
 ### After (Using Components)
 
 ```typescript
-<ResponsiveSection backgroundColor="white">
-  <ResponsiveHeading level={2} className="mb-6">Title</ResponsiveHeading>
-  <ResponsiveText variant="bodyLarge" className="text-gray-600">Content</ResponsiveText>
-</ResponsiveSection>
+<Section tone="surface">
+  <Heading level={2} variant="site" className="mb-6">Title</Heading>
+  <p className={responsiveTypography.bodyLarge}>Content</p>
+</Section>
 ```
 
 ## Benefits
@@ -175,8 +164,8 @@ import { ResponsiveHeading, ResponsiveText } from '@/components/layout/Responsiv
 ## Examples
 
 See these files for examples:
-- `src/app/get-involved/page.tsx` - Uses ResponsiveSection
-- `src/components/layout/ResponsiveHero.tsx` - Hero implementation
+- `src/app/[locale]/get-involved/page.tsx` - Uses `PageHero`
+- `src/components/layout/PageHero.tsx` - Hero implementation (`ResponsiveHero` was folded into it)
 - `src/components/services/ServiceHero.tsx` - Service-specific hero
 
 

@@ -1,266 +1,100 @@
 # Installation Guide
 
-This guide will help you set up the RevampIT development environment on your local machine.
+This guide sets up the evig development environment on your local machine.
+The short version is in the root `README.md` ("Quick Start"); every script is in
+[`COMMANDS.md`](../COMMANDS.md).
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+- **Node.js 22.13+** (CI and deploy run Node 24) - [Download](https://nodejs.org/)
+- **pnpm** (version pinned in `package.json` → `packageManager`)
+- **Docker** — runs the local Postgres, Meilisearch and Listmonk
+- **Git**
 
-- **Node.js 22.13+** - [Download](https://nodejs.org/)
-- **PostgreSQL 13+** - [Download](https://www.postgresql.org/download/)
-- **Git** - [Download](https://git-scm.com/downloads)
-- **Docker** (optional) - [Download](https://www.docker.com/get-started)
+There is one app: the Next.js project at the repository root. There is no
+separate API server.
 
-## Quick Setup
+## Setup
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-org/revampit.git
-cd revampit
-```
-
-### 2. Install Dependencies
+### 1. Clone and install
 
 ```bash
-# Install frontend dependencies
+git clone https://github.com/bitbaum/evig.git
+cd evig
 pnpm install
-
-# Install CMS API dependencies
-cd cms-api
-pnpm install
-cd ..
 ```
 
-### 3. Environment Configuration
+### 2. Environment
 
-#### Frontend Environment
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your configuration:
+At minimum set `DATABASE_URL` and `AUTH_SECRET` (32+ characters). For the Docker
+database:
+
 ```env
-# Frontend Configuration
-NEXT_PUBLIC_API_URL=http://localhost:3001
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-
-# Database — DATABASE_URL is the single connection source (app + auth share this pool).
-# Local dev: Docker Postgres (pnpm run services:up → port 5433)
-DATABASE_URL=postgresql://postgres:your_password@localhost:5433/revampit_cms
+DATABASE_URL=postgresql://postgres:postgres@localhost:5433/revampit_cms
 ```
 
-#### CMS API Environment
-```bash
-cd cms-api
-cp .env.example .env
-```
+`DATABASE_URL` is the single connection source: the app and auth share one pool.
+`.env.example` lists every other variable (payments, email, search).
 
-Edit `cms-api/.env` with your configuration:
-```env
-# Server Configuration
-PORT=3001
-NODE_ENV=development
-
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=revampit_cms
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-# JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
-JWT_EXPIRES_IN=24h
-
-# CORS Configuration
-FRONTEND_URL=http://localhost:3000
-
-# Admin User Configuration
-ADMIN_EMAIL=admin@revampit.ch
-ADMIN_PASSWORD=Admin123!
-ADMIN_FIRST_NAME=Admin
-ADMIN_LAST_NAME=User
-```
-
-### 4. Database Setup
-
-#### Option A: Using Docker (Recommended)
-```bash
-# Start PostgreSQL container
-docker-compose up -d postgres
-
-# The database will be automatically created with the correct schema
-```
-
-#### Option B: Local PostgreSQL
-```bash
-# Create database
-createdb revampit_cms
-
-# Run migrations
-cd cms-api
-pnpm run migrate
-cd ..
-```
-
-### 5. Start Development Servers
-
-Open two terminal windows:
-
-**Terminal 1 - CMS API:**
-```bash
-cd cms-api
-pnpm run dev
-```
-
-**Terminal 2 - Frontend:**
-```bash
-pnpm run dev
-```
-
-### 6. Access the Application
-
-- **Frontend**: http://localhost:3000
-- **CMS API**: http://localhost:3001
-- **Admin Interface**: http://localhost:3000/admin/login
-
-#### Default Admin Credentials
-- **Email**: admin@revampit.ch
-- **Password**: Admin123!
-
-## Docker Development (Alternative)
-
-If you prefer using Docker for the entire development environment:
+### 3. Database
 
 ```bash
-# Start all services
-docker-compose -f docker-compose.dev.yml up
-
-# Or run in background
-docker-compose -f docker-compose.dev.yml up -d
+pnpm run services:up   # Docker: Postgres on :5433, Meilisearch, Listmonk
+pnpm run db:migrate    # apply scripts/db/migrations/*.sql
+pnpm run setup-admins  # create admin users
 ```
 
-This will start:
-- PostgreSQL database
-- CMS API server
-- Frontend development server
+Never point a local `.env.local` at the production database, and never use
+`drizzle-kit push` against a shared database (see `.claude/CLAUDE.md`).
 
-## Troubleshooting
+### 4. Start
 
-### Common Issues
-
-#### Port Already in Use
 ```bash
-# Check what's using the port
-lsof -i :3000  # or :3001
-
-# Kill the process
-kill -9 <PID>
+pnpm run dev   # Next.js on http://localhost:3000
+# or everything at once:
+pnpm run d     # services:up + transcription worker + dev
 ```
 
-#### Database Connection Issues
-```bash
-# Check PostgreSQL status
-brew services list | grep postgresql  # macOS
-systemctl status postgresql           # Linux
-net start postgresql                  # Windows
-
-# Test connection
-psql -h localhost -p 5432 -U postgres -d revampit_cms
-```
-
-#### Permission Issues
-```bash
-# Fix pnpm store permissions (Unix/Linux)
-sudo chown -R $(whoami) "$(pnpm store path)"
-
-# Prune the pnpm store
-pnpm store prune
-```
-
-#### Module Not Found
-```bash
-# Clear node_modules and reinstall
-rm -rf node_modules
-pnpm install
-
-# Also clear cms-api modules
-cd cms-api
-rm -rf node_modules
-pnpm install
-cd ..
-```
-
-### Environment-Specific Issues
-
-#### macOS
-```bash
-# Install Command Line Tools if needed
-xcode-select --install
-
-# Install Homebrew if needed
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install PostgreSQL via Homebrew
-brew install postgresql@15
-brew services start postgresql@15
-```
-
-#### Windows
-```bash
-# Use Windows Subsystem for Linux (WSL) for better compatibility
-wsl --install
-
-# Or use PowerShell with elevated privileges for npm global packages
-```
-
-#### Linux (Ubuntu/Debian)
-```bash
-# Update package list
-sudo apt update
-
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Install PostgreSQL
-sudo apt install postgresql postgresql-contrib
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-```
+- **Site**: http://localhost:3000
+- **Admin**: http://localhost:3000/admin
 
 ## Verification
 
-After installation, verify everything works:
-
 ```bash
-# Check frontend
-curl http://localhost:3000
-
-# Check API health
-curl http://localhost:3001/health
-
-# Check database connection
-cd cms-api && pnpm run db:status
+curl http://localhost:3000/api/health
+pnpm run verify   # format, lint, umlauts, typecheck, tests, build — what CI runs
 ```
 
-## Next Steps
+## Troubleshooting
 
-1. Read the [Development Guide](development.md)
-2. Check the [API Documentation](api.md)
-3. Review the [Contributing Guidelines](../CONTRIBUTING.md)
-4. Explore the [CMS User Guide](cms-guide.md)
+### Port already in use
 
-## Getting Help
+```bash
+lsof -i :3000
+kill -9 <PID>
+```
 
-If you encounter issues:
+### Database connection issues
 
-1. Check the [Troubleshooting section](#troubleshooting) above
-2. Search [GitHub Issues](https://github.com/your-org/revampit/issues)
-3. Create a new issue with details about your environment and the problem
-4. Join our community discussions
+```bash
+docker compose ps db
+psql "postgresql://postgres:postgres@localhost:5433/revampit_cms" -c 'select 1'
+```
 
----
+### Module not found
 
-**Happy coding! 🚀**
+```bash
+rm -rf node_modules
+pnpm install
+```
+
+## Next steps
+
+1. Read the [Development Guide](../development/DEV_GUIDE.md)
+2. Check the [API Documentation](../API_DOCUMENTATION.md)
+3. Review the [Contributing Guidelines](../../CONTRIBUTING.md)
+4. Read [SHARED_CONTEXT.md](../SHARED_CONTEXT.md) for the stack and file layout

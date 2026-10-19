@@ -19,7 +19,7 @@ last_modified_summary: Updated to clarify terminal CLI vs web usage; terminal to
 **Before starting any task:**
 1. ✅ Read `docs/development/DEV_GUIDE.md` - Core development principles
 2. ✅ Read `docs/BEST_PRACTICES.md` - Critical AI slop prevention
-3. ✅ Read `DEVELOPMENT_GUIDELINES.md` - File deletion protection rules
+3. ✅ Read `.claude/CLAUDE.md` ("Protected Files") - File deletion protection rules
 4. ✅ Understand Claude's capabilities and best practices
 
 ---
@@ -599,7 +599,7 @@ Provide:
 
 - `docs/development/DEV_GUIDE.md` - Main development guide
 - `docs/BEST_PRACTICES.md` - Best practices and AI slop prevention
-- `DEVELOPMENT_GUIDELINES.md` - File deletion protection
+- `.claude/CLAUDE.md` ("Protected Files") - File deletion protection
 - `docs/guides/ARCHITECTURE.md` - System architecture
 
 ---
