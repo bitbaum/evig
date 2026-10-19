@@ -28,7 +28,7 @@ reconciliation is read back from the invoice — never trusted from the webhook 
 
 ## Environment variables
 
-Set these in `/opt/revampit/app/.env` (and GitHub `SELFHOST_ENV`):
+Set these in `/opt/evig/app/.env` (and GitHub `SELFHOST_ENV`):
 
 | Var | Required | Meaning |
 |-----|----------|---------|
@@ -44,10 +44,12 @@ Set these in `/opt/revampit/app/.env` (and GitHub `SELFHOST_ENV`):
 In the store's **Webhooks** settings, add:
 
 ```
-URL:     https://revampit.orangecat.ch/api/payments/webhook/btcpay
+URL:     https://evig.orangecat.ch/api/payments/webhook/btcpay
 Events:  Invoice settled, Invoice expired, Invoice invalid
 Secret:  <the value you put in BTCPAY_WEBHOOK_SECRET>
 ```
+
+> Providers configured before the rename (2026-09-10) may still point at `revampit.orangecat.ch`. That host 308-redirects to `evig.orangecat.ch` with the method and body preserved, so they keep working, but update them to the canonical host when you next touch the provider dashboard.
 
 We verify `BTCPay-Sig: sha256=<hex>` (HMAC of the raw body) before acting, then
 re-query the invoice for the authoritative CHF amount.

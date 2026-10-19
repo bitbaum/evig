@@ -29,10 +29,10 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | **Admin** | staff/super-admin account, from `AUTH_TEST_ADMIN_EMAIL` | All admin routes **plus** the same user + public routes |
 
 ```bash
-PLAYWRIGHT_BASE_URL=https://revampit.orangecat.ch \
+PLAYWRIGHT_BASE_URL=https://evig.orangecat.ch \
 AUTH_TEST_USER_EMAIL='…' AUTH_TEST_USER_PASSWORD='…' \
 AUTH_TEST_ADMIN_EMAIL='…' AUTH_TEST_ADMIN_PASSWORD='…' \
-npm run test:e2e:inventory
+pnpm run test:e2e:inventory
 ```
 
 Both addresses are real logins on the target deployment, so they live in the repository secrets of the same name rather than in this file — there is no default for either.

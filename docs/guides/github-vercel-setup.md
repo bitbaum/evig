@@ -17,13 +17,13 @@
 Production deploys run when you **push to `main`**, via the GitHub Actions
 workflow `.github/workflows/deploy-selfhost.yml`, which builds and rsyncs a
 Next.js standalone release to the Hetzner box (`ubuntu@167.233.22.31`) serving
-`https://revampit.orangecat.ch`. Full details: **`deployment.md`**.
+`https://evig.orangecat.ch`. Full details: **`deployment.md`**.
 
 That workflow requires exactly **two** repository secrets:
 
 | Secret | Purpose | Used by |
 |--------|---------|---------|
-| `HETZNER_SSH_PRIVATE_KEY` | Private SSH key for `ubuntu@167.233.22.31`. | "Setup SSH" step writes it to `~/.ssh/id_ed25519`; used to rsync the release and run remote `systemctl restart revampit-app`. |
+| `HETZNER_SSH_PRIVATE_KEY` | Private SSH key for `ubuntu@167.233.22.31`. | "Setup SSH" step writes it to `~/.ssh/id_ed25519`; used to rsync the release and run remote `systemctl restart evig-app`. |
 | `SELFHOST_ENV` | Full contents of `.env.selfhost.local` (multiline). | "Write selfhost env" step writes it to disk so the build + deploy have the production environment. |
 
 If either secret is missing or empty, the workflow logs a notice and exits

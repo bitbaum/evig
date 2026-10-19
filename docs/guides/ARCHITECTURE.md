@@ -5,7 +5,7 @@
 Production is **one Next.js app** on the Hetzner box.
 
 - Site: https://evig.orangecat.ch
-- Deploy: GitHub Actions → `scripts/selfhost-deploy-evig.sh`. The systemd unit may still be named revampit-app. That is the process name, not a second app.
+- Deploy: GitHub Actions → `scripts/selfhost-deploy-evig.sh`. The systemd unit is `evig-app` (box directory `/opt/evig`).
 - Database: self-hosted Postgres on that box. Neon is retired.
 - Staff: `users.is_staff`. See `src/lib/permissions.ts`.
 - Identity: `src/config/org.ts`.

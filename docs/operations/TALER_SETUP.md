@@ -24,7 +24,7 @@ marketplace escrow).
 
 ## Environment variables
 
-Set these in `/opt/revampit/app/.env` (and GitHub `SELFHOST_ENV`):
+Set these in `/opt/evig/app/.env` (and GitHub `SELFHOST_ENV`):
 
 | Var | Required | Meaning |
 |-----|----------|---------|
@@ -39,8 +39,10 @@ Set these in `/opt/revampit/app/.env` (and GitHub `SELFHOST_ENV`):
 Point the merchant backend's order-status webhook at:
 
 ```
-https://revampit.orangecat.ch/api/payments/webhook/taler
+https://evig.orangecat.ch/api/payments/webhook/taler
 ```
+
+> Providers configured before the rename (2026-09-10) may still point at `revampit.orangecat.ch`. That host 308-redirects to `evig.orangecat.ch` with the method and body preserved, so they keep working, but update them to the canonical host when you next touch the provider dashboard.
 
 We treat the delivery only as "order X changed" — the **authoritative** status +
 amount are re-queried from `GET {backend}/private/orders/{id}` (authenticated), so

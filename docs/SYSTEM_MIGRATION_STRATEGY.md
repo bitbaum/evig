@@ -5,7 +5,7 @@
 **Question posed:** Can Revamp-IT move its whole stack off the legacy **Kivitendo**
 (Perl ERP, `revamp.kivitendo.ch`) and **Shopware 6** shop (`shop.revamp-it.ch`)
 onto **Kivvi** (our ERP, `kivvi.orangecat.ch`) + the **new RevampIT site**
-(`revampit.orangecat.ch`)? The team believes migration is impossible.
+(`evig.orangecat.ch`)? The team believes migration is impossible.
 
 > Scope of this doc: the *strategic* picture and a phased path. The product
 > catalogue import has its own detailed plan in
@@ -128,7 +128,7 @@ each other.
                         /api/v1 push │           │ /api/v1 pull
                      (syncToKivvi)   │           │ (canonical data)
                     ┌───────────────┴───────────▼─────────────┐
-                    │  RevampIT site (revampit.orangecat.ch)   │
+                    │  evig site (evig.orangecat.ch)           │
                     │  PUBLIC STOREFRONT + COMMUNITY           │
                     │  /marketplace · /admin/erfassung (intake)│
                     │  listings (is_revampit + P2P) · Payrexx  │

@@ -63,7 +63,7 @@ marketplace replaces Shopware; events come off Openki; the ERP off Kivitendo
   So "software shop / open-source hackerspace" is an honest, provable positioning.
 
 ### 3. Forkability — the platform as a commons *(proposed)*
-Anyone — especially the team — can **fork `revampit.orangecat.ch` really easily**
+Anyone — especially the team — can **fork the platform behind `evig.orangecat.ch` ([bitbaum/evig](https://github.com/bitbaum/evig)) really easily**
 and continue the work. Governance-by-fork: the founder builds it; the team forks
 and continues; each member can fork and carry it forward.
 - **What makes it real:** the codebase is already config-driven (org data in

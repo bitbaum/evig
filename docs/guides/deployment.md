@@ -1,12 +1,12 @@
-# RevampIT Deployment Guide
+# evig Deployment Guide
 
 **Created:** 2024-12-29
 **Last Updated:** 2026-09-04
 **Summary:** Production deploys run via GitHub Actions → Hetzner self-host. Vercel is retired.
 
 Production runs on a **self-hosted Next.js standalone build on a Hetzner box**
-(`ubuntu@167.233.22.31`), served at **`https://revampit.orangecat.ch`** behind
-`systemd` (`revampit-app`). **Vercel is no longer used for production.**
+(`ubuntu@167.233.22.31`), served at **`https://evig.orangecat.ch`** behind
+`systemd` (`evig-app`). **Vercel is no longer used for production.**
 
 There is exactly **one** production deploy method: **push to `main`**. GitHub
 Actions does the rest.
@@ -31,14 +31,14 @@ Build standalone output in the runner
 Apply unrecorded scripts/db/migrations/*.sql to PROD Postgres  (before activating)
    │
    ▼
-rsync release → ubuntu@167.233.22.31:/opt/revampit/releases/<id>
-   │  swap /opt/revampit/app → release
-   │  systemctl restart revampit-app
+rsync release → ubuntu@167.233.22.31:/opt/evig/releases/<id>
+   │  swap /opt/evig/app → release
+   │  systemctl restart evig-app
    ▼
 Health gate: GET /api/health  AND  real page render on http://localhost:4004/
    │
-   ├─ pass → live at https://revampit.orangecat.ch
-   └─ fail → auto-rollback to /opt/revampit/app.previous
+   ├─ pass → live at https://evig.orangecat.ch
+   └─ fail → auto-rollback to /opt/evig/app.previous
 ```
 
 `concurrency: cancel-in-progress` is set on the workflow, so two pushes in quick
@@ -81,18 +81,18 @@ cleanly without deploying (see Troubleshooting).
    table on the production Hetzner Postgres is applied **before** the new release
    is activated. A migration failure aborts the deploy (the running release is
    left untouched).
-3. **Rsyncs the release** to `/opt/revampit/releases/<id>` on
+3. **Rsyncs the release** to `/opt/evig/releases/<id>` on
    `ubuntu@167.233.22.31`.
-4. **Swaps the symlink** `/opt/revampit/app` → the new release.
-5. **Restarts the service**: `systemctl restart revampit-app`.
+4. **Swaps the symlink** `/opt/evig/app` → the new release.
+5. **Restarts the service**: `systemctl restart evig-app`.
 6. **Health-gates** the new release on **both**:
    - `GET /api/health`, and
    - a real page render on `http://localhost:4004/`.
 
    If **either** check fails, it **auto-rolls back** to
-   `/opt/revampit/app.previous` and restarts, so a bad build never stays live.
+   `/opt/evig/app.previous` and restarts, so a bad build never stays live.
 
-**Persistent uploads:** user uploads live in `/opt/revampit/uploads` and are
+**Persistent uploads:** user uploads live in `/opt/evig/uploads` and are
 symlinked into each release's `public/uploads`, so they survive release swaps.
 
 ---
@@ -179,20 +179,20 @@ A `scripts/db/migrations/*.sql` failed to apply to the PROD Hetzner Postgres. Th
 running release is **left in place** (no swap happened). Read the workflow logs
 for the failing SQL, fix the migration, and push again. To apply/inspect
 manually: `ssh ubuntu@167.233.22.31`, read `DATABASE_URL` from
-`/opt/revampit/app/.env`, and run the `.sql` against `psql "$DATABASE_URL"` in a
+`/opt/evig/app/.env`, and run the `.sql` against `psql "$DATABASE_URL"` in a
 transaction, then record it in `schema_migrations`.
 
 ### Release deployed but auto-rolled back
 
 The health gate failed — either `GET /api/health` or the real page render on
 `http://localhost:4004/` didn't succeed, so the script reverted to
-`/opt/revampit/app.previous`. Production is still on the previous good release.
+`/opt/evig/app.previous`. Production is still on the previous good release.
 Check the workflow logs and the service:
 
 ```bash
 ssh ubuntu@167.233.22.31
-journalctl -u revampit-app -n 100 --no-pager
-systemctl status revampit-app
+journalctl -u evig-app -n 100 --no-pager
+systemctl status evig-app
 ```
 
 Common causes: a runtime env var missing from `SELFHOST_ENV`, a component that

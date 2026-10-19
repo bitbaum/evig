@@ -5,7 +5,7 @@
 **Last Modified Summary:** Status note — cutover already happened to the Hetzner box; single DATABASE_URL pool
 
 > **ℹ️ Status (2026-06-19):** The cutover to production has already happened. Live
-> prod runs on the **self-hosted Hetzner box** (`revampit.orangecat.ch`, ssh
+> prod runs on the **self-hosted Hetzner box** (`evig.orangecat.ch`, ssh
 > `ubuntu@167.233.22.31`) — app + self-hosted Postgres 17 on one server, deployed via
 > GitHub Actions → rsync → systemd, with nightly backups to Cloudflare R2. The
 > Frauenfeld / Datacenter Thurgau plan below was the original target and did not
@@ -330,4 +330,4 @@ But for now, **one server handles everything** beautifully! 🚀
 ./scripts/migrate-to-production.sh [server-ip] revampit.ch
 ```
 
-**(Historical.)** This was the one-command path planned for the move off Vercel. The cutover is done — production now runs on the self-hosted Hetzner box and deploys via `git push origin main` (GitHub Actions → `revampit.orangecat.ch`). See `docs/guides/deployment.md`. 🎯
+**(Historical.)** This was the one-command path planned for the move off Vercel. The cutover is done — production now runs on the self-hosted Hetzner box and deploys via `git push origin main` (GitHub Actions → `evig.orangecat.ch`). See `docs/guides/deployment.md`. 🎯

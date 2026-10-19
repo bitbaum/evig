@@ -68,7 +68,7 @@ Drizzle Kit itself remains installed (`drizzle-kit` in devDependencies) — it's
    deploy lands the migration and records it in `schema_migrations`.
 
    To apply one **manually** (e.g. out-of-band): ssh `ubuntu@167.233.22.31`, read
-   `DATABASE_URL` from `/opt/revampit/app/.env`, then:
+   `DATABASE_URL` from `/opt/evig/app/.env`, then:
    ```bash
    psql "$DATABASE_URL" -f scripts/db/migrations/NNN_your_migration.sql
    ```

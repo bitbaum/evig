@@ -99,7 +99,7 @@ organisations can adopt it directly.
 
 - **Organisation**: evig (in Gründung)
 - **Base**: Zürich, Switzerland (online-first; no public store or warehouse)
-- **Website**: https://evig.orangecat.ch (`revampit.orangecat.ch` remains a working alias)
+- **Website**: https://evig.orangecat.ch (the retired host `revampit.orangecat.ch` redirects here)
 - **Legal status**: gemeinnütziger Verein in Gründung
 
 ---

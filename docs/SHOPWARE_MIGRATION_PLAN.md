@@ -4,7 +4,7 @@
 **Author:** Investigation session 2026-07-06
 **Scope:** (1) Migrate the live catalogue from the legacy Shopware 6 shop
 (`shop.revamp-it.ch`) into the unified `listings` store rendered at
-`revampit.orangecat.ch/marketplace`; (2) verify and harden the two product-add
+`evig.orangecat.ch/marketplace`; (2) verify and harden the two product-add
 paths (user-submitted + admin) plus edit/delete; (3) fix the code debt and
 best-practice violations found in the listing subsystem along the way.
 
@@ -354,7 +354,7 @@ listings render at `/marketplace`, images resolve from R2, categories/filters
 work, search indexes, no duplicates on a second run.
 
 **Phase 4 — Load to prod.** Dry-run against prod → review diff → real run →
-post-run report. Spot-check on `revampit.orangecat.ch/marketplace`. Keep the old
+post-run report. Spot-check on `evig.orangecat.ch/marketplace`. Keep the old
 shop read-only until sign-off.
 
 **Phase 5 — Deferred (DECISION-E = import only).** No ongoing sync or

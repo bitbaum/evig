@@ -31,13 +31,15 @@ mission; affordable pricing is the product, not a subsidy.
 
 **Two layers — rebrand ONLY Layer A, never blind-rename Layer B:**
 - **Layer A (user-facing brand)** → say `evig`: copy, i18n message values, README,
-  page content, org identity in `src/config/org.ts`. Done on branch `rebrand/evig`.
+  page content, org identity in `src/config/org.ts`. Done.
 - **Layer B (infra identifiers)** → still literally carry the `revampit` name and
   MUST stay accurate to the running system until a deliberate infra refactor:
-  DB `revampit_cms` / prod DB `revampit`, the `is_revampit` column, deploy paths
-  `/opt/revampit/app`, systemd `revampit-app`, script `selfhost-deploy-revampit.sh`,
-  host `revampit.orangecat.ch`. Renaming any of these in docs/code without migrating
-  the actual infra makes the docs LIE. The owner's bootstrap login is still
+  DB `revampit_cms` / prod DB `revampit`, the `is_revampit` column, the R2 backup
+  bucket `revampit-backups`. Renaming any of these in docs/code without migrating
+  the actual infra makes the docs LIE. Already cut over (2026-09-02 / 2026-09-10):
+  the box directory is `/opt/evig` (systemd `evig-app`, timers `evig-cron@*` /
+  `evig-backup`, deploy script `scripts/selfhost-deploy-evig.sh`) and the host is
+  `evig.orangecat.ch` (`revampit.orangecat.ch` is a retired 308 redirect). The owner's bootstrap login is still
   `georgy.butaev@revamp-it.ch` (`SUPER_ADMIN_EMAILS`) — that one address is a
   lockout floor, not a domain rule. The domain does not grant staff. Leave the
   infra names until the cutover is explicitly done.
@@ -99,19 +101,21 @@ revampit/
 
 - **Production** runs a **self-hosted Postgres on the Hetzner box**
   (`DATABASE_URL=postgresql://…@localhost:5432/revampit` in
-  `/opt/revampit/app/.env`). **Neon is fully retired** (cutover completed
+  `/opt/evig/app/.env`). **Neon is fully retired** (cutover completed
   2026-06-18) — the prod `.env` no longer contains any `DB_*`/`AUTH_DB_*` Neon
   vars; the app + auth both connect via `DATABASE_URL`.
-- **Local dev** `.env.local` points `DATABASE_URL` at its own DB (Neon for now).
+- **Local dev** `.env.local` points `DATABASE_URL` at its own DB — the Docker
+  Postgres from `pnpm run services:up` on port 5433 (`revampit_cms`, see
+  `.env.example`). Never at prod.
 - **One connection source (SSOT):** `getDbConfig()` (src/lib/auth/config.ts)
   prefers `DATABASE_URL`, so app (Drizzle) and auth (credentials) share one pool.
 
 **Consequences you MUST respect:**
 1. **Migrations must reach the PROD Hetzner DB.** The deploy
-   (`selfhost-deploy-revampit.sh`) auto-applies any unrecorded
+   (`selfhost-deploy-evig.sh`) auto-applies any unrecorded
    `scripts/db/migrations/*.sql` to the prod DB before activating. To apply
    manually: ssh `ubuntu@167.233.22.31`, read `DATABASE_URL` from
-   `/opt/revampit/app/.env`, pipe the `.sql` to `psql "$DB"` in a transaction,
+   `/opt/evig/app/.env`, pipe the `.sql` to `psql "$DB"` in a transaction,
    then record it in `schema_migrations`. Extension/owner ops need
    `sudo -u postgres psql -d revampit` (the app user isn't superuser).
 2. **Schema reaches ANY shared database ONLY via `scripts/db/migrations/`.**

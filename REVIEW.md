@@ -1,23 +1,24 @@
-# REVIEW.md — revampit review bar
+# REVIEW.md — evig review bar
 
 Judge the DIFF against these gates, in order. Flag correctness and requirement
 gaps only — lint owns style. Global standards load via CLAUDE.md; this file is
-ONLY revampit's scars.
+ONLY evig's scars.
 
 ## Fatal invariants (one violation = block)
 
 1. **`drizzle-kit push` is FORBIDDEN** — schema changes go through generated
    SQL migrations in `scripts/db/migrations/` (CI replays them against a
    throwaway Postgres). A push once broke CI for everyone; never again.
-2. **`is_revampit` is a stored column** — NEVER re-derive staff status from the
-   `@revamp-it.ch` email domain in queries or logic.
+2. **`is_revampit` is a stored column** (evig stock vs. P2P listing) — NEVER
+   re-derive it, or staff status (`users.is_staff`), from the `@revamp-it.ch`
+   email domain in queries or logic.
 3. **Prod/dev DB split** — no code path may point dev tooling at the prod DB;
    check connection-string provenance on anything touching `DB_*` env.
 4. **Payments** — `lib/services/payment-webhook.ts` is the highest-blast-radius
    money path; any change there requires its test suite green (921-line
    webhook test) + a manual reasoning note in the PR body.
 5. **Swiss German** — `ß` never appears in user-facing strings (`ss` only);
-   real umlauts ä/ö/ü required, never ae/oe/ue. `npm run lint:umlauts` gates it.
+   real umlauts ä/ö/ü required, never ae/oe/ue. `pnpm run lint:umlauts` gates it.
 
 ## Repo gotchas that have bitten before
 

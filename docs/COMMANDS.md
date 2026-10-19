@@ -4,7 +4,7 @@ last_modified_date: 2026-07-04
 last_modified_summary: IT-Hilfe journey E2E (edit + withdraw); local run notes
 ---
 
-# RevampIT Commands Reference (SSOT)
+# evig Commands Reference (SSOT)
 
 **Single Source of Truth** for all package scripts and commands.
 
@@ -96,17 +96,17 @@ pnpm run test:all       # Run all tests
 
 ## Deployment
 
-Production app: **https://revampit.orangecat.ch** (Hetzner self-host).
+Production app: **https://evig.orangecat.ch** (Hetzner self-host). The retired host `revampit.orangecat.ch` 308-redirects here.
 Public legacy domain `revamp-it.ch` is still the old Joomla/Apache site and is not the production app.
 
 ### Automatic (push-to-deploy)
 
 | Trigger | What happens |
 |---------|----------------|
-| `git push origin main` (local) | Pre-push hook builds + deploys in background → `/tmp/push-deploy-revampit.log` |
+| `git push origin main` (local) | No local deploy — the pre-push hook's background deploy is disabled (see `.husky/pre-push`). Manual fallback: `pnpm run deploy:selfhost` |
 | `git push origin main` (GitHub) | Actions workflow `.github/workflows/deploy-selfhost.yml` runs lint + typecheck, then deploys if secrets are set |
 
-Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or recreate from the prod `/opt/revampit/app/.env`.
+Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or recreate from the prod `/opt/evig/app/.env`.
 
 **One-time GitHub secrets** (Settings → Secrets → Actions) for CI deploy when you push from anywhere:
 
@@ -161,16 +161,16 @@ pnpm run db:migrate      # apply unrecorded scripts/db/migrations/*.sql (DATABAS
 Operational checks:
 
 ```bash
-curl https://revampit.orangecat.ch/api/health  # dependency health
-curl https://revampit.orangecat.ch/api/version # deployed version / git SHA
+curl https://evig.orangecat.ch/api/health  # dependency health
+curl https://evig.orangecat.ch/api/version # deployed version / git SHA
 ```
 
 Production dependencies on the Hetzner box:
 
 | Service | Runtime | Binding | Notes |
 |---------|---------|---------|-------|
-| `revampit-app` | systemd | `127.0.0.1:4004` behind Caddy | `/opt/revampit/app`, restarted by `scripts/selfhost-deploy-evig.sh` |
-| `revampit_meilisearch` | Docker | `127.0.0.1:7700` | Required for healthy `/api/health`; master key is stored only in `/opt/revampit/app/.env` |
+| `evig-app` | systemd | `127.0.0.1:4004` behind Caddy | `/opt/evig/app`, restarted by `scripts/selfhost-deploy-evig.sh` |
+| `revampit_meilisearch` | Docker | `127.0.0.1:7700` | Required for healthy `/api/health`; master key is stored only in `/opt/evig/app/.env` |
 
 The deploy script copies the server-local `.env` and `launch.sh` into each release before activation. Do not put those runtime secrets in git.
 
