@@ -357,11 +357,12 @@ MIT © [AI-Native CMS Team](https://github.com/your-org/ai-native-cms)
 ## 🔗 Related Packages
 
 - [`@ai-native-cms/react`](../ai-native-cms-react) - React components
-- [`@ai-native-cms/nextjs`](../ai-native-cms-nextjs) - Next.js plugin
-- [`@ai-native-cms/cli`](../ai-native-cms-cli) - CLI tools
+
+A Next.js plugin and a CLI were planned as separate packages; neither exists in
+this repository.
 
 ---
 
 **Ready to make your website AI-native?** 🚀
 
-Get started with our [Quick Start Guide](../../docs/quick-start.md) or check out the [live examples](../../examples).
+Check out the [Next.js example](../../examples/nextjs-basic).

@@ -82,8 +82,9 @@ cantons, pass your own `Set<'YYYY-MM-DD'>` as `holidays`.
 ## Scope
 
 This is the **accounting core** — the maths, fully tested. Storage (DB), auth, the
-UI, PDF/print reports, and localisation live in the app that embeds it. See the
-[Saldo product](../../) for a reference Next.js implementation (self-service
+UI, PDF/print reports, and localisation live in the app that embeds it. See the evig app
+(the Saldo product: [`src/lib/team/saldo.ts`](../../src/lib/team/saldo.ts) and
+`src/app/admin/zeiterfassung/`) for a reference Next.js implementation (self-service
 timecards, four-eyes approval, printable monthly reports, and public share links
 for a referring social worker).
 

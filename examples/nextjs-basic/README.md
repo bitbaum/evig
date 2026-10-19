@@ -287,7 +287,7 @@ cmsConfig.notifications.providers.push({
 ## 📚 Learn More
 
 - [AI-Native CMS Core Documentation](../../packages/ai-native-cms-core/README.md)
-- [React Components Documentation](../../packages/ai-native-cms-react/README.md)
+- [React Components source](../../packages/ai-native-cms-react/src) (the package has no README)
 - [Next.js Documentation](https://nextjs.org/docs)
 
 ## 🤝 Contributing
