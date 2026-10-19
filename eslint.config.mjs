@@ -78,7 +78,6 @@ const eslintConfig = [
     ignores: [
       '.next/**',
       'node_modules/**',
-      'examples/**',
       'packages/**',
       // Per-session agent worktrees are complete checkouts of this repo living
       // inside it, so without this every file gets linted twice: once here and
