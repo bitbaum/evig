@@ -46,7 +46,6 @@
     "compliance": "pnpm run compliance:ssot && pnpm run compliance:i18n && pnpm run compliance:i18n-hardcoded && pnpm run compliance:i18n-leaks && pnpm run compliance:i18n-stale",
     "compliance:ci": "pnpm run compliance:ssot && pnpm run compliance:i18n && pnpm run compliance:i18n-hardcoded && pnpm run compliance:i18n-leaks",
     "i18n:missing": "node scripts/i18n-missing.mjs",
-    "i18n:businessplan": "node scripts/i18n-businessplan-parity.mjs",
     "i18n:apply": "node scripts/i18n-apply.mjs",
     "i18n:leaks": "node scripts/i18n-leaks.mjs",
     "i18n:apply-leaks": "node scripts/i18n-apply-leaks.mjs",

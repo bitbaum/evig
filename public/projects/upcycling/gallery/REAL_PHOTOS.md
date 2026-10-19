@@ -2,8 +2,7 @@
 
 This folder holds production photos for the gallery at
 `/projects/upcycling/gallery`. The piece list lives in
-`src/data/upcycling-gallery.ts` (`PIECES` array). Asset paths are also
-referenced from `src/config/upcycling-assets.ts`.
+`src/data/upcycling-gallery.ts` (`PIECES` array).
 
 ## How it works
 

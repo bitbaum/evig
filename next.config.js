@@ -277,7 +277,6 @@ const nextConfig = {
           '**/test-results/**',
           '**/postgres-init/**',
           '**/cms-api/**',
-          '**/examples/**',
           '**/packages/**',
         ],
         followSymlinks: false,

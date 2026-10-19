@@ -187,9 +187,8 @@ Payrexx: config SSOT `src/config/payrexx.ts` · setup `docs/operations/PAYREXX_S
 ## Monitor-Upcycling mini-site (pages removed)
 
 The `/projects/upcycling/*` pages and their `businessPlan` messages are no longer
-in `src/app` or `messages/`. Leftovers still in the tree: `src/config/upcycling-*.ts`,
-`src/data/upcycling-status.ts` and the business-plan scripts. The old SSOT map is
-`docs/archive/projects/upcycling.md`.
+in `src/app` or `messages/`, and their config, status data and business-plan
+scripts are deleted too. The old SSOT map is `docs/archive/projects/upcycling.md`.
 
 Nav dropdown labels for projects live under **`nav.items.*`** in locale files; use `nav-i18n.ts` helpers in header components.
 

@@ -206,5 +206,4 @@ code didn't expect.
 - Workflow: `.github/workflows/deploy-selfhost.yml`
 - Deploy script: `scripts/selfhost-deploy-evig.sh`
 - DB / prod environment notes: project `CLAUDE.md` → "Database Configuration"
-- GitHub secrets reference: `docs/guides/github-vercel-setup.md` (legacy filename;
-  see note at its top)
+- GitHub secrets: "Required GitHub repo secrets" above
