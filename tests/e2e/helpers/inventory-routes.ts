@@ -117,8 +117,8 @@ export const PUBLIC_ROUTES: InventoryRoute[] = [
     urlPattern: /\/it-hilfe/,
   },
   // Route #116 (the /projects/upcycling/* mini-site) was intentionally removed
-  // with the /projects purge (commit 10c1b8adf); its config lingers but the pages
-  // 404, so it is no longer smoke-tested here.
+  // with the /projects purge (commit 10c1b8adf); its config is deleted too, so it
+  // is no longer smoke-tested here.
   { id: 101, label: 'Blog index', path: ROUTES.public.blog },
   { id: 103, label: 'Blog submit', path: ROUTES.public.blogSubmit },
   { id: 112, label: 'Donate hardware', path: ROUTES.public.donate },

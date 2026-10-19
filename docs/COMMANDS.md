@@ -51,17 +51,7 @@ pnpm run start          # Start production server
 pnpm run typecheck      # TypeScript validation (run before commits!)
 pnpm run lint           # ESLint check
 pnpm run check:file-inputs  # No file input mixes image + document types (Android hides the file browser)
-pnpm run i18n:businessplan  # Business plan i18n shape/invariant parity (8 locales)
 ```
-
-### Monitor-Upcycling content scripts
-
-```bash
-node scripts/sync-businessplan-locales.mjs   # After editing DE businessPlan block
-node scripts/prune-businessplan-archive.mjs  # Remove archived citation keys from all locales
-```
-
-The mini-site pages and the `businessPlan` messages these scripts edit have been removed; see `docs/archive/projects/upcycling.md`.
 
 ---
 

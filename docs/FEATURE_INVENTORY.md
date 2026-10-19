@@ -256,7 +256,7 @@ Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Updat
 | 113 | My donations | `/dashboard/donations` | ✅ inventory E2E |
 | 114 | Admin donations | `/admin/donations` | ✅ inventory E2E |
 | 115 | Projects (admin) | `/admin/projects`, `[slug]` | ✅ list; slug dynamic 🟡 |
-| 116 | Upcycling mini-site | `/projects/upcycling/*` | ✅ inventory E2E (nav + guide) |
+| 116 | Upcycling mini-site | `/projects/upcycling/*` | ❌ removed (pages, config and scripts deleted) |
 | 117 | Get involved pages | `/get-involved/*` | ✅ donate path |
 | 118 | Legal pages | impressum, datenschutz, agb, transparenz | ✅ inventory E2E |
 | 119 | FAQ, contact, support | `/faq`, `/contact`, `/support` | ✅ inventory E2E |
