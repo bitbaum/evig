@@ -79,7 +79,7 @@ AI slop includes:
    - If a type/interface exists, reuse it
 
 2. **Never create conflicting implementations**
-   - Don't create `Button.tsx` if `components/ui/Button.tsx` exists
+   - Don't create `Button.tsx` if `src/components/ui/button.tsx` exists
    - Don't create `utils/helpers.ts` if `lib/utils.ts` exists
    - Don't create multiple ways to do the same thing
 

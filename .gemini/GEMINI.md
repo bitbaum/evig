@@ -16,7 +16,7 @@ Gemini CLI auto-loads this file when running inside this repository.
 - `docs/SHARED_CONTEXT.md` — Project context (mission, tech stack, database, file structure)
 - `docs/COMMANDS.md` — All npm scripts and commands
 - `docs/MISSION_STATEMENT.md` — Official mission statement
-- `docs/CODE_AUDIT.md` — Current code quality issues
+- `docs/AUDIT_BACKLOG_2026-08.md` — Open audit findings
 
 Keep this file lean; avoid duplicating large sections from the canonical sources.
 

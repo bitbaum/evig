@@ -93,7 +93,7 @@ last_modified_summary: Added Codex CLI (terminal) and Gemini CLI (terminal) auto
 1. ✅ **Read core documentation:**
    - `docs/development/DEV_GUIDE.md` - Main development guide
    - `docs/BEST_PRACTICES.md` - AI slop prevention
-   - `DEVELOPMENT_GUIDELINES.md` - File deletion protection
+   - `.claude/CLAUDE.md` ("Protected Files") - File deletion protection
 
 2. ✅ **Follow critical rules:**
    - Never delete files without explicit approval
@@ -205,7 +205,7 @@ docs/development/
 ### Core Documentation
 - [`DEV_GUIDE.md`](./DEV_GUIDE.md) - Main development guide
 - [`../BEST_PRACTICES.md`](../BEST_PRACTICES.md) - Best practices
-- [`../../DEVELOPMENT_GUIDELINES.md`](../../DEVELOPMENT_GUIDELINES.md) - File protection
+- [`../../.claude/CLAUDE.md`](../../.claude/CLAUDE.md) - File protection ("Protected Files")
 
 ### Agent-Specific Guides
 - **Cursor:**

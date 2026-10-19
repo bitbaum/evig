@@ -188,8 +188,8 @@ component. Phase 0 fixes that adapter layer.
    `:root` / `.dark` `--color-bg`, `--color-surface`, `--color-text`, etc.;
    `@theme` palette scales (`primary-*`, `error-*`, …) remain for status badges.
 
-Reference pages: `src/app/[locale]/page.tsx`, `projects/upcycling/page.tsx`,
-`techniker/[id]/TechnikerProfileView.tsx`, `src/app/admin/appointments/page.tsx`.
+Reference pages: `src/app/[locale]/page.tsx`,
+`src/app/[locale]/it-hilfe/techniker/[id]/TechnikerProfileView.tsx`, `src/app/admin/appointments/page.tsx`.
 
 ## Tailwind 4 — current state
 

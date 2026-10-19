@@ -7,7 +7,7 @@
  * inbox alert (REVAMPIT_NOTIFICATION_EMAIL targets info@…, not a per-user
  * recipient — notifyUsers/notifyAllStaff don't fit).
  *
- * Closes ARCHITECTURE_DEBT.md #2.
+ * Closes docs/archive/ARCHITECTURE_DEBT.md #2.
  */
 
 import { db } from '@/db';

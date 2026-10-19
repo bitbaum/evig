@@ -360,7 +360,7 @@ logger.error('Database error', { error, query })
 | `src/config/database.ts` | Database configuration & table names |
 | `src/auth.ts` | Auth.js configuration & session management |
 | `src/app/api/**/route.ts` | API route handlers (backend endpoints) |
-| `src/middleware.ts` | Route protection & session validation |
+| `src/proxy.ts` | Route protection & session validation (Next.js 16 proxy, formerly `middleware.ts`) |
 | `docker-compose.yml` | Local database setup |
 | `scripts/db/migrations/*.sql` | Database schema migrations |
 

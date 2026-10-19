@@ -1,39 +1,40 @@
 # Reliability Hardening Summary
 
-This project is configured to favor reliability of Auth and Database while keeping CMS disabled by default.
+This project is configured to favor reliability of Auth and Database.
 
 ## What’s configured
 
-- CMS disabled by default
-  - `ENABLE_CMS=false` gates all CMS API routes and client calls.
-  - `cms_api` service is commented out in `docker-compose.yml`.
-
 - Database hardening
-  - New migration `scripts/db/migrations/005_auth_hardening_and_indexes.sql`:
+  - Migration `scripts/db/migrations/005b_auth_hardening_and_indexes.sql`:
     - Enforces case-insensitive emails via `CITEXT` with a safety pre-check.
     - Ensures Auth.js timestamp columns exist (`users."emailVerified"`, `"createdAt"`, `"updatedAt"`).
     - Adds critical indexes for interactions, preferences, segments, workshop instances, registrations, service appointments, and JSONB fields.
-  - Migration runner updated to apply all migrations in order.
+  - Every deploy (`scripts/selfhost-deploy-evig.sh`) applies unrecorded migrations to the prod DB before activating; see [MIGRATIONS.md](./MIGRATIONS.md).
 
 - Redis-backed rate limiter and lockout (optional)
+  - Configured in `src/config/redis.ts`, used by `src/lib/security/rate-limit.ts`.
   - Enable via env:
     - `ENABLE_REDIS_RATE_LIMITER=true`
     - `REDIS_URL=redis://localhost:6380`
   - Falls back to in-memory if Redis client is not available.
 
-## How to run migrations
+## How to run migrations locally
 
 ```
 pnpm run db:up
-bash scripts/db/run-migration.sh
+pnpm run db:migrate   # bash scripts/db/run-migration.sh
 ```
 
 This applies all `scripts/db/migrations/*.sql` in order.
 
-## Recommended production settings
+## Production
 
-- Managed HA Postgres (Multi-AZ, PITR) and PgBouncer (transaction pooling)
+Production runs self-hosted Postgres on the Hetzner box, with nightly backups to
+Cloudflare R2 (`scripts/ops/backup-db-to-r2.sh`); recovery is in
+[DISASTER_RECOVERY.md](./DISASTER_RECOVERY.md).
+
+Recommended settings:
+
 - Enforce Postgres timeouts: `statement_timeout` (~15s), `idle_in_transaction_session_timeout` (~30s)
 - Enable Redis rate limiting (`ENABLE_REDIS_RATE_LIMITER=true`)
 - Admin 2FA (TOTP) and backup codes (future enhancement)
-

@@ -70,7 +70,7 @@ export const decisions = pgTable(
     // Optional link to a protocol meeting + action item that spawned this
     // decision. Nullable — most decisions are standalone. Populated only
     // when a protocol-embedded vote is created via the unified pipeline
-    // (see docs/ARCHITECTURE_DEBT.md #1). action_item_id is a string ID
+    // (see docs/archive/ARCHITECTURE_DEBT.md #1). action_item_id is a string ID
     // from the AI-extracted notes.action_items array (not a FK).
     protocolId: uuid('protocol_id').references(() => meetingProtocols.id, { onDelete: 'cascade' }),
     actionItemId: text('action_item_id'),

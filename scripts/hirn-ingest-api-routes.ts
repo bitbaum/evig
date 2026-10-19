@@ -41,29 +41,15 @@ function extractRouteInfo(filePath: string, content: string): RouteInfo {
   const apiMatch = relativePath.match(/src\/app(\/api\/.*)\/route\.ts/);
   const apiPath = apiMatch ? apiMatch[1] : relativePath;
 
-  // Extract HTTP methods
-  const methods: string[] = [];
-  if (content.includes('export async function GET') || content.includes('export function GET')) {
-    methods.push('GET');
-  }
-  if (content.includes('export async function POST') || content.includes('export function POST')) {
-    methods.push('POST');
-  }
-  if (content.includes('export async function PUT') || content.includes('export function PUT')) {
-    methods.push('PUT');
-  }
-  if (
-    content.includes('export async function PATCH') ||
-    content.includes('export function PATCH')
-  ) {
-    methods.push('PATCH');
-  }
-  if (
-    content.includes('export async function DELETE') ||
-    content.includes('export function DELETE')
-  ) {
-    methods.push('DELETE');
-  }
+  // Extract HTTP methods. Routes export them three ways: a function
+  // declaration, a const wrapped in a guard (`export const GET = withAdmin(...)`),
+  // or a destructured / re-export (`export const { GET, POST } = handlers`). Matching only the first missed
+  // most of the API.
+  const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].filter((method) =>
+    new RegExp(
+      `export\\s+(?:async\\s+)?function\\s+${method}\\b|export\\s+const\\s+${method}\\b|export\\s+(?:const\\s*)?\\{[^}]*\\b${method}\\b[^}]*\\}`,
+    ).test(content),
+  );
 
   // Extract JSDoc comment at the top
   const docMatch = content.match(/\/\*\*\s*\n([\s\S]*?)\*\//);
@@ -85,10 +71,18 @@ function extractRouteInfo(filePath: string, content: string): RouteInfo {
   if (content.includes('auth()') || content.includes('getServerSession')) {
     authentication = 'Session required';
   }
-  if (content.includes('session?.user') || content.includes('!session?.user')) {
+  if (
+    content.includes('session?.user') ||
+    content.includes('!session?.user') ||
+    content.includes('withAuth(')
+  ) {
     authentication = 'Authenticated users';
   }
-  if (content.includes('isStaff') || content.includes('staffPermissions')) {
+  if (
+    content.includes('isStaff') ||
+    content.includes('staffPermissions') ||
+    content.includes('withAdmin(')
+  ) {
     authentication = 'Staff only';
   }
   if (content.includes('isSuperAdmin')) {
@@ -99,7 +93,10 @@ function extractRouteInfo(filePath: string, content: string): RouteInfo {
   let codeSnippet = '';
   for (const method of methods) {
     const funcMatch = content.match(
-      new RegExp(`export (?:async )?function ${method}[\\s\\S]*?\\{([\\s\\S]*?)(?=export|$)`, 'm'),
+      new RegExp(
+        `export (?:async )?(?:function|const) ${method}[\\s\\S]*?\\{([\\s\\S]*?)(?=export|$)`,
+        'm',
+      ),
     );
     if (funcMatch) {
       const funcBody = funcMatch[0];

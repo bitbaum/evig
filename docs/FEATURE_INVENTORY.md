@@ -366,4 +366,4 @@ Config SSOT: `src/config/hr-vacancies.ts`, `src/config/hr-application-status.ts`
 
 **E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe:preferred:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey` · `npm run test:e2e:timecards:journey` · `npm run test:e2e:intake:journey` · `npm run test:e2e:tasks:journey` · `npm run test:e2e:protocols:journey` · `npm run test:e2e:decisions:journey` · `npm run test:e2e:cms:journey`
 
-See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)
+See also: [`archive/ARCHITECTURE_DEBT.md`](./archive/ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

@@ -32,7 +32,7 @@ The schema file itself marks this `DEPRECATED, UNUSED` (per migration
 application step). The live DB table can stay; only the Drizzle reference
 is dead.
 
-- `src/db/schema/marketplace.ts:283-332` — `sellerApplications` table +
+- `src/db/schema/marketplace.ts` (the "SELLER APPLICATIONS — DEPRECATED, UNUSED" block) — `sellerApplications` table +
   `SellerApplication` + `NewSellerApplication` type exports
 
 **Note**: keep the email template `adminNewSellerApplication` —
@@ -45,21 +45,24 @@ that's a different thing and is still in use.
 
 ### Technician API proxies + singular `/helper/` routes (QQQ.3) — 410 Gone (2026-06-19)
 
-List endpoints below no longer proxy; they return **410 Gone** via
-`src/lib/api/deprecated-endpoint.ts` with `Link: rel="successor-version"`.
-Per-resource routes under `/api/repairers/[id]/` remain for booking/availability.
+The two list proxies have since been deleted outright; their successors are
+`/api/technicians?tier=professional` (was `/api/repairers`) and
+`/api/technicians?tier=community` (was `/api/it-hilfe/helpers`). The
+`/api/repairers/[id]/` per-resource routes are gone too: technicians are read
+through `src/app/api/technicians/[id]/route.ts`.
 
-- `src/app/api/repairers/route.ts` → use `/api/technicians?tier=professional`
-- `src/app/api/it-hilfe/helpers/route.ts` → use `/api/technicians?tier=community`
+The singular `/helper/` routes below still exist and return **410 Gone** via
+`src/lib/api/deprecated-endpoint.ts` with `Link: rel="successor-version"`:
+
 - `src/app/api/it-hilfe/helper/my-offers/route.ts` → use `/api/it-hilfe/my-offers`
 - `src/app/api/it-hilfe/helper/matching-requests/route.ts` → use `/api/it-hilfe/requests?matchMySkills=true`
 - ~~`IT_HILFE.api.helpers`~~ — removed; use `IT_HILFE.api.technicians` / `technician(id)`
-- `IT_HILFE.routes.helpers` in `src/config/it-hilfe.ts` — renamed to
-  `routes.technicians`, old key kept as one-release alias
+- ~~`IT_HILFE.routes.helpers`~~ — renamed to `routes.technicians` in
+  `src/config/it-hilfe.ts`; the one-release alias has since been removed
 
 ### Removed 2026-06-23
 
-- `src/components/technicians/` — duplicate TechnicianCard (zero importers; live card at
+- `src/components/technicians/` — deleted; it was a duplicate TechnicianCard (zero importers; live card at
   `src/app/[locale]/it-hilfe/techniker/TechnicianCard.tsx`)
 
 ### Possibly orphaned, not yet reverified

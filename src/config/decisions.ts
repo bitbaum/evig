@@ -100,7 +100,7 @@ export const VOTING_METHODS = [
   'simple_majority',
   'ranked_choice',
   // Lightweight: thumbs up/down only — used by protocol-embedded
-  // "quick vote on this action item" flow (ARCHITECTURE_DEBT.md #1).
+  // "quick vote on this action item" flow (docs/archive/ARCHITECTURE_DEBT.md #1).
   'thumbs_up_down',
 ] as const;
 

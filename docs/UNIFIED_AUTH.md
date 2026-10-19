@@ -342,7 +342,7 @@ Check `docs/EMAIL_SETUP.md` — email is required for registration and reset.
 
 - `docs/EMAIL_SETUP.md` — email provider setup
 - `docs/UNIFIED_AUTH.md` — this file
-- `docs/ARCHITECTURE_DEBT.md` — notification pipeline status
+- `docs/archive/ARCHITECTURE_DEBT.md` — notification pipeline status (closed)
 - `docs/SHARED_CONTEXT.md` — tech stack and database
 - `src/lib/permissions.ts` — admin section access SSOT
 

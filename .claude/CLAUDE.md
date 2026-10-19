@@ -517,7 +517,7 @@ Run `scripts/db/migrations/002b-simplified-auth.sql` to add:
 | `docs/SHARED_CONTEXT.md` | Tech stack, database, file structure |
 | `docs/COMMANDS.md` | All package scripts |
 | `docs/MISSION_STATEMENT.md` | Organization mission |
-| `docs/CODE_AUDIT.md` | Current issues to fix |
+| `docs/AUDIT_BACKLOG_2026-08.md` | Open audit findings to fix (`docs/archive/CODE_AUDIT.md` is the retired, historical list) |
 
 ## Don't
 

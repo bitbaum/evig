@@ -1,6 +1,6 @@
 # Improvement Plan — toward "absolutely perfect"
 
-**Date:** 2026-07-02 · **Base:** commit 7d1ce407 · **Inputs:** `docs/AUDIT_REPORT.md`
+**Date:** 2026-07-02 · **Base:** commit 7d1ce407 · **Inputs:** `docs/archive/AUDIT_REPORT_2026-07.md`
 (2026-07-02 full audit) + deep admin-side audit + deep public/user-flows audit
 (both 2026-07-02, multi-agent, every HIGH re-verified against source).
 

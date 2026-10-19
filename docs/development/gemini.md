@@ -19,7 +19,7 @@ last_modified_summary: Updated to clarify terminal CLI vs web usage; terminal to
 **Before starting any task:**
 1. ✅ Read `docs/development/DEV_GUIDE.md` - Core development principles
 2. ✅ Read `docs/BEST_PRACTICES.md` - Critical AI slop prevention
-3. ✅ Read `DEVELOPMENT_GUIDELINES.md` - File deletion protection rules
+3. ✅ Read `.claude/CLAUDE.md` ("Protected Files") - File deletion protection rules
 4. ✅ Understand Gemini's limitations and capabilities
 
 ---
@@ -202,7 +202,7 @@ function processProducts(products: Product[]): ProcessedProduct[] {
 4. ✅ Check naming conventions
 
 **Red flags to avoid:**
-- 🚩 Suggesting `Button.tsx` when `components/ui/Button.tsx` exists
+- 🚩 Suggesting `Button.tsx` when `src/components/ui/button.tsx` exists
 - 🚩 Creating duplicate utilities
 - 🚩 Suggesting conflicting patterns
 
@@ -514,7 +514,7 @@ Reference docs/development/DEV_GUIDE.md."
 
 - `docs/development/DEV_GUIDE.md` - Main development guide
 - `docs/BEST_PRACTICES.md` - Best practices
-- `DEVELOPMENT_GUIDELINES.md` - File protection rules
+- `.claude/CLAUDE.md` ("Protected Files") - File protection rules
 - `docs/guides/ARCHITECTURE.md` - System architecture
 
 ---
