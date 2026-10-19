@@ -9,9 +9,9 @@ compass.
 > the operating org and dogfooding customer. The platform is now **evig**'s (see
 > [`EVIG_STORY.md`](./EVIG_STORY.md)); those references are kept as the dated record,
 > not updated in place. Companion to the concrete plans in
-[`SYSTEM_MIGRATION_STRATEGY.md`](./SYSTEM_MIGRATION_STRATEGY.md),
+[`archive/SYSTEM_MIGRATION_STRATEGY.md`](./archive/SYSTEM_MIGRATION_STRATEGY.md),
 [`KIVVI_ERP_ADOPTION.md`](./KIVVI_ERP_ADOPTION.md),
-[`SHOPWARE_MIGRATION_PLAN.md`](./SHOPWARE_MIGRATION_PLAN.md).
+[`archive/SHOPWARE_MIGRATION_PLAN.md`](./archive/SHOPWARE_MIGRATION_PLAN.md).
 
 > **North star:** Used computers get repaired and rehomed — not landfilled. The
 > platform should *embody* that mission (transparency, sovereignty, care), not

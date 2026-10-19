@@ -2,8 +2,8 @@
 
 **Status:** Playbook / proposal
 **Author:** Investigation session 2026-07-06 (Kivvi deep-dive agent)
-**Companion docs:** [`SYSTEM_MIGRATION_STRATEGY.md`](./SYSTEM_MIGRATION_STRATEGY.md)
-(the Kivitendo→Kivvi + Shopware retirement strategy), [`SHOPWARE_MIGRATION_PLAN.md`](./SHOPWARE_MIGRATION_PLAN.md).
+**Companion docs:** [`archive/SYSTEM_MIGRATION_STRATEGY.md`](./archive/SYSTEM_MIGRATION_STRATEGY.md)
+(the Kivitendo→Kivvi + Shopware retirement strategy), [`archive/SHOPWARE_MIGRATION_PLAN.md`](./archive/SHOPWARE_MIGRATION_PLAN.md).
 
 How Revamp-IT runs on **Kivvi** (`/home/g/dev/kivvi`) as its real ERP —
 replacing Kivitendo — integrating via the existing caller
