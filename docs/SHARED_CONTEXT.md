@@ -1,10 +1,10 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-07-16
-last_modified_summary: Access Points — production URLs (revampit.orangecat.ch) + legacy-Joomla warning
+last_modified_summary: Access Points — production URL (evig.orangecat.ch; revampit.orangecat.ch 308-redirects) + legacy-Joomla warning
 ---
 
-# Revamp-IT Shared Context (SSOT)
+# evig Shared Context (SSOT)
 
 **Single Source of Truth** for project context used by all agent files and documentation.
 
@@ -36,8 +36,8 @@ jurisdiction, letterhead) takes it from `ORG` in that file.
 | Backend | Next.js API Routes | — |
 | Auth | Auth.js v5, Credentials, JWT sessions | Same login for `/dashboard` and `/admin` — see `docs/UNIFIED_AUTH.md` |
 | E-commerce | Custom (inventory-based) | Integrated |
-| Database/Search | PostgreSQL (prod: self-hosted Postgres 17 on Hetzner via `DATABASE_URL`; dev: Docker on port 5433), Redis (6380), Meilisearch (7700) | Drizzle ORM; auth shares the same `DATABASE_URL` pool — no separate auth DB |
-| Deploy | GitHub Actions → self-hosted Hetzner app (revampit.orangecat.ch), systemd `revampit-app`; Vercel not used | See `docs/COMMANDS.md` |
+| Database/Search | PostgreSQL (prod: self-hosted Postgres 17 on Hetzner via `DATABASE_URL`; dev: Docker on port 5433), Redis (optional, via `REDIS_URL`), Meilisearch (7700) | Drizzle ORM; auth shares the same `DATABASE_URL` pool — no separate auth DB |
+| Deploy | GitHub Actions → self-hosted Hetzner app (evig.orangecat.ch), systemd `evig-app`; Vercel not used | See `docs/COMMANDS.md` |
 | Storage | Cloudflare R2 (S3-compatible, bucket `revampit-media`) for product/listing images; `public/uploads` local fallback | Configured via `S3_*` env vars |
 
 ---
@@ -53,8 +53,10 @@ jurisdiction, letterhead) takes it from `ORG` in that file.
 
 | Service | Port |
 |---------|------|
-| Redis | 6380 |
 | Meilisearch | 7700 |
+| Listmonk | 9090 |
+
+Redis is optional and not part of `docker-compose.yml`; set `REDIS_URL` to enable it.
 
 ---
 
@@ -62,7 +64,7 @@ jurisdiction, letterhead) takes it from `ORG` in that file.
 
 ### Production (this codebase)
 
-- **App**: https://evig.orangecat.ch — self-hosted on the Hetzner box, deployed from `main` via `deploy-selfhost.yml` (systemd `revampit-app`)
+- **App**: https://evig.orangecat.ch — self-hosted on the Hetzner box, deployed from `main` via `deploy-selfhost.yml` (systemd `evig-app`)
 - **Health**: https://evig.orangecat.ch/api/health (DB + Meilisearch status)
 - **Admin**: https://evig.orangecat.ch/admin
 - **Zeiterfassung (staff time entry)**: https://evig.orangecat.ch/admin/zeiterfassung (same shared `TimecardsClient` also at `/dashboard/timecards`)
@@ -96,7 +98,7 @@ scripts/db/migrations/    # Migration scripts (PROTECTED)
 
 ## Customer journeys (public IA)
 
-People come to RevampIT for two jobs — SSOT: `src/config/customer-journeys.ts`
+People come to evig for two jobs — SSOT: `src/config/customer-journeys.ts`
 
 | Journey | Entry | Routes |
 |---------|--------|--------|
@@ -178,7 +180,7 @@ Legacy `/dashboard/bookings/*` → permanent redirect to `/dashboard/appointment
 
 Payrexx: config SSOT `src/config/payrexx.ts` · setup `docs/operations/PAYREXX_SETUP.md`. Return banners: `PaymentReturnBanner` + `src/lib/payments/payment-return.ts`.
 
-**Marketplace RevampIT stock:** add to cart → `/marketplace/cart` → `POST /api/marketplace/cart/checkout`. P2P listings use direct checkout per listing.
+**Marketplace evig stock:** add to cart → `/marketplace/cart` → `POST /api/marketplace/cart/checkout`. P2P listings use direct checkout per listing.
 
 ---
 

@@ -14,7 +14,7 @@ Payrexx powers **marketplace checkout**, **paid workshop registration**, and **a
 
 ## Environment variables — set ALL THREE together
 
-Add to prod `/opt/revampit/app/.env` (and GitHub `SELFHOST_ENV` if using Actions deploy):
+Add to prod `/opt/evig/app/.env` (and GitHub `SELFHOST_ENV` if using Actions deploy):
 
 | Variable | Purpose |
 |----------|---------|
@@ -24,7 +24,7 @@ Add to prod `/opt/revampit/app/.env` (and GitHub `SELFHOST_ENV` if using Actions
 
 > ⚠️ **Set all three at once.** Checkout activates on `INSTANCE` + `API_SECRET` alone, but **without `PAYREXX_WEBHOOK_SECRET` every webhook is rejected** (fail-closed) → customers are charged but orders never advance. `createGateway` logs a loud error if it ever runs in this partial state (`isPayrexxPartiallyConfigured()`).
 
-Also confirm `NEXTAUTH_URL=https://revampit.orangecat.ch` (redirect URLs sent to Payrexx derive from it; otherwise they point at localhost).
+Also confirm `NEXTAUTH_URL=https://evig.orangecat.ch` (redirect URLs sent to Payrexx derive from it; otherwise they point at localhost).
 
 Local dev: leave unset → mock redirect at `/api/payments/payrexx-mock-redirect`.
 Templates: `.env.example`, `environment.example`, `.env.selfhost.local.example`
@@ -35,9 +35,11 @@ Templates: `.env.example`, `environment.example`, `.env.selfhost.local.example`
 
 1. Create Payrexx instance (sandbox first).
 2. Copy **API secret** → `PAYREXX_API_SECRET`.
-3. Set **webhook URL** to `https://revampit.orangecat.ch/api/payments/payrexx-webhook`.
+3. Set **webhook URL** to `https://evig.orangecat.ch/api/payments/payrexx-webhook`.
 4. Copy the **webhook signing secret** → `PAYREXX_WEBHOOK_SECRET`. The webhook handler verifies the `X-Webhook-Signature` header (lowercase-hex SHA-256 HMAC of the raw body, key = this secret as UTF-8). No code change needed — just paste the secret.
 5. Reservation mode is enabled in code (`reservation=1`): funds are **authorized** then captured. Capture is automatic — marketplace on buyer receipt-confirm; workshops/appointments immediately in the webhook (non-escrow) or via the escrow-release cron (escrow).
+
+> The live Payrexx instance was configured before the rename (2026-09-10) and may still point its webhook at `revampit.orangecat.ch`. That host 308-redirects to `evig.orangecat.ch` with the method and body preserved, so webhooks keep arriving, but set the canonical URL above when you next touch the Payrexx dashboard.
 
 ---
 
@@ -46,12 +48,12 @@ Templates: `.env.example`, `environment.example`, `.env.selfhost.local.example`
 Escrow payments (workshop/appointment with `useEscrow=true`) are held until released. The safety-net cron captures any still-held past its deadline so funds aren't lost when the Payrexx reservation expires (~7 days). Install it like the existing timers:
 
 ```bash
-sudo cp /opt/revampit/ops/revampit-cron@release-escrow.timer /etc/systemd/system/
+sudo cp /opt/evig/ops/evig-cron@release-escrow.timer /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now revampit-cron@release-escrow.timer
+sudo systemctl enable --now evig-cron@release-escrow.timer
 ```
 
-(The generic `revampit-cron@.service` already exists; this only adds the schedule — daily 01:00 UTC → `GET /api/cron/release-escrow`, authenticated by `CRON_SECRET`.)
+(The generic `evig-cron@.service` already exists; this only adds the schedule — daily 01:00 UTC → `GET /api/cron/release-escrow`, authenticated by `CRON_SECRET`.)
 
 ---
 
@@ -59,7 +61,7 @@ sudo systemctl enable --now revampit-cron@release-escrow.timer
 
 ```bash
 # Restart app on box after .env change
-sudo systemctl restart revampit-app
+sudo systemctl restart evig-app
 
 # E2E (full payment flows)
 AUTH_TEST_USER_PASSWORD='…' AUTH_TEST_ADMIN_PASSWORD='…' \

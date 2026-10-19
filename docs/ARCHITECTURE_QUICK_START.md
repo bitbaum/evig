@@ -142,16 +142,10 @@ if (session.user.role === ROLES.REVAMPIT_ADMIN) {
 return NextResponse.redirect('/unauthorized')
 ```
 
-**After** (current approach — direct permissions):
-```typescript
-// ✅ GOOD: Uses session fields directly
-import { isStaffEmail } from '@/lib/permissions'
-
-if (session.user.isStaff || isStaffEmail(session.user.email || '')) {
-  return NextResponse.next()
-}
-return NextResponse.redirect('/unauthorized')
-```
+**After**: check the SECTION, never the e-mail domain and never the bare staff
+flag. `isStaffEmail` is cosmetic (welcome-email template) and grants nothing;
+`session.user.isStaff` alone is wider than any section. Use `withAdmin('<section>')`
+(below) or `canAccessSection(user, section)` from `@/lib/permissions`.
 
 **For API routes**, use the `withAdmin` middleware with section-level auth:
 ```typescript
@@ -166,7 +160,7 @@ export const GET = withAdmin('products', async (request, session) => { ... })
 
 **Available Functions** (from `@/lib/permissions`):
 
-1. **`isStaffEmail(email)`** — Check if email domain is @revamp-it.ch
+1. **`isStaffEmail(email)`** — Cosmetic only (picks the welcome-email template); never grants staff — staff is `users.is_staff`
 2. **`isSuperAdmin(email)`** — Check if user has full admin access
 3. **`canAccessSection(user, section)`** — Check section-specific access
 4. **`getAccessibleSections(user)`** — Get all accessible sections

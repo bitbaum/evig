@@ -1,5 +1,5 @@
 <!--
-Thanks for contributing to Revamp-IT! Please skim the checklist below
+Thanks for contributing to evig! Please skim the checklist below
 before opening the PR. CI will catch most violations automatically,
 but a clean PR description makes review much faster.
 -->
@@ -20,10 +20,10 @@ matters as much as desktop. -->
 
 ## Checklist
 
-- [ ] Tests pass locally (`npm test`)
-- [ ] `npm run lint` clean
-- [ ] `npm run typecheck` clean
-- [ ] Swiss German: no ASCII umlauts (`npm run lint:umlauts`); proper `ä/ö/ü`, `ss` (not `ß`)
+- [ ] Tests pass locally (`pnpm test`)
+- [ ] `pnpm run lint` clean
+- [ ] `pnpm run typecheck` clean
+- [ ] Swiss German: no ASCII umlauts (`pnpm run lint:umlauts`); proper `ä/ö/ü`, `ss` (not `ß`)
 - [ ] No `console.log` — use `logger` from `@/lib/logger`
 - [ ] No hardcoded table names — use `TABLE_NAMES` from `@/config/database`
 - [ ] No hardcoded org data — use `@/config/org`

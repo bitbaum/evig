@@ -1,21 +1,21 @@
 # Contributing
 
-Thanks for the interest. This document covers the practical workflow for shipping changes to Revamp-IT.
+Thanks for the interest. This document covers the practical workflow for shipping changes to evig.
 
 ## Ways to contribute
 
 - **Code** — fix a bug, ship a feature, refactor, add tests
 - **Docs** — improve the [docs/](./docs) index, write a how-to, fix outdated reference material
-- **Translation** — RevampIT ships in seven locales (de · en · fr · es · it · ja · ko); the message catalogues are in [`src/i18n/messages/`](./src/i18n/messages)
+- **Translation** — evig ships in eight locales (de · fr · en · it · es · ja · ko · ru); the message catalogues are in [`messages/`](./messages)
 - **Triage** — reproduce bug reports, label issues, close stale ones
 - **Design** — UI/UX critique, accessibility audit, visual polish (mobile-first matters here)
-- **Operations** — donate hardware, time, or money to the [Verein itself](https://revamp-it.ch/get-involved/donate); the platform is one part of the org
+- **Operations** — give hardware or time to evig itself ([evig.orangecat.ch](https://evig.orangecat.ch)); the platform is one part of the org
 
 ## Prerequisites
 
-- Node.js **20+**
+- Node.js **22.13+** (CI and deploy run Node 24)
 - A Postgres instance — start local Docker with `pnpm run services:up` (port 5433). Production runs on self-hosted Postgres 17 on Hetzner.
-- (Optional, for full feature coverage) Meilisearch, Redis (upstash), Listmonk
+- (Optional, for full feature coverage) Meilisearch, Redis, Resend or Listmonk
 
 ## Local setup
 
@@ -65,7 +65,7 @@ These are the rules the codebase actually relies on. Violations either fail CI o
 
 | Rule | Why |
 |---|---|
-| `import { logger } from '@/lib/logger'` — never `console.log` | Structured logs; `console.*` is silently dropped in serverless |
+| `import { logger } from '@/lib/logger'` — never `console.log` | Structured logs with context; `console.*` is not |
 | Use `TABLE_NAMES` from `@/config/database` — never hardcode table strings | One source of truth; renaming a table is one diff |
 | Parameterized queries only — never string-concatenate user input | SQL injection |
 | Use `CONTACT` / `ORG` / `LOCATIONS` from `@/config/org` — never hardcode addresses, phones, emails | Same SSOT principle, applied to org-level data |

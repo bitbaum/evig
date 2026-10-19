@@ -118,7 +118,7 @@ the rename. Plan:
      Hetzner DB before activating the new release — so shipping the
      matching code applies the rename. To apply manually instead: ssh
      `ubuntu@167.233.22.31`, read `DATABASE_URL` from
-     `/opt/revampit/app/.env`, and run the migration via `psql "$DATABASE_URL"`.
+     `/opt/evig/app/.env`, and run the migration via `psql "$DATABASE_URL"`.
    - Immediately deploy the matching code (if applied manually).
    - Verify smoke tests (login, browse /techniker, create IT-Hilfe
      request, accept offer).

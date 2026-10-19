@@ -313,7 +313,7 @@ Next.js Dev Server (port 3000)
 ### Production (self-hosted Hetzner box)
 
 Production is **not** serverless. The app and its database run on a single
-self-hosted Hetzner server (`revampit.orangecat.ch`, ssh `ubuntu@167.233.22.31`),
+self-hosted Hetzner server (`evig.orangecat.ch`, ssh `ubuntu@167.233.22.31`),
 deployed via GitHub Actions → build → rsync → systemd (no Vercel).
 
 ```
@@ -326,7 +326,7 @@ Database (Production)
 │     DATABASE_URL=postgresql://…@localhost:5432/revampit
 ├── getDbConfig() uses DATABASE_URL → ONE pool shared by app + auth
 └── Nightly off-box backup to Cloudflare R2 (`revampit-backups`)
-      via systemd `revampit-backup.timer`
+      via systemd `evig-backup.timer`
       (see scripts/ops/README.md and docs/DISASTER_RECOVERY.md)
 ```
 

@@ -18,7 +18,7 @@ evig makes genuinely good computing affordable to everyone — curated, decent h
 | **IT-Hilfe** | People who need help | Matches help requests with volunteer technicians; in-person + remote |
 | **Workshops** | Community | Repair Café sessions, Linux installs, digital-skills classes — paid + free |
 | **Erfassung pipeline** | Staff | AI-assisted intake → triage → photo → publish for donated hardware |
-| **Member services** | Members | Member directory, Swiss-compliant donation receipts, voting on association decisions |
+| **Member services** | Members | Member directory, donation history, voting on association decisions (no tax-deductible donation receipts while the Verein is in formation) |
 | **HIRN AI** | Staff | In-house knowledge / action assistant; cascades through Groq / OpenRouter / Ollama |
 
 ## How evig funds this platform
@@ -35,7 +35,7 @@ The platform is the operational backbone for all five. It is open-source ([MIT](
 
 ## Architecture
 
-The application is a single Next.js 16 app with App Router for both pages and API routes. In production, data lives in self-hosted PostgreSQL 17 on the Hetzner box, accessed through Drizzle ORM via `DATABASE_URL`. Authentication uses NextAuth v5 (Auth.js) with the @auth/pg-adapter, sharing the same connection pool as the app. Search is powered by Meilisearch. Payments go through Payrexx (Swiss-based, ZKB/Twint/card). Email is delivered via Listmonk with Nodemailer / Brevo as fallback. Product/listing images are stored in Cloudflare R2 (S3-compatible).
+The application is a single Next.js 16 app with App Router for both pages and API routes. In production, data lives in self-hosted PostgreSQL 17 on the Hetzner box, accessed through Drizzle ORM via `DATABASE_URL`. Authentication uses NextAuth v5 (Auth.js) with the @auth/pg-adapter, sharing the same connection pool as the app. Search is powered by Meilisearch. Payments go through Payrexx (Swiss-based, ZKB/Twint/card). Email goes through Resend when `RESEND_API_KEY` is set, Listmonk when `LISTMONK_ENABLED=true`, and SMTP (Nodemailer) otherwise (`src/config/email.ts`). Product/listing images are stored in Cloudflare R2 (S3-compatible).
 
 ### TABLE_NAMES as Single Source of Truth
 
@@ -100,12 +100,12 @@ These are enforced, not suggested:
 | Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter (shares the app `DATABASE_URL` pool) |
 | Search | Meilisearch |
 | Payments | Payrexx (Swiss-based; ZKB / Twint / card) |
-| Email | Listmonk (primary), Nodemailer / Brevo (fallback) |
+| Email | Resend (preferred), Listmonk (opt-in), SMTP via Nodemailer (fallback) — `src/config/email.ts` |
 | Storage | Cloudflare R2 (S3-compatible) for product/listing images |
-| Rate limiting | Redis (upstash) |
+| Rate limiting | Redis |
 | AI | HIRN (in-house provider stack: Groq → OpenRouter → Ollama cascade) |
 | Testing | Vitest (7,500+ tests), Playwright (E2E) |
-| CI/CD | GitHub Actions → self-hosted Hetzner deploy (systemd `revampit-app`) |
+| CI/CD | GitHub Actions → self-hosted Hetzner deploy (systemd `evig-app`) |
 
 <details>
 <summary><strong>Quick Start</strong></summary>
@@ -114,7 +114,7 @@ These are enforced, not suggested:
 
 - Node.js 22.13+ (CI and deploy run Node 24)
 - A PostgreSQL database — local Docker via `pnpm run services:up` (port 5433)
-- Optional: Meilisearch, Redis, Listmonk for full feature coverage
+- Optional: Meilisearch, Redis, Resend or Listmonk for full feature coverage
 
 ### Setup
 
@@ -134,7 +134,7 @@ At minimum, configure:
 - `DATABASE_URL` -- PostgreSQL connection string (`postgresql://postgres:postgres@localhost:5433/revampit_cms` for local Docker; prod uses Hetzner — see `.env.selfhost.local.example`)
 - `AUTH_SECRET` -- 32+ char random string for NextAuth JWT signing
 - `PAYREXX_INSTANCE` / `PAYREXX_API_SECRET` / `PAYREXX_WEBHOOK_SECRET` -- payment integration
-- `LISTMONK_URL` + Listmonk credentials -- email delivery
+- `RESEND_API_KEY` (or Listmonk / SMTP settings) -- email delivery
 - `MEILISEARCH_URL` / `MEILISEARCH_KEY` -- search
 
 See `.env.example` for the full list.
@@ -163,18 +163,20 @@ pnpm run test:e2e      # run Playwright E2E suite
 
 Defined in `.github/workflows/ci.yml`:
 
-1. **Code Quality** -- ESLint + TypeScript type check + Next.js build
-2. **Auth Smoke Test** -- Playwright, runs conditionally
-3. **Unit Tests** -- Vitest, PR only
+1. **Code Quality** -- `pnpm run verify` (lint, umlauts, typecheck, tests, build)
+2. **Auth Smoke Test** and **Dual-Persona Inventory Smoke** -- Playwright against production, when the test secrets are set
+3. **Migration Drift Check** -- replays every migration from zero
+4. **Unit Tests** -- Vitest, PR only
+5. **Dependency Security Audit**
 
-On merge to `main`, the `.github/workflows/deploy-selfhost.yml` workflow lints, type-checks, builds the Next standalone bundle, rsyncs it to the Hetzner box, and restarts the systemd `revampit-app` service (with a page-render rollback gate). Vercel is not used for production.
+On merge to `main`, the `.github/workflows/deploy-selfhost.yml` workflow lints, type-checks, builds the Next standalone bundle, rsyncs it to the Hetzner box, and restarts the systemd `evig-app` service (with a page-render rollback gate). Vercel is not used for production.
 
 ## Project Structure
 
 ```
 src/
   app/              # Next.js App Router (pages + API routes)
-    [locale]/       # Public site (next-intl, de/en/fr/es/it/ja/ko)
+    [locale]/       # Public site (next-intl, de/fr/en/it/es/ja/ko/ru)
     admin/          # Staff admin surface
     api/            # API route handlers
   components/       # React components (UI only, no business logic)
@@ -192,8 +194,8 @@ src/
   db/schema/        # Drizzle schemas
 scripts/
   db/migrations/    # Sequential SQL migrations (072 ADD COLUMN token_version, etc.)
-tests/              # Vitest test suites
-e2e/                # Playwright E2E tests
+src/**/__tests__/   # Vitest suites (co-located with the code)
+tests/              # Playwright E2E tests
 ```
 
 ## Contributing
