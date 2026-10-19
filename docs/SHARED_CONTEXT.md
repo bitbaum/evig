@@ -160,7 +160,7 @@ Get-involved pages (volunteer, intern, reintegration) link to filtered `/karrier
 
 - **SSOT:** `docs/UNIFIED_AUTH.md` — registration, verify-code, password reset, staff permissions
 - **Live onboarding:** `OnboardingChecklist` on `/dashboard` (`src/lib/domain/onboarding.ts`)
-- **Notifications:** central `notifyUsers()` pipeline — see `docs/ARCHITECTURE_DEBT.md` (#2 closed)
+- **Notifications:** central `notifyUsers()` pipeline — see `docs/archive/ARCHITECTURE_DEBT.md` (#2 closed)
 
 ---
 
@@ -184,9 +184,12 @@ Payrexx: config SSOT `src/config/payrexx.ts` · setup `docs/operations/PAYREXX_S
 
 ---
 
-## Monitor-Upcycling mini-site
+## Monitor-Upcycling mini-site (pages removed)
 
-Public sub-site at `/projects/upcycling/*`. Routes, reading flow, gallery, business plan i18n, and scripts: **`docs/projects/upcycling.md`**.
+The `/projects/upcycling/*` pages and their `businessPlan` messages are no longer
+in `src/app` or `messages/`. Leftovers still in the tree: `src/config/upcycling-*.ts`,
+`src/data/upcycling-status.ts` and the business-plan scripts. The old SSOT map is
+`docs/archive/projects/upcycling.md`.
 
 Nav dropdown labels for projects live under **`nav.items.*`** in locale files; use `nav-i18n.ts` helpers in header components.
 

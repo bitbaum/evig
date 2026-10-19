@@ -61,7 +61,7 @@ node scripts/sync-businessplan-locales.mjs   # After editing DE businessPlan blo
 node scripts/prune-businessplan-archive.mjs  # Remove archived citation keys from all locales
 ```
 
-See `docs/projects/upcycling.md` for mini-site SSOT map.
+The mini-site pages and the `businessPlan` messages these scripts edit have been removed; see `docs/archive/projects/upcycling.md`.
 
 ---
 
@@ -179,7 +179,7 @@ The deploy script copies the server-local `.env` and `launch.sh` into each relea
 ## Database
 
 ```bash
-pnpm run db:migrate-users  # Migrate existing users
+pnpm run db:down     # Stop the local Postgres container (db:up and db:migrate are listed above)
 ```
 
 ---
