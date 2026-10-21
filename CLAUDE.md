@@ -76,6 +76,13 @@ hold the line on all of it by default:
 - **Config-driven, nothing hardcoded.** No hardcoded labels, categories, stats,
   numbers, or magic strings in components — source from config/DB. (Stats: DB or
   `org-numbers.defaults.ts`.)
+- **One shape per kind.** The fleet-wide design rule is stated once, in
+  [bitbaum/fleet AGENTS.md → "One shape per kind"](https://github.com/bitbaum/fleet/blob/main/AGENTS.md):
+  siblings share one frame, rows of one list have one anatomy, a row of
+  choices is one row (never wrapping pills), one primary action per screen,
+  every label says what happens, an icon promises its screen. Read it before
+  building a screen and run its pre-PR checklist (390px, siblings, labels,
+  one primary, the gates).
 - **Design discipline — match OrangeCat / Loki.** Semantic tokens + the
   shared primitives (`Card`, `Button`, `Heading`, `IconBadge`, `Section`,
   `EmptyState`, `Input`) only. NO arbitrary hex (`bg-[#…]`), NO inline style
