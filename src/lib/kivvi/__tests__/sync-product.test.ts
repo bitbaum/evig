@@ -2,11 +2,13 @@
  * A real adapter test: evig may retry after the original HTTP response is lost,
  * but it must reuse one create key and must not re-create already-linked items.
  */
-const mockSelect = vi.fn();
-const mockUpdate = vi.fn();
-const mockSync = vi.fn();
-const mockConfigured = vi.fn();
-const mockLogger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+const { mockSelect, mockUpdate, mockSync, mockConfigured, mockLogger } = vi.hoisted(() => ({
+  mockSelect: vi.fn(),
+  mockUpdate: vi.fn(),
+  mockSync: vi.fn(),
+  mockConfigured: vi.fn(),
+  mockLogger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+}));
 
 vi.mock('@/db', () => ({
   db: {
