@@ -10,9 +10,9 @@
  */
 
 import { db } from '@/db';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { inventoryItems } from '@/db/schema/inventory';
-import { syncToKivvi, mapConditionToKivvi } from '@/lib/kivvi/client';
+import { syncToKivvi, mapConditionToKivvi, isKivviConfigured } from '@/lib/kivvi/client';
 import { logger } from '@/lib/logger';
 
 export interface KivviProductSyncInput {
@@ -52,42 +52,72 @@ function parseSpecs(
 }
 
 /**
- * Push the device to Kivvi and record the outcome on the inventory item.
- * Returns immediately (void) — the sync runs detached.
+ * One stable identity for the CREATE event, not a hash of changing product
+ * details. A crash after Kivvi creates the item but before evig stores its ID
+ * can safely replay within Kivvi's idempotency retention window.
+ */
+export function kivviInventoryCreateKey(inventoryId: string): string {
+  return `evig:inventory:create:v1:${inventoryId}`;
+}
+
+/**
+ * Push a newly captured device to Kivvi without blocking the intake response.
+ * A database lookup first prevents late/delayed invocations from re-creating
+ * an item that already has a canonical ERP reference.
+ *
+ * This remains best-effort, NOT a durable outbox. A missing local link after
+ * Kivvi's key retention expires requires reconciliation before replay.
  */
 export function syncProductToKivvi(input: KivviProductSyncInput): void {
-  syncToKivvi({
-    description: `${input.hersteller ? `${input.hersteller} ` : ''}${input.produktname}`,
-    // Map RevampIT's zustand vocabulary to Kivvi's enum — a raw 'new'/'defect'
-    // would otherwise be rejected by Kivvi with HTTP 400 and never sync.
-    condition: mapConditionToKivvi(input.zustand),
-    askingPrice: input.verkaufspreis != null ? String(input.verkaufspreis) : undefined,
-    location: input.location ?? undefined,
-    notes: input.kurzbeschreibung ?? undefined,
-    specs: parseSpecs(input.langtext),
-  })
-    .then((kivviResult) => {
-      if (kivviResult.success) {
-        // Store Kivvi ID on the RevampIT inventory record for future reference
-        db.update(inventoryItems)
-          .set({
-            kivviInventoryItemId: kivviResult.kivviInventoryItemId,
-            kivviSyncStatus: 'synced',
-            kivviSyncedAt: new Date().toISOString(),
-          })
-          .where(eq(inventoryItems.id, input.inventoryId))
-          .catch((err: unknown) => logger.error('Failed to store Kivvi ID', { err }));
-      } else if (kivviResult.error !== 'Kivvi not configured') {
-        // Log real errors, not just "not configured" (expected in dev)
-        logger.warn('Kivvi sync failed', {
-          inventoryId: input.inventoryId,
-          error: kivviResult.error,
-        });
-        db.update(inventoryItems)
-          .set({ kivviSyncStatus: 'error' })
-          .where(eq(inventoryItems.id, input.inventoryId))
-          .catch(() => {});
-      }
-    })
-    .catch(() => {});
+  if (!isKivviConfigured()) return;
+
+  void (async () => {
+    const [existing] = await db
+      .select({ kivviInventoryItemId: inventoryItems.kivviInventoryItemId })
+      .from(inventoryItems)
+      .where(eq(inventoryItems.id, input.inventoryId))
+      .limit(1);
+    if (!existing) {
+      logger.warn('Kivvi sync skipped: inventory row not found', { inventoryId: input.inventoryId });
+      return;
+    }
+    if (existing.kivviInventoryItemId) return;
+
+    const result = await syncToKivvi(
+      {
+        description: `${input.hersteller ? `${input.hersteller} ` : ''}${input.produktname}`,
+        condition: mapConditionToKivvi(input.zustand),
+        askingPrice: input.verkaufspreis != null ? String(input.verkaufspreis) : undefined,
+        location: input.location ?? undefined,
+        notes: input.kurzbeschreibung ?? undefined,
+        specs: parseSpecs(input.langtext),
+      },
+      kivviInventoryCreateKey(input.inventoryId),
+    );
+
+    if (result.success) {
+      await db
+        .update(inventoryItems)
+        .set({
+          kivviInventoryItemId: result.kivviInventoryItemId,
+          kivviSyncStatus: 'synced',
+          kivviSyncedAt: new Date().toISOString(),
+        })
+        .where(and(eq(inventoryItems.id, input.inventoryId), isNull(inventoryItems.kivviInventoryItemId)));
+      return;
+    }
+
+    if (result.error !== 'Kivvi not configured') {
+      logger.warn('Kivvi sync failed', {
+        inventoryId: input.inventoryId,
+        error: result.error,
+      });
+      await db
+        .update(inventoryItems)
+        .set({ kivviSyncStatus: 'error' })
+        .where(and(eq(inventoryItems.id, input.inventoryId), isNull(inventoryItems.kivviInventoryItemId)));
+    }
+  })().catch((err: unknown) =>
+    logger.error('Kivvi intake sync failed', { inventoryId: input.inventoryId, err }),
+  );
 }
