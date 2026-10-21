@@ -211,7 +211,8 @@ describe('POST /api/admin/erfassung — success', () => {
   it('returns 200 without waiting for detached Kivvi synchronization', async () => {
     const response = await POST(makeRequest());
     expect(response.status).toBe(200);
-    expect(mockSyncToKivvi).toHaveBeenCalledWith(expect.objectContaining({ inventoryId: 'inv-789' }));
+    const expected = expect.objectContaining({ inventoryId: 'inv-789' });
+    expect(mockSyncToKivvi).toHaveBeenCalledWith(expected);
   });
 
   it('returns 500 when DB transaction throws', async () => {
