@@ -18,6 +18,7 @@ jobs:
   quality:
     name: Code Quality Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -78,6 +79,7 @@ jobs:
   auth-smoke:
     name: Auth Smoke Test
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     # Deliberately NO `needs:`. This job tests the ALREADY-DEPLOYED production
     # site (PLAYWRIGHT_BASE_URL defaults to https://evig.orangecat.ch); it
     # never builds this branch and reads nothing `quality` produced. Waiting on
@@ -131,6 +133,7 @@ jobs:
   inventory-smoke:
     name: Dual-Persona Inventory Smoke
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     # Deliberately NO `needs:` — same reason as auth-smoke above. This walks 186
     # routes on the LIVE site via scripts/e2e-inventory-prod.sh; nothing about
     # that verdict depends on whether this branch lints. Removing the wait moves
@@ -188,6 +191,7 @@ jobs:
   migrations:
     name: Migration Drift Check
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
     services:
       postgres:
@@ -218,6 +222,7 @@ jobs:
   e2e-local:
     name: Local E2E Journeys
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     # Deliberately NO `needs:`. This job is self-contained — it brings its own
     # postgres service, applies its own migrations, seeds its own data, builds
     # the app and starts its own server. It consumed no output from `quality`
