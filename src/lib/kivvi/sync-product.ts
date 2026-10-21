@@ -78,7 +78,9 @@ export function syncProductToKivvi(input: KivviProductSyncInput): void {
       .where(eq(inventoryItems.id, input.inventoryId))
       .limit(1);
     if (!existing) {
-      logger.warn('Kivvi sync skipped: inventory row not found', { inventoryId: input.inventoryId });
+      logger.warn('Kivvi sync skipped: inventory row not found', {
+        inventoryId: input.inventoryId,
+      });
       return;
     }
     if (existing.kivviInventoryItemId) return;
@@ -103,7 +105,12 @@ export function syncProductToKivvi(input: KivviProductSyncInput): void {
           kivviSyncStatus: 'synced',
           kivviSyncedAt: new Date().toISOString(),
         })
-        .where(and(eq(inventoryItems.id, input.inventoryId), isNull(inventoryItems.kivviInventoryItemId)));
+        .where(
+          and(
+            eq(inventoryItems.id, input.inventoryId),
+            isNull(inventoryItems.kivviInventoryItemId),
+          ),
+        );
       return;
     }
 
