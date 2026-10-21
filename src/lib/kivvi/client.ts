@@ -195,10 +195,12 @@ async function kivviFetch<T>(path: string, options: RequestInit = {}): Promise<T
  */
 export async function createKivviInventoryItem(
   input: CreateKivviInventoryItemInput,
+  idempotencyKey?: string,
 ): Promise<KivviInventoryItem> {
   return kivviFetch<KivviInventoryItem>('/inventory-items', {
     method: 'POST',
     body: JSON.stringify(input),
+    ...(idempotencyKey ? { headers: { 'Idempotency-Key': idempotencyKey } } : {}),
   });
 }
 
@@ -368,7 +370,10 @@ export type KivviSyncResult =
  * If Kivvi is not configured (KIVVI_API_URL/TOKEN not set), returns success: false
  * without logging an error (allows development without Kivvi configured).
  */
-export async function syncToKivvi(input: CreateKivviInventoryItemInput): Promise<KivviSyncResult> {
+export async function syncToKivvi(
+  input: CreateKivviInventoryItemInput,
+  idempotencyKey?: string,
+): Promise<KivviSyncResult> {
   if (!isConfigured()) {
     return { success: false, error: 'Kivvi not configured' };
   }
@@ -377,6 +382,7 @@ export async function syncToKivvi(input: CreateKivviInventoryItemInput): Promise
     const warehouseId = getDefaultWarehouseId();
     const item = await createKivviInventoryItem(
       warehouseId && !input.warehouseId ? { ...input, warehouseId } : input,
+      idempotencyKey,
     );
     return { success: true, kivviInventoryItemId: item.id, itemNumber: item.itemNumber };
   } catch (error) {
