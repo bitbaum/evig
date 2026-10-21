@@ -99,14 +99,14 @@
     "i18n:stale-update": "node scripts/i18n-stale.mjs --update",
     "compliance:i18n-stale": "node scripts/i18n-stale.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --write src/lib/kivvi/sync-product.ts src/lib/kivvi/__tests__/sync-product.test.ts && git diff -- src/lib/kivvi/sync-product.ts src/lib/kivvi/__tests__/sync-product.test.ts && node -e \"process.exit(1)\""
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.3",
     "@aws-sdk/client-s3": "^3.1146.0",
     "@bitbaum/accountkit": "github:bitbaum/accountkit#v0.2.1",
     "@bitbaum/ai-kit": "^1.21.0",
-    "@bitbaum/chatkit": "^0.11.0",
+    "@bitbaum/chatkit": "^0.12.0",
     "@bitbaum/mail-kit": "^0.1.1",
     "@bitbaum/searchkit": "github:bitbaum/searchkit#v0.2.2",
     "@bitbaum/whenkit": "github:bitbaum/whenkit#v0.3.2",
