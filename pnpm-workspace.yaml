@@ -22,6 +22,7 @@ allowBuilds:
 # Naming the version makes each new release a deliberate line in a diff, which
 # is the entire point of the delay.
 minimumReleaseAgeExclude:
+  - '@bitbaum/chatkit'
   - '@bitbaum/ai-kit'
   - '@bitbaum/mail-kit@0.1.1'
   - bip-kit@0.2.6 || 0.2.7 || 0.3.1

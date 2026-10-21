@@ -1,5 +1,7 @@
 'use client';
 
+import { Markdown } from '@bitbaum/chatkit/react';
+
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react';
@@ -280,7 +282,16 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                     : 'bg-surface-raised text-text-primary rounded-2xl rounded-bl-sm px-4 py-3'
                 }`}
               >
-                <div className="whitespace-pre-wrap">{message.content}</div>
+                <div>
+                  {message.role === 'assistant' ? (
+                    <Markdown
+                      text={message.content}
+                      onReply={!loading && index === messages.length - 1 ? send : undefined}
+                    />
+                  ) : (
+                    <span className="whitespace-pre-wrap">{message.content}</span>
+                  )}
+                </div>
 
                 {message.role === 'assistant' && message.actions && message.actions.length > 0 && (
                   <div className="mt-3 space-y-2">
