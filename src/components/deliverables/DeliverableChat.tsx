@@ -2,8 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { Markdown } from '@bitbaum/chatkit/react';
 import { Sparkles, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -90,26 +89,10 @@ export default function DeliverableChat({
                   turn.content
                 ) : (
                   <div className="space-y-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:list-decimal [&_ol]:pl-4 [&_a]:text-action [&_a]:underline">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        code: ({ className, children }) => {
-                          const isBlock = (className ?? '').includes('language-');
-                          return isBlock ? (
-                            <code className="block bg-surface-overlay text-text-primary rounded-md p-2.5 my-2 text-xs font-mono overflow-x-auto whitespace-pre">
-                              {children}
-                            </code>
-                          ) : (
-                            <code className="bg-surface-overlay rounded px-1 py-0.5 text-xs font-mono">
-                              {children}
-                            </code>
-                          );
-                        },
-                        pre: ({ children }) => <pre className="my-0">{children}</pre>,
-                      }}
-                    >
-                      {turn.content}
-                    </ReactMarkdown>
+                    <Markdown
+                      text={turn.content}
+                      onReply={!busy && i === turns.length - 1 ? ask : undefined}
+                    />
                   </div>
                 )}
               </div>

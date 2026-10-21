@@ -12,7 +12,7 @@
  * not in a fresh answer, not in reloaded history, not in a copy.
  */
 
-import { REPLIES_INSTRUCTION, extractReplies } from '@bitbaum/chatkit';
+import { RICH_ANSWERS_INSTRUCTION, REPLIES_INSTRUCTION, extractReplies } from '@bitbaum/chatkit';
 
 export interface AnswerWithReplies {
   /** The answer as the person should read it — block removed. */
@@ -23,7 +23,7 @@ export interface AnswerWithReplies {
 
 /** Append the suggested-replies instruction to a conversational system prompt. */
 export function withSuggestedReplies(systemPrompt: string): string {
-  return `${systemPrompt}\n\n${REPLIES_INSTRUCTION}`;
+  return `${systemPrompt}\n\n${RICH_ANSWERS_INSTRUCTION}\n\n${REPLIES_INSTRUCTION}`;
 }
 
 /** Split a model answer into readable text and its suggested replies. */

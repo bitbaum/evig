@@ -9,7 +9,8 @@
  * Unauthenticated visitors see a login prompt + the context quick actions.
  */
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Markdown } from '@bitbaum/chatkit/react';
 import { useTranslations } from 'next-intl';
 import { Brain, Loader2, Send, X } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
@@ -36,40 +37,6 @@ interface HirnChatPanelProps {
   context: HirnPageContext;
   pathname: string;
   isAuthenticated: boolean;
-}
-
-const MARKDOWN_LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
-
-/** Render assistant text, turning markdown links into real links. */
-function renderAssistantContent(content: string): ReactNode[] {
-  const nodes: ReactNode[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-  MARKDOWN_LINK.lastIndex = 0;
-  while ((match = MARKDOWN_LINK.exec(content)) !== null) {
-    if (match.index > lastIndex) nodes.push(content.slice(lastIndex, match.index));
-    const [, label, href] = match;
-    nodes.push(
-      href.startsWith('/') ? (
-        <Link key={match.index} href={href} className="underline font-medium">
-          {label}
-        </Link>
-      ) : (
-        <a
-          key={match.index}
-          href={href}
-          className="underline font-medium"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {label}
-        </a>
-      ),
-    );
-    lastIndex = match.index + match[0].length;
-  }
-  if (lastIndex < content.length) nodes.push(content.slice(lastIndex));
-  return nodes;
 }
 
 function QuickActions({ actions }: { actions: NonNullable<HirnPageContext['quickActions']> }) {
@@ -279,9 +246,14 @@ export function HirnChatPanel({
                           : 'bg-surface-raised text-text-primary rounded-2xl rounded-bl-sm px-4 py-3'
                       }`}
                     >
-                      {message.role === 'assistant'
-                        ? renderAssistantContent(message.content)
-                        : message.content}
+                      {message.role === 'assistant' ? (
+                        <Markdown
+                          text={message.content}
+                          onReply={!loading && index === messages.length - 1 ? send : undefined}
+                        />
+                      ) : (
+                        message.content
+                      )}
                     </div>
                   </div>
                 ))

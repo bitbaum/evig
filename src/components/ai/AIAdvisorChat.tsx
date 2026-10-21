@@ -1,5 +1,7 @@
 'use client';
 
+import { Markdown } from '@bitbaum/chatkit/react';
+
 /**
  * AIAdvisorChat — shared collapsed "ask the AI about this thing" card.
  *
@@ -153,7 +155,7 @@ export function AIAdvisorChat({
                 <Sparkles className="w-3 h-3" />
                 KI-Antwort
               </div>
-              {analysis}
+              <Markdown text={analysis} onReply={loading ? undefined : ask} />
             </div>
           )}
 

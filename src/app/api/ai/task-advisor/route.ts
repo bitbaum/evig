@@ -1,3 +1,4 @@
+import { RICH_ANSWERS_INSTRUCTION } from '@bitbaum/chatkit';
 /**
  * Task Advisor API
  *
@@ -74,7 +75,7 @@ Hilf konkret weiter. Knapp und klar, unter 250 Wörtern.`;
     logger.info('Task advisor requested', { questionLength: question.length });
 
     const result = await callWithFallback({
-      systemPrompt: SYSTEM_PROMPT,
+      systemPrompt: `${SYSTEM_PROMPT}\n\n${RICH_ANSWERS_INSTRUCTION}`,
       userPrompt,
       maxTokens: 500,
       temperature: 0.3,

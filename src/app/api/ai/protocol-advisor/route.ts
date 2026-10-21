@@ -1,3 +1,4 @@
+import { RICH_ANSWERS_INSTRUCTION } from '@bitbaum/chatkit';
 /**
  * Protocol Advisor API
  *
@@ -113,7 +114,7 @@ Beantworte die Frage basierend auf dem Protokollinhalt. Knapp und klar, unter 20
     // the underlying fetch running with no client when the outer timer won
     // — same leak as vote-advisor (fixed 77322923).
     const result = await callWithFallback({
-      systemPrompt: SYSTEM_PROMPT,
+      systemPrompt: `${SYSTEM_PROMPT}\n\n${RICH_ANSWERS_INSTRUCTION}`,
       userPrompt,
       maxTokens: 400,
       temperature: 0.3,
