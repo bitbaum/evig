@@ -75,11 +75,10 @@ vi.mock('@/lib/erfassung/create-product', () => ({
   createErfassungProduct: (...args: unknown[]) => mockCreateErfassungProduct(...args),
 }));
 
-vi.mock('@/lib/kivvi/client', () => ({
-  syncToKivvi: (...args: unknown[]) => mockSyncToKivvi(...args),
-  // Route maps zustand → Kivvi enum synchronously while building the sync
-  // payload; without this stub it's undefined and throws before the response.
-  mapConditionToKivvi: (condition?: string | null) => condition ?? 'fair',
+vi.mock('@/lib/kivvi/sync-product', () => ({
+  // The route delegates all ERP work to the detached adapter, whose async
+  // failures are tested in sync-product.test.ts.
+  syncProductToKivvi: (...args: unknown[]) => mockSyncToKivvi(...args),
 }));
 
 vi.mock('@/lib/schemas', () => ({
@@ -154,8 +153,8 @@ beforeEach(async () => {
 
   mockTransaction.mockImplementation(async (cb: (tx: unknown) => unknown) => cb({}));
   mockCreateErfassungProduct.mockResolvedValue(MOCK_PRODUCT_RESULT);
-  // syncToKivvi: fire-and-forget Promise
-  mockSyncToKivvi.mockResolvedValue({ success: true, kivviInventoryItemId: 'k-123' });
+  // The route calls a synchronous, non-blocking adapter, not the Kivvi HTTP client.
+  mockSyncToKivvi.mockReturnValue(undefined);
   mockSet.mockReturnValue({ where: mockWhere });
   mockWhere.mockReturnValue({ catch: mockCatch });
   mockCatch.mockReturnValue(undefined);
@@ -209,10 +208,12 @@ describe('POST /api/admin/erfassung — success', () => {
     expect(body.data.product_id).toBe('prod-456');
   });
 
-  it('returns 200 even when Kivvi sync fails', async () => {
-    mockSyncToKivvi.mockRejectedValueOnce(new Error('Kivvi unavailable'));
+  it('returns 200 without waiting for detached Kivvi synchronization', async () => {
     const response = await POST(makeRequest());
     expect(response.status).toBe(200);
+    expect(mockSyncToKivvi).toHaveBeenCalledWith(
+      expect.objectContaining({ inventoryId: 'inv-789' }),
+    );
   });
 
   it('returns 500 when DB transaction throws', async () => {
