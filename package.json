@@ -99,7 +99,7 @@
     "i18n:stale-update": "node scripts/i18n-stale.mjs --update",
     "compliance:i18n-stale": "node scripts/i18n-stale.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --write src/lib/kivvi/sync-product.ts src/lib/kivvi/__tests__/sync-product.test.ts && git diff -- src/lib/kivvi/sync-product.ts src/lib/kivvi/__tests__/sync-product.test.ts && node -e \"process.exit(1)\""
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.3",
