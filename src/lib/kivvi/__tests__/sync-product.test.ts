@@ -9,7 +9,10 @@ const mockConfigured = vi.fn();
 const mockLogger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() };
 
 vi.mock('@/db', () => ({
-  db: { select: (...args: unknown[]) => mockSelect(...args), update: (...args: unknown[]) => mockUpdate(...args) },
+  db: {
+    select: (...args: unknown[]) => mockSelect(...args),
+    update: (...args: unknown[]) => mockUpdate(...args),
+  },
 }));
 vi.mock('@/db/schema/inventory', () => ({
   inventoryItems: { id: 'inventory.id', kivviInventoryItemId: 'inventory.kivvi_id' },
