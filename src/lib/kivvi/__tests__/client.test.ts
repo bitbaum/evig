@@ -195,6 +195,27 @@ describe('createKivviInventoryItem', () => {
     expect(options.method).toBe('POST');
   });
 
+  it('sends an exact idempotency key on a retried item creation', async () => {
+    mockFetchResponse(makeKivviItem());
+
+    await createKivviInventoryItem(
+      { description: 'ThinkPad T480' },
+      'evig:inventory:create:v1:inv-789',
+    );
+
+    const [, options] = mockFetch.mock.calls[0];
+    expect(options.headers['Idempotency-Key']).toBe('evig:inventory:create:v1:inv-789');
+  });
+
+  it('does not invent an idempotency key for callers without one', async () => {
+    mockFetchResponse(makeKivviItem());
+
+    await createKivviInventoryItem({ description: 'Laptop' });
+
+    const [, options] = mockFetch.mock.calls[0];
+    expect(options.headers['Idempotency-Key']).toBeUndefined();
+  });
+
   it('returns the KivviInventoryItem from response data', async () => {
     mockFetchResponse(makeKivviItem());
 
@@ -394,6 +415,15 @@ describe('syncToKivvi', () => {
 
     const body = JSON.parse(mockFetch.mock.calls[0][1].body);
     expect(body.warehouseId).toBe('wh-custom');
+  });
+
+  it('forwards the same create key through the sync wrapper', async () => {
+    mockFetchResponse(makeKivviItem());
+
+    await syncToKivvi({ description: 'ThinkPad T480' }, 'evig:inventory:create:v1:inv-789');
+
+    const [, options] = mockFetch.mock.calls[0];
+    expect(options.headers['Idempotency-Key']).toBe('evig:inventory:create:v1:inv-789');
   });
 
   it('returns { success: true, kivviInventoryItemId, itemNumber } on success', async () => {
