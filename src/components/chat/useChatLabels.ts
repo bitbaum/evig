@@ -35,6 +35,9 @@ export function useChatLabels(): ChatLabels {
       failed: t('failed'),
       loading: t('loading'),
       replies: t('replies'),
+      thoughtFor: t('thoughtFor'),
+      thought: t('thought'),
+      thinking: t('thinking'),
     },
     composer: {
       send: t('send'),
