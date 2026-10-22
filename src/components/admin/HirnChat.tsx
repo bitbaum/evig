@@ -1,21 +1,34 @@
 'use client';
 
-import { Markdown } from '@bitbaum/chatkit/react';
+/**
+ * HirnChat — the staff Hirn chat (full page at /admin/hirn, compact in the
+ * slide-over). The chat is `@bitbaum/chatkit`: `ChatScreen` + `ChatThread` +
+ * `Composer`, the fleet's one chat. evig adds what is evig's through chatkit's
+ * slots: the action cards Hirn proposes (`renderFooter`), the provider line,
+ * the page-context starters, and the translated words.
+ */
 
-import { useState, useRef, useEffect } from 'react';
+import '@bitbaum/chatkit/styles.css';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import {
+  ChatScreen,
+  ChatStarters,
+  ChatThread,
+  Composer,
+  type ChatMessageData,
+} from '@bitbaum/chatkit/react';
 import { useTranslations } from 'next-intl';
-import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react';
+import { Bot, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react';
 import Heading from '@/components/admin/AdminHeading';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useChatLabels } from '@/components/chat/useChatLabels';
 import { apiFetch } from '@/lib/api/client';
 import { usePathname } from 'next/navigation';
 import { resolveHirnContext } from '@/config/hirn/page-contexts';
 import { logger } from '@/lib/logger';
 import { ORG } from '@/config/org';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { IconBadge } from '@/components/ui/IconBadge';
-import { SuggestedReplies } from '@/components/hirn/SuggestedReplies';
+import { transcribeForHirn } from '@/lib/hirn/transcribe-client';
 
 interface HirnActionCard {
   id: string;
@@ -27,34 +40,31 @@ interface HirnActionCard {
   payload: Record<string, unknown>;
 }
 
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  createdAt: Date;
+/** A turn, plus what evig keeps beside it (never sent back as history). */
+interface Message extends ChatMessageData {
   model?: string;
   provider?: string;
   actions?: HirnActionCard[];
-  /** Suggested next messages — shown only under the latest answer. */
-  replies?: string[];
 }
 
 interface HirnChatProps {
   sessionId: string;
   onSessionChange?: () => void;
-  /** Compact mode for slide-over panel - smaller padding, no header */
+  /** Compact mode for slide-over panel — the panel has its own header. */
   compact?: boolean;
 }
 
 export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnChatProps) {
   const t = useTranslations('admin.hirn.chat');
+  const labels = useChatLabels();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [stopped, setStopped] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [error, setError] = useState('');
   const [pendingClear, setPendingClear] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const nextId = useRef(0);
 
   // Load chat history on mount or session change
   useEffect(() => {
@@ -66,17 +76,16 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             id: string;
             role: string;
             content: string;
-            created_at?: string;
-            createdAt?: string;
             replies?: string[];
           }[]
         >(`/api/admin/hirn/history?sessionId=${encodeURIComponent(sessionId)}`);
         if (result.success && result.data) {
           setMessages(
             result.data.map((m) => ({
-              ...m,
+              id: m.id,
               role: m.role as 'user' | 'assistant',
-              createdAt: new Date(m.created_at || m.createdAt || Date.now()),
+              content: m.content,
+              replies: m.replies,
             })),
           );
         }
@@ -89,39 +98,28 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     loadHistory();
   }, [sessionId]);
 
-  // Scroll to bottom when messages change
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   const pathname = usePathname();
   // Page context (SSOT: config/hirn/page-contexts) — tells Hirn what the
-  // staff member is currently looking at + seeds the empty-state chips.
+  // staff member is currently looking at + seeds the empty-state starters.
   const pageContext = resolveHirnContext(pathname ?? '/admin', 'admin');
-  // Chips are UI → localized via admin.hirnContexts.<area>.sN, config German fallback.
+  // Starters are UI → localized via admin.hirnContexts.<area>.sN, config German fallback.
   const tCtx = useTranslations('admin.hirnContexts');
   const localizedSuggestions = pageContext.suggestions.map((fallback, i) => {
     const key = `${pageContext.area}.s${i}`;
     return tCtx.has(key as never) ? tCtx(key as never) : fallback;
   });
 
-  // One send path for the composer and the suggested replies, so a tapped
-  // reply is exactly a typed one.
-  const send = async (text: string) => {
-    const content = text.trim();
-    if (!content || loading) return;
+  const newId = (role: ChatMessageData['role']) => `${role}-${Date.now()}-${++nextId.current}`;
 
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content,
-      createdAt: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setLoading(true);
+  /** One request: `thread` ends with the person's turn; the answer or the
+   *  failure (with Retry) is appended. The server holds the history. */
+  const ask = async (thread: Message[], content: string) => {
+    setMessages(thread);
+    setBusy(true);
+    setStopped(false);
     setError('');
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     try {
       const result = await apiFetch<{
@@ -132,38 +130,66 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         actions?: HirnActionCard[];
       }>('/api/admin/hirn/chat', {
         method: 'POST',
-        body: {
-          message: userMessage.content,
-          sessionId,
-          pathname: pathname ?? undefined,
-        },
+        body: { message: content, sessionId, pathname: pathname ?? undefined },
+        signal: controller.signal,
       });
 
+      if (controller.signal.aborted) {
+        setStopped(true);
+        return;
+      }
       if (!result.success) {
         throw new Error(result.error || t('errorSendDefault'));
       }
 
       const responseData = result.data!;
-
-      const assistantMessage: Message = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: responseData.content || t('errorEmptyResponse'),
-        createdAt: new Date(),
-        model: responseData.model || undefined,
-        provider: responseData.provider || undefined,
-        actions: responseData.actions || [],
-        replies: responseData.replies || [],
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-      setError(''); // Clear any previous error on success
+      setMessages([
+        ...thread,
+        {
+          id: newId('assistant'),
+          role: 'assistant',
+          content: responseData.content || t('errorEmptyResponse'),
+          model: responseData.model || undefined,
+          provider: responseData.provider || undefined,
+          actions: responseData.actions || [],
+          replies: responseData.replies || [],
+        },
+      ]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('errorUnknown'));
+      setMessages([
+        ...thread,
+        {
+          id: newId('assistant'),
+          role: 'assistant',
+          content: err instanceof Error ? err.message : t('errorUnknown'),
+          failed: true,
+        },
+      ]);
     } finally {
-      setLoading(false);
+      if (abortRef.current === controller) abortRef.current = null;
+      setBusy(false);
     }
   };
+
+  // One send path for the composer, the starters and the suggested replies,
+  // so a tapped reply is exactly a typed one.
+  const send = (text: string) => {
+    const content = text.trim();
+    if (!content || busy) return false;
+    const base = messages.filter((m) => !m.failed);
+    void ask([...base, { id: newId('user'), role: 'user', content }], content);
+    return true;
+  };
+
+  const retry = () => {
+    if (busy) return;
+    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+    if (!lastUser) return;
+    const upTo = messages.slice(0, messages.indexOf(lastUser) + 1).filter((m) => !m.failed);
+    void ask(upTo, lastUser.content);
+  };
+
+  const stop = () => abortRef.current?.abort();
 
   const clearSession = () => setPendingClear(true);
 
@@ -173,6 +199,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         method: 'DELETE',
       });
       setMessages([]);
+      setStopped(false);
       onSessionChange?.();
     } catch (err) {
       logger.warn('Failed to delete Hirn chat session', { error: err });
@@ -180,227 +207,158 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     }
   };
 
-  const executeAction = async (action: HirnActionCard) => {
-    setError('');
+  const executeAction = useCallback(
+    async (action: HirnActionCard) => {
+      setError('');
 
-    // Navigate actions just redirect — no API call needed
-    if (action.type === 'navigate') {
-      const url = typeof action.payload.url === 'string' ? action.payload.url : '/admin';
-      window.location.href = url;
-      return;
-    }
-
-    try {
-      const result = await apiFetch<{ entity?: { link?: string } }>(
-        '/api/admin/hirn/actions/execute',
-        {
-          method: 'POST',
-          body: {
-            actionId: action.id,
-            actionType: action.type,
-            payload: action.payload,
-            dryRun: false,
-          },
-        },
-      );
-
-      if (!result.success) throw new Error(result.error || t('errorActionDefault'));
-
-      const link = result.data?.entity?.link;
-      if (link) {
-        window.location.href = link;
+      // Navigate actions just redirect — no API call needed
+      if (action.type === 'navigate') {
+        const url = typeof action.payload.url === 'string' ? action.payload.url : '/admin';
+        window.location.href = url;
+        return;
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('errorActionDefault'));
-    }
-  };
 
-  if (loadingHistory) {
+      try {
+        const result = await apiFetch<{ entity?: { link?: string } }>(
+          '/api/admin/hirn/actions/execute',
+          {
+            method: 'POST',
+            body: {
+              actionId: action.id,
+              actionType: action.type,
+              payload: action.payload,
+              dryRun: false,
+            },
+          },
+        );
+
+        if (!result.success) throw new Error(result.error || t('errorActionDefault'));
+
+        const link = result.data?.entity?.link;
+        if (link) {
+          window.location.href = link;
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : t('errorActionDefault'));
+      }
+    },
+    [t],
+  );
+
+  /** What evig shows under an answer: the proposed actions and the provider. */
+  const renderFooter = (m: ChatMessageData) => {
+    const message = m as Message;
+    if (message.role !== 'assistant' || message.failed) return null;
+    const actions = message.actions ?? [];
+    if (actions.length === 0 && !message.model) return null;
     return (
-      <div className="flex items-center justify-center h-full">
-        <Loader2 className="w-8 h-8 animate-spin text-action" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col h-full">
-      {/* Header - hidden in compact mode */}
-      {!compact && (
-        <div className="flex items-center justify-between p-4 border-b border">
-          <div className="flex items-center gap-2">
-            <Bot className="w-5 h-5 text-action" />
-            <span className="font-medium text-text-primary">{t('title')}</span>
-          </div>
-          {messages.length > 0 && (
-            <Button variant="destructive-ghost" size="sm" onClick={clearSession} className="gap-1">
-              <Trash2 className="w-4 h-4" />
-              {t('clear')}
-            </Button>
-          )}
-        </div>
-      )}
-
-      {/* Messages */}
-      <div className={`flex-1 overflow-y-auto space-y-4 ${compact ? 'p-3' : 'p-4'}`}>
-        {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center text-text-tertiary">
-            <Sparkles className="w-12 h-12 mb-4 text-action" />
-            <Heading level={3} className="text-lg font-medium">
-              {t('welcomeTitle')}
-            </Heading>
-            <p className="text-sm max-w-md mt-2">{t('welcomeBody', { orgName: ORG.name })}</p>
-            {localizedSuggestions.length > 0 && (
-              <div className="mt-5 flex flex-wrap justify-center gap-2">
-                {localizedSuggestions.map((suggestion) => (
-                  <Button
-                    key={suggestion}
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setInput(suggestion)}
-                    className="rounded-full text-xs"
-                  >
-                    {suggestion}
-                  </Button>
-                ))}
+      <div className="mt-3 space-y-2">
+        {actions.map((action) => (
+          <div key={action.id} className="card-shell p-3">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="text-sm font-semibold text-text-primary">{action.title}</p>
+                <p className="text-xs text-text-secondary mt-1">{action.summary}</p>
               </div>
-            )}
-          </div>
-        ) : (
-          messages.map((message, index) => (
-            <div
-              key={message.id}
-              className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
-            >
-              {message.role === 'assistant' && <IconBadge icon={Bot} shape="circle" size="sm" />}
-
-              <div
-                className={`max-w-[80%] ${
-                  message.role === 'user'
-                    ? 'bg-action text-action-text rounded-2xl rounded-br-sm px-4 py-2'
-                    : 'bg-surface-raised text-text-primary rounded-2xl rounded-bl-sm px-4 py-3'
-                }`}
-              >
-                <div>
-                  {message.role === 'assistant' ? (
-                    <Markdown
-                      text={message.content}
-                      onReply={!loading && index === messages.length - 1 ? send : undefined}
-                    />
-                  ) : (
-                    <span className="whitespace-pre-wrap">{message.content}</span>
-                  )}
-                </div>
-
-                {message.role === 'assistant' && message.actions && message.actions.length > 0 && (
-                  <div className="mt-3 space-y-2">
-                    {message.actions.map((action) => (
-                      <div
-                        key={action.id}
-                        className="rounded-xl border border-strong p-3 bg-surface-base/70"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="text-sm font-semibold">{action.title}</p>
-                            <p className="text-xs text-text-secondary mt-1">{action.summary}</p>
-                          </div>
-                          {action.risky && <TriangleAlert className="w-4 h-4 text-warning-500" />}
-                        </div>
-                        <Button
-                          type="button"
-                          onClick={() => executeAction(action)}
-                          variant="primary"
-                          size="sm"
-                          className="mt-3"
-                        >
-                          <Rocket className="w-3.5 h-3.5" />
-                          {action.cta}
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {message.role === 'assistant' && index === messages.length - 1 && !loading && (
-                  <SuggestedReplies replies={message.replies} onPick={send} />
-                )}
-
-                {message.role === 'assistant' && message.model && (
-                  <p className="mt-2 text-xs text-text-muted">
-                    via {message.provider}/{message.model}
-                  </p>
-                )}
-              </div>
-
-              {message.role === 'user' && (
-                <div className="shrink-0 w-8 h-8 rounded-full bg-action flex items-center justify-center">
-                  <User className="w-4 h-4 text-action-text" />
-                </div>
+              {action.risky && (
+                <TriangleAlert className="w-4 h-4 text-warning-500 shrink-0" aria-hidden="true" />
               )}
             </div>
-          ))
-        )}
-
-        {loading && (
-          <div className="flex gap-3">
-            <IconBadge icon={Bot} shape="circle" size="sm" />
-            <div className="bg-surface-raised rounded-2xl rounded-bl-sm px-4 py-3">
-              <div className="flex gap-1">
-                <span
-                  className="w-2 h-2 bg-action rounded-full animate-bounce"
-                  style={{ animationDelay: '0ms' }}
-                />
-                <span
-                  className="w-2 h-2 bg-action rounded-full animate-bounce"
-                  style={{ animationDelay: '150ms' }}
-                />
-                <span
-                  className="w-2 h-2 bg-action rounded-full animate-bounce"
-                  style={{ animationDelay: '300ms' }}
-                />
-              </div>
-            </div>
+            <Button
+              type="button"
+              onClick={() => executeAction(action)}
+              variant="primary"
+              size="sm"
+              className="mt-3"
+            >
+              <Rocket className="w-3.5 h-3.5" aria-hidden="true" />
+              {action.cta}
+            </Button>
           </div>
+        ))}
+        {message.model && (
+          <p className="text-xs text-text-muted">
+            via {message.provider}/{message.model}
+          </p>
         )}
-
-        {error && (
-          <div
-            id="hirn-chat-error"
-            className="p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg"
-          >
-            <p className="text-sm text-error-700 dark:text-error-300">{error}</p>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
       </div>
+    );
+  };
 
-      {/* Input */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          send(input);
-        }}
-        className={`border-t border ${compact ? 'p-3' : 'p-4'}`}
+  const header = compact ? undefined : (
+    <>
+      <span className="ck-glass hirn-glass-title">
+        <Bot className="w-4 h-4 text-action" aria-hidden="true" />
+        <span className="truncate">{t('title')}</span>
+      </span>
+      <span className="flex-1" />
+      {messages.length > 0 && (
+        // eslint-disable-next-line no-restricted-syntax -- chatkit's ck-glass header pill (fleet chat chrome); Button's variant classes would fight it
+        <button type="button" className="ck-glass" onClick={clearSession}>
+          <Trash2 className="w-4 h-4" aria-hidden="true" />
+          {t('clear')}
+        </button>
+      )}
+    </>
+  );
+
+  return (
+    <>
+      <ChatScreen
+        fill="parent"
+        className="hirn-screen"
+        header={header}
+        composer={
+          <>
+            {error && (
+              <p className="ck-failed" role="alert">
+                {error}
+              </p>
+            )}
+            <Composer
+              onSend={(text) => send(text)}
+              placeholder={t('inputPlaceholder')}
+              ariaLabel={t('inputPlaceholder')}
+              sending={busy}
+              onStop={stop}
+              voice={{ transcribe: transcribeForHirn }}
+              labels={labels.composer}
+              density={compact ? 'compact' : 'comfortable'}
+            />
+          </>
+        }
+        footnote={labels.footnote}
       >
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={t('inputPlaceholder')}
-            disabled={loading}
-            aria-required="true"
-            aria-invalid={!!error}
-            aria-describedby={error ? 'hirn-chat-error' : undefined}
-            className="flex-1"
-          />
-          <Button type="submit" variant="primary" disabled={!input.trim() || loading}>
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-          </Button>
-        </div>
-      </form>
+        <ChatThread
+          messages={messages}
+          loading={loadingHistory}
+          live={busy ? { status: labels.thread.working } : null}
+          stopped={stopped}
+          onStop={stop}
+          onRetry={retry}
+          onReply={send}
+          renderFooter={renderFooter}
+          share={{ title: t('title') }}
+          labels={labels.thread}
+          empty={
+            <ChatStarters
+              starters={localizedSuggestions}
+              onPick={send}
+              title={
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <Sparkles className="w-12 h-12 text-action" aria-hidden="true" />
+                  <Heading level={3} className="text-lg font-medium text-text-primary">
+                    {t('welcomeTitle')}
+                  </Heading>
+                  <p className="text-sm text-text-tertiary max-w-md">
+                    {t('welcomeBody', { orgName: ORG.name })}
+                  </p>
+                </div>
+              }
+            />
+          }
+        />
+      </ChatScreen>
 
       <ConfirmDialog
         isOpen={pendingClear}
@@ -412,6 +370,6 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         }}
         onClose={() => setPendingClear(false)}
       />
-    </div>
+    </>
   );
 }

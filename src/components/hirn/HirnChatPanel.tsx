@@ -1,35 +1,44 @@
 'use client';
 
 /**
- * HirnChatPanel — shared slide-over chat UI for the public Hirn assistant.
+ * HirnChatPanel — the public Hirn assistant as a slide-over.
  *
- * Page context (description, suggestion chips, quick actions) comes from the
- * SSOT in src/config/hirn/page-contexts.ts. Messages go to /api/hirn/chat
- * with the current pathname; history is client-held (nothing persisted).
- * Unauthenticated visitors see a login prompt + the context quick actions.
+ * The chat is `@bitbaum/chatkit` (fleet rule: every chat is chatkit, fixed
+ * there and never here): `ChatScreen` lays the conversation out edge to edge
+ * with the title row and the composer floating over it, `ChatThread` draws
+ * the turns with Copy · Listen · Share under every answer and the one-tap
+ * replies under the latest, and `Composer` is the box — growing textarea,
+ * Enter sends, Shift+Enter breaks, a microphone with a server leg, Stop
+ * while an answer is on its way. evig supplies only the words (the `chat`
+ * and `hirn` namespaces) and the page context from
+ * src/config/hirn/page-contexts.ts (description, starters, quick links).
+ *
+ * Messages go to /api/hirn/chat with the current pathname; history is
+ * client-held (nothing persisted). Unauthenticated visitors see a login
+ * prompt + the context quick actions.
  */
 
+import '@bitbaum/chatkit/styles.css';
 import { useEffect, useRef, useState } from 'react';
-import { Markdown } from '@bitbaum/chatkit/react';
+import {
+  ChatScreen,
+  ChatStarters,
+  ChatThread,
+  Composer,
+  type ChatMessageData,
+} from '@bitbaum/chatkit/react';
 import { useTranslations } from 'next-intl';
-import { Brain, Loader2, Send, X } from 'lucide-react';
+import { Brain, X } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import Heading from '@/components/ui/Heading';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useChatLabels } from '@/components/chat/useChatLabels';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { withClientCsrfHeader } from '@/lib/api/csrf-client';
+import { transcribeForHirn } from '@/lib/hirn/transcribe-client';
 import { ORG } from '@/config/org';
 import { ROUTES } from '@/config/routes';
 import type { HirnPageContext } from '@/config/hirn/page-contexts';
-import { SuggestedReplies } from './SuggestedReplies';
-
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-  /** Suggested next messages (assistant only) — never sent back as history. */
-  replies?: string[];
-}
 
 interface HirnChatPanelProps {
   isOpen: boolean;
@@ -39,19 +48,32 @@ interface HirnChatPanelProps {
   isAuthenticated: boolean;
 }
 
-function QuickActions({ actions }: { actions: NonNullable<HirnPageContext['quickActions']> }) {
+/** Only the newest turns travel; the page context re-anchors every call. */
+const HISTORY_LIMIT = 10;
+
+/** The context's links, as one row of equal pills (44px targets). */
+function QuickActions({
+  actions,
+  label,
+}: {
+  actions: NonNullable<HirnPageContext['quickActions']>;
+  label: string;
+}) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <nav className="flex flex-wrap gap-2" aria-label={label}>
       {actions.map((action) => (
-        <Link
+        <Button
           key={action.href}
+          as={Link}
           href={action.href}
-          className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border border-strong text-text-primary hover:border-action hover:text-action transition-colors"
+          variant="outline"
+          size="sm"
+          className="min-h-11 rounded-full"
         >
           {action.label}
-        </Link>
+        </Button>
       ))}
-    </div>
+    </nav>
   );
 }
 
@@ -64,11 +86,12 @@ export function HirnChatPanel({
 }: HirnChatPanelProps) {
   const t = useTranslations('hirn');
   const tCommon = useTranslations('common');
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const labels = useChatLabels();
+  const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [stopped, setStopped] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const nextId = useRef(0);
 
   const panelRef = useFocusTrap<HTMLDivElement>(isOpen, onClose);
 
@@ -82,19 +105,25 @@ export function HirnChatPanel({
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, loading]);
+  const newId = (role: ChatMessageData['role']) => `${role}-${++nextId.current}`;
 
-  const send = async (text: string) => {
-    const message = text.trim();
-    if (!message || loading) return;
+  /**
+   * One request. `thread` already ends with the person's turn; the answer —
+   * or the failure, with Retry — is appended to it. A failed turn is never
+   * sent back as history.
+   */
+  const ask = async (thread: ChatMessageData[], message: string) => {
+    setMessages(thread);
+    setBusy(true);
+    setStopped(false);
+    const controller = new AbortController();
+    abortRef.current = controller;
 
-    const nextMessages: ChatMessage[] = [...messages, { role: 'user', content: message }];
-    setMessages(nextMessages);
-    setInput('');
-    setLoading(true);
-    setError('');
+    const fail = (content: string) =>
+      setMessages([
+        ...thread,
+        { id: newId('assistant'), role: 'assistant', content, failed: true },
+      ]);
 
     try {
       // Direct fetch (not apiFetch) so the 429 status is detectable for a
@@ -102,43 +131,75 @@ export function HirnChatPanel({
       const res = await fetch('/api/hirn/chat', {
         method: 'POST',
         headers: withClientCsrfHeader({ 'Content-Type': 'application/json' }, 'POST'),
+        signal: controller.signal,
         body: JSON.stringify({
           message,
           pathname,
-          history: messages.slice(-10).map(({ role, content }) => ({ role, content })),
+          history: thread
+            .slice(0, -1)
+            .filter((m) => !m.failed)
+            .slice(-HISTORY_LIMIT)
+            .map(({ role, content }) => ({ role, content })),
         }),
       });
       const data = await res.json().catch(() => ({}));
 
       if (res.status === 429) {
-        setError(t('rateLimited'));
+        fail(t('rateLimited'));
         return;
       }
       if (!res.ok || !data.success || !data.data?.reply) {
-        setError(typeof data.error === 'string' ? data.error : t('error'));
+        fail(typeof data.error === 'string' ? data.error : t('error'));
         return;
       }
 
       setMessages([
-        ...nextMessages,
+        ...thread,
         {
+          id: newId('assistant'),
           role: 'assistant',
           content: data.data.reply,
           replies: Array.isArray(data.data.replies) ? data.data.replies : [],
         },
       ]);
     } catch {
-      setError(t('error'));
+      if (controller.signal.aborted) {
+        setStopped(true);
+        return;
+      }
+      fail(t('error'));
     } finally {
-      setLoading(false);
+      if (abortRef.current === controller) abortRef.current = null;
+      setBusy(false);
     }
   };
+
+  /** The composer, a starter and a suggested reply all send through here. */
+  const send = (text: string) => {
+    const message = text.trim();
+    if (!message || busy) return false;
+    const base = messages.filter((m) => !m.failed);
+    void ask([...base, { id: newId('user'), role: 'user', content: message }], message);
+    return true;
+  };
+
+  /** Retry the last turn from the same question — nothing to retype. */
+  const retry = () => {
+    if (busy) return;
+    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+    if (!lastUser) return;
+    const upTo = messages.slice(0, messages.indexOf(lastUser) + 1).filter((m) => !m.failed);
+    void ask(upTo, lastUser.content);
+  };
+
+  const stop = () => abortRef.current?.abort();
 
   if (!isOpen) return null;
 
   const lastMessage = messages[messages.length - 1];
+  const quickActions = context.quickActions ?? [];
   const showQuickActionsAfterReply =
-    !loading && lastMessage?.role === 'assistant' && (context.quickActions?.length ?? 0) > 0;
+    !busy && !stopped && lastMessage?.role === 'assistant' && !lastMessage.failed;
 
   return (
     <>
@@ -156,185 +217,111 @@ export function HirnChatPanel({
         aria-modal="true"
         aria-label={t('title')}
         tabIndex={-1}
-        className="fixed inset-y-0 right-0 z-[110] w-full max-w-md bg-surface-base flex flex-col focus:outline-none"
+        className="fixed inset-y-0 right-0 z-[110] w-full max-w-md bg-surface-page flex flex-col focus:outline-none"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border bg-action">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-surface-base/20 flex items-center justify-center">
-              <Brain className="w-4 h-4 text-white" aria-hidden="true" />
-            </div>
-            <div>
-              <Heading level={2} className="font-semibold text-white">
-                {t('title')}
-              </Heading>
-              <p className="text-xs text-white/70">{t('subtitle', { orgName: ORG.name })}</p>
-            </div>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            aria-label={tCommon('close')}
-            className="text-white/80 hover:text-white hover:bg-surface-base/10 rounded-lg"
-          >
-            <X className="w-5 h-5" />
-          </Button>
-        </div>
-
-        {/* Body */}
         {!isAuthenticated ? (
-          <div className="flex-1 flex flex-col items-center justify-center gap-4 p-6 text-center">
-            <Brain className="w-10 h-10 text-action" aria-hidden="true" />
-            <p className="text-sm text-text-secondary max-w-xs">
-              {t('loginPrompt', { orgName: ORG.name })}
-            </p>
-            <Link
-              href={ROUTES.public.login}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-action text-action-text hover:bg-action-hover transition-colors"
-            >
-              {t('loginCta')}
-            </Link>
-            {context.quickActions && context.quickActions.length > 0 && (
-              <QuickActions actions={context.quickActions} />
-            )}
-          </div>
-        ) : (
           <>
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-                  <Brain className="w-10 h-10 text-action" aria-hidden="true" />
-                  <div>
-                    <Heading level={3} className="text-base font-medium text-text-primary">
-                      {t('emptyTitle')}
-                    </Heading>
-                    <p className="text-sm text-text-tertiary mt-1">{t('emptyHint')}</p>
-                  </div>
-                  <div
-                    className="flex flex-col gap-2 w-full max-w-xs"
-                    aria-label={t('suggestionsLabel')}
-                  >
-                    {context.suggestions.map((suggestion) => (
-                      <Button
-                        key={suggestion}
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => send(suggestion)}
-                        className="justify-start text-left whitespace-normal h-auto py-2"
-                      >
-                        {suggestion}
-                      </Button>
-                    ))}
-                  </div>
-                  {context.quickActions && context.quickActions.length > 0 && (
-                    <QuickActions actions={context.quickActions} />
-                  )}
-                </div>
-              ) : (
-                messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${message.role === 'user' ? 'justify-end' : ''}`}
-                  >
-                    <div
-                      className={`max-w-[85%] whitespace-pre-wrap text-sm ${
-                        message.role === 'user'
-                          ? 'bg-action text-action-text rounded-2xl rounded-br-sm px-4 py-2'
-                          : 'bg-surface-raised text-text-primary rounded-2xl rounded-bl-sm px-4 py-3'
-                      }`}
-                    >
-                      {message.role === 'assistant' ? (
-                        <Markdown
-                          text={message.content}
-                          onReply={!loading && index === messages.length - 1 ? send : undefined}
-                        />
-                      ) : (
-                        message.content
+            <div className="flex items-center justify-between gap-2 px-4 py-3">
+              <span className="ck-glass hirn-glass-title">
+                <Brain className="w-4 h-4 text-action" aria-hidden="true" />
+                {t('title')}
+              </span>
+              {/* eslint-disable-next-line no-restricted-syntax -- chatkit's ck-glass header pill (fleet chat chrome); Button's variant classes would fight it */}
+              <button
+                type="button"
+                className="ck-glass"
+                onClick={onClose}
+                aria-label={tCommon('close')}
+              >
+                <X className="w-5 h-5" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="flex-1 flex flex-col items-center justify-center gap-4 p-6 text-center">
+              <Brain className="w-10 h-10 text-action" aria-hidden="true" />
+              <p className="text-sm text-text-secondary max-w-xs">
+                {t('loginPrompt', { orgName: ORG.name })}
+              </p>
+              <Button as={Link} href={ROUTES.public.login} variant="primary">
+                {t('loginCta')}
+              </Button>
+              {quickActions.length > 0 && (
+                <QuickActions actions={quickActions} label={t('quickActionsLabel')} />
+              )}
+            </div>
+          </>
+        ) : (
+          // The visual viewport, not the panel: on a phone the keyboard
+          // shrinks it, and the composer rides on top of the keyboard.
+          <ChatScreen
+            fill="viewport"
+            className="hirn-screen"
+            header={
+              <>
+                <span className="ck-glass hirn-glass-title">
+                  <Brain className="w-4 h-4 text-action" aria-hidden="true" />
+                  <span className="truncate">{t('title')}</span>
+                </span>
+                <span className="flex-1" />
+                {/* eslint-disable-next-line no-restricted-syntax -- chatkit's ck-glass header pill (fleet chat chrome); Button's variant classes would fight it */}
+                <button
+                  type="button"
+                  className="ck-glass"
+                  onClick={onClose}
+                  aria-label={tCommon('close')}
+                >
+                  <X className="w-5 h-5" aria-hidden="true" />
+                </button>
+              </>
+            }
+            composer={
+              <Composer
+                onSend={(text) => send(text)}
+                placeholder={t('inputPlaceholder')}
+                ariaLabel={t('inputPlaceholder')}
+                sending={busy}
+                onStop={stop}
+                voice={{ transcribe: transcribeForHirn }}
+                labels={labels.composer}
+                autoFocus
+              />
+            }
+            footnote={labels.footnote}
+          >
+            <ChatThread
+              messages={messages}
+              live={busy ? { status: t('thinking') } : null}
+              stopped={stopped}
+              onStop={stop}
+              onRetry={retry}
+              onReply={send}
+              share={{ title: t('title') }}
+              labels={labels.thread}
+              empty={
+                <ChatStarters
+                  starters={context.suggestions}
+                  onPick={send}
+                  title={
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <Brain className="w-10 h-10 text-action" aria-hidden="true" />
+                      <div>
+                        <Heading level={3} className="text-base font-medium text-text-primary">
+                          {t('emptyTitle')}
+                        </Heading>
+                        <p className="text-sm text-text-tertiary mt-1">{t('emptyHint')}</p>
+                      </div>
+                      {quickActions.length > 0 && (
+                        <QuickActions actions={quickActions} label={t('quickActionsLabel')} />
                       )}
                     </div>
-                  </div>
-                ))
-              )}
-
-              {!loading && lastMessage?.role === 'assistant' && (
-                <SuggestedReplies replies={lastMessage.replies} onPick={send} />
-              )}
-
-              {showQuickActionsAfterReply && context.quickActions && (
-                <QuickActions actions={context.quickActions} />
-              )}
-
-              {loading && (
-                <div className="flex" aria-label={t('thinking')}>
-                  <div className="bg-surface-raised rounded-2xl rounded-bl-sm px-4 py-3">
-                    <div className="flex gap-1">
-                      <span
-                        className="w-2 h-2 bg-action rounded-full animate-bounce"
-                        style={{ animationDelay: '0ms' }}
-                      />
-                      <span
-                        className="w-2 h-2 bg-action rounded-full animate-bounce"
-                        style={{ animationDelay: '150ms' }}
-                      />
-                      <span
-                        className="w-2 h-2 bg-action rounded-full animate-bounce"
-                        style={{ animationDelay: '300ms' }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {error && (
-                <div
-                  id="hirn-panel-error"
-                  className="p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg"
-                >
-                  <p className="text-sm text-error-700 dark:text-error-300">{error}</p>
-                </div>
-              )}
-
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Input */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                send(input);
-              }}
-              className="border-t border p-3"
-            >
-              <div className="flex gap-2">
-                <Input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder={t('inputPlaceholder')}
-                  disabled={loading}
-                  maxLength={2000}
-                  aria-invalid={!!error}
-                  aria-describedby={error ? 'hirn-panel-error' : undefined}
-                  className="flex-1"
+                  }
                 />
-                <Button
-                  type="submit"
-                  variant="primary"
-                  disabled={!input.trim() || loading}
-                  aria-label={t('send')}
-                >
-                  {loading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <Send className="w-5 h-5" />
-                  )}
-                </Button>
-              </div>
-            </form>
-          </>
+              }
+            >
+              {showQuickActionsAfterReply && quickActions.length > 0 && (
+                <QuickActions actions={quickActions} label={t('quickActionsLabel')} />
+              )}
+            </ChatThread>
+          </ChatScreen>
         )}
       </div>
     </>

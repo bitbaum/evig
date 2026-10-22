@@ -161,6 +161,7 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
 
         <DeliverableChat
           endpoint={`/api/deliverables/${deliverable.id}/ask`}
+          signedIn
           suggestions={[
             'Was macht dieser Code?',
             'Wie binde ich das ein?',

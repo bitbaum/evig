@@ -21,6 +21,8 @@ interface ApiFetchOptions {
   headers?: Record<string, string>;
   /** Pass true when body is FormData (skips JSON.stringify and Content-Type header) */
   formData?: boolean;
+  /** Abort from outside (a chat's Stop). An aborted call resolves as a failure. */
+  signal?: AbortSignal;
 }
 
 /**
@@ -31,10 +33,11 @@ export async function apiFetch<T = unknown>(
   url: string,
   options: ApiFetchOptions = {},
 ): Promise<ApiResponse<T>> {
-  const { method = 'GET', body, headers = {}, formData = false } = options;
+  const { method = 'GET', body, headers = {}, formData = false, signal } = options;
 
   const fetchOptions: RequestInit = {
     method,
+    ...(signal ? { signal } : {}),
     headers: withClientCsrfHeader(
       {
         ...(body !== undefined && !formData ? { 'Content-Type': 'application/json' } : {}),

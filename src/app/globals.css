@@ -1508,8 +1508,8 @@
 }
 
 /* ─── @bitbaum/chatkit → evig tokens ──────────────────────────────────────────
- * chatkit's stylesheet (imported by the components that use it, e.g.
- * components/hirn/SuggestedReplies.tsx) reads only --ck-* variables, and by
+ * chatkit's stylesheet (imported by every chat component — the Hirn panel,
+ * the staff chat, the deliverable Q&A) reads only --ck-* variables, and by
  * default derives them from HSL-triplet tokens. evig's tokens are full colours,
  * so they are mapped here, once. Deliberately UNLAYERED: chatkit sets its
  * defaults unlayered at zero specificity, and an unlayered rule beats any
@@ -1546,4 +1546,23 @@
   --ck-fg-3: var(--text-tertiary);
   --ck-line: var(--border-subtle);
   --ck-line-2: var(--border-default);
+}
+
+/* A chat as the whole display (chatkit ChatScreen): the Hirn panel and the
+   staff chat. The title in the floating header is a frosted pill like the
+   buttons beside it, but it is a label, not a control. */
+.hirn-screen {
+  flex: 1;
+}
+/* The public panel follows the VISUAL viewport (the composer rides above the
+   phone keyboard) and stops above the cookie banner, which stacks over
+   everything, the same clearance the Hirn button keeps. */
+.hirn-screen.ck-screen-viewport {
+  flex: none;
+  height: calc(var(--ck-viewport-height, 100dvh) - var(--cookie-banner-clearance, 0px));
+}
+.hirn-screen .hirn-glass-title {
+  min-width: 0;
+  cursor: default;
+  font-weight: 600;
 }
