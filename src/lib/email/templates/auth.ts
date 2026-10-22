@@ -64,6 +64,91 @@ ${createTextFooter()}
   `.trim(),
 });
 
+/** Code for moving the login address. Sent to the NEW inbox only. */
+export const emailAddressChange = (name: string, code: string): EmailContent => ({
+  subject: `Neue E-Mail bestätigen - ${ORG.name}`, // i18n-ok
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Neue E-Mail bestätigen</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Neue E-Mail bestätigen</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${escapeHtml(name || 'Benutzer')},</h2>
+          <p>Jemand (hoffentlich du) möchte diese Adresse als Login für ${ORG.name} verwenden. Gib den Code in den Einstellungen ein. Danach gilt die neue Adresse, die alte nicht mehr.</p>
+          <div class="code">${code}</div>
+          <p><strong>Sicherheitshinweis:</strong> Der Code ist 15 Minuten gültig. Teile ihn mit niemandem.</p>
+          <p>Wenn du das nicht warst, ignoriere diese E-Mail. Am Konto ändert sich nichts.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name || 'Benutzer'},
+
+Jemand möchte diese Adresse als Login für ${ORG.name} verwenden.
+
+Dein Code lautet: ${code}
+
+Der Code ist 15 Minuten gültig. Wenn du das nicht warst, ignoriere diese E-Mail.
+${createTextFooter()}
+  `.trim(),
+});
+
+/** Notice to the OLD inbox after the login address has moved. */
+export const emailAddressChanged = (name: string, newEmail: string): EmailContent => ({
+  subject: `Login-Adresse geändert - ${ORG.name}`, // i18n-ok
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Login-Adresse geändert</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Login-Adresse geändert</h1>
+        </div>
+        <div class="content">
+          <h2>Hallo ${escapeHtml(name || 'Benutzer')},</h2>
+          <p>Die Login-Adresse deines ${ORG.name}-Kontos ist jetzt <strong>${escapeHtml(newEmail)}</strong>. Mit dieser Adresse kannst du dich nicht mehr anmelden.</p>
+          <p>Wenn du das nicht warst, setze sofort das Passwort über «Passwort vergessen» an der neuen Adresse zurück und melde dich bei uns.</p>
+        </div>
+        <div class="footer">
+          <p>${AUTO_GENERATED_TEXT}</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo ${name || 'Benutzer'},
+
+Die Login-Adresse deines ${ORG.name}-Kontos ist jetzt ${newEmail}.
+Mit dieser Adresse kannst du dich nicht mehr anmelden.
+
+Wenn du das nicht warst, setze sofort das Passwort zurück.
+${createTextFooter()}
+  `.trim(),
+});
+
 export const emailVerification = (name: string, verificationUrl: string): EmailContent => ({
   subject: `E-Mail-Adresse bestätigen - ${ORG.name}`,
   html: `

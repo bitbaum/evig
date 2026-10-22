@@ -113,6 +113,8 @@ export default function SettingsPage() {
               <AccountSection
                 profile={profile}
                 email={session?.user?.email || ''}
+                isSuperAdmin={Boolean(session?.user?.isSuperAdmin)}
+                emailVerified={Boolean(session?.user?.emailVerified)}
                 handleChange={handleChange}
               />
             )}

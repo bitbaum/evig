@@ -74,6 +74,8 @@ describe('isStaffEmail', () => {
 describe('isSuperAdmin', () => {
   it('returns true for known super admin emails', () => {
     expect(isSuperAdmin('georgy.butaev@revamp-it.ch')).toBe(true);
+    expect(isSuperAdmin('butaeff@gmail.com')).toBe(true);
+    expect(isSuperAdmin('butai@gmail.com')).toBe(true);
   });
 
   // Regression guard: evig separated from Revamp-IT on 2026-07-24. Their
@@ -88,6 +90,7 @@ describe('isSuperAdmin', () => {
 
   it('is case-insensitive', () => {
     expect(isSuperAdmin('GEORGY.BUTAEV@REVAMP-IT.CH')).toBe(true);
+    expect(isSuperAdmin('Butaeff@Gmail.com')).toBe(true);
   });
 
   it('returns true when isSuperAdminFromDb flag is true', () => {
@@ -283,6 +286,8 @@ describe('getAccessibleSections', () => {
 describe('getInitialStaffPermissions', () => {
   it('returns wildcard for super admins', () => {
     expect(getInitialStaffPermissions('georgy.butaev@revamp-it.ch')).toEqual(['*']);
+    expect(getInitialStaffPermissions('butaeff@gmail.com')).toEqual(['*']);
+    expect(getInitialStaffPermissions('butai@gmail.com')).toEqual(['*']);
   });
 
   it('returns default permissions for regular staff', () => {
@@ -309,11 +314,13 @@ describe('auth constants', () => {
     expect(isStaffEmail('georgy.butaev@revamp-it.ch')).toBe(true);
   });
 
-  it('has super admin emails defined', () => {
-    expect(SUPER_ADMIN_EMAILS.length).toBeGreaterThan(0);
-    SUPER_ADMIN_EMAILS.forEach((email) => {
-      expect(email).toContain('@revamp-it.ch');
-    });
+  it('lists the owner addresses, not a domain', () => {
+    expect([...SUPER_ADMIN_EMAILS]).toEqual([
+      'georgy.butaev@revamp-it.ch',
+      'butaeff@gmail.com',
+      'butai@gmail.com',
+    ]);
+    expect(isSuperAdmin('someoneelse@gmail.com')).toBe(false);
   });
 
   it('has content status values', () => {

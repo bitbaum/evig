@@ -152,6 +152,19 @@ describe('withAdmin (any staff)', () => {
     expect(handler).not.toHaveBeenCalled();
   });
 
+  it('calls the handler when the user is a bootstrap super admin without the staff flag', async () => {
+    mockAuth.mockResolvedValueOnce({
+      ...nonStaffSession,
+      user: { ...nonStaffSession.user, email: 'butaeff@gmail.com', isSuperAdmin: true },
+    });
+    const handler = vi.fn().mockResolvedValue('ok');
+
+    const result = await withAdmin(handler)(REQ);
+
+    expect(handler).toHaveBeenCalled();
+    expect(result).toBe('ok');
+  });
+
   it('calls the handler when the user is staff', async () => {
     mockAuth.mockResolvedValueOnce(validSession);
     const handler = vi.fn().mockResolvedValue('ok');
