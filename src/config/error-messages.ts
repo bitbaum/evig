@@ -70,6 +70,8 @@ export const ERROR_MESSAGES = {
   ORDER_ID_REQUIRED: 'Bestell-ID fehlt',
   POOL_ID_REQUIRED: 'Pool-ID fehlt',
   NO_AUDIO_RECEIVED: 'Keine Audiodatei empfangen',
+  AUDIO_TOO_LARGE: 'Die Aufnahme ist zu gross',
+  TRANSCRIPTION_FAILED: 'Transkription fehlgeschlagen',
   EMAIL_REQUIRED: 'E-Mail erforderlich',
   EMAIL_PASSWORD_REQUIRED: 'E-Mail und Passwort sind erforderlich',
   ALL_FIELDS_REQUIRED: 'Alle erforderlichen Felder müssen ausgefüllt sein',

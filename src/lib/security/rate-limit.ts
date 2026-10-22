@@ -133,6 +133,11 @@ export const rateLimiters = {
   // Hirn admin chat: 60 per hour per staff member (working tool, generous).
   hirnChatStaff: createRateLimiter(ONE_HOUR_MS, 60),
 
+  // Hirn chat dictation: 60 takes per hour per user. The server leg of the
+  // chat microphone (Whisper) — only reached where the browser recogniser
+  // cannot work, so the budget is wider than the chat's own.
+  hirnTranscribe: createRateLimiter(ONE_HOUR_MS, 60),
+
   // Decision Beschluss narrative: 10 per hour per staff member. Each click is
   // one model call on the free tier; there is no background path any more.
   decisionNarrative: createRateLimiter(ONE_HOUR_MS, 10),

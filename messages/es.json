@@ -7915,6 +7915,37 @@
       "send": "Enviar pregunta"
     }
   },
+  "chat": {
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "listen": "Escuchar",
+    "share": "Compartir",
+    "retry": "Intentar de nuevo",
+    "stop": "Detener",
+    "working": "Un momento…",
+    "stopped": "Detenido. Envía el mensaje de nuevo.",
+    "jump": "Ir al último mensaje",
+    "failed": "Eso no funcionó.",
+    "loading": "Cargando la conversación",
+    "replies": "Respuestas sugeridas",
+    "send": "Enviar",
+    "voice": "Hablar en lugar de escribir",
+    "voiceStop": "Detener la grabación",
+    "cancelRecording": "Cancelar la grabación",
+    "confirmRecording": "Listo — usar lo que dije",
+    "listening": "Te escucho…",
+    "transcribing": "Transcribiendo…",
+    "queue": "Poner un mensaje en cola…",
+    "dismiss": "Ocultar",
+    "retryTake": "Intentar de nuevo",
+    "dictation": {
+      "mic": "El micrófono está bloqueado. Permítelo para este sitio e inténtalo de nuevo.",
+      "silence": "No se oyó nada. Inténtalo de nuevo, un poco más cerca del micrófono.",
+      "unavailable": "La entrada de voz no está disponible ahora mismo. Escribe en su lugar o inténtalo más tarde.",
+      "fileTooLarge": "Esa grabación es demasiado grande para transcribirla aquí."
+    },
+    "footnote": "Las respuestas pueden contener errores."
+  },
   "invite": {
     "title": "Invitar a amigos",
     "subtitle": "Invita a tus amigos a {orgName} y ambos os beneficiáis.",

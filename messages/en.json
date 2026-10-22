@@ -7917,6 +7917,37 @@
       "send": "Send question"
     }
   },
+  "chat": {
+    "copy": "Copy",
+    "copied": "Copied",
+    "listen": "Listen",
+    "share": "Share",
+    "retry": "Try again",
+    "stop": "Stop",
+    "working": "One moment…",
+    "stopped": "Stopped. Send the message again.",
+    "jump": "Jump to the latest message",
+    "failed": "That did not go through.",
+    "loading": "Loading conversation",
+    "replies": "Suggested replies",
+    "send": "Send",
+    "voice": "Speak instead of typing",
+    "voiceStop": "Stop recording",
+    "cancelRecording": "Cancel recording",
+    "confirmRecording": "Done — use what I said",
+    "listening": "Listening…",
+    "transcribing": "Transcribing…",
+    "queue": "Queue a message…",
+    "dismiss": "Dismiss",
+    "retryTake": "Try again",
+    "dictation": {
+      "mic": "The microphone is blocked. Allow it for this site and try again.",
+      "silence": "Nothing was heard. Try again, a little closer to the mic.",
+      "unavailable": "Voice input is not available right now. Type instead, or try again later.",
+      "fileTooLarge": "That recording is too large to transcribe here."
+    },
+    "footnote": "Answers can be wrong."
+  },
   "invite": {
     "title": "Invite friends",
     "subtitle": "Invite friends to {orgName} — and you both benefit.",

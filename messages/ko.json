@@ -7827,6 +7827,37 @@
       "send": "질문 보내기"
     }
   },
+  "chat": {
+    "copy": "복사",
+    "copied": "복사됨",
+    "listen": "듣기",
+    "share": "공유",
+    "retry": "다시 시도",
+    "stop": "중지",
+    "working": "잠시만 기다려 주세요…",
+    "stopped": "중지되었습니다. 메시지를 다시 보내 주세요.",
+    "jump": "최신 메시지로 이동",
+    "failed": "전송되지 않았습니다.",
+    "loading": "대화를 불러오는 중",
+    "replies": "추천 답변",
+    "send": "보내기",
+    "voice": "입력 대신 말하기",
+    "voiceStop": "녹음 중지",
+    "cancelRecording": "녹음 취소",
+    "confirmRecording": "완료 — 말한 내용 사용",
+    "listening": "듣고 있습니다…",
+    "transcribing": "받아쓰는 중…",
+    "queue": "메시지 예약…",
+    "dismiss": "닫기",
+    "retryTake": "다시 시도",
+    "dictation": {
+      "mic": "마이크가 차단되어 있습니다. 이 사이트에서 마이크를 허용하고 다시 시도해 주세요.",
+      "silence": "아무것도 들리지 않았습니다. 마이크에 조금 더 가까이에서 다시 시도해 주세요.",
+      "unavailable": "음성 입력을 지금 사용할 수 없습니다. 대신 입력하거나 나중에 다시 시도해 주세요.",
+      "fileTooLarge": "이 녹음은 너무 커서 여기에서 받아쓸 수 없습니다."
+    },
+    "footnote": "답변에 오류가 있을 수 있습니다."
+  },
   "invite": {
     "title": "친구 초대하기",
     "subtitle": "친구를 {orgName}에 초대하세요 — 두 분 모두 혜택을 받습니다.",
