@@ -31,12 +31,14 @@ export async function completeProvider(
     extraHeaders,
   });
   const raw = result.raw as {
+    model?: unknown;
     usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
   };
   const usage = raw?.usage;
   return {
     content: result.text,
-    model: result.link.model,
+    model:
+      typeof raw?.model === 'string' && raw.model.trim() ? raw.model.trim() : result.link.model,
     provider: id,
     ...(usage
       ? {

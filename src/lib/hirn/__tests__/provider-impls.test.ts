@@ -458,3 +458,19 @@ describe('OpenRouterProvider — isAvailable', () => {
     expect(result).toBe(false);
   });
 });
+
+describe.each([GroqProvider, OpenRouterProvider])('shared transport model identity', (Provider) => {
+  it('reports the served model while preserving the requested routing alias', async () => {
+    global.fetch = vi.fn().mockReturnValue(
+      okResponse({
+        model: 'served-model-version',
+        choices: [{ message: { content: 'Answer' } }],
+      }),
+    );
+    const provider = new Provider({ apiKey: 'synthetic-own-key', model: 'requested-alias' });
+    const result = await provider.chat({ messages: MESSAGES });
+    expect(result.model).toBe('served-model-version');
+    const request = (global.fetch as Mock).mock.calls[0][1];
+    expect(JSON.parse(request.body).model).toBe('requested-alias');
+  });
+});
