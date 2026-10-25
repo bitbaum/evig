@@ -429,6 +429,11 @@ jobs:
           FAIL_ON: critical
         run: bash scripts/ci/dependency-audit.sh
 
+      - name: Patched mail and browser dependency compatibility
+        env:
+          BROWSER_EXECUTABLE: /usr/bin/google-chrome
+        run: node --test scripts/ci/security-dependency-smoke.mjs
+
   # Red-main alarm for the DISPATCHED path.
   #
   # Every merge here is an auto-merge made with GITHUB_TOKEN, which fires no
