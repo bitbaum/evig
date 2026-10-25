@@ -11,6 +11,7 @@ export interface Message {
 }
 
 export interface ChatCompletionOptions {
+  signal?: AbortSignal;
   messages: Message[];
   temperature?: number;
   maxTokens?: number;
