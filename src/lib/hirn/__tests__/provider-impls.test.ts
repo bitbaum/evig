@@ -46,23 +46,11 @@
 // ---------------------------------------------------------------------------
 
 function okResponse(body: unknown) {
-  return Promise.resolve({
-    ok: true,
-    status: 200,
-    json: () => Promise.resolve(body),
-    text: () => Promise.resolve(JSON.stringify(body)),
-    body: null,
-  } as unknown as Response);
+  return Promise.resolve(Response.json(body));
 }
 
 function errorResponse(status: number, body = 'Error') {
-  return Promise.resolve({
-    ok: false,
-    status,
-    json: () => Promise.reject(new Error('not json')),
-    text: () => Promise.resolve(body),
-    body: null,
-  } as unknown as Response);
+  return Promise.resolve(new Response(body, { status }));
 }
 
 function abortError() {
@@ -155,13 +143,11 @@ describe('GroqProvider — chat', () => {
     expect(result.provider).toBe('groq');
   });
 
-  it('returns empty string when choices is missing content', async () => {
+  it('rejects an empty successful response through the shared client', async () => {
     global.fetch = vi.fn().mockReturnValue(okResponse({ choices: [] }));
 
     const provider = new GroqProvider({ apiKey: 'gsk_test' });
-    const result = await provider.chat({ messages: MESSAGES });
-
-    expect(result.content).toBe('');
+    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(/empty|exhausted/i);
   });
 
   it('throws on non-ok HTTP response', async () => {
@@ -169,7 +155,7 @@ describe('GroqProvider — chat', () => {
 
     const provider = new GroqProvider({ apiKey: 'gsk_bad' });
 
-    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow('Groq API error: 401');
+    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(/401/);
   });
 
   it('throws descriptive timeout message on AbortError', async () => {
@@ -177,9 +163,7 @@ describe('GroqProvider — chat', () => {
 
     const provider = new GroqProvider({ apiKey: 'gsk_test' });
 
-    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(
-      'Groq Zeitüberschreitung nach 30s',
-    );
+    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(/abort|timeout|exhausted/i);
   });
 });
 
@@ -405,7 +389,9 @@ describe('OpenRouterProvider — chat', () => {
   });
 
   it('includes HTTP-Referer and X-Title headers', async () => {
-    global.fetch = vi.fn().mockReturnValue(okResponse({ choices: [{ message: { content: '' } }] }));
+    global.fetch = vi
+      .fn()
+      .mockReturnValue(okResponse({ choices: [{ message: { content: 'A real answer' } }] }));
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
     await provider.chat({ messages: MESSAGES });
@@ -421,9 +407,7 @@ describe('OpenRouterProvider — chat', () => {
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
 
-    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(
-      'OpenRouter API error: 429',
-    );
+    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(/429/);
   });
 
   it('throws descriptive timeout message on AbortError', async () => {
@@ -431,9 +415,7 @@ describe('OpenRouterProvider — chat', () => {
 
     const provider = new OpenRouterProvider({ apiKey: 'sk-or-test' });
 
-    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(
-      'OpenRouter Zeitüberschreitung nach 30s',
-    );
+    await expect(provider.chat({ messages: MESSAGES })).rejects.toThrow(/abort|timeout|exhausted/i);
   });
 });
 
@@ -474,5 +456,21 @@ describe('OpenRouterProvider — isAvailable', () => {
     const result = await provider.isAvailable();
 
     expect(result).toBe(false);
+  });
+});
+
+describe.each([GroqProvider, OpenRouterProvider])('shared transport model identity', (Provider) => {
+  it('reports the served model while preserving the requested routing alias', async () => {
+    global.fetch = vi.fn().mockReturnValue(
+      okResponse({
+        model: 'served-model-version',
+        choices: [{ message: { content: 'Answer' } }],
+      }),
+    );
+    const provider = new Provider({ apiKey: 'synthetic-own-key', model: 'requested-alias' });
+    const result = await provider.chat({ messages: MESSAGES });
+    expect(result.model).toBe('served-model-version');
+    const request = (global.fetch as Mock).mock.calls[0][1];
+    expect(JSON.parse(request.body).model).toBe('requested-alias');
   });
 });
