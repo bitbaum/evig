@@ -125,7 +125,7 @@
     "cookie": "^2.0.1",
     "cron-parser": "^5.10.2",
     "csv-parse": "^7.0.2",
-    "drizzle-orm": "^0.45.1",
+    "drizzle-orm": "^0.45.4",
     "exceljs": "^4.4.0",
     "framer-motion": "^13.4.0",
     "gray-matter": "^4.0.3",
