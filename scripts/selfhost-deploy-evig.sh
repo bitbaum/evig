@@ -2,6 +2,11 @@
 # Deploy evig to evig.orangecat.ch (Hetzner /opt/evig/app).
 set -euo pipefail
 
+# Capture deployment metadata before loading the application's runtime env.
+readonly receipt_root="${FLEET_RECEIPT_ROOT:-}"
+readonly receipt_public="${FLEET_RECEIPT_PUBLIC:-}"
+readonly receipt_repo="${FLEET_RECEIPT_REPO:-}"
+
 # The box IP is defined ONCE, org-wide: the `HETZNER_IP` Actions variable
 # (visibility: all), passed in by .github/workflows/deploy-selfhost.yml.
 # It used to be a literal here AND in that workflow — two copies of one
@@ -93,6 +98,14 @@ NEST="$(cd "$STAGE" && find . -maxdepth 4 -name server.js -not -path '*node_modu
 mkdir -p "$STAGE/$NEST/.next/static"
 cp -a "$SRC/.next/static/." "$STAGE/$NEST/.next/static/"
 [ -d "$SRC/public" ] && cp -a "$SRC/public/." "$STAGE/$NEST/public/"
+
+receipt_file="$STAGE/$NEST/public/.well-known/fleet-release.json"
+rm -f "$receipt_file"
+if [ "$receipt_public" = true ]; then
+  test -f "$receipt_root/scripts/ci/release-receipt.mjs"
+  node "$receipt_root/scripts/ci/release-receipt.mjs" --public \
+    --root "$SRC" --dir "$SRC" --repo "$receipt_repo" --output "$receipt_file"
+fi
 
 if [ -d "$SRC/node_modules/@swc/helpers/esm" ]; then
   mkdir -p "$STAGE/$NEST/node_modules/@swc/helpers"
@@ -198,5 +211,10 @@ REMOTE
 )
 
 echo "RESULT $NAME@$RELEASE_SHA: $result"
+
+if [ "$receipt_public" = true ]; then
+  node "$receipt_root/scripts/ci/verify-live-release-receipt.mjs" \
+    --url https://evig.orangecat.ch/.well-known/fleet-release.json --expected "$receipt_file"
+fi
 
 echo "Done: https://evig.orangecat.ch/"
