@@ -46,7 +46,16 @@ jobs:
       # SPACE-separated: the sweep word-splits this. A comma would become one
       # bogus token, every dispatch would fail, and the only symptom would be
       # that nothing deploys — while the sweep still reported success.
-      rearm_workflows: 'ci.yml deploy-selfhost.yml'
+      #
+      # ci.yml ONLY. deploy-selfhost.yml used to be re-armed here too, and every
+      # merge shipped TWICE: the sweep merges with FLEET_PAT, so the push already
+      # starts CI and Deploy chains off its green run through workflow_run. The
+      # dispatched copy started a minute after the merge and polled for that CI
+      # for ~460 s, then deployed; the chained one then deployed the same commit
+      # again (2216bf0: dispatch 691 s, chained 443 s, both successful). A merge
+      # that somehow produced no chained deploy is caught by the fleet's deploy
+      # reconciler, which dispatches a stale green tip every 15 minutes.
+      rearm_workflows: 'ci.yml'
     secrets:
       # GITHUB_TOKEN cannot merge a PR that touches .github/workflows, so every
       # Dependabot `github_actions` bump stalls forever: the sweep tries, the
