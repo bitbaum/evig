@@ -6137,26 +6137,18 @@
       "openFullscreen": "Open fullscreen",
       "pageTitle": "Hirn AI",
       "pageDescription": "AI assistant for evig",
-      "sidebar": {
-        "newConversation": "New conversation",
+      "stats": {
         "documentsLabel": "Documents",
-        "chunksLabel": "Chunks",
-        "conversationsHeading": "Conversations",
-        "emptyConversations": "No conversations yet",
-        "messageCount": "{count, plural, one {# message} other {# messages}}"
+        "chunksLabel": "Chunks"
       },
       "chat": {
         "title": "Hirn Assistant",
-        "clear": "Delete",
         "welcomeTitle": "Welcome to Hirn",
         "welcomeBody": "Ask questions about {orgName} — I know our mission, history, numbers, services and pricing and I'm happy to help.",
         "inputPlaceholder": "Ask a question…",
-        "confirmDeleteTitle": "Delete conversation",
-        "confirmDeleteMessage": "Are you sure you want to delete this conversation?",
         "errorSendDefault": "Failed to send",
         "errorEmptyResponse": "No response received.",
         "errorUnknown": "Unknown error",
-        "errorDelete": "Failed to delete",
         "errorActionDefault": "Action failed"
       },
       "floatingButton": {
@@ -7948,6 +7940,42 @@
       "silence": "Nothing was heard. Try again, a little closer to the mic.",
       "unavailable": "Voice input is not available right now. Type instead, or try again later.",
       "fileTooLarge": "That recording is too large to transcribe here."
+    },
+    "app": {
+      "chats": "Chats",
+      "openChats": "Open your chats",
+      "closeChats": "Close chats",
+      "newChat": "New chat",
+      "untitled": "New chat",
+      "more": "More for this chat",
+      "temporary": "Temporary chat",
+      "temporaryNote": "Not saved. Gone when you leave it.",
+      "share": "Share this chat",
+      "rename": "Rename",
+      "renameField": "Name of this chat",
+      "delete": "Delete",
+      "deleteAsk": "Delete “{title}”?",
+      "save": "Save",
+      "cancel": "Cancel",
+      "search": "Search chats",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "earlier": "Earlier",
+      "noChats": "No chats yet. What you ask is kept here.",
+      "noMatch": "No chat is called “{query}”.",
+      "loadingChats": "Loading your chats…",
+      "listFailed": "Your chats did not load.",
+      "tryAgain": "Try again",
+      "answering": "Answering…",
+      "chatActions": "Rename or delete “{title}”",
+      "queued": "Sends when this answer is done",
+      "unqueue": "Do not send “{text}”",
+      "dismiss": "Dismiss",
+      "problems": {
+        "load": "Your chats did not load.",
+        "save": "That was not saved. Check the connection and try again.",
+        "open": "That chat did not open. Try again."
+      }
     },
     "footnote": "Answers can be wrong."
   },

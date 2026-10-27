@@ -6117,26 +6117,18 @@
       "openFullscreen": "全画面で開く",
       "pageTitle": "Hirn AI",
       "pageDescription": "evigのAIアシスタント",
-      "sidebar": {
-        "newConversation": "新しい会話",
+      "stats": {
         "documentsLabel": "ドキュメント",
-        "chunksLabel": "チャンク",
-        "conversationsHeading": "会話",
-        "emptyConversations": "会話がありません",
-        "messageCount": "{count, plural, one {#件のメッセージ} other {#件のメッセージ}}"
+        "chunksLabel": "チャンク"
       },
       "chat": {
         "title": "Hirn アシスタント",
-        "clear": "削除",
         "welcomeTitle": "Hirnへようこそ",
         "welcomeBody": "{orgName}について質問してください — ミッション、歴史、数値、サービス、価格を把握しており、喜んでお手伝いします。",
         "inputPlaceholder": "質問を入力…",
-        "confirmDeleteTitle": "会話を削除",
-        "confirmDeleteMessage": "この会話を本当に削除しますか？",
         "errorSendDefault": "送信エラー",
         "errorEmptyResponse": "応答がありませんでした。",
         "errorUnknown": "不明なエラー",
-        "errorDelete": "削除エラー",
         "errorActionDefault": "操作に失敗しました"
       },
       "floatingButton": {
@@ -7926,6 +7918,42 @@
       "silence": "何も聞き取れませんでした。マイクにもう少し近づいて、もう一度お試しください。",
       "unavailable": "音声入力は現在利用できません。代わりに入力するか、後でもう一度お試しください。",
       "fileTooLarge": "この録音は大きすぎるため、ここでは文字起こしできません。"
+    },
+    "app": {
+      "chats": "チャット",
+      "openChats": "チャットを開く",
+      "closeChats": "チャットを閉じる",
+      "newChat": "新しいチャット",
+      "untitled": "新しいチャット",
+      "more": "このチャットのその他",
+      "temporary": "一時チャット",
+      "temporaryNote": "保存されません。閉じると消えます。",
+      "share": "このチャットを共有",
+      "rename": "名前を変更",
+      "renameField": "このチャットの名前",
+      "delete": "削除",
+      "deleteAsk": "「{title}」を削除しますか？",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "search": "チャットを検索",
+      "today": "今日",
+      "yesterday": "昨日",
+      "earlier": "以前",
+      "noChats": "まだチャットがありません。質問した内容はここに保存されます。",
+      "noMatch": "「{query}」というチャットはありません。",
+      "loadingChats": "チャットを読み込み中…",
+      "listFailed": "チャットを読み込めませんでした。",
+      "tryAgain": "もう一度試す",
+      "answering": "回答中…",
+      "chatActions": "「{title}」の名前変更または削除",
+      "queued": "この回答が終わったら送信されます",
+      "unqueue": "「{text}」を送信しない",
+      "dismiss": "閉じる",
+      "problems": {
+        "load": "チャットを読み込めませんでした。",
+        "save": "保存されませんでした。接続を確認して、もう一度お試しください。",
+        "open": "そのチャットを開けませんでした。もう一度お試しください。"
+      }
     },
     "footnote": "回答には誤りが含まれる場合があります。"
   },

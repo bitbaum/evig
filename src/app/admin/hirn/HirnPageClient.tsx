@@ -8,33 +8,41 @@
 
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Brain } from 'lucide-react';
 import { HirnChat } from '@/components/admin/HirnChat';
-import { HirnSidebar } from '@/components/admin/HirnSidebar';
 import { HirnProviderSelector } from '@/components/admin/HirnProviderSelector';
 import Heading from '@/components/admin/AdminHeading';
 import { ORG } from '@/config/org';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
 
-function generateSessionId(): string {
-  return crypto.randomUUID();
+interface KnowledgeStats {
+  totalDocuments: number;
+  totalChunks: number;
+}
+
+/** What Hirn knows: documents and chunks, as one quiet line in the page header. */
+function useKnowledgeStats(): KnowledgeStats | null {
+  const [stats, setStats] = useState<KnowledgeStats | null>(null);
+  useEffect(() => {
+    let alive = true;
+    apiFetch<KnowledgeStats>('/api/admin/hirn/documents?stats=true')
+      .then((result) => {
+        if (alive && result.success && result.data) setStats(result.data);
+      })
+      .catch((err) => logger.error('Failed to load Hirn stats', { error: err }));
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return stats;
 }
 
 export default function HirnPageClient() {
-  const [currentSessionId, setCurrentSessionId] = useState<string>(generateSessionId());
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
-  const handleNewSession = useCallback(() => {
-    setCurrentSessionId(generateSessionId());
-  }, []);
-
-  const handleSelectSession = useCallback((sessionId: string) => {
-    setCurrentSessionId(sessionId);
-  }, []);
-
-  const handleSessionChange = useCallback(() => {
-    setRefreshTrigger((prev) => prev + 1);
-  }, []);
+  const t = useTranslations('admin.hirn.stats');
+  const stats = useKnowledgeStats();
 
   return (
     <div className="h-[calc(100vh-4rem)]">
@@ -53,25 +61,20 @@ export default function HirnPageClient() {
             </p>
           </div>
         </div>
-        <HirnProviderSelector />
+        <div className="flex items-center gap-4">
+          {stats && (
+            <p className="hidden sm:block text-sm text-text-secondary">
+              {t('documentsLabel')}: {stats.totalDocuments} · {t('chunksLabel')}:{' '}
+              {stats.totalChunks}
+            </p>
+          )}
+          <HirnProviderSelector />
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex h-[calc(100%-5rem)]">
-        {/* Sidebar */}
-        <div className="w-72 border-r border bg-surface-raised">
-          <HirnSidebar
-            currentSessionId={currentSessionId}
-            onSelectSession={handleSelectSession}
-            onNewSession={handleNewSession}
-            refreshTrigger={refreshTrigger}
-          />
-        </div>
-
-        {/* Chat Area */}
-        <div className="flex-1 bg-surface-base">
-          <HirnChat sessionId={currentSessionId} onSessionChange={handleSessionChange} />
-        </div>
+      {/* The chat is a whole app: its list, New chat and rename come with it. */}
+      <div className="h-[calc(100%-5rem)] bg-surface-base">
+        <HirnChat />
       </div>
     </div>
   );

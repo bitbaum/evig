@@ -6137,26 +6137,18 @@
       "openFullscreen": "Abrir en pantalla completa",
       "pageTitle": "Hirn AI",
       "pageDescription": "Asistente de IA para evig",
-      "sidebar": {
-        "newConversation": "Nueva conversación",
+      "stats": {
         "documentsLabel": "Documentos",
-        "chunksLabel": "Fragmentos",
-        "conversationsHeading": "Conversaciones",
-        "emptyConversations": "No hay conversaciones",
-        "messageCount": "{count, plural, one {# mensaje} other {# mensajes}}"
+        "chunksLabel": "Fragmentos"
       },
       "chat": {
         "title": "Asistente Hirn",
-        "clear": "Borrar",
         "welcomeTitle": "Bienvenido a Hirn",
         "welcomeBody": "Haz preguntas sobre {orgName}: conozco nuestra misión, historia, cifras, servicios y precios, y estaré encantado de ayudarte.",
         "inputPlaceholder": "Haz una pregunta…",
-        "confirmDeleteTitle": "Eliminar conversación",
-        "confirmDeleteMessage": "¿Seguro que quieres eliminar esta conversación?",
         "errorSendDefault": "Error al enviar",
         "errorEmptyResponse": "No se recibió ninguna respuesta.",
         "errorUnknown": "Error desconocido",
-        "errorDelete": "Error al eliminar",
         "errorActionDefault": "La acción ha fallado"
       },
       "floatingButton": {
@@ -7946,6 +7938,42 @@
       "silence": "No se oyó nada. Inténtalo de nuevo, un poco más cerca del micrófono.",
       "unavailable": "La entrada de voz no está disponible ahora mismo. Escribe en su lugar o inténtalo más tarde.",
       "fileTooLarge": "Esa grabación es demasiado grande para transcribirla aquí."
+    },
+    "app": {
+      "chats": "Conversaciones",
+      "openChats": "Abrir tus conversaciones",
+      "closeChats": "Cerrar conversaciones",
+      "newChat": "Nueva conversación",
+      "untitled": "Nueva conversación",
+      "more": "Más para esta conversación",
+      "temporary": "Conversación temporal",
+      "temporaryNote": "No se guarda. Desaparece al salir.",
+      "share": "Compartir esta conversación",
+      "rename": "Renombrar",
+      "renameField": "Nombre de esta conversación",
+      "delete": "Eliminar",
+      "deleteAsk": "¿Eliminar «{title}»?",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "search": "Buscar conversaciones",
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "earlier": "Antes",
+      "noChats": "Aún no hay conversaciones. Lo que preguntes se guarda aquí.",
+      "noMatch": "Ninguna conversación se llama «{query}».",
+      "loadingChats": "Cargando tus conversaciones…",
+      "listFailed": "Tus conversaciones no se cargaron.",
+      "tryAgain": "Reintentar",
+      "answering": "Respondiendo…",
+      "chatActions": "Renombrar o eliminar «{title}»",
+      "queued": "Se envía cuando termine esta respuesta",
+      "unqueue": "No enviar «{text}»",
+      "dismiss": "Ocultar",
+      "problems": {
+        "load": "Tus conversaciones no se cargaron.",
+        "save": "No se guardó. Comprueba la conexión e inténtalo de nuevo.",
+        "open": "Esa conversación no se abrió. Inténtalo de nuevo."
+      }
     },
     "footnote": "Las respuestas pueden contener errores."
   },

@@ -7,14 +7,17 @@
  * and takes overrides. This hook reads the `chat` message namespace and hands
  * back the two override objects, so each chat passes `labels={labels.thread}`
  * and `labels={labels.composer}` and none of them re-translates "Copy".
+ * A whole chat app (`ChatApp`) takes `labels={labels.app}` too.
  */
 
 import { useTranslations } from 'next-intl';
-import type { ComposerLabelOverrides, ThreadLabels } from '@bitbaum/chatkit/react';
+import type { ChatAppLabels, ComposerLabelOverrides, ThreadLabels } from '@bitbaum/chatkit/react';
 
 export interface ChatLabels {
   thread: Partial<ThreadLabels>;
   composer: ComposerLabelOverrides;
+  /** The chat app's own words: the list, New chat, Temporary chat, Rename. */
+  app: Partial<ChatAppLabels>;
   /** One quiet line under the composer: answers can be wrong. */
   footnote: string;
 }
@@ -56,6 +59,42 @@ export function useChatLabels(): ChatLabels {
         silence: t('dictation.silence'),
         unavailable: t('dictation.unavailable'),
         fileTooLarge: t('dictation.fileTooLarge'),
+      },
+    },
+    app: {
+      chats: t('app.chats'),
+      openChats: t('app.openChats'),
+      closeChats: t('app.closeChats'),
+      newChat: t('app.newChat'),
+      untitled: t('app.untitled'),
+      more: t('app.more'),
+      temporary: t('app.temporary'),
+      temporaryNote: t('app.temporaryNote'),
+      share: t('app.share'),
+      rename: t('app.rename'),
+      renameField: t('app.renameField'),
+      delete: t('app.delete'),
+      deleteAsk: (title) => t('app.deleteAsk', { title }),
+      save: t('app.save'),
+      cancel: t('app.cancel'),
+      search: t('app.search'),
+      today: t('app.today'),
+      yesterday: t('app.yesterday'),
+      earlier: t('app.earlier'),
+      noChats: t('app.noChats'),
+      noMatch: (query) => t('app.noMatch', { query }),
+      loadingChats: t('app.loadingChats'),
+      listFailed: t('app.listFailed'),
+      tryAgain: t('app.tryAgain'),
+      answering: t('app.answering'),
+      chatActions: (title) => t('app.chatActions', { title }),
+      queued: t('app.queued'),
+      unqueue: (text) => t('app.unqueue', { text }),
+      dismiss: t('app.dismiss'),
+      problems: {
+        load: t('app.problems.load'),
+        save: t('app.problems.save'),
+        open: t('app.problems.open'),
       },
     },
     footnote: t('footnote'),

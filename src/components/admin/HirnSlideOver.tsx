@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect } from 'react';
 import { X, Brain, Maximize2 } from 'lucide-react';
 import Heading from '@/components/admin/AdminHeading';
 import { Button } from '@/components/ui/button';
@@ -16,16 +16,11 @@ interface HirnSlideOverProps {
   onClose: () => void;
 }
 
-function generateSessionId(): string {
-  return crypto.randomUUID();
-}
-
 /**
  * Slide-over panel for Hirn AI chat
  * Opens from the right side like ChatGPT/Claude interfaces
  */
 export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
-  const [sessionId, setSessionId] = useState<string>(() => generateSessionId());
   const t = useTranslations('admin.hirn');
   const tCommon = useTranslations('common');
 
@@ -42,10 +37,6 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
       document.body.style.overflow = prevOverflow;
     };
   }, [isOpen]);
-
-  const handleNewSession = useCallback(() => {
-    setSessionId(generateSessionId());
-  }, []);
 
   if (!isOpen) {
     return null;
@@ -111,9 +102,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
 
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden">
-          {sessionId && (
-            <HirnChat sessionId={sessionId} onSessionChange={handleNewSession} compact />
-          )}
+          <HirnChat compact />
         </div>
       </div>
 

@@ -2,6 +2,12 @@
 
 What changed on evig, newest first, in the words of someone using it. This file is the canonical record the fleet map reads; the site renders the same releases at `/changelog` from `src/config/changelog.ts`, and the two are updated in the same PR.
 
+## [0.5.3] - 2026-10-27
+
+- **Hirn keeps your conversations.**
+- Hirn now has a conversation list with search: new conversation, rename, delete, and after a reload your last conversation is back.
+- The public Hirn assistant also offers a temporary conversation that is saved nowhere.
+
 ## [0.5.2] - 2026-10-12
 
 - **Search forgives a typo.**
