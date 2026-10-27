@@ -163,11 +163,13 @@ pnpm run test:e2e      # run Playwright E2E suite
 
 Defined in `.github/workflows/ci.yml`:
 
-1. **Code Quality** -- `pnpm run verify` (lint, umlauts, typecheck, tests, build)
+1. **Code Quality** -- `pnpm run verify` (lint, umlauts, typecheck, tests, build) on every pull request; on a squash merge to `main` (subject ends in `(#N)`) only `pnpm run verify:main` (the same checks without tests and build, about 3 minutes)
 2. **Auth Smoke Test** and **Dual-Persona Inventory Smoke** -- Playwright against production, when the test secrets are set
 3. **Migration Drift Check** -- replays every migration from zero
 4. **Unit Tests** -- Vitest, PR only
 5. **Dependency Security Audit**
+
+**Merge → live.** One full proof per change, on the pull request. On main, a PR merge runs the fast gate and skips the E2E journeys and the production smokes the PR already ran; a main push without `(#N)` runs everything. Re-running the full bundle on main for a PR merge is a regression. Main runs are grouped per commit, so merges never queue behind each other.
 
 On merge to `main`, the `.github/workflows/deploy-selfhost.yml` workflow lints, type-checks, builds the Next standalone bundle, rsyncs it to the Hetzner box, and restarts the systemd `evig-app` service (with a page-render rollback gate). Vercel is not used for production.
 

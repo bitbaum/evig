@@ -12,6 +12,15 @@ on:
 env:
   NODE_VERSION: '24'
 
+# A newer push to a PR branch supersedes the older run — dependabot rebases and
+# agent re-pushes were each paying ~10 minutes of CI for a commit nobody would
+# merge. On main the group is per COMMIT and never cancels: two merges run side
+# by side, and a re-armed dispatch for the same commit queues behind its push
+# run instead of killing it (deploy chains off a run that finished).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}-${{ github.ref == 'refs/heads/main' && github.sha || 'branch' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   # Quality checks - runs on all branches and PRs
   # Self-host deploy: .github/workflows/deploy-selfhost.yml on push to main
@@ -64,8 +73,28 @@ jobs:
       # too. Unit tests are ALSO run by the standalone `test` job below, which
       # the post-main verdict needs by name; that duplication is deliberate and
       # parallel (no wall-clock cost), not an oversight.
+      #
+      # MERGE → LIVE: ONE FULL PROOF PER CHANGE, ON THE PULL REQUEST. A squash
+      # merge onto main has already passed the whole bundle on its PR, and the
+      # deploy builds the app again, so repeating tests + build here only
+      # doubled merge→live (main CI 9.3 min median, 2026-10-27). A main tip whose
+      # subject names a PR — squash merges end in `(#N)` — gets `verify:main`
+      # (formatting, lint, the repo's own checks, typecheck). Pull requests and a
+      # main push WITHOUT `(#N)` keep the full bundle. Same rule as bitbaum/loki.
       - name: Verify (lint + umlauts + typecheck + test + build)
-        run: pnpm run verify
+        run: |
+          set -euo pipefail
+          subject=$(git log -1 --format=%s)
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "PR — full verify"
+            pnpm run verify
+          elif [ "${{ github.ref }}" = "refs/heads/main" ] && echo "$subject" | grep -Eq '\(#[0-9]+\)'; then
+            echo "main tip looks like a PR merge ($subject) — fast verify:main"
+            pnpm run verify:main
+          else
+            echo "main without PR subject ($subject) — full verify"
+            pnpm run verify
+          fi
         env:
           # Build-time placeholders so strict env validation doesn't fail during CI compile.
           AUTH_SECRET: ci-build-placeholder-secret-32chars
@@ -80,6 +109,9 @@ jobs:
     name: Auth Smoke Test
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    # Already proven on the pull request; a PR-merge push to main (subject has
+    # `(#N)`) skips it. Dispatched and non-PR main runs still run it.
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '(#')
     # Deliberately NO `needs:`. This job tests the ALREADY-DEPLOYED production
     # site (PLAYWRIGHT_BASE_URL defaults to https://evig.orangecat.ch); it
     # never builds this branch and reads nothing `quality` produced. Waiting on
@@ -134,6 +166,9 @@ jobs:
     name: Dual-Persona Inventory Smoke
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    # Already proven on the pull request; a PR-merge push to main (subject has
+    # `(#N)`) skips it. Dispatched and non-PR main runs still run it.
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '(#')
     # Deliberately NO `needs:` — same reason as auth-smoke above. This walks 186
     # routes on the LIVE site via scripts/e2e-inventory-prod.sh; nothing about
     # that verdict depends on whether this branch lints. Removing the wait moves
@@ -223,6 +258,9 @@ jobs:
     name: Local E2E Journeys
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    # Already proven on the pull request; a PR-merge push to main (subject has
+    # `(#N)`) skips it. Dispatched and non-PR main runs still run it.
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '(#')
     # Deliberately NO `needs:`. This job is self-contained — it brings its own
     # postgres service, applies its own migrations, seeds its own data, builds
     # the app and starts its own server. It consumed no output from `quality`
