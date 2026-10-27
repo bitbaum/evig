@@ -80,6 +80,7 @@
     "ship": "bash scripts/ship.sh",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "verify": "pnpm run format:check && pnpm run lint && pnpm run check:file-inputs && pnpm run lint:umlauts && pnpm run lint:chrome && pnpm run lint:docs && pnpm run lint:claims && pnpm run lint:ops && pnpm run test:ops && pnpm run compliance:ci && pnpm run typecheck && pnpm run test && pnpm run build",
+    "verify:main": "pnpm run format:check && pnpm run lint && pnpm run check:file-inputs && pnpm run lint:umlauts && pnpm run lint:chrome && pnpm run lint:docs && pnpm run lint:claims && pnpm run lint:ops && pnpm run test:ops && pnpm run compliance:ci && pnpm run typecheck",
     "prod:build": "docker build -f Dockerfile.prod -t revampit-app:latest .",
     "prod:up": "docker compose -f docker-compose.prod.yml up -d",
     "prod:down": "docker compose -f docker-compose.prod.yml down",
