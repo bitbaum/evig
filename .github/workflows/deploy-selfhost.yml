@@ -173,6 +173,22 @@ jobs:
           echo "::error::timed out waiting for CI Pipeline on $TARGET_SHA"
           exit 1
 
+      - name: Prepare public package receipt producer
+        if: steps.secrets.outputs.configured == 'true' && steps.gate.outputs.proceed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .private)" = false
+          producer="$RUNNER_TEMP/fleet-receipt-producer"
+          git init --quiet "$producer"
+          git -C "$producer" remote add origin https://github.com/bitbaum/fleet.git
+          git -C "$producer" fetch --quiet --depth 1 origin 5da9886a5211dc74dc6b7c8f5eade60c460cea6c
+          git -C "$producer" checkout --quiet --detach FETCH_HEAD
+          echo "FLEET_RECEIPT_ROOT=$producer" >> "$GITHUB_ENV"
+          echo "FLEET_RECEIPT_PUBLIC=true" >> "$GITHUB_ENV"
+          echo "FLEET_RECEIPT_REPO=$GITHUB_REPOSITORY" >> "$GITHUB_ENV"
+
       - name: Write selfhost env
         if: steps.secrets.outputs.configured == 'true' && steps.gate.outputs.proceed == 'true'
         run: |
