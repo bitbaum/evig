@@ -1,5 +1,5 @@
 /**
- * HirnChatPanel — the public assistant as a chatkit chat.
+ * HirnChatPanel — the public assistant as a chatkit ChatApp.
  *
  * Behaviours locked (the fleet's chat standard, through chatkit):
  *   - signed out: the login prompt, no composer
@@ -7,6 +7,8 @@
  *   - an answer's `replies` become one-tap buttons under it, sent as typed
  *   - a failed turn is shown with Retry (no dead ends), which re-asks the
  *     same question without retyping and drops the failure from history
+ *   - the 429 answer says so in the panel's own words, not the generic one
+ *   - the context's quick links follow the newest answer
  */
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
@@ -53,6 +55,8 @@ describe('HirnChatPanel', () => {
     // jsdom lays nothing out: chatkit's thread follows the newest turn with
     // scrollIntoView, which jsdom does not implement.
     Element.prototype.scrollIntoView = vi.fn();
+    // The chats live on this device; start every case with none.
+    window.localStorage.clear();
   });
 
   it('shows the login prompt and no composer when signed out', () => {
@@ -103,5 +107,33 @@ describe('HirnChatPanel', () => {
     // The failure is gone from the thread; Retry now belongs to the answer's
     // own action row (Copy · Listen · Share · Retry), as under every answer.
     expect(screen.queryByText('error')).not.toBeInTheDocument();
+  });
+
+  it('says the rate limit in its own words, not the generic failure', async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: false,
+      status: 429,
+      json: async () => ({ success: false }),
+    } as Response);
+    renderPanel();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Was macht evig?' }));
+
+    expect(await screen.findByText('rateLimited')).toBeInTheDocument();
+    expect(screen.queryByText('error')).not.toBeInTheDocument();
+  });
+
+  it('offers the context links under the newest answer only', async () => {
+    fetchMock.mockResolvedValueOnce(ok('Erste Antwort.', ['Mehr dazu']));
+    renderPanel();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Was macht evig?' }));
+    await screen.findByText('Erste Antwort.');
+    expect(screen.getAllByRole('link', { name: 'Marktplatz' })).toHaveLength(1);
+
+    fetchMock.mockResolvedValueOnce(ok('Zweite Antwort.'));
+    fireEvent.click(screen.getByRole('button', { name: 'Mehr dazu' }));
+    await screen.findByText('Zweite Antwort.');
+    expect(screen.getAllByRole('link', { name: 'Marktplatz' })).toHaveLength(1);
   });
 });

@@ -4870,6 +4870,42 @@
       "unavailable": "Spracheingabe ist gerade nicht verfügbar. Tippe stattdessen oder versuche es später.",
       "fileTooLarge": "Diese Aufnahme ist zu gross, um sie hier zu transkribieren."
     },
+    "app": {
+      "chats": "Gespräche",
+      "openChats": "Gespräche öffnen",
+      "closeChats": "Gespräche schliessen",
+      "newChat": "Neues Gespräch",
+      "untitled": "Neues Gespräch",
+      "more": "Mehr zu diesem Gespräch",
+      "temporary": "Temporäres Gespräch",
+      "temporaryNote": "Nicht gespeichert. Weg, sobald du es verlässt.",
+      "share": "Gespräch teilen",
+      "rename": "Umbenennen",
+      "renameField": "Name dieses Gesprächs",
+      "delete": "Löschen",
+      "deleteAsk": "«{title}» löschen?",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "search": "Gespräche durchsuchen",
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "earlier": "Früher",
+      "noChats": "Noch keine Gespräche. Was du fragst, wird hier aufbewahrt.",
+      "noMatch": "Kein Gespräch heisst «{query}».",
+      "loadingChats": "Gespräche werden geladen…",
+      "listFailed": "Die Gespräche konnten nicht geladen werden.",
+      "tryAgain": "Nochmals versuchen",
+      "answering": "Antwortet…",
+      "chatActions": "«{title}» umbenennen oder löschen",
+      "queued": "Wird gesendet, sobald die Antwort da ist",
+      "unqueue": "«{text}» nicht senden",
+      "dismiss": "Ausblenden",
+      "problems": {
+        "load": "Die Gespräche konnten nicht geladen werden.",
+        "save": "Das wurde nicht gespeichert. Prüfe die Verbindung und versuche es nochmals.",
+        "open": "Dieses Gespräch liess sich nicht öffnen. Versuche es nochmals."
+      }
+    },
     "footnote": "Antworten können Fehler enthalten."
   },
   "dashboard": {
@@ -6270,26 +6306,18 @@
       "openFullscreen": "Vollbild öffnen",
       "pageTitle": "Hirn AI",
       "pageDescription": "KI-Assistent für evig",
-      "sidebar": {
-        "newConversation": "Neues Gespräch",
+      "stats": {
         "documentsLabel": "Dokumente",
-        "chunksLabel": "Chunks",
-        "conversationsHeading": "Gespräche",
-        "emptyConversations": "Keine Gespräche vorhanden",
-        "messageCount": "{count, plural, one {# Nachricht} other {# Nachrichten}}"
+        "chunksLabel": "Chunks"
       },
       "chat": {
         "title": "Hirn Assistant",
-        "clear": "Löschen",
         "welcomeTitle": "Willkommen bei Hirn",
         "welcomeBody": "Stelle Fragen zu {orgName} — ich kenne unsere Mission, Geschichte, Zahlen, Dienstleistungen und Preise und helfe dir gerne weiter.",
         "inputPlaceholder": "Stelle eine Frage…",
-        "confirmDeleteTitle": "Gespräch löschen",
-        "confirmDeleteMessage": "Möchtest du dieses Gespräch wirklich löschen?",
         "errorSendDefault": "Fehler beim Senden",
         "errorEmptyResponse": "Keine Antwort erhalten.",
         "errorUnknown": "Unbekannter Fehler",
-        "errorDelete": "Fehler beim Löschen",
         "errorActionDefault": "Aktion fehlgeschlagen"
       },
       "floatingButton": {

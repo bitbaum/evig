@@ -2,33 +2,33 @@
 
 /**
  * HirnChat — the staff Hirn chat (full page at /admin/hirn, compact in the
- * slide-over). The chat is `@bitbaum/chatkit`: `ChatScreen` + `ChatThread` +
- * `Composer`, the fleet's one chat. evig adds what is evig's through chatkit's
- * slots: the action cards Hirn proposes (`renderFooter`), the provider line,
- * the page-context starters, and the translated words.
+ * slide-over). The whole app is `@bitbaum/chatkit`'s `ChatApp`: header, chat
+ * list, New chat, rename, delete, thread and composer. evig adds only what is
+ * evig's: the transport to /api/admin/hirn/chat, the store over Hirn's
+ * per-session history (src/lib/hirn/conversation-store.ts), the action cards
+ * Hirn proposes and the provider line (`thread.renderFooter`), the
+ * page-context starters, and the translated words.
+ *
+ * Temporary chats are off: the chat route writes every turn to the history
+ * itself, so a chat that "is never saved" would be a promise this server
+ * cannot keep. Attachments are off: the route takes a message and nothing else.
  */
 
 import '@bitbaum/chatkit/styles.css';
-import { useState, useRef, useEffect, useCallback } from 'react';
-import {
-  ChatScreen,
-  ChatStarters,
-  ChatThread,
-  Composer,
-  type ChatMessageData,
-} from '@bitbaum/chatkit/react';
-import { useTranslations } from 'next-intl';
-import { Bot, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { ChatApp, ChatTurnError, type ChatTransport } from '@bitbaum/chatkit/react';
+import type { ChatMessageData } from '@bitbaum/chatkit/react';
+import { useLocale, useTranslations } from 'next-intl';
+import { Sparkles, Rocket, TriangleAlert } from 'lucide-react';
 import Heading from '@/components/admin/AdminHeading';
 import { Button } from '@/components/ui/button';
 import { useChatLabels } from '@/components/chat/useChatLabels';
 import { apiFetch } from '@/lib/api/client';
 import { usePathname } from 'next/navigation';
 import { resolveHirnContext } from '@/config/hirn/page-contexts';
-import { logger } from '@/lib/logger';
 import { ORG } from '@/config/org';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { transcribeForHirn } from '@/lib/hirn/transcribe-client';
+import { hirnConversationStore } from '@/lib/hirn/conversation-store';
 
 interface HirnActionCard {
   id: string;
@@ -40,63 +40,28 @@ interface HirnActionCard {
   payload: Record<string, unknown>;
 }
 
-/** A turn, plus what evig keeps beside it (never sent back as history). */
-interface Message extends ChatMessageData {
+/** An answer, plus what evig keeps beside it (never sent back as history). */
+interface HirnAnswer extends ChatMessageData {
   model?: string;
   provider?: string;
   actions?: HirnActionCard[];
 }
 
 interface HirnChatProps {
-  sessionId: string;
-  onSessionChange?: () => void;
-  /** Compact mode for slide-over panel — the panel has its own header. */
+  /** Compact mode for the slide-over: tighter composer, the list always a drawer. */
   compact?: boolean;
 }
 
-export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnChatProps) {
+const store = hirnConversationStore();
+
+/** Each surface reopens its own chat after a reload or after the panel closes. */
+const REMEMBER_KEY = { page: 'evig-hirn-admin', panel: 'evig-hirn-admin-panel' } as const;
+
+export function HirnChat({ compact = false }: HirnChatProps) {
   const t = useTranslations('admin.hirn.chat');
   const labels = useChatLabels();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [busy, setBusy] = useState(false);
-  const [stopped, setStopped] = useState(false);
-  const [loadingHistory, setLoadingHistory] = useState(true);
-  const [error, setError] = useState('');
-  const [pendingClear, setPendingClear] = useState(false);
-  const abortRef = useRef<AbortController | null>(null);
-  const nextId = useRef(0);
-
-  // Load chat history on mount or session change
-  useEffect(() => {
-    const loadHistory = async () => {
-      setLoadingHistory(true);
-      try {
-        const result = await apiFetch<
-          {
-            id: string;
-            role: string;
-            content: string;
-            replies?: string[];
-          }[]
-        >(`/api/admin/hirn/history?sessionId=${encodeURIComponent(sessionId)}`);
-        if (result.success && result.data) {
-          setMessages(
-            result.data.map((m) => ({
-              id: m.id,
-              role: m.role as 'user' | 'assistant',
-              content: m.content,
-              replies: m.replies,
-            })),
-          );
-        }
-      } catch {
-        // New session, no history
-      } finally {
-        setLoadingHistory(false);
-      }
-    };
-    loadHistory();
-  }, [sessionId]);
+  const locale = useLocale();
+  const [actionError, setActionError] = useState('');
 
   const pathname = usePathname();
   // Page context (SSOT: config/hirn/page-contexts) — tells Hirn what the
@@ -109,107 +74,40 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     return tCtx.has(key as never) ? tCtx(key as never) : fallback;
   });
 
-  const newId = (role: ChatMessageData['role']) => `${role}-${Date.now()}-${++nextId.current}`;
-
-  /** One request: `thread` ends with the person's turn; the answer or the
-   *  failure (with Retry) is appended. The server holds the history. */
-  const ask = async (thread: Message[], content: string) => {
-    setMessages(thread);
-    setBusy(true);
-    setStopped(false);
-    setError('');
-    const controller = new AbortController();
-    abortRef.current = controller;
-
-    try {
-      const result = await apiFetch<{
-        content: string;
-        replies?: string[];
-        model?: string;
-        provider?: string;
-        actions?: HirnActionCard[];
-      }>('/api/admin/hirn/chat', {
-        method: 'POST',
-        body: { message: content, sessionId, pathname: pathname ?? undefined },
-        signal: controller.signal,
-      });
-
-      if (controller.signal.aborted) {
-        setStopped(true);
-        return;
-      }
-      if (!result.success) {
-        throw new Error(result.error || t('errorSendDefault'));
-      }
-
-      const responseData = result.data!;
-      setMessages([
-        ...thread,
-        {
-          id: newId('assistant'),
-          role: 'assistant',
-          content: responseData.content || t('errorEmptyResponse'),
-          model: responseData.model || undefined,
-          provider: responseData.provider || undefined,
-          actions: responseData.actions || [],
-          replies: responseData.replies || [],
-        },
-      ]);
-    } catch (err) {
-      setMessages([
-        ...thread,
-        {
-          id: newId('assistant'),
-          role: 'assistant',
-          content: err instanceof Error ? err.message : t('errorUnknown'),
-          failed: true,
-        },
-      ]);
-    } finally {
-      if (abortRef.current === controller) abortRef.current = null;
-      setBusy(false);
+  const transport: ChatTransport = async (turn) => {
+    setActionError('');
+    const result = await apiFetch<{
+      content: string;
+      replies?: string[];
+      model?: string;
+      provider?: string;
+      actions?: HirnActionCard[];
+    }>('/api/admin/hirn/chat', {
+      method: 'POST',
+      body: {
+        message: turn.text,
+        sessionId: turn.conversationId ?? turn.chatId,
+        pathname: pathname ?? undefined,
+      },
+      signal: turn.signal,
+    });
+    if (!result.success || !result.data) {
+      throw new ChatTurnError(result.error || t('errorSendDefault'));
     }
-  };
-
-  // One send path for the composer, the starters and the suggested replies,
-  // so a tapped reply is exactly a typed one.
-  const send = (text: string) => {
-    const content = text.trim();
-    if (!content || busy) return false;
-    const base = messages.filter((m) => !m.failed);
-    void ask([...base, { id: newId('user'), role: 'user', content }], content);
-    return true;
-  };
-
-  const retry = () => {
-    if (busy) return;
-    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
-    if (!lastUser) return;
-    const upTo = messages.slice(0, messages.indexOf(lastUser) + 1).filter((m) => !m.failed);
-    void ask(upTo, lastUser.content);
-  };
-
-  const stop = () => abortRef.current?.abort();
-
-  const clearSession = () => setPendingClear(true);
-
-  const doClearSession = async () => {
-    try {
-      await apiFetch<void>(`/api/admin/hirn/history?sessionId=${encodeURIComponent(sessionId)}`, {
-        method: 'DELETE',
-      });
-      setMessages([]);
-      setStopped(false);
-      onSessionChange?.();
-    } catch (err) {
-      logger.warn('Failed to delete Hirn chat session', { error: err });
-      setError(t('errorDelete'));
-    }
+    const data = result.data;
+    const answer: Omit<HirnAnswer, 'id' | 'role'> = {
+      content: data.content || t('errorEmptyResponse'),
+      replies: data.replies ?? [],
+      model: data.model || undefined,
+      provider: data.provider || undefined,
+      actions: data.actions ?? [],
+    };
+    return answer;
   };
 
   const executeAction = useCallback(
     async (action: HirnActionCard) => {
-      setError('');
+      setActionError('');
 
       // Navigate actions just redirect — no API call needed
       if (action.type === 'navigate') {
@@ -239,7 +137,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
           window.location.href = link;
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : t('errorActionDefault'));
+        setActionError(err instanceof Error ? err.message : t('errorActionDefault'));
       }
     },
     [t],
@@ -247,7 +145,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
   /** What evig shows under an answer: the proposed actions and the provider. */
   const renderFooter = (m: ChatMessageData) => {
-    const message = m as Message;
+    const message = m as HirnAnswer;
     if (message.role !== 'assistant' || message.failed) return null;
     const actions = message.actions ?? [];
     if (actions.length === 0 && !message.model) return null;
@@ -269,7 +167,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               onClick={() => executeAction(action)}
               variant="primary"
               size="sm"
-              className="mt-3"
+              className="mt-3 min-h-11"
             >
               <Rocket className="w-3.5 h-3.5" aria-hidden="true" />
               {action.cta}
@@ -285,91 +183,52 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     );
   };
 
-  const header = compact ? undefined : (
-    <>
-      <span className="ck-glass hirn-glass-title">
-        <Bot className="w-4 h-4 text-action" aria-hidden="true" />
-        <span className="truncate">{t('title')}</span>
-      </span>
-      <span className="flex-1" />
-      {messages.length > 0 && (
-        // eslint-disable-next-line no-restricted-syntax -- chatkit's ck-glass header pill (fleet chat chrome); Button's variant classes would fight it
-        <button type="button" className="ck-glass" onClick={clearSession}>
-          <Trash2 className="w-4 h-4" aria-hidden="true" />
-          {t('clear')}
-        </button>
-      )}
-    </>
-  );
-
   return (
-    <>
-      <ChatScreen
-        fill="parent"
-        className="hirn-screen"
-        header={header}
-        composer={
-          <>
-            {error && (
-              <p className="ck-failed" role="alert">
-                {error}
-              </p>
-            )}
-            <Composer
-              onSend={(text) => send(text)}
-              placeholder={t('inputPlaceholder')}
-              ariaLabel={t('inputPlaceholder')}
-              sending={busy}
-              onStop={stop}
-              voice={{ transcribe: transcribeForHirn }}
-              labels={labels.composer}
-              density={compact ? 'compact' : 'comfortable'}
-            />
-          </>
-        }
-        footnote={labels.footnote}
-      >
-        <ChatThread
-          messages={messages}
-          loading={loadingHistory}
-          live={busy ? { status: labels.thread.working } : null}
-          stopped={stopped}
-          onStop={stop}
-          onRetry={retry}
-          onReply={send}
-          renderFooter={renderFooter}
-          share={{ title: t('title') }}
-          labels={labels.thread}
-          empty={
-            <ChatStarters
-              starters={localizedSuggestions}
-              onPick={send}
-              title={
-                <div className="flex flex-col items-center gap-2 text-center">
-                  <Sparkles className="w-12 h-12 text-action" aria-hidden="true" />
-                  <Heading level={3} className="text-lg font-medium text-text-primary">
-                    {t('welcomeTitle')}
-                  </Heading>
-                  <p className="text-sm text-text-tertiary max-w-md">
-                    {t('welcomeBody', { orgName: ORG.name })}
-                  </p>
-                </div>
-              }
-            />
-          }
-        />
-      </ChatScreen>
-
-      <ConfirmDialog
-        isOpen={pendingClear}
-        title={t('confirmDeleteTitle')}
-        message={t('confirmDeleteMessage')}
-        onConfirm={() => {
-          setPendingClear(false);
-          doClearSession();
-        }}
-        onClose={() => setPendingClear(false)}
-      />
-    </>
+    <ChatApp
+      fill="parent"
+      className="hirn-screen"
+      name={t('title')}
+      store={store}
+      transport={transport}
+      rememberKey={compact ? REMEMBER_KEY.panel : REMEMBER_KEY.page}
+      // The slide-over is a 28rem panel: the list is always its drawer, never
+      // a rail beside the chat (a media query that never matches).
+      railQuery={compact ? 'not all' : undefined}
+      temporaryChats={false}
+      placeholder={t('inputPlaceholder')}
+      labels={labels.app}
+      locale={locale}
+      footnote={labels.footnote}
+      composer={{
+        ariaLabel: t('inputPlaceholder'),
+        // /api/admin/hirn/chat takes a message and no files.
+        attach: false,
+        voice: { transcribe: transcribeForHirn },
+        labels: labels.composer,
+        density: compact ? 'compact' : 'comfortable',
+      }}
+      thread={{
+        labels: labels.thread,
+        share: { title: t('title') },
+        renderFooter,
+        after: actionError ? (
+          <p className="ck-failed" role="alert">
+            {actionError}
+          </p>
+        ) : null,
+      }}
+      starters={localizedSuggestions}
+      startersTitle={
+        <div className="flex flex-col items-center gap-2 text-center">
+          <Sparkles className="w-12 h-12 text-action" aria-hidden="true" />
+          <Heading level={3} className="text-lg font-medium text-text-primary">
+            {t('welcomeTitle')}
+          </Heading>
+          <p className="text-sm text-text-tertiary max-w-md">
+            {t('welcomeBody', { orgName: ORG.name })}
+          </p>
+        </div>
+      }
+    />
   );
 }

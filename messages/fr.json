@@ -6137,26 +6137,18 @@
       "openFullscreen": "Ouvrir en plein écran",
       "pageTitle": "Hirn AI",
       "pageDescription": "Assistant IA pour evig",
-      "sidebar": {
-        "newConversation": "Nouvelle conversation",
+      "stats": {
         "documentsLabel": "Documents",
-        "chunksLabel": "Chunks",
-        "conversationsHeading": "Conversations",
-        "emptyConversations": "Aucune conversation",
-        "messageCount": "{count, plural, one {# message} other {# messages}}"
+        "chunksLabel": "Chunks"
       },
       "chat": {
         "title": "Hirn Assistant",
-        "clear": "Supprimer",
         "welcomeTitle": "Bienvenue dans Hirn",
         "welcomeBody": "Pose tes questions sur {orgName} — je connais notre mission, notre histoire, nos chiffres, nos services et nos tarifs et je suis là pour t'aider.",
         "inputPlaceholder": "Pose une question…",
-        "confirmDeleteTitle": "Supprimer la conversation",
-        "confirmDeleteMessage": "Veux-tu vraiment supprimer cette conversation ?",
         "errorSendDefault": "Échec de l'envoi",
         "errorEmptyResponse": "Aucune réponse reçue.",
         "errorUnknown": "Erreur inconnue",
-        "errorDelete": "Échec de la suppression",
         "errorActionDefault": "L'action a échoué"
       },
       "floatingButton": {
@@ -7948,6 +7940,42 @@
       "silence": "Rien n’a été entendu. Réessayez, un peu plus près du micro.",
       "unavailable": "La saisie vocale n’est pas disponible pour le moment. Écrivez à la place ou réessayez plus tard.",
       "fileTooLarge": "Cet enregistrement est trop volumineux pour être transcrit ici."
+    },
+    "app": {
+      "chats": "Conversations",
+      "openChats": "Ouvrir vos conversations",
+      "closeChats": "Fermer les conversations",
+      "newChat": "Nouvelle conversation",
+      "untitled": "Nouvelle conversation",
+      "more": "Plus pour cette conversation",
+      "temporary": "Conversation temporaire",
+      "temporaryNote": "Non enregistrée. Disparaît quand vous la quittez.",
+      "share": "Partager cette conversation",
+      "rename": "Renommer",
+      "renameField": "Nom de cette conversation",
+      "delete": "Supprimer",
+      "deleteAsk": "Supprimer « {title} » ?",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "search": "Rechercher des conversations",
+      "today": "Aujourd’hui",
+      "yesterday": "Hier",
+      "earlier": "Plus tôt",
+      "noChats": "Aucune conversation pour l’instant. Ce que vous demandez est conservé ici.",
+      "noMatch": "Aucune conversation ne s’appelle « {query} ».",
+      "loadingChats": "Chargement de vos conversations…",
+      "listFailed": "Vos conversations n’ont pas pu être chargées.",
+      "tryAgain": "Réessayer",
+      "answering": "Répond…",
+      "chatActions": "Renommer ou supprimer « {title} »",
+      "queued": "Part quand cette réponse est terminée",
+      "unqueue": "Ne pas envoyer « {text} »",
+      "dismiss": "Masquer",
+      "problems": {
+        "load": "Vos conversations n’ont pas pu être chargées.",
+        "save": "Ce n’est pas enregistré. Vérifiez la connexion et réessayez.",
+        "open": "Cette conversation ne s’est pas ouverte. Réessayez."
+      }
     },
     "footnote": "Les réponses peuvent contenir des erreurs."
   },

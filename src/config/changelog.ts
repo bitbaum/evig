@@ -28,6 +28,25 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
+    id: 'v0-5-3',
+    version: '0.5.3',
+    date: '2026-10-27',
+    title: {
+      de: 'Hirn führt Gespräche, die bleiben',
+      en: 'Hirn keeps your conversations',
+    },
+    changes: [
+      {
+        de: 'Hirn hat jetzt eine Gesprächsliste mit Suche: neues Gespräch, umbenennen, löschen, und nach dem Neuladen ist dein letztes Gespräch wieder da',
+        en: 'Hirn now has a conversation list with search: new conversation, rename, delete, and after a reload your last conversation is back',
+      },
+      {
+        de: 'Im öffentlichen Hirn-Assistenten gibt es zusätzlich ein temporäres Gespräch, das nirgends gespeichert wird',
+        en: 'The public Hirn assistant also offers a temporary conversation that is saved nowhere',
+      },
+    ],
+  },
+  {
     id: 'v0-5-2',
     version: '0.5.2',
     date: '2026-10-12',

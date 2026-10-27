@@ -6151,26 +6151,18 @@
       "openFullscreen": "Открыть на весь экран",
       "pageTitle": "Hirn AI",
       "pageDescription": "ИИ-ассистент для evig",
-      "sidebar": {
-        "newConversation": "Новый разговор",
+      "stats": {
         "documentsLabel": "Документы",
-        "chunksLabel": "Фрагменты",
-        "conversationsHeading": "Разговоры",
-        "emptyConversations": "Разговоров нет",
-        "messageCount": "{count, plural, one {# сообщение} few {# сообщения} many {# сообщений} other {# сообщения}}"
+        "chunksLabel": "Фрагменты"
       },
       "chat": {
         "title": "Hirn Assistant",
-        "clear": "Очистить",
         "welcomeTitle": "Добро пожаловать в Hirn",
         "welcomeBody": "Задавайте вопросы о {orgName} — я знаю нашу миссию, историю, цифры, услуги и цены и с радостью помогу вам.",
         "inputPlaceholder": "Задайте вопрос…",
-        "confirmDeleteTitle": "Удалить разговор",
-        "confirmDeleteMessage": "Вы действительно хотите удалить этот разговор?",
         "errorSendDefault": "Ошибка при отправке",
         "errorEmptyResponse": "Ответ не получен.",
         "errorUnknown": "Неизвестная ошибка",
-        "errorDelete": "Ошибка при удалении",
         "errorActionDefault": "Действие не удалось"
       },
       "floatingButton": {
@@ -7960,6 +7952,42 @@
       "silence": "Ничего не слышно. Попробуйте ещё раз, чуть ближе к микрофону.",
       "unavailable": "Голосовой ввод сейчас недоступен. Напишите текст или попробуйте позже.",
       "fileTooLarge": "Эта запись слишком большая, чтобы расшифровать её здесь."
+    },
+    "app": {
+      "chats": "Чаты",
+      "openChats": "Открыть чаты",
+      "closeChats": "Закрыть чаты",
+      "newChat": "Новый чат",
+      "untitled": "Новый чат",
+      "more": "Ещё для этого чата",
+      "temporary": "Временный чат",
+      "temporaryNote": "Не сохраняется. Исчезнет, когда вы уйдёте.",
+      "share": "Поделиться этим чатом",
+      "rename": "Переименовать",
+      "renameField": "Название этого чата",
+      "delete": "Удалить",
+      "deleteAsk": "Удалить «{title}»?",
+      "save": "Сохранить",
+      "cancel": "Отмена",
+      "search": "Искать в чатах",
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "earlier": "Ранее",
+      "noChats": "Чатов пока нет. Всё, что вы спросите, хранится здесь.",
+      "noMatch": "Нет чата с названием «{query}».",
+      "loadingChats": "Загрузка чатов…",
+      "listFailed": "Чаты не загрузились.",
+      "tryAgain": "Повторить",
+      "answering": "Отвечает…",
+      "chatActions": "Переименовать или удалить «{title}»",
+      "queued": "Отправится, когда закончится этот ответ",
+      "unqueue": "Не отправлять «{text}»",
+      "dismiss": "Скрыть",
+      "problems": {
+        "load": "Чаты не загрузились.",
+        "save": "Не сохранено. Проверьте соединение и повторьте.",
+        "open": "Этот чат не открылся. Повторьте."
+      }
     },
     "footnote": "Ответы могут содержать ошибки."
   },
