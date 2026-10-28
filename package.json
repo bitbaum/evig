@@ -107,7 +107,7 @@
     "@aws-sdk/client-s3": "^3.1146.0",
     "@bitbaum/accountkit": "^0.9.1",
     "@bitbaum/ai-kit": "^1.21.4",
-    "@bitbaum/chatkit": "^0.21.1",
+    "@bitbaum/chatkit": "^0.21.2",
     "@bitbaum/mail-kit": "^0.2.0",
     "@bitbaum/searchkit": "^0.2.3",
     "@bitbaum/whenkit": "^0.3.3",
