@@ -2,7 +2,6 @@
 
 Affordable-intelligence platform — curated, durable hardware and digital access at a fair price (rebranded from Revamp-IT 2026-07-24; see `.claude/CLAUDE.md` for the Layer A/B rebrand rule). Brand is `evig`. Infra identifiers (`is_revampit`, the `revampit` database, deploy paths, the systemd unit) stay until a real cutover. The email domain does not grant staff — that rule is retired; see `src/lib/permissions.ts`.
 
-@~/.claude/CLAUDE.md
 @.claude/CLAUDE.md
 
 Org rules are [bitbaum/fleet AGENTS.md](https://github.com/bitbaum/fleet/blob/main/AGENTS.md): packages by default (say why if you skip one), search through `@bitbaum/searchkit`, chat through `@bitbaum/chatkit`, shared names and the identity contract. Read that file. Do not restate it here.
