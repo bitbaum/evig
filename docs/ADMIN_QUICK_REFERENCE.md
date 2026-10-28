@@ -14,7 +14,7 @@ pnpm run setup-admins   # Create admin users
 - **Shop / Marketplace Frontend**: http://localhost:3000/marketplace
 
 ### Admin Credentials
-- **CMS Admin**: admin@revampit.ch / Admin123!
+- **Local development only.** `pnpm run setup-admins` creates `admin@revampit.ch` with the password `Admin123!` unless `ADMIN_PASSWORD` or `SETUP_ADMIN_PASSWORD` is set. With `NODE_ENV=production` it refuses to run without one of them (`scripts/setup-all-admins.ts`), so this pair is never a production login.
 
 ## 🛠️ Common Tasks
 
