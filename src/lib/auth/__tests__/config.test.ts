@@ -297,14 +297,6 @@ describe('AUTH_CONFIG security floor', () => {
     expect(AUTH_CONFIG.bcrypt.saltRounds).toBeGreaterThanOrEqual(10);
   });
 
-  it('keeps password minLength at exactly 8 (matches forms + reset flow)', () => {
-    expect(AUTH_CONFIG.password.minLength).toBe(8);
-  });
-
-  it('caps password maxLength to prevent bcrypt-DoS via long inputs', () => {
-    expect(AUTH_CONFIG.password.maxLength).toBeLessThanOrEqual(128);
-  });
-
   it('cookies are httpOnly + sameSite=strict', () => {
     expect(AUTH_CONFIG.cookies.httpOnly).toBe(true);
     expect(AUTH_CONFIG.cookies.sameSite).toBe('strict');

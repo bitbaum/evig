@@ -268,10 +268,10 @@ EMAIL_FROM=...
 
 ### Password requirements
 
-Defined in `AUTH_CONFIG` / `RegisterSchema`:
-
-- Minimum 8 characters
-- At least one uppercase, lowercase, and number
+One rule for every bitbaum product, imported from
+`@bitbaum/accountkit/auth/password` (`MIN_PASSWORD_LENGTH`, `MAX_PASSWORD_LENGTH`)
+and used by `passwordSchema` in `lib/schemas/auth.ts`: not empty, at most 128
+characters. No complexity requirement, no strength meter, no local minimum.
 
 ### Session security
 

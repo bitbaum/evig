@@ -58,16 +58,6 @@ export const AUTH_CONFIG = {
   },
 
   // Password policy - Simple and user-friendly
-  password: {
-    minLength: 8, // Simple 8 character minimum
-    maxLength: 128, // Prevent DoS via long passwords
-    requireUppercase: false, // No complexity requirements
-    requireLowercase: false,
-    requireNumbers: false,
-    requireSpecialChars: false,
-    specialChars: '!@#$%^&*(),.?":{}|<>[]\\;\'`~_+-=',
-  },
-
   // Account lockout
   lockout: {
     maxFailedAttempts: 5, // Lock after 5 failed attempts

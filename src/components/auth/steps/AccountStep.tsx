@@ -5,18 +5,10 @@ import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { AUTH_CONFIG } from '@/lib/auth/config';
+import { passwordProblem } from '@bitbaum/accountkit/auth/password';
 import Heading from '@/components/ui/Heading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
-// Single source: same config the server's RegisterSchema derives from
-// (lib/schemas/auth.ts:createPasswordSchema). If the policy changes —
-// minLength becomes 10, complexity is added — the client UI updates
-// automatically. Note: we deliberately don't surface complexity hints
-// even if AUTH_CONFIG grows them, because forced complexity makes
-// password creation worse, not safer. See bcrypt + zxcvbn literature.
-const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength;
 
 interface AccountStepProps {
   name: string;
@@ -55,12 +47,8 @@ export function AccountStep({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Derived from AUTH_CONFIG (SSOT). One check by design — RevampIT's
-  // password policy is intentionally simple (8 chars, no complexity rules).
-  const passwordChecks = {
-    length: password.length >= PASSWORD_MIN_LENGTH,
-  };
-  const passwordValid = passwordChecks.length;
+  // The one bitbaum password rule: not empty. No strength meter, no checklist.
+  const passwordValid = passwordProblem(password) === null;
   const passwordsMatch = password === confirmPassword;
   const isValid = email && passwordValid && passwordsMatch && acceptTerms;
 
@@ -149,7 +137,6 @@ export function AccountStep({
             onChange={(e) => onPasswordChange(e.target.value)}
             required
             autoComplete="new-password"
-            placeholder={t('passwordPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
             className="pl-11 pr-12 py-3 border-2 border-default rounded-lg"
@@ -165,24 +152,6 @@ export function AccountStep({
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </Button>
         </div>
-
-        {/* Password Strength */}
-        {password && (
-          <div className="mt-2">
-            <div className="flex gap-1 mb-2">
-              <div
-                className={`h-1.5 flex-1 rounded-full ${
-                  passwordChecks.length ? 'bg-action' : 'bg-surface-overlay'
-                }`}
-              />
-            </div>
-            <ul className="text-xs text-text-tertiary space-y-0.5">
-              <li className={passwordChecks.length ? 'text-action' : ''}>
-                {passwordChecks.length ? '✓' : '○'} {t('passwordMin')}
-              </li>
-            </ul>
-          </div>
-        )}
       </div>
 
       {/* Confirm Password */}

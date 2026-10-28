@@ -4,7 +4,6 @@
  */
 
 import bcrypt from 'bcryptjs';
-import { AUTH_CONFIG } from '@/lib/auth/config';
 
 const SALT_ROUNDS = 12;
 
@@ -47,54 +46,4 @@ export function generateToken(length: number = 32): string {
     token += chars[randomValues[i] % chars.length];
   }
   return token;
-}
-
-/**
- * Validate password strength according to AUTH_CONFIG
- * Dynamically reads requirements from config for flexibility
- */
-export function validatePasswordStrength(password: string): {
-  isValid: boolean;
-  errors: string[];
-} {
-  const errors: string[] = [];
-  const config = AUTH_CONFIG.password;
-
-  // Length validation
-  if (password.length < config.minLength) {
-    errors.push(`Passwort muss mindestens ${config.minLength} Zeichen lang sein`);
-  }
-  if (password.length > config.maxLength) {
-    errors.push(`Passwort darf maximal ${config.maxLength} Zeichen lang sein`);
-  }
-
-  // Uppercase validation (only if required)
-  if (config.requireUppercase && !/[A-Z]/.test(password)) {
-    errors.push('Passwort muss mindestens einen Grossbuchstaben enthalten');
-  }
-
-  // Lowercase validation (only if required)
-  if (config.requireLowercase && !/[a-z]/.test(password)) {
-    errors.push('Passwort muss mindestens einen Kleinbuchstaben enthalten');
-  }
-
-  // Number validation (only if required)
-  if (config.requireNumbers && !/[0-9]/.test(password)) {
-    errors.push('Passwort muss mindestens eine Zahl enthalten');
-  }
-
-  // Special character validation (only if required)
-  if (config.requireSpecialChars) {
-    const specialCharsRegex = new RegExp(
-      `[${config.specialChars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`,
-    );
-    if (!specialCharsRegex.test(password)) {
-      errors.push('Passwort muss mindestens ein Sonderzeichen enthalten');
-    }
-  }
-
-  return {
-    isValid: errors.length === 0,
-    errors,
-  };
 }

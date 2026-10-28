@@ -241,20 +241,6 @@ export const SETTINGS_CONFIG = {
         maxLength: 'Nachname darf maximal 50 Zeichen lang sein',
       },
     },
-    password: {
-      minLength: 8,
-      requireUppercase: true,
-      requireLowercase: true,
-      requireNumber: true,
-      errorMessages: {
-        required: 'Passwort ist erforderlich',
-        minLength: 'Passwort muss mindestens 8 Zeichen lang sein',
-        uppercase: 'Passwort muss mindestens einen Grossbuchstaben enthalten',
-        lowercase: 'Passwort muss mindestens einen Kleinbuchstaben enthalten',
-        number: 'Passwort muss mindestens eine Zahl enthalten',
-        mismatch: 'Passwörter stimmen nicht überein',
-      },
-    },
     phone: {
       pattern: /^\+?[0-9\s()-]+$/,
       errorMessages: {

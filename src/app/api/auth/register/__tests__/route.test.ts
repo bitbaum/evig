@@ -63,12 +63,7 @@ vi.mock('@/lib/schemas', async () => {
     RegisterSchema: {
       safeParse: vi.fn((body: unknown) => {
         const b = body as Record<string, unknown>;
-        if (
-          !b?.email ||
-          !String(b.email).includes('@') ||
-          !b?.password ||
-          String(b.password).length < 8
-        ) {
+        if (!b?.email || !String(b.email).includes('@') || !b?.password) {
           return {
             success: false,
             error: { flatten: () => ({ fieldErrors: { email: ['Invalid'] } }) },
@@ -152,8 +147,8 @@ describe('POST /api/auth/register — validation', () => {
     expect(response.status).toBe(400);
   });
 
-  it('returns 400 when password is too short', async () => {
-    const response = await POST(makeRequest({ email: 'test@example.com', password: 'short' }));
+  it('returns 400 when the password is empty', async () => {
+    const response = await POST(makeRequest({ email: 'test@example.com', password: '' }));
     expect(response.status).toBe(400);
   });
 

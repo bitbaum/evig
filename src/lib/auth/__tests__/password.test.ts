@@ -21,13 +21,7 @@ vi.mock('@/lib/auth/config', () => ({
 }));
 
 import type { Mock } from 'vitest';
-import {
-  hashPassword,
-  verifyPassword,
-  constantTimeCompare,
-  generateToken,
-  validatePasswordStrength,
-} from '../password';
+import { hashPassword, verifyPassword, constantTimeCompare, generateToken } from '../password';
 
 // ============================================================================
 // hashPassword + verifyPassword
@@ -106,40 +100,5 @@ describe('generateToken', () => {
   it('only contains alphanumeric characters', () => {
     const token = generateToken(100);
     expect(token).toMatch(/^[A-Za-z0-9]+$/);
-  });
-});
-
-// ============================================================================
-// validatePasswordStrength
-// ============================================================================
-
-describe('validatePasswordStrength', () => {
-  it('accepts valid password (meets minimum length)', () => {
-    const result = validatePasswordStrength('abcdefgh'); // 8 chars
-    expect(result.isValid).toBe(true);
-    expect(result.errors).toHaveLength(0);
-  });
-
-  it('rejects password shorter than minLength', () => {
-    const result = validatePasswordStrength('short');
-    expect(result.isValid).toBe(false);
-    expect(result.errors.length).toBeGreaterThan(0);
-    expect(result.errors[0]).toContain('8');
-  });
-
-  it('rejects password exceeding maxLength', () => {
-    const longPassword = 'a'.repeat(129);
-    const result = validatePasswordStrength(longPassword);
-    expect(result.isValid).toBe(false);
-    expect(result.errors.length).toBeGreaterThan(0);
-    expect(result.errors[0]).toContain('128');
-  });
-
-  it('accepts any character combination when no requirements', () => {
-    // With all require* flags off, only length matters
-    expect(validatePasswordStrength('12345678').isValid).toBe(true);
-    expect(validatePasswordStrength('abcdefgh').isValid).toBe(true);
-    expect(validatePasswordStrength('ABCDEFGH').isValid).toBe(true);
-    expect(validatePasswordStrength('!@#$%^&*').isValid).toBe(true);
   });
 });

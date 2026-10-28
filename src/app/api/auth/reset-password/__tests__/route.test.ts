@@ -203,10 +203,8 @@ describe('POST /api/auth/reset-password — schema validation', () => {
     expect(response.status).toBe(400);
   });
 
-  it('returns 400 when password is too short (less than 8 chars)', async () => {
-    const response = await POST(
-      makeRequest({ token: 'tok', password: 'short', confirmPassword: 'short' }),
-    );
+  it('returns 400 when the password is empty (the one bitbaum rule)', async () => {
+    const response = await POST(makeRequest({ token: 'tok', password: '', confirmPassword: '' }));
     expect(response.status).toBe(400);
   });
 });

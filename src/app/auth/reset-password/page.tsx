@@ -11,10 +11,7 @@ import Heading from '@/components/ui/Heading';
 import { IconBadge } from '@/components/ui/IconBadge';
 import { apiFetch } from '@/lib/api/client';
 import { useTranslations } from 'next-intl';
-import { AUTH_CONFIG } from '@/lib/auth/config';
 import { ROUTES } from '@/config/routes';
-
-const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength;
 
 function ResetPasswordContent() {
   const t = useTranslations('auth.resetPassword');
@@ -38,14 +35,6 @@ function ResetPasswordContent() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-
-    // Derives from AUTH_CONFIG (SSOT). Server-side schema enforces the
-    // same rule — this client check is just for fast feedback.
-    if (password.length < PASSWORD_MIN_LENGTH) {
-      setError(t('errorTooShort'));
-      setIsLoading(false);
-      return;
-    }
 
     if (password !== confirmPassword) {
       setError(t('errorMismatch'));
@@ -189,7 +178,6 @@ function ResetPasswordContent() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-11 pr-11"
-                  placeholder={t('newPasswordPlaceholder')}
                 />
                 <Button
                   variant="ghost"
@@ -243,26 +231,6 @@ function ResetPasswordContent() {
                   )}
                 </Button>
               </div>
-            </div>
-
-            <div className="text-sm text-text-secondary space-y-1">
-              <p className="font-medium">{t('requirementsTitle')}</p>
-              <ul className="ml-4 space-y-0.5">
-                <li
-                  className={
-                    password.length >= PASSWORD_MIN_LENGTH ? 'text-action' : 'text-text-tertiary'
-                  }
-                >
-                  ✓ {t('requirementLength')}
-                </li>
-                <li
-                  className={
-                    password === confirmPassword && password ? 'text-action' : 'text-text-tertiary'
-                  }
-                >
-                  ✓ {t('requirementMatch')}
-                </li>
-              </ul>
             </div>
 
             <Button type="submit" disabled={isLoading} className="w-full gap-2 py-2.5">

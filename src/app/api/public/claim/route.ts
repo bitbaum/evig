@@ -2,7 +2,6 @@ import { NextRequest } from 'next/server';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { claimAccountSchema } from '@/lib/schemas/teams';
 import { consumeClaim } from '@/lib/services/team-invites';
-import { validatePasswordStrength } from '@/lib/auth/password';
 import { logger } from '@/lib/logger';
 
 /**
@@ -16,12 +15,6 @@ export async function POST(request: NextRequest) {
       return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors);
     }
     const { token, name, email, password } = result.data;
-
-    // Password strength: auth SSOT, same bar as registration / reset.
-    const strength = validatePasswordStrength(password);
-    if (!strength.isValid) {
-      return apiBadRequest(strength.errors[0] ?? 'Passwort zu schwach');
-    }
 
     const claim = await consumeClaim(token, { name, email, password });
     if (!claim.success) return apiBadRequest(claim.error ?? 'Übernahme fehlgeschlagen');
