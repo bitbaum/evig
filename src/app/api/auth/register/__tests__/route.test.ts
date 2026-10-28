@@ -63,12 +63,7 @@ vi.mock('@/lib/schemas', async () => {
     RegisterSchema: {
       safeParse: vi.fn((body: unknown) => {
         const b = body as Record<string, unknown>;
-        if (
-          !b?.email ||
-          !String(b.email).includes('@') ||
-          !b?.password ||
-          String(b.password).length < 8
-        ) {
+        if (!b?.email || !String(b.email).includes('@') || !b?.password) {
           return {
             success: false,
             error: { flatten: () => ({ fieldErrors: { email: ['Invalid'] } }) },

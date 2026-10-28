@@ -45,13 +45,13 @@ describe('RegisterSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects password shorter than 8 characters', () => {
-    const result = RegisterSchema.safeParse({ ...valid, password: 'short' });
+  it('rejects an empty password', () => {
+    const result = RegisterSchema.safeParse({ ...valid, password: '' });
     expect(result.success).toBe(false);
   });
 
-  it('accepts password of exactly 8 characters', () => {
-    const result = RegisterSchema.safeParse({ ...valid, password: '12345678' });
+  it('accepts a one-character password (the one bitbaum rule)', () => {
+    const result = RegisterSchema.safeParse({ ...valid, password: 'x' });
     expect(result.success).toBe(true);
   });
 
@@ -167,11 +167,11 @@ describe('ResetPasswordSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects password shorter than 8 characters', () => {
+  it('rejects an empty password', () => {
     const result = ResetPasswordSchema.safeParse({
       ...valid,
-      password: 'short',
-      confirmPassword: 'short',
+      password: '',
+      confirmPassword: '',
     });
     expect(result.success).toBe(false);
   });
@@ -206,11 +206,11 @@ describe('ChangePasswordSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects newPassword shorter than 8 characters', () => {
+  it('rejects an empty newPassword', () => {
     const result = ChangePasswordSchema.safeParse({
       ...valid,
-      newPassword: 'short',
-      confirmPassword: 'short',
+      newPassword: '',
+      confirmPassword: '',
     });
     expect(result.success).toBe(false);
   });

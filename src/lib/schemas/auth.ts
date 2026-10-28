@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AUTH_CONFIG } from '@/lib/auth/config';
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from '@bitbaum/accountkit/auth/password';
 
 // Email validation (RFC 5322 compliant)
 const emailSchema = z
@@ -7,52 +7,12 @@ const emailSchema = z
   .email('Bitte gib eine gültige E-Mail-Adresse ein')
   .transform((email) => email.toLowerCase().trim());
 
-// ============================================================================
-// PASSWORD SCHEMA - Derived from AUTH_CONFIG (SSOT)
-// ============================================================================
-
-/**
- * Create password schema from AUTH_CONFIG
- * This ensures schema matches the config - no duplicate definitions
- */
-function createPasswordSchema() {
-  const {
-    minLength,
-    maxLength,
-    requireUppercase,
-    requireLowercase,
-    requireNumbers,
-    requireSpecialChars,
-    specialChars,
-  } = AUTH_CONFIG.password;
-
-  let schema = z
-    .string()
-    .min(minLength, `Passwort muss mindestens ${minLength} Zeichen lang sein`)
-    .max(maxLength, `Passwort darf maximal ${maxLength} Zeichen lang sein`);
-
-  if (requireUppercase) {
-    schema = schema.regex(/[A-Z]/, 'Passwort muss mindestens einen Grossbuchstaben enthalten');
-  }
-  if (requireLowercase) {
-    schema = schema.regex(/[a-z]/, 'Passwort muss mindestens einen Kleinbuchstaben enthalten');
-  }
-  if (requireNumbers) {
-    schema = schema.regex(/[0-9]/, 'Passwort muss mindestens eine Zahl enthalten');
-  }
-  if (requireSpecialChars) {
-    // Escape special regex characters in the specialChars string
-    const escapedChars = specialChars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    schema = schema.regex(
-      new RegExp(`[${escapedChars}]`),
-      'Passwort muss mindestens ein Sonderzeichen enthalten',
-    );
-  }
-
-  return schema;
-}
-
-const passwordSchema = createPasswordSchema();
+// The one bitbaum password rule (@bitbaum/accountkit/auth/password): not empty,
+// at most 128 characters. No complexity, no other minimum.
+export const passwordSchema = z
+  .string()
+  .min(MIN_PASSWORD_LENGTH, 'Passwort ist erforderlich')
+  .max(MAX_PASSWORD_LENGTH, `Passwort darf maximal ${MAX_PASSWORD_LENGTH} Zeichen lang sein`);
 
 // Legacy user role schema for backward compatibility
 // (still used by some admin-facing flows; not by registration anymore)
