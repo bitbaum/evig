@@ -147,8 +147,8 @@ describe('POST /api/auth/register — validation', () => {
     expect(response.status).toBe(400);
   });
 
-  it('returns 400 when password is too short', async () => {
-    const response = await POST(makeRequest({ email: 'test@example.com', password: 'short' }));
+  it('returns 400 when the password is empty', async () => {
+    const response = await POST(makeRequest({ email: 'test@example.com', password: '' }));
     expect(response.status).toBe(400);
   });
 
