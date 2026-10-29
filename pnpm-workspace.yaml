@@ -30,7 +30,7 @@ minimumReleaseAgeExclude:
   - '@bitbaum/searchkit@0.2.3'
   - '@bitbaum/whenkit@0.3.3'
   - limitkit@0.2.1
-  - '@bitbaum/chartkit@0.6.0'
+  - '@bitbaum/chartkit@0.6.0 || 0.7.0'
 overrides:
   '@swc/helpers': 0.5.23
   '@opentelemetry/core': ^2.8.0

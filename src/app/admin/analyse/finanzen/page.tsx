@@ -18,7 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import {
   AnalyseTabs,
-  RevenueAreaChart,
+  RevenueByYearChart,
   RevenuePieChart,
   TrendBarChart,
 } from '@/components/analyse';
@@ -175,7 +175,7 @@ export default async function FinanzenPage() {
       {/* Charts Row */}
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Revenue Over Time */}
-        <RevenueAreaChart
+        <RevenueByYearChart
           data={chartData}
           source="Kivitendo"
           sourceDate={
