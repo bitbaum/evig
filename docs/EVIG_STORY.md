@@ -3,7 +3,7 @@
 > **What this is.** The canonical founding narrative for evig — the source text that
 > the About page, homepage, pitch decks, and grant applications all derive from.
 > Prose here is the SSOT for *voice and story*; facts stay honest to
-> `src/config/org.ts` and `.claude/CLAUDE.md` (evig is a **gemeinnütziger Verein in
+> `src/config/org.ts` and `AGENTS.md` (evig is a **gemeinnütziger Verein in
 > Gründung**, founded 2026 in Zürich — no invented metrics, no tax-receipt claims
 > until the Verein is registered and recognised).
 
