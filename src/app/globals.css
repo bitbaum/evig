@@ -1,4 +1,5 @@
 @import '@bitbaum/chatkit/styles.css';
+@import '@bitbaum/chartkit/styles.css';
 @import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
@@ -1546,6 +1547,25 @@
   --ck-fg-3: var(--text-tertiary);
   --ck-line: var(--border-subtle);
   --ck-line-2: var(--border-default);
+}
+
+/* ─── @bitbaum/chartkit → evig tokens ─────────────────────────────────────────
+ * chartkit shares chatkit's --ck-bg / --ck-line / --ck-accent / --ck-font
+ * (mapped above) and reads a few of its own, whose defaults are HSL triplets.
+ * Unlayered for the same reason as the chatkit block. Series are by index:
+ * no orange (secondary), which is kept for Bitcoin and top-of-funnel actions.
+ * ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  --ck-ink: var(--text-primary);
+  --ck-ink-muted: var(--text-tertiary);
+  --ck-up: var(--color-success-600);
+  --ck-down: var(--color-error-600);
+  --ck-series-1: var(--color-success-600);
+  --ck-series-2: var(--color-info-600);
+  --ck-series-3: var(--color-neutral-500);
+  --ck-series-4: var(--color-warning-600);
+  --ck-series-5: var(--color-error-600);
+  --ck-series-6: var(--text-primary);
 }
 
 /* A chat as the whole display (chatkit ChatScreen): the Hirn panel and the

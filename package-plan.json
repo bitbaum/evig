@@ -1,0 +1,27 @@
+{
+  "blocks": {
+    "charts": {
+      "package": "@bitbaum/chartkit",
+      "bindings": [
+        {
+          "file": "src/components/analyse/charts/RevenuePieChart.tsx",
+          "symbols": ["DoughnutChart"]
+        }
+      ]
+    }
+  },
+  "exceptions": {
+    "revenue-over-time": {
+      "package": "@bitbaum/chartkit",
+      "status": "product-owned",
+      "files": ["src/components/analyse/charts/RevenueAreaChart.tsx"],
+      "reason": "Revenue by category over every booked year (eleven, 2015-2025) as a stacked area. ChartKit 0.6.0 has no stacked area: LineChart's `area` fills each series from the floor, it does not stack. Its stacked ColumnChart would carry the same data, but it gives every period an equal column and ellipsizes the label without thinning, so at 390px eleven years read '20…' (the same eight-year chart rendered so in Chromium in Hirnli). Migrate when ChartKit stacks areas, or when ColumnChart thins period labels."
+    },
+    "year-over-year-by-category": {
+      "package": "@bitbaum/chartkit",
+      "status": "product-owned",
+      "files": ["src/components/analyse/charts/TrendBarChart.tsx"],
+      "reason": "Previous vs current year side by side for each revenue category, the current-year bar coloured by the sign of the change. ColumnChart is the only grouped chart in ChartKit 0.6.0 and is built for periods: it shortens any x label over eight characters (PERIOD_MAX), so 'Warenverkauf' and 'Dienstleistungen' become 'Warenve…' and 'Dienstl…', and it has no per-column tone. BarChart is one series per row, so it cannot pair two years."
+    }
+  }
+}
