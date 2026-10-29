@@ -86,7 +86,7 @@ Current public pages should prefer `ui-public-display-md` / `ui-public-display-l
 
 The early `ResponsiveSection` / `ResponsiveHero` / `ResponsiveHeading` components
 were removed. Their jobs now belong to the shared layout primitives (see the
-"Chrome & Navigation" table in `CLAUDE.md`):
+"Design" section of `AGENTS.md`):
 
 ### Section
 

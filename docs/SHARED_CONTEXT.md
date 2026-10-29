@@ -68,7 +68,7 @@ Redis is optional and not part of `docker-compose.yml`; set `REDIS_URL` to enabl
 - **Health**: https://evig.orangecat.ch/api/health (DB + Meilisearch status)
 - **Admin**: https://evig.orangecat.ch/admin
 - **Zeiterfassung (staff time entry)**: https://evig.orangecat.ch/admin/zeiterfassung (same shared `TimecardsClient` also at `/dashboard/timecards`)
-- **Old host**: https://revampit.orangecat.ch redirects here via Caddy. The redirect must stay **308**, not 301/`permanent` — 301 drops the method, so POSTs arrive as GETs and credentials login breaks. See the Production URL section of `CLAUDE.md`.
+- **Old host**: https://revampit.orangecat.ch redirects here via Caddy. The redirect must stay **308**, not 301/`permanent` — 301 drops the method, so POSTs arrive as GETs and credentials login breaks. See `AGENTS.md`.
 
 ⚠️ **https://www.revamp-it.ch is NOT this codebase** — that is the organization's legacy Joomla site. Never smoke-test or verify deploys there.
 

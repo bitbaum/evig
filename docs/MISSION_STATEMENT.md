@@ -2,7 +2,7 @@
 
 > Narrative SSOT for voice and story is [`EVIG_STORY.md`](EVIG_STORY.md). This file
 > is the compact mission reference. Facts stay honest to `src/config/org.ts` and
-> `.claude/CLAUDE.md`: evig is a **gemeinnütziger Verein in Gründung**, founded 2026
+> `AGENTS.md`: evig is a **gemeinnütziger Verein in Gründung**, founded 2026
 > in Zürich — no invented metrics, no tax-receipt or recognised-charity claims until
 > the Verein is registered and recognised.
 
