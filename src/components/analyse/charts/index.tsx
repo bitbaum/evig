@@ -1,9 +1,11 @@
 'use client';
 
 /**
- * Chart barrel — recharts is heavy, so the chart components are loaded
+ * Chart barrel — recharts is heavy, so the recharts charts are loaded
  * lazily on the client (ssr: false) instead of shipping in the initial
- * bundle. ChartWrapper is internal to the charts and not re-exported.
+ * bundle. RevenuePieChart is drawn by @bitbaum/chartkit, which renders on the
+ * server with no client runtime, so it is exported directly. ChartWrapper is
+ * internal to the charts and not re-exported.
  */
 
 import dynamic from 'next/dynamic';
@@ -19,10 +21,7 @@ export const RevenueAreaChart = dynamic(
   { ssr: false, loading: ChartLoading },
 );
 
-export const RevenuePieChart = dynamic(
-  () => import('./RevenuePieChart').then((m) => m.RevenuePieChart),
-  { ssr: false, loading: ChartLoading },
-);
+export { RevenuePieChart } from './RevenuePieChart';
 
 export const TrendBarChart = dynamic(() => import('./TrendBarChart').then((m) => m.TrendBarChart), {
   ssr: false,
