@@ -10,15 +10,6 @@
  * - Payment provider theme colors
  */
 
-/** Revenue category colors used in financial charts */
-export const REVENUE_CATEGORY_COLORS = {
-  warenverkauf: '#22c55e',
-  dienstleistungen: '#3b82f6',
-  integration: '#8b5cf6',
-  spenden: '#f59e0b',
-  aufstockung: '#ec4899',
-} as const;
-
 /** Revenue category labels (German) */
 export const REVENUE_CATEGORY_LABELS = {
   warenverkauf: 'Warenverkauf',
