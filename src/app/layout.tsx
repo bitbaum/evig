@@ -44,6 +44,9 @@ export const metadata: Metadata = {
     template: `%s | ${ORG.name}`,
   },
   description: `${ORG.motto} ${ORG.description}`,
+  // public/site.webmanifest was served but never linked, so browsers never
+  // offered "Install app".
+  manifest: '/site.webmanifest',
   keywords: [
     'bezahlbare Computer',
     'kuratierte Hardware',
