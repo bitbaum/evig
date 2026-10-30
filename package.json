@@ -129,7 +129,7 @@
     "csv-parse": "^7.0.2",
     "drizzle-orm": "^0.45.4",
     "exceljs": "^4.4.0",
-    "framer-motion": "^13.4.0",
+    "framer-motion": "^14.7.1",
     "gray-matter": "^4.0.3",
     "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
