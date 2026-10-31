@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { auth } from '@/auth';
-import { getAccessibleSections, isStaffEmail } from '@/lib/permissions';
+import { getAccessibleSections, isStaffEmail, isSuperAdmin } from '@/lib/permissions';
 import { AdminLayoutClient } from './AdminLayoutClient';
 import { ORG } from '@/config/org';
 
@@ -31,7 +31,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect(`/auth/login?callbackUrl=${encodeURIComponent(currentPath)}`);
   }
 
-  if (!session.user.isStaff) {
+  // The DB flag is the roster. The bootstrap allowlist is a floor so the
+  // owner's Gmail (or the old Revamp mailbox, until it is retired) can still
+  // open /admin before anyone has clicked "confirm" in Einstellungen.
+  const ownerFloor = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
+
+  if (!session.user.isStaff && !ownerFloor) {
     // A staff-email user who simply hasn't verified yet is staff — they just
     // haven't unlocked admin. Send them to complete verification (resends the
     // code + shows the entry step) rather than to a misleading "not staff" page.
@@ -43,8 +48,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const accessibleSections = getAccessibleSections({
     email: session.user.email,
-    is_staff: session.user.isStaff,
+    is_staff: session.user.isStaff || ownerFloor,
     staff_permissions: session.user.staffPermissions,
+    is_super_admin: ownerFloor,
   });
 
   if (accessibleSections.length === 0) {

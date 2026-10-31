@@ -126,15 +126,44 @@ export const SETTINGS_CONFIG = {
       lastNamePlaceholder: 'Dein Nachname',
 
       email: 'E-Mail',
-      emailDescription: 'deine E-Mail-Adresse kann nicht geändert werden',
+      emailDescription:
+        'Die Adresse ist dein Login. Wir ändern sie erst, wenn der Code an die neue Adresse ankommt.', // i18n-ok
       emailReadonly: 'E-Mail-Adresse (schreibgeschützt)',
+
+      emailChange: 'E-Mail ändern', // i18n-ok
+      emailChangeNew: 'Neue E-Mail-Adresse', // i18n-ok
+      emailChangePassword: 'Aktuelles Passwort',
+      emailChangeSend: 'Code senden',
+      emailChangeCode: 'Code aus der E-Mail',
+      emailChangeConfirm: 'Adresse übernehmen',
+      emailChangeCancel: 'Abbrechen',
+      emailChangeSent: 'Code ist unterwegs. Schau auch im Spam nach.',
+      emailChangeDone: 'Adresse geändert. Beim nächsten Laden gilt die neue.',
 
       password: 'Passwort',
       currentPassword: 'Aktuelles Passwort',
       newPassword: 'Neues Passwort',
       confirmPassword: 'Passwort bestätigen',
       changePassword: 'Passwort ändern',
-      passwordDescription: 'Ändere dein Passwort für mehr Sicherheit',
+      passwordDescription: 'Mindestens 8 Zeichen. Du bleibst angemeldet.',
+      passwordSave: 'Passwort speichern',
+      passwordDone: 'Passwort geändert.',
+
+      adminAccess: 'Admin-Zugang',
+      adminAccessHave: 'Diese Adresse hat Admin-Zugang.',
+      adminAccessNeed: 'Diese Adresse hat noch keinen Admin-Zugang.',
+      adminAccessHint:
+        'Frag an. Jemand, der schon Admin ist, bestätigt das hier. Voller Admin sieht Finanzen und Nutzer. Mitarbeiter sieht den Alltag, ohne Finanzen.', // i18n-ok
+      adminAccessReason: 'Warum brauchst du Zugang?',
+      adminAccessAsk: 'Zugang anfragen',
+      adminAccessPending: 'Anfrage ist raus. Ein Admin kann sie hier bestätigen.',
+      adminAccessRejected: 'Die letzte Anfrage wurde abgelehnt. Du kannst eine neue stellen.',
+      adminAccessQueue: 'Offene Anfragen',
+      adminAccessEmpty: 'Keine offenen Anfragen.',
+      adminAccessApprove: 'Als Admin bestätigen',
+      adminAccessStaff: 'Als Mitarbeiter',
+      adminAccessReject: 'Ablehnen',
+      adminAccessApproved: 'Bestätigt. Die Person soll sich einmal neu anmelden.',
 
       deleteAccount: 'Konto löschen',
       deleteAccountWarning: 'Diese Aktion kann nicht rückgängig gemacht werden',

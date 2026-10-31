@@ -7,6 +7,8 @@
 // Auth templates
 export {
   verificationCode,
+  emailAddressChange,
+  emailAddressChanged,
   emailVerification,
   welcome,
   passwordReset,

@@ -27,6 +27,7 @@ export interface ValidSession {
     name?: string | null;
     image?: string | null;
     role?: string;
+    emailVerified?: boolean;
     isStaff: boolean;
     staffPermissions: string[];
     isSuperAdmin: boolean;
@@ -125,7 +126,9 @@ export function withAdmin<TParams = Record<string, never>>(
 
     const validSession = session as unknown as ValidSession;
 
-    if (!validSession.user.isStaff) {
+    // Bootstrap owners (SUPER_ADMIN_EMAILS) are super admins even when the
+    // is_staff column was never set. The admin layout uses the same rule.
+    if (!validSession.user.isStaff && !validSession.user.isSuperAdmin) {
       return apiForbidden(ERROR_MESSAGES.ADMIN_REQUIRED);
     }
 
