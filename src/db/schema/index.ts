@@ -29,3 +29,4 @@ export * from './hr-vacancies';
 export * from './storage-locations';
 export * from './deliverables';
 export * from './teams'; // misc is now a backward-compat re-export barrel; index owns the canonical exports above
+export * from './accountkit';

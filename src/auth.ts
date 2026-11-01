@@ -47,6 +47,11 @@ import {
   readLinkToken,
   resolveOrangeCatSignIn,
 } from '@/lib/auth/orangecat';
+import { claimsFor } from '@/lib/auth/claims';
+import { sharedAuth, sharedAuthEnabled } from '@/lib/auth/shared/runtime';
+import { sharedSession } from '@/lib/auth/shared/session';
+import { nextAuthClientCompat } from '@/lib/auth/shared/bridge';
+import type { NextRequest } from 'next/server';
 import { logger } from '@/lib/logger';
 import { SESSION_MAX_AGE_SECONDS, SESSION_UPDATE_AGE_SECONDS } from '@/config/security';
 import { sendEmail } from '@/lib/email';
@@ -311,24 +316,17 @@ export const authConfig = {
       if (account?.provider === ORANGECAT_PROVIDER_ID && account.providerAccountId) {
         const dbUser = await getUserByOrangeCatActorId(account.providerAccountId);
         if (dbUser) {
-          const emailVerified = !!dbUser.emailVerified;
-          const userIsStaff = emailVerified ? Boolean(dbUser.is_staff) : false;
+          const claims = claimsFor(dbUser);
           token.id = dbUser.id;
           token.email = dbUser.email;
           token.name = dbUser.name ?? token.name;
           token.picture = dbUser.image ?? token.picture;
-          token.role = dbUser.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER);
-          token.emailVerified = emailVerified;
-          token.isStaff = userIsStaff;
-          token.staffPermissions = dbUser.staff_permissions?.length
-            ? dbUser.staff_permissions
-            : userIsStaff
-              ? getInitialStaffPermissions(dbUser.email)
-              : [];
-          token.isSuperAdmin = emailVerified
-            ? Boolean(dbUser.is_super_admin) || isSuperAdmin(dbUser.email)
-            : false;
-          token.dashboardMode = dbUser.dashboard_mode ?? 'coordinator';
+          token.role = claims.role;
+          token.emailVerified = claims.emailVerified;
+          token.isStaff = claims.isStaff;
+          token.staffPermissions = claims.staffPermissions;
+          token.isSuperAdmin = claims.isSuperAdmin;
+          token.dashboardMode = claims.dashboardMode;
           token.tokenVersion = dbUser.token_version ?? 0;
         }
         return token;
@@ -337,26 +335,15 @@ export const authConfig = {
       // Path 1: initial sign-in
       if (user) {
         token.id = user.id;
-        // Legacy role - kept for backward compatibility
-        // Staff get REVAMPIT_ADMIN, others get CUSTOMER
-        // SECURITY: Only grant staff privileges if email is verified, and the
-        // DB flag is the sole source of truth — never OR in isStaffEmail
-        // here (see authorize() above for why).
-        const emailVerified = !!user.emailVerified;
-        const userIsStaff = emailVerified ? Boolean(user.is_staff) : false;
-        token.role = user.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER);
-        token.emailVerified = emailVerified;
-        // New simplified auth fields
-        token.isStaff = userIsStaff;
-        token.staffPermissions = user.staff_permissions?.length
-          ? user.staff_permissions
-          : userIsStaff
-            ? getInitialStaffPermissions(user.email ?? '')
-            : [];
-        token.isSuperAdmin = emailVerified
-          ? Boolean(user.is_super_admin) || isSuperAdmin(user.email ?? '')
-          : false;
-        token.dashboardMode = user.dashboard_mode ?? 'coordinator';
+        // SECURITY: staff privileges only with a verified address, and the DB
+        // flag is the sole source of truth (src/lib/auth/claims.ts).
+        const claims = claimsFor(user);
+        token.role = claims.role;
+        token.emailVerified = claims.emailVerified;
+        token.isStaff = claims.isStaff;
+        token.staffPermissions = claims.staffPermissions;
+        token.isSuperAdmin = claims.isSuperAdmin;
+        token.dashboardMode = claims.dashboardMode;
         token.tokenVersion = user.token_version ?? 0;
         return token;
       }
@@ -368,20 +355,13 @@ export const authConfig = {
           const freshUser = await getUserById(token.id as string);
           if (freshUser && freshUser.token_version !== (token.tokenVersion ?? 0)) {
             // Admin changed permissions — refresh the token's claims.
-            const emailVerified = !!freshUser.emailVerified;
-            const userIsStaff = emailVerified ? Boolean(freshUser.is_staff) : false;
-            token.role = freshUser.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER);
-            token.emailVerified = emailVerified;
-            token.isStaff = userIsStaff;
-            token.staffPermissions = freshUser.staff_permissions?.length
-              ? freshUser.staff_permissions
-              : userIsStaff
-                ? getInitialStaffPermissions(freshUser.email ?? '')
-                : [];
-            token.isSuperAdmin = emailVerified
-              ? Boolean(freshUser.is_super_admin) || isSuperAdmin(freshUser.email ?? '')
-              : false;
-            token.dashboardMode = freshUser.dashboard_mode ?? 'coordinator';
+            const claims = claimsFor(freshUser);
+            token.role = claims.role;
+            token.emailVerified = claims.emailVerified;
+            token.isStaff = claims.isStaff;
+            token.staffPermissions = claims.staffPermissions;
+            token.isSuperAdmin = claims.isSuperAdmin;
+            token.dashboardMode = claims.dashboardMode;
             token.tokenVersion = freshUser.token_version;
             logger.info('JWT permissions refreshed after admin change', {
               userId: token.id,
@@ -518,7 +498,30 @@ async function signInWithOrangeCat(
 }
 
 // Export Auth.js helpers for App Router
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+const nextAuth = NextAuth(authConfig);
+
+export const { signIn, signOut } = nextAuth;
+
+/**
+ * Who is signed in. One reader for both runtimes: AccountKit's shared session
+ * with AUTH_RUNTIME=accountkit, the Auth.js JWT otherwise. Same shape either
+ * way (docs/ACCOUNTKIT-MIGRATION.md).
+ */
+export async function auth(): Promise<Session | null> {
+  return sharedAuthEnabled() ? sharedSession() : nextAuth.auth();
+}
+
+/** /api/auth/*: AccountKit's endpoints when the shared runtime is on. */
+export const handlers = {
+  GET: async (request: NextRequest) =>
+    sharedAuthEnabled()
+      ? ((await nextAuthClientCompat(request)) ?? sharedAuth.GET(request))
+      : nextAuth.handlers.GET(request),
+  POST: async (request: NextRequest) =>
+    sharedAuthEnabled()
+      ? ((await nextAuthClientCompat(request)) ?? sharedAuth.POST(request))
+      : nextAuth.handlers.POST(request),
+};
 
 // ============================================================================
 // Registration helper (not part of Auth.js, but used by registration API)

@@ -254,6 +254,26 @@ jobs:
           PGDATABASE: evig_drift
         run: bash scripts/db/apply-migrations-ci.sh
 
+      # The AccountKit runtime (off in production until the switch) on the chain
+      # just applied: the cutover import, its mirror triggers, and every way in
+      # through the real handlers (docs/ACCOUNTKIT-MIGRATION.md).
+      - uses: pnpm/action-setup@v6
+      - name: Set pnpm store dir
+        run: pnpm config set store-dir ~/.pnpm-store --global
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Account journeys on the shared runtime
+        env:
+          EVIG_JOURNEY_DATABASE_URL: postgres://postgres:ci@localhost:5432/evig_drift
+          # The rehearsal must also pass on the same chain.
+          DATABASE_URL: postgres://postgres:ci@localhost:5432/evig_drift
+        run: |
+          node scripts/db/accountkit-import-rehearse.mjs
+          pnpm exec vitest run src/lib/auth/shared
+
   e2e-local:
     name: Local E2E Journeys
     runs-on: ubuntu-latest

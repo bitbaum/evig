@@ -9,6 +9,9 @@
 AUTH_SECRET=your-super-secret-auth-key-change-in-production-min-32-chars
 NEXTAUTH_URL=http://localhost:3001
 NEXTAUTH_SECRET=your-super-secret-auth-key-change-in-production-min-32-chars
+# Accounts on @bitbaum/accountkit instead of Auth.js. Leave unset until the
+# cutover in docs/ACCOUNTKIT-MIGRATION.md.
+# AUTH_RUNTIME=accountkit
 
 # Database — SSOT: DATABASE_URL (app + auth share one pool)
 # Local dev: Docker Postgres from docker-compose.yml (port 5433)
