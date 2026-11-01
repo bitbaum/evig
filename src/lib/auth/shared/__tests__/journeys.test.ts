@@ -221,6 +221,33 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
     expect(rows).toEqual([{ actor, emailVerified: null }]);
   });
 
+  test('with account mail on, an unconfirmed account still signs in (AccountKit default)', async () => {
+    // AccountKit fixes its rule when the runtime starts, so this one runs on a
+    // fresh runtime that sees a configured sender. Signing in sends no mail.
+    process.env.RESEND_API_KEY = 're_synthetic_journey_key';
+    vi.resetModules();
+    try {
+      const { nextAuthClientCompat } = await import('../bridge');
+      const res = await nextAuthClientCompat(
+        request('/callback/credentials', {
+          form: {
+            email: 'unverified@example.test',
+            password: PASSWORD,
+            callbackUrl: `${SITE}/dashboard/orders`,
+            csrfToken: 'x',
+          },
+        }),
+      );
+      const body = (await res!.json()) as { url: string };
+      expect(body.url).toBe(`${SITE}/dashboard/orders`);
+    } finally {
+      delete process.env.RESEND_API_KEY;
+      const { getPool } = await import('@/lib/auth/db');
+      await getPool().end();
+      vi.resetModules();
+    }
+  });
+
   test('OrangeCat is offered only once its client is configured', async () => {
     const { providers } = await load();
     expect(Object.keys(providers({}))).toEqual(['credentials']);

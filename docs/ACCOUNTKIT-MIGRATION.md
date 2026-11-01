@@ -18,8 +18,7 @@ DATABASE_URL=postgres://… node scripts/db/accountkit-import-rehearse.mjs
 ```
 
 It runs `scripts/db/accountkit-import.sql` in one transaction, always rolls
-back, and prints only counts, among them `unverified_password_accounts` (see
-"Before switching"). There is no apply mode. It takes locks even though it
+back, and prints only counts. There is no apply mode. It takes locks even though it
 rolls back, so never point it at the served database.
 
 The import keeps each `users.id` as the shared user id, so every table that
@@ -53,6 +52,10 @@ every sign-in; unset, Auth.js answers as today. The secret is
   (`session`, `csrf`, `providers`, `signout`, `callback/credentials`,
   `signin/orangecat`) from AccountKit, in evig's own login codes, and hands
   every other path to AccountKit. The proxy asks AccountKit for the session.
+- Nobody waits for an email confirmation to sign in: that is AccountKit's
+  default for every product (owner decision, 2026-11-01), and evig's own rule
+  already. Confirming the address still unlocks staff powers
+  (`src/lib/auth/claims.ts`).
 - Password sign-in keeps evig's per-account lockout beside AccountKit's
   limiter. Change-password goes through AccountKit. Registration, the 6-digit
   code and the reset link stay evig's and reach the shared row through the
@@ -69,22 +72,14 @@ not deployed or browser evidence.
 
 ## Before switching
 
-1. **Decide unverified sign-in.** AccountKit refuses a password sign-in to an
-   unverified address whenever account mail is configured. evig does not:
-   today an unverified account signs in and only staff powers wait for the
-   address. The rehearsal's `unverified_password_accounts` says how many
-   people this touches. The choice is one of these. Accept AccountKit's rule:
-   those people are told to confirm their address, and evig's resend-code page
-   is the way forward. Or ask AccountKit for a product option that keeps
-   evig's rule.
-2. **OrangeCat callback.** evig's OrangeCat client (`evig`) is registered for
+1. **OrangeCat callback.** evig's OrangeCat client (`evig`) is registered for
    Auth.js's `/api/auth/callback/orangecat`. AccountKit returns to
    `/api/auth/oauth2/callback/orangecat`; orangecat#1501 adds that URI beside
    the old one. Confirm it is live before switching.
-3. Stop Auth.js writes, import once under locks, then set `AUTH_RUNTIME`.
+2. Stop Auth.js writes, import once under locks, then set `AUTH_RUNTIME`.
    Everyone signed in under Auth.js signs in again once. To roll back, unset
    `AUTH_RUNTIME` and drop the two triggers. A password changed through
    AccountKit is scrypt, which Auth.js cannot read, so those people reset
    their password once more under Auth.js.
-4. Prove sign-in, recovery, a staff demotion and revocation on the deployed
+3. Prove sign-in, recovery, a staff demotion and revocation on the deployed
    artifact with an approved test identity.
