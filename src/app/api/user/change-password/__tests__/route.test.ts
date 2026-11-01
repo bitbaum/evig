@@ -29,6 +29,12 @@ vi.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth(...args),
 }));
 
+// The shared-runtime branch (AUTH_RUNTIME=accountkit) is covered by
+// src/lib/auth/shared/__tests__/journeys.test.ts on a real database.
+vi.mock('@/lib/auth/shared/compat', () => ({
+  compat: { callShared: vi.fn() },
+}));
+
 const mockSelectWhere = vi.fn();
 const mockSelectFrom = vi.fn().mockReturnValue({ where: mockSelectWhere });
 const mockSelect = vi.fn().mockReturnValue({ from: mockSelectFrom });

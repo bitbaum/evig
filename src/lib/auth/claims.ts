@@ -1,7 +1,7 @@
 /**
  * What a signed-in person may do, derived from their `users` row. One rule for
  * both runtimes: the Auth.js jwt callback (src/auth.ts) and the AccountKit
- * session reader (src/lib/auth/shared/session.ts).
+ * session reader (src/lib/auth/shared/compat.ts).
  *
  * Email verification is not a login wall here. It gates only staff powers: an
  * unverified account signs in as a normal user and gains staff/super-admin the
