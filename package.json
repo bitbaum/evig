@@ -106,7 +106,7 @@
     "@auth/pg-adapter": "^1.11.3",
     "@aws-sdk/client-s3": "^3.1146.0",
     "@better-auth/passkey": "^1.7.14",
-    "@bitbaum/accountkit": "github:bitbaum/accountkit#b9d876f91f9a1b4acd875c4cfcb373c20db4288a",
+    "@bitbaum/accountkit": "github:bitbaum/accountkit#309f3b3265c6ec68220e64f789c29610c4ea2204",
     "@bitbaum/ai-kit": "^1.21.5",
     "@bitbaum/chartkit": "^0.7.0",
     "@bitbaum/chatkit": "^0.21.5",
