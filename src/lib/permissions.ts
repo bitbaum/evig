@@ -88,16 +88,23 @@ export function isStaffEmail(email: string | null | undefined): boolean {
  * this list is a floor, not the roster. Grant super admin to anyone else via
  * PATCH /api/admin/users/[id]/permissions — never by editing this array.
  *
- * evig separated from Revamp-IT on 2026-07-24. The Revamp-IT super admins
- * (andreas@, veronica@, daniel@) were removed on 2026-08-05: they held full
- * access to evig's sensitive sections (users, finances, settings) purely by
- * e-mail, bypassing the DB — and the demotion guard below made them
- * un-removable through the UI.
+ * evig separated from Revamp-IT. Admin is no longer "anyone at that domain".
+ * The database (`users.is_super_admin`) is the roster. This list is only a
+ * lockout floor: the addresses the owner actually signs in with, so a bad
+ * migration cannot shut evig out of its own admin.
  *
- * Layer B: the owner's login is still `@revamp-it.ch` (see .claude/CLAUDE.md).
- * Add the evig address here at infra cutover, do not swap it before.
+ * Anyone else becomes admin from Einstellungen → Admin-Zugang: they ask,
+ * an existing admin confirms. Do not grow this list for staff.
+ *
+ * `georgy.butaev@revamp-it.ch` stays until that mailbox is retired — it is
+ * the account that still has to be able to confirm the others. It is not a
+ * Revamp-IT privilege. andreas@, veronica@ and daniel@ stay off this list.
  */
-export const SUPER_ADMIN_EMAILS = ['georgy.butaev@revamp-it.ch'] as const;
+export const SUPER_ADMIN_EMAILS = [
+  'georgy.butaev@revamp-it.ch',
+  'butaeff@gmail.com',
+  'butai@gmail.com',
+] as const;
 
 /**
  * Check if a user is a super admin

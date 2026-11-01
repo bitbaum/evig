@@ -82,6 +82,8 @@ describe('isStaffEmail', () => {
 describe('isSuperAdmin', () => {
   it('returns true for a known super admin email', () => {
     expect(isSuperAdmin('georgy.butaev@revamp-it.ch')).toBe(true);
+    expect(isSuperAdmin('butaeff@gmail.com')).toBe(true);
+    expect(isSuperAdmin('butai@gmail.com')).toBe(true);
   });
 
   it('returns false for a regular staff email', () => {
@@ -290,6 +292,7 @@ describe('getAccessibleSections', () => {
 describe('getInitialStaffPermissions', () => {
   it('returns ["*"] for super admins', () => {
     expect(getInitialStaffPermissions('georgy.butaev@revamp-it.ch')).toEqual(['*']);
+    expect(getInitialStaffPermissions('butai@gmail.com')).toEqual(['*']);
   });
 
   it('returns non-sensitive sections for regular staff', () => {

@@ -103,6 +103,41 @@ declare module 'next-auth' {
 // Absent, not broken, until the box holds the OrangeCat client pair.
 const orangecat = orangecatClient();
 
+/**
+ * Staff claims for a session.
+ *
+ * `is_staff` in the database is the roster. The bootstrap allowlist
+ * (SUPER_ADMIN_EMAILS, via isSuperAdmin) is a floor on top of that — never
+ * the whole mail domain. isStaffEmail stays cosmetic. Unverified addresses
+ * get neither flag, so an unconfirmed inbox cannot open /admin.
+ */
+function deriveStaffClaims(input: {
+  email?: string | null;
+  emailVerified?: Date | null | boolean;
+  is_staff?: boolean;
+  staff_permissions?: string[] | null;
+  is_super_admin?: boolean;
+  role?: string | null;
+  dashboard_mode?: 'coordinator' | 'lead' | 'volunteer' | null;
+}) {
+  const emailVerified = !!input.emailVerified;
+  const bootstrap = emailVerified && isSuperAdmin(input.email);
+  const userIsStaff = emailVerified ? Boolean(input.is_staff) || bootstrap : false;
+  const permissions = input.staff_permissions?.length
+    ? input.staff_permissions
+    : userIsStaff
+      ? getInitialStaffPermissions(input.email ?? '')
+      : [];
+  return {
+    emailVerified,
+    userIsStaff,
+    permissions,
+    userIsSuperAdmin: emailVerified ? Boolean(input.is_super_admin) || bootstrap : false,
+    role: input.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER),
+    dashboardMode: input.dashboard_mode ?? ('coordinator' as const),
+  };
+}
+
 export const authConfig = {
   // Secret for signing cookies and tokens
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
@@ -198,17 +233,15 @@ export const authConfig = {
           // a normal user and unlocks admin the moment they verify. Regular
           // users need no verification at all.
 
-          // SECURITY: DB flag is the sole source of truth for staff status.
-          // Do NOT OR in isStaffEmail(email) here — that would grant staff
-          // access to anyone who can register/verify an @revamp-it.ch
-          // address, bypassing admin-controlled promotion and revocation.
-          const userIsStaff = Boolean(user.is_staff);
-          const userPermissions = user.staff_permissions?.length
-            ? user.staff_permissions
-            : userIsStaff
-              ? getInitialStaffPermissions(user.email)
-              : [];
-          const userIsSuperAdmin = Boolean(user.is_super_admin) || isSuperAdmin(user.email);
+          // SECURITY: DB flag is the roster. Do NOT OR in isStaffEmail(email) —
+          // that would grant staff to anyone who can register an
+          // @revamp-it.ch address. The bootstrap allowlist is applied in the
+          // JWT callback (deriveStaffClaims), and only after the address is
+          // verified.
+          const claims = deriveStaffClaims(user);
+          const userIsStaff = claims.userIsStaff;
+          const userPermissions = claims.permissions;
+          const userIsSuperAdmin = claims.userIsSuperAdmin;
 
           // Return user object with new simplified auth fields
           return {
@@ -311,24 +344,17 @@ export const authConfig = {
       if (account?.provider === ORANGECAT_PROVIDER_ID && account.providerAccountId) {
         const dbUser = await getUserByOrangeCatActorId(account.providerAccountId);
         if (dbUser) {
-          const emailVerified = !!dbUser.emailVerified;
-          const userIsStaff = emailVerified ? Boolean(dbUser.is_staff) : false;
+          const claims = deriveStaffClaims(dbUser);
           token.id = dbUser.id;
           token.email = dbUser.email;
           token.name = dbUser.name ?? token.name;
           token.picture = dbUser.image ?? token.picture;
-          token.role = dbUser.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER);
-          token.emailVerified = emailVerified;
-          token.isStaff = userIsStaff;
-          token.staffPermissions = dbUser.staff_permissions?.length
-            ? dbUser.staff_permissions
-            : userIsStaff
-              ? getInitialStaffPermissions(dbUser.email)
-              : [];
-          token.isSuperAdmin = emailVerified
-            ? Boolean(dbUser.is_super_admin) || isSuperAdmin(dbUser.email)
-            : false;
-          token.dashboardMode = dbUser.dashboard_mode ?? 'coordinator';
+          token.role = claims.role;
+          token.emailVerified = claims.emailVerified;
+          token.isStaff = claims.userIsStaff;
+          token.staffPermissions = claims.permissions;
+          token.isSuperAdmin = claims.userIsSuperAdmin;
+          token.dashboardMode = claims.dashboardMode;
           token.tokenVersion = dbUser.token_version ?? 0;
         }
         return token;
@@ -337,26 +363,16 @@ export const authConfig = {
       // Path 1: initial sign-in
       if (user) {
         token.id = user.id;
-        // Legacy role - kept for backward compatibility
-        // Staff get REVAMPIT_ADMIN, others get CUSTOMER
-        // SECURITY: Only grant staff privileges if email is verified, and the
-        // DB flag is the sole source of truth — never OR in isStaffEmail
-        // here (see authorize() above for why).
-        const emailVerified = !!user.emailVerified;
-        const userIsStaff = emailVerified ? Boolean(user.is_staff) : false;
-        token.role = user.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER);
-        token.emailVerified = emailVerified;
-        // New simplified auth fields
-        token.isStaff = userIsStaff;
-        token.staffPermissions = user.staff_permissions?.length
-          ? user.staff_permissions
-          : userIsStaff
-            ? getInitialStaffPermissions(user.email ?? '')
-            : [];
-        token.isSuperAdmin = emailVerified
-          ? Boolean(user.is_super_admin) || isSuperAdmin(user.email ?? '')
-          : false;
-        token.dashboardMode = user.dashboard_mode ?? 'coordinator';
+        // Legacy role - kept for backward compatibility.
+        // SECURITY: verified DB flag, plus the bootstrap allowlist. Never
+        // the mail domain (see deriveStaffClaims).
+        const claims = deriveStaffClaims(user);
+        token.role = claims.role;
+        token.emailVerified = claims.emailVerified;
+        token.isStaff = claims.userIsStaff;
+        token.staffPermissions = claims.permissions;
+        token.isSuperAdmin = claims.userIsSuperAdmin;
+        token.dashboardMode = claims.dashboardMode;
         token.tokenVersion = user.token_version ?? 0;
         return token;
       }
@@ -366,22 +382,22 @@ export const authConfig = {
         try {
           const { getUserById } = await import('@/lib/auth/db');
           const freshUser = await getUserById(token.id as string);
-          if (freshUser && freshUser.token_version !== (token.tokenVersion ?? 0)) {
-            // Admin changed permissions — refresh the token's claims.
-            const emailVerified = !!freshUser.emailVerified;
-            const userIsStaff = emailVerified ? Boolean(freshUser.is_staff) : false;
-            token.role = freshUser.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER);
-            token.emailVerified = emailVerified;
-            token.isStaff = userIsStaff;
-            token.staffPermissions = freshUser.staff_permissions?.length
-              ? freshUser.staff_permissions
-              : userIsStaff
-                ? getInitialStaffPermissions(freshUser.email ?? '')
-                : [];
-            token.isSuperAdmin = emailVerified
-              ? Boolean(freshUser.is_super_admin) || isSuperAdmin(freshUser.email ?? '')
-              : false;
-            token.dashboardMode = freshUser.dashboard_mode ?? 'coordinator';
+          if (!freshUser) return token;
+          const claims = deriveStaffClaims(freshUser);
+          const stale =
+            freshUser.token_version !== (token.tokenVersion ?? 0) ||
+            token.isStaff !== claims.userIsStaff ||
+            token.isSuperAdmin !== claims.userIsSuperAdmin ||
+            token.email !== freshUser.email;
+          if (stale) {
+            // Permissions, the bootstrap floor, or the login address changed.
+            token.email = freshUser.email;
+            token.role = claims.role;
+            token.emailVerified = claims.emailVerified;
+            token.isStaff = claims.userIsStaff;
+            token.staffPermissions = claims.permissions;
+            token.isSuperAdmin = claims.userIsSuperAdmin;
+            token.dashboardMode = claims.dashboardMode;
             token.tokenVersion = freshUser.token_version;
             logger.info('JWT permissions refreshed after admin change', {
               userId: token.id,
