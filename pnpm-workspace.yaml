@@ -26,7 +26,7 @@ minimumReleaseAgeExclude:
   - '@bitbaum/ai-kit'
   - '@bitbaum/mail-kit@0.1.1'
   - bip-kit@0.2.6 || 0.2.7 || 0.3.1
-  - '@bitbaum/accountkit@0.9.0 || 0.9.1 || 0.10.0 || 0.11.0 || 0.12.0 || 0.13.0 || 0.14.0 || 0.15.0'
+  - '@bitbaum/accountkit@0.9.0 || 0.9.1 || 0.10.0 || 0.11.0 || 0.12.0 || 0.13.0 || 0.14.0 || 0.15.0 || 0.16.0'
   - '@bitbaum/searchkit@0.2.3'
   - '@bitbaum/whenkit@0.3.3'
   - limitkit@0.2.1
