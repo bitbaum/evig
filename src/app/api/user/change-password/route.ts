@@ -13,6 +13,8 @@ import { users } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { validateBody, ChangePasswordSchema } from '@/lib/schemas';
 import { rateLimiters } from '@/lib/security/rate-limit';
+import { sharedAuthEnabled } from '@/lib/auth/shared/runtime';
+import { callShared } from '@/lib/auth/shared/call';
 
 export const POST = withAuth(async (request: NextRequest, session) => {
   try {
@@ -28,6 +30,23 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     const validation = validateBody(ChangePasswordSchema, body);
     if (!validation.success) return validation.error;
     const { currentPassword, newPassword } = validation.data;
+
+    // On the shared runtime the password lives in AccountKit's row, and
+    // `users.password_hash` may be stale. It checks the current password,
+    // writes the new one and ends this person's other sessions.
+    if (sharedAuthEnabled()) {
+      const answer = await callShared(request, '/change-password', {
+        currentPassword,
+        newPassword,
+        revokeOtherSessions: true,
+      });
+      if (answer.status !== 200) {
+        return apiBadRequest('Das aktuelle Passwort ist falsch');
+      }
+      const response = apiSuccess({ message: 'Passwort erfolgreich geändert' });
+      for (const cookie of answer.cookies) response.headers.append('set-cookie', cookie);
+      return response;
+    }
 
     // Fetch current password hash from database
     const [user] = await db
