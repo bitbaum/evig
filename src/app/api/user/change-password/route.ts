@@ -13,8 +13,8 @@ import { users } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { validateBody, ChangePasswordSchema } from '@/lib/schemas';
 import { rateLimiters } from '@/lib/security/rate-limit';
-import { sharedAuthEnabled } from '@/lib/auth/shared/runtime';
-import { callShared } from '@/lib/auth/shared/call';
+import { sharedRuntimeEnabled } from '@bitbaum/accountkit/auth/switch';
+import { compat } from '@/lib/auth/shared/compat';
 
 export const POST = withAuth(async (request: NextRequest, session) => {
   try {
@@ -34,8 +34,8 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     // On the shared runtime the password lives in AccountKit's row, and
     // `users.password_hash` may be stale. It checks the current password,
     // writes the new one and ends this person's other sessions.
-    if (sharedAuthEnabled()) {
-      const answer = await callShared(request, '/change-password', {
+    if (sharedRuntimeEnabled()) {
+      const answer = await compat.callShared(request, '/change-password', {
         currentPassword,
         newPassword,
         revokeOtherSessions: true,

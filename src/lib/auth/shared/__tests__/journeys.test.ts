@@ -12,12 +12,12 @@
  */
 import { readFile } from 'node:fs/promises';
 import bcrypt from 'bcryptjs';
-import { NextRequest } from 'next/server';
+import { createCompatClient } from '@bitbaum/accountkit/auth/compat-testing';
 import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
 
 const URL_ = process.env.EVIG_JOURNEY_DATABASE_URL;
 const SITE = 'https://evig.example.test';
-const state = vi.hoisted(() => {
+vi.hoisted(() => {
   const url = process.env.EVIG_JOURNEY_DATABASE_URL;
   if (url) {
     Object.assign(process.env, {
@@ -29,27 +29,20 @@ const state = vi.hoisted(() => {
     delete process.env.RESEND_API_KEY;
     delete process.env.ORANGECAT_OAUTH_CLIENT_ID;
   }
-  return { cookie: '' };
 });
 
 vi.mock('next/headers', () => ({
-  headers: async () => new Headers({ cookie: state.cookie }),
+  headers: async () => new Headers(),
   cookies: async () => ({ get: () => undefined, delete: () => undefined }),
 }));
 
 const PASSWORD = 'synthetic legacy password';
 const STAFF = '00000000-0000-4000-8000-000000000001';
 const UNVERIFIED_STAFF = '00000000-0000-4000-8000-000000000002';
-let ip = 0;
 
 describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
-  const load = async () => {
-    const { db } = await import('@/db');
-    const { sql } = await import('drizzle-orm');
-    const bridge = await import('../bridge');
-    const runtime = await import('../runtime');
-    return { db, sql, ...bridge, ...runtime };
-  };
+  let browser: ReturnType<typeof createCompatClient>;
+  const compat = async () => (await import('../compat')).compat;
 
   async function exec(text: string, params: unknown[] = []) {
     const { getPool } = await import('@/lib/auth/db');
@@ -62,7 +55,7 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
   });
 
   beforeEach(async () => {
-    state.cookie = '';
+    browser = createCompatClient({ compat: await compat(), site: SITE });
     await exec(`DROP TRIGGER IF EXISTS evig_accountkit_from_users ON users;
       DROP TRIGGER IF EXISTS evig_accountkit_to_users ON auth_users;
       TRUNCATE auth_users, auth_accounts, auth_sessions, auth_verifications,
@@ -84,54 +77,12 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
     }
   });
 
-  function request(route: string, init: { form?: Record<string, string>; get?: boolean } = {}) {
-    ip += 1;
-    const headers = new Headers({
-      origin: SITE,
-      'x-forwarded-for': `198.51.100.${ip % 250}`,
-      cookie: state.cookie,
-    });
-    if (init.form) headers.set('content-type', 'application/x-www-form-urlencoded');
-    return new NextRequest(`${SITE}/api/auth${route}`, {
-      method: init.get ? 'GET' : 'POST',
-      headers,
-      body: init.form ? new URLSearchParams(init.form) : undefined,
-    });
-  }
+  const signIn = (email: string, password: string) =>
+    browser.signIn('credentials', { email, password }, `${SITE}/dashboard/orders`);
 
-  async function answer(req: NextRequest) {
-    const { nextAuthClientCompat, sharedAuth } = await load();
-    const res =
-      (await nextAuthClientCompat(req)) ??
-      (await (req.method === 'GET' ? sharedAuth.GET(req) : sharedAuth.POST(req)));
-    const set = res.headers.getSetCookie();
-    if (set.length) {
-      const jar = new Map(
-        state.cookie
-          .split('; ')
-          .filter(Boolean)
-          .map((c) => c.split('=') as [string, string]),
-      );
-      for (const cookie of set) {
-        const [pair] = cookie.split(';');
-        const [name, ...value] = pair.split('=');
-        if (/max-age=0/i.test(cookie) || value.join('=') === '') jar.delete(name);
-        else jar.set(name, value.join('='));
-      }
-      state.cookie = [...jar].map(([k, v]) => `${k}=${v}`).join('; ');
-    }
-    return res;
-  }
-
-  const signIn = async (email: string, password: string) =>
-    (await answer(
-      request('/callback/credentials', {
-        form: { email, password, callbackUrl: `${SITE}/dashboard/orders`, csrfToken: 'x' },
-      }),
-    ).then((r) => r.json())) as { url: string };
-
+  // Signed out reads as null; `{}` keeps the `.user` checks below short.
   const session = async () =>
-    (await answer(request('/session', { get: true })).then((r) => r.json())) as {
+    ((await browser.session()) ?? {}) as {
       user?: { id: string; isStaff: boolean; emailVerified: boolean; email: string };
     };
 
@@ -174,14 +125,21 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
 
   test('change-password goes through AccountKit and the old password stops working', async () => {
     await signIn('staff@example.test', PASSWORD);
-    const { callShared } = await load();
-    const changed = await callShared(request('/change-password'), '/change-password', {
-      currentPassword: PASSWORD,
-      newPassword: 'changed through accountkit',
-      revokeOtherSessions: true,
-    });
+    const changed = await (
+      await compat()
+    ).callShared(
+      new Request(`${SITE}/api/auth/change-password`, {
+        headers: { cookie: browser.cookie, origin: SITE },
+      }),
+      '/change-password',
+      {
+        currentPassword: PASSWORD,
+        newPassword: 'changed through accountkit',
+        revokeOtherSessions: true,
+      },
+    );
     expect(changed.status).toBe(200);
-    state.cookie = '';
+    browser.cookie = '';
     expect((await signIn('staff@example.test', PASSWORD)).url).toContain('invalid_credentials');
     expect((await signIn('staff@example.test', 'changed through accountkit')).url).toContain(
       '/dashboard',
@@ -200,7 +158,7 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
 
   test('sign-out ends the shared session', async () => {
     await signIn('staff@example.test', PASSWORD);
-    await answer(request('/signout', { form: { csrfToken: 'x' } }));
+    await browser.signOut();
     expect((await session()).user).toBeUndefined();
   });
 
@@ -227,18 +185,12 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
     process.env.RESEND_API_KEY = 're_synthetic_journey_key';
     vi.resetModules();
     try {
-      const { nextAuthClientCompat } = await import('../bridge');
-      const res = await nextAuthClientCompat(
-        request('/callback/credentials', {
-          form: {
-            email: 'unverified@example.test',
-            password: PASSWORD,
-            callbackUrl: `${SITE}/dashboard/orders`,
-            csrfToken: 'x',
-          },
-        }),
+      const fresh = createCompatClient({ compat: await compat(), site: SITE });
+      const body = await fresh.signIn(
+        'credentials',
+        { email: 'unverified@example.test', password: PASSWORD },
+        `${SITE}/dashboard/orders`,
       );
-      const body = (await res!.json()) as { url: string };
       expect(body.url).toBe(`${SITE}/dashboard/orders`);
     } finally {
       delete process.env.RESEND_API_KEY;
@@ -249,12 +201,17 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
   });
 
   test('OrangeCat is offered only once its client is configured', async () => {
-    const { providers } = await load();
-    expect(Object.keys(providers({}))).toEqual(['credentials']);
-    expect(
-      Object.keys(
-        providers({ ORANGECAT_OAUTH_CLIENT_ID: 'evig', ORANGECAT_OAUTH_CLIENT_SECRET: 's' }),
-      ),
-    ).toEqual(['credentials', 'orangecat']);
+    const { providers } = await compat();
+    expect(Object.keys(providers())).toEqual(['credentials']);
+    Object.assign(process.env, {
+      ORANGECAT_OAUTH_CLIENT_ID: 'evig',
+      ORANGECAT_OAUTH_CLIENT_SECRET: 's',
+    });
+    try {
+      expect(Object.keys(providers()).sort()).toEqual(['credentials', 'orangecat']);
+    } finally {
+      delete process.env.ORANGECAT_OAUTH_CLIENT_ID;
+      delete process.env.ORANGECAT_OAUTH_CLIENT_SECRET;
+    }
   });
 });

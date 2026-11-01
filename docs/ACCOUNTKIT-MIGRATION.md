@@ -14,7 +14,7 @@ Against an isolated database holding an authorised snapshot, after every
 migration:
 
 ```sh
-DATABASE_URL=postgres://… node scripts/db/accountkit-import-rehearse.mjs
+DATABASE_URL=postgres://… pnpm run db:rehearse-import
 ```
 
 It runs `scripts/db/accountkit-import.sql` in one transaction, always rolls
@@ -48,10 +48,13 @@ every sign-in; unset, Auth.js answers as today. The secret is
   `users` row on every request (`src/lib/auth/claims.ts`, the same rule the
   Auth.js jwt callback uses). A demotion, a deletion or a newly verified
   address applies on the next request; `token_version` is not needed.
-- The pages keep `next-auth/react`. `/api/auth` answers its calls
-  (`session`, `csrf`, `providers`, `signout`, `callback/credentials`,
-  `signin/orangecat`) from AccountKit, in evig's own login codes, and hands
-  every other path to AccountKit. The proxy asks AccountKit for the session.
+- The pages keep `next-auth/react`. AccountKit's compat layer
+  (`@bitbaum/accountkit/auth/nextauth-compat`, configured in
+  `src/lib/auth/shared/compat.ts`) answers its calls (`session`, `csrf`,
+  `providers`, `signout`, `callback/credentials`, `signin/orangecat`) in
+  evig's own login codes. Of AccountKit's own endpoints only the session,
+  sign-in, sign-out and the OAuth callback are open. The proxy asks AccountKit
+  for the session.
 - Nobody waits for an email confirmation to sign in: that is AccountKit's
   default for every product (owner decision, 2026-11-01), and evig's own rule
   already. Confirming the address still unlocks staff powers
@@ -72,10 +75,9 @@ not deployed or browser evidence.
 
 ## Before switching
 
-1. **OrangeCat callback.** evig's OrangeCat client (`evig`) is registered for
-   Auth.js's `/api/auth/callback/orangecat`. AccountKit returns to
-   `/api/auth/oauth2/callback/orangecat`; orangecat#1501 adds that URI beside
-   the old one. Confirm it is live before switching.
+1. **OrangeCat callback.** Done: client `evig` accepts AccountKit's
+   `/api/auth/oauth2/callback/orangecat` beside the Auth.js one
+   (orangecat#1501, live).
 2. Stop Auth.js writes, import once under locks, then set `AUTH_RUNTIME`.
    Everyone signed in under Auth.js signs in again once. To roll back, unset
    `AUTH_RUNTIME` and drop the two triggers. A password changed through

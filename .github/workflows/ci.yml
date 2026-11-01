@@ -271,7 +271,7 @@ jobs:
           # The rehearsal must also pass on the same chain.
           DATABASE_URL: postgres://postgres:ci@localhost:5432/evig_drift
         run: |
-          node scripts/db/accountkit-import-rehearse.mjs
+          pnpm run db:rehearse-import
           pnpm exec vitest run src/lib/auth/shared
 
   e2e-local:
