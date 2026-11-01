@@ -76,9 +76,10 @@ not deployed or browser evidence.
 
 ## Switched (2026-11-01)
 
-The switch ran from Loki's `accountkit-switch.yml`
-(`scripts/hetzner/accountkit-switch.sh`, see Loki's
-`docs/architecture/accountkit-migration.md`):
+The switch ran from Loki's
+[`accountkit-switch.yml`](https://github.com/bitbaum/loki/blob/main/.github/workflows/accountkit-switch.yml)
+(see Loki's
+[AccountKit migration](https://github.com/bitbaum/loki/blob/main/docs/architecture/accountkit-migration.md)):
 
 1. A survey counted 21 accounts and nobody whose only way in would be
    lost.
