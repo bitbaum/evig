@@ -1,6 +1,7 @@
 /**
- * A person AccountKit created itself (a first OrangeCat or bitbaum sign-in) gets
- * evig's `users` row under the same id, so every evig table can reference them.
+ * A person AccountKit created itself (a first OrangeCat or bitbaum sign-in, or
+ * a first email sign-in link to a new address) gets evig's `users` row under
+ * the same id, so every evig table can reference them.
  * Linking a method to an existing person only records the OrangeCat actor id.
  * Idempotent: AccountKit may call this more than once for one person.
  */
