@@ -41,8 +41,8 @@ importers:
         specifier: ^0.23.1
         version: 0.23.1(11332ae5a8ba7fb0f90bbe311ca9e8db)
       '@bitbaum/ai-kit':
-        specifier: ^1.22.0
-        version: 1.22.0(react@19.3.1)
+        specifier: ^1.23.0
+        version: 1.23.0(react@19.3.1)
       '@bitbaum/chartkit':
         specifier: ^0.7.0
         version: 0.7.0(react@19.3.1)
@@ -619,8 +619,8 @@ packages:
       next:
         optional: true
 
-  '@bitbaum/ai-kit@1.22.0':
-    resolution: {integrity: sha512-IfebEXcs+mbpK0jrrGpSJg2WPWq0VKMDuKYRoB5yMni+uZ4wRWfKOwS+DlUmgDfWmVWMAQzXDbQSawANbHbeYg==}
+  '@bitbaum/ai-kit@1.23.0':
+    resolution: {integrity: sha512-PFSdiWYJ3TMsXPlV11yZEMoZBELNvxT39s0EITYX8nJTS3d8PIjitHWNWTbmvpPA1QwEg2L0/WSlsa4tN3wqfg==}
     engines: {node: '>=20'}
     peerDependencies:
       react: '>=18'
@@ -7171,7 +7171,7 @@ snapshots:
       drizzle-orm: 0.45.4(@opentelemetry/api@1.9.1)(@types/pg@8.23.1)(kysely@0.29.7)(pg@8.23.1)
       next: 16.4.3(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@26.4.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
 
-  '@bitbaum/ai-kit@1.22.0(react@19.3.1)':
+  '@bitbaum/ai-kit@1.23.0(react@19.3.1)':
     dependencies:
       '@mozilla/readability': 0.6.0
       ai-forms: 0.1.3(react@19.3.1)
