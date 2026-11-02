@@ -107,9 +107,9 @@ export function AccountPanel(
 /**
  * Takes a reset token out of the address bar, referrers and history once the
  * page holds it. The sign-in page passes the token to RecoveryForm from the
- * server: evig's session provider remounts the page once after hydration
- * (src/components/auth/SessionProvider.tsx), which would lose a token that
- * only lived in client state.
+ * server, so the form keeps it however the page mounts. (The session provider
+ * once remounted every page after hydration and lost a token that lived only
+ * in client state; src/components/auth/SessionProvider.tsx no longer does.)
  */
 export function TokenScrubber() {
   useEffect(() => {

@@ -21,7 +21,7 @@ import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/utils';
 
-// Skip SSR — both use useSession which requires SessionProvider (lazy-loaded client-side only)
+// Loaded client-side only (ssr: false), after the first paint.
 const UserMenu = dynamic(
   () => import('@/components/auth/UserMenu').then((m) => ({ default: m.UserMenu })),
   { ssr: false },
