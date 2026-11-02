@@ -1,17 +1,8 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
-import { SessionContext } from 'next-auth/react';
+import type { ReactNode } from 'react';
+import { SessionProvider as NextAuthSessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';
-
-type NextAuthSessionProvider = React.ComponentType<{
-  children: ReactNode;
-  session?: Session | null;
-  refetchInterval?: number;
-  refetchOnWindowFocus?: boolean;
-  refetchWhenOffline?: boolean;
-  basePath?: string;
-}>;
 
 interface Props {
   children: ReactNode;
@@ -19,44 +10,29 @@ interface Props {
   session?: Session | null;
 }
 
-let _cachedSP: NextAuthSessionProvider | null = null;
-
-// Lazy-loads next-auth/react client-side to avoid the React-null circular-dependency
-// that can occur in Next.js 16 + next-auth v5 beta SSR bundles during static generation.
-//
-// When the parent layout passes `session` (fetched via auth() server-side),
-// the fallback context starts in the correct authenticated/unauthenticated
-// state instead of 'loading'. This is what stops the Anmelden/Registrieren
-// flash (or stuck state) for logged-in users — previously useSession()
-// returned 'loading' on first render, the navbar showed login buttons, and
-// if the lazy SP import or its re-render didn't land cleanly (hydration
-// error, slow chunk fetch, etc.) the buttons stayed visible.
-function LazyAuthProvider({ children, session }: Props) {
-  const [SP, setSP] = useState<NextAuthSessionProvider | null>(() => _cachedSP);
-
-  // Build a fallback that matches the server-known auth state. `loading`
-  // is only used when we have no server session AND the real SP hasn't
-  // mounted yet — never for an already-authenticated user.
-  const fallback = session?.user
-    ? { data: session, status: 'authenticated' as const, update: async () => session }
-    : session === null
-      ? { data: null, status: 'unauthenticated' as const, update: async () => null }
-      : { data: null, status: 'loading' as const, update: async () => null };
-
-  useEffect(() => {
-    if (_cachedSP) return;
-    import('next-auth/react').then(({ SessionProvider: sp }) => {
-      _cachedSP = sp as NextAuthSessionProvider;
-      setSP(() => sp as NextAuthSessionProvider);
-    });
-  }, []);
-
-  if (!SP) {
-    return <SessionContext.Provider value={fallback}>{children}</SessionContext.Provider>;
-  }
-
+/**
+ * The `useSession` context for every page. Sign-in itself is AccountKit's
+ * (src/lib/auth/shared/), but many components still read the session
+ * through `next-auth/react`'s `useSession`, and `signOut` relies on this
+ * provider to tell other tabs. `/api/auth/*` serves that protocol through
+ * AccountKit's compat layer.
+ *
+ * The provider is one component type from the first server render to the last
+ * client render. It used to lazy-load `next-auth/react` and swap a fallback
+ * context provider for the real one after hydration; a different element type
+ * at the root makes React unmount and remount the whole page, so every page
+ * lost its client state once (AccountKit's reset form lost its token). The
+ * lazy load bought nothing: `next-auth/react` was already in the bundle
+ * through `SessionContext` and every `useSession` import, and the circular
+ * dependency it worked around is handled by `transpilePackages` in
+ * next.config.js. `SessionProvider.test.tsx` pins this.
+ *
+ * Passing `session` starts the context authenticated or unauthenticated, never
+ * `loading`, and the provider does not refetch it on mount.
+ */
+export function SessionProvider({ children, session }: Props) {
   return (
-    <SP
+    <NextAuthSessionProvider
       session={session}
       refetchInterval={0}
       refetchOnWindowFocus={false}
@@ -64,10 +40,6 @@ function LazyAuthProvider({ children, session }: Props) {
       basePath="/api/auth"
     >
       {children}
-    </SP>
+    </NextAuthSessionProvider>
   );
-}
-
-export function SessionProvider({ children, session }: Props) {
-  return <LazyAuthProvider session={session}>{children}</LazyAuthProvider>;
 }
