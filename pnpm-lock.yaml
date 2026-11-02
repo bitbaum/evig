@@ -18,7 +18,7 @@ overrides:
   shell-quote: ^1.11.0
   vite: ^8.2.4
   brace-expansion: ^5.0.9
-  uuid: ^14.0.2
+  uuid: ^14.0.3
   sharp: ^0.35.5
   dompurify: ^3.4.17
   lodash-es: ^4.18.1
@@ -200,8 +200,8 @@ importers:
         specifier: ^0.9.0
         version: 0.9.0(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
       uuid:
-        specifier: ^14.0.2
-        version: 14.0.2
+        specifier: ^14.0.3
+        version: 14.0.3
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -6509,8 +6509,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  uuid@14.0.2:
-    resolution: {integrity: sha512-xZe/16rV4aa+HGSOCiY2YeLT1OybRLrrkL/Rqaq7p7GMVXjFh+6wN4oMYgjFmnSnhY8t6Xpdl2l9qmnHYuMHwQ==}
+  uuid@14.0.3:
+    resolution: {integrity: sha512-Sc5u1VVln93y1Xnz4R+CunOZc7R9LUcTmhj7Rc7Eg3HVcf7rVn2FOoa812fe0W8p3jD7xeoGSYbfqCGGH2B6xw==}
     hasBin: true
 
   validate-npm-package-license@3.0.4:
@@ -10586,7 +10586,7 @@ snapshots:
       saxes: 5.0.1
       tmp: 0.2.7
       unzipper: 0.10.14
-      uuid: 14.0.2
+      uuid: 14.0.3
 
   expect-type@1.4.0: {}
 
@@ -11675,7 +11675,7 @@ snapshots:
       roughjs: 4.6.6
       stylis: 4.4.0
       ts-dedent: 2.3.0
-      uuid: 14.0.2
+      uuid: 14.0.3
 
   micromark-core-commonmark@2.0.3:
     dependencies:
@@ -13357,7 +13357,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  uuid@14.0.2: {}
+  uuid@14.0.3: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
