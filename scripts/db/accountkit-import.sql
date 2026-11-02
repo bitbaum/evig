@@ -64,10 +64,14 @@ DO $$ BEGIN
 END $$;
 
 -- From here on every writer of either table keeps the other in step
--- (functions in migration 142). Rolled back with everything else in a rehearsal.
+-- (functions in migrations 142 and 143). Rolled back with everything else in a rehearsal.
 DROP TRIGGER IF EXISTS evig_accountkit_from_users ON users;
 CREATE TRIGGER evig_accountkit_from_users AFTER INSERT OR UPDATE OR DELETE ON users
   FOR EACH ROW EXECUTE FUNCTION evig_accountkit_from_users();
 DROP TRIGGER IF EXISTS evig_accountkit_to_users ON auth_users;
 CREATE TRIGGER evig_accountkit_to_users AFTER UPDATE ON auth_users
   FOR EACH ROW EXECUTE FUNCTION evig_accountkit_to_users();
+-- AccountKit's own account deletion removes the evig person (migration 143).
+DROP TRIGGER IF EXISTS evig_accountkit_delete_users ON auth_users;
+CREATE TRIGGER evig_accountkit_delete_users AFTER DELETE ON auth_users
+  FOR EACH ROW EXECUTE FUNCTION evig_accountkit_delete_users();

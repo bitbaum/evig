@@ -455,7 +455,8 @@
       "successLoginLink": "Ir al inicio de sesión",
       "successOtherEmail": "Usar otra dirección de correo electrónico",
       "genericError": "Se ha producido un error",
-      "resetFailed": "Error al restablecer la contraseña"
+      "resetFailed": "Error al restablecer la contraseña",
+      "unavailable": "Restablecer por correo no está disponible ahora. Inicia sesión de otra forma o escríbenos."
     },
     "verify": {
       "heading": "Confirma tu correo",
@@ -5376,6 +5377,14 @@
       "decisionsTitle": "Votaciones",
       "decisionsDesc": "Votaciones abiertas donde tu voz cuenta.",
       "decisionDetailTitle": "Votación"
+    },
+    "security": {
+      "title": "Inicio de sesión y seguridad",
+      "description": "Contraseña, passkeys, inicio de sesión en dos pasos, inicios vinculados y eliminar tu cuenta.",
+      "keptSuperAdmin": "Una cuenta de superadministrador no puede eliminarse a sí misma.",
+      "keptRecords": "Tu cuenta figura en registros que evig debe conservar, por eso no puede eliminarse a sí misma.",
+      "requestDeletion": "Pedir al equipo de evig que la elimine",
+      "manage": "Gestionar contraseña, passkeys e inicio en dos pasos"
     }
   },
   "components": {

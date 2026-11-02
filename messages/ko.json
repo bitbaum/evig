@@ -455,7 +455,8 @@
       "successLoginLink": "로그인으로 이동",
       "successOtherEmail": "다른 이메일 주소 사용하기",
       "genericError": "오류가 발생했습니다",
-      "resetFailed": "비밀번호 재설정에 실패했습니다"
+      "resetFailed": "비밀번호 재설정에 실패했습니다",
+      "unavailable": "지금은 이메일로 재설정할 수 없습니다. 다른 방법으로 로그인하거나 문의해 주세요."
     },
     "verify": {
       "heading": "이메일을 확인하세요",
@@ -5288,6 +5289,14 @@
       "decisionsTitle": "투표",
       "decisionsDesc": "당신의 목소리가 중요한 공개 투표.",
       "decisionDetailTitle": "투표"
+    },
+    "security": {
+      "title": "로그인 및 보안",
+      "description": "비밀번호, 패스키, 2단계 로그인, 연결된 로그인, 계정 삭제.",
+      "keptSuperAdmin": "최고 관리자 계정은 스스로 삭제할 수 없습니다.",
+      "keptRecords": "이 계정은 evig가 보관해야 하는 기록에 올라 있어 스스로 삭제할 수 없습니다.",
+      "requestDeletion": "evig 팀에 삭제 요청하기",
+      "manage": "비밀번호, 패스키, 2단계 로그인 관리"
     }
   },
   "components": {

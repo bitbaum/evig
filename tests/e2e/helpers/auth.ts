@@ -95,6 +95,18 @@ function pathMatchesCallback(pathname: string, search: string, callbackUrl: stri
   );
 }
 
+/**
+ * AccountKit allows 10 password attempts per address per 15 minutes. Every
+ * spec signs in from the same machine, so each sign-in names its own
+ * (documentation-range) address. Behind a proxy the proxy's own hop wins, so
+ * against a deployment this changes nothing.
+ */
+let signInHop = 0;
+export function nextSignInAddress(): string {
+  signInHop += 1;
+  return `198.51.100.${(signInHop % 250) + 1}`;
+}
+
 /** Log in via Auth.js credentials API (reliable; shares cookies with page context). */
 export async function loginWithCredentials(
   page: Page,
@@ -115,6 +127,7 @@ export async function loginWithCredentials(
   const { csrfToken } = (await csrfRes.json()) as { csrfToken: string };
 
   const loginRes = await page.request.post('/api/auth/callback/credentials', {
+    headers: { 'x-forwarded-for': nextSignInAddress() },
     form: {
       csrfToken,
       email,

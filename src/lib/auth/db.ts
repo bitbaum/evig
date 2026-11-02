@@ -53,8 +53,6 @@ export {
   createVerificationCode,
   verifyEmailCode,
   createPasswordResetToken,
-  verifyPasswordResetToken,
-  updateUserPassword,
   getPasswordResetToken,
 } from './db-verification';
 

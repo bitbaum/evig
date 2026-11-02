@@ -1,54 +1,44 @@
-'use client';
-
-import { useEffect, Suspense } from 'react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { ORG } from '@/config/org';
-import { Logo } from '@/components/ui/Logo';
-import { RegistrationWizard } from '@/components/auth/RegistrationWizard';
-import { AuthenticatedRedirect } from '@/components/auth/AuthenticatedRedirect';
+import { connection } from 'next/server';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { authLabelsFor } from '@bitbaum/accountkit/auth';
+import { AuthShell } from '@/components/auth/AuthShell';
+import { SignUpForm } from '@/components/auth/AuthForms';
+import { ReferralKeeper } from '@/components/auth/ReferralKeeper';
+import { evigMethods } from '@/lib/auth/shared/methods';
 
-export default function RegisterPage() {
-  const t = useTranslations('auth.login');
-  const { status } = useSession();
-
-  useEffect(() => {
-    document.title = `Registrieren | ${ORG.name}`;
-  }, []);
-
-  if (status === 'loading' || status === 'authenticated') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-surface-raised">
-        <Suspense fallback={null}>
-          <AuthenticatedRedirect />
-        </Suspense>
-        <Loader2 className="w-8 h-8 animate-spin text-action" />
-      </div>
-    );
-  }
-
+/**
+ * AccountKit's sign-up: an email and a password, or any other method. A new
+ * person confirms the address with evig's 6-digit code (/auth/verify-email),
+ * or later from the dashboard. A referral link (?ref=…) is kept for the
+ * sign-up (src/lib/auth/shared/evig-plugin.ts).
+ */
+export default async function RegisterPage() {
+  await connection();
+  const [t, tLogin, locale] = await Promise.all([
+    getTranslations('auth.register'),
+    getTranslations('auth.login'),
+    getLocale(),
+  ]);
   return (
-    <div className="min-h-screen bg-surface-raised py-12 px-4 sm:px-6 lg:px-8">
-      <Suspense fallback={null}>
-        <AuthenticatedRedirect />
-      </Suspense>
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center text-action hover:text-action transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            {t('backHome')}
-          </Link>
-        </div>
-        <div className="flex justify-center mb-8">
-          <Logo showText={true} />
-        </div>
-        <RegistrationWizard />
-      </div>
-    </div>
+    <AuthShell backHome={tLogin('backHome')} title={t('heading')} subtitle={t('subtitle')}>
+      <ReferralKeeper />
+      <SignUpForm
+        labels={authLabelsFor(locale)}
+        methods={evigMethods()}
+        next="/auth/verify-email"
+        signIn={t('login')}
+      />
+      <p className="mt-6 text-center text-xs text-text-tertiary">
+        {t('termsI')}{' '}
+        <Link href="/agb" className="text-action hover:underline">
+          AGB
+        </Link>{' '}
+        {t('termsAnd')}{' '}
+        <Link href="/datenschutz" className="text-action hover:underline">
+          Datenschutzbestimmungen
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

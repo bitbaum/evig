@@ -5,13 +5,19 @@
 # MAIN APPLICATION (Next.js)
 # ==========================================
 
-# Auth.js — generate: openssl rand -base64 64
+# Accounts (@bitbaum/accountkit) — generate: openssl rand -base64 64
 AUTH_SECRET=your-super-secret-auth-key-change-in-production-min-32-chars
 NEXTAUTH_URL=http://localhost:3001
 NEXTAUTH_SECRET=your-super-secret-auth-key-change-in-production-min-32-chars
-# Accounts on @bitbaum/accountkit instead of Auth.js. Leave unset until the
-# cutover in docs/ACCOUNTKIT-MIGRATION.md.
-# AUTH_RUNTIME=accountkit
+# "Sign in with OrangeCat" (client id "evig"): both, or the button is hidden.
+# ORANGECAT_OAUTH_CLIENT_ID=
+# ORANGECAT_OAUTH_CLIENT_SECRET=
+# The shared bitbaum sign-in (Morulia): all three, or the button is hidden.
+# Switched on by loki app-secrets.yml signin-on.
+# SIGNIN_ISSUER=
+# SIGNIN_CLIENT_ID=
+# SIGNIN_CLIENT_SECRET=
+# The email sign-in link and password recovery need account mail (RESEND_*).
 
 # Database — SSOT: DATABASE_URL (app + auth share one pool)
 # Local dev: Docker Postgres from docker-compose.yml (port 5433)

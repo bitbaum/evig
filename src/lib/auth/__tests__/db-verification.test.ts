@@ -36,16 +36,6 @@
  *   - returns a 64-char hex token
  *   - lowercases the email
  *
- *   verifyPasswordResetToken
- *   - returns { success: false } when token not found
- *   - deletes the token and returns { success: true, email } on success
- *   - returns { success: false } on DB error
- *
- *   updateUserPassword
- *   - returns { success: false } when user not found
- *   - returns { success: true } on successful update
- *   - returns { success: false } on DB error
- *
  *   getPasswordResetToken
  *   - returns null when not found
  *   - returns { identifier, token, expires } when found
@@ -141,8 +131,6 @@ import {
   createVerificationCode,
   verifyEmailCode,
   createPasswordResetToken,
-  verifyPasswordResetToken,
-  updateUserPassword,
   getPasswordResetToken,
 } from '../db-verification';
 
@@ -383,86 +371,6 @@ describe('createPasswordResetToken', () => {
 
     expect(exp).toBeGreaterThanOrEqual(before + sevenDaysMs);
     expect(exp).toBeLessThanOrEqual(after + sevenDaysMs);
-  });
-});
-
-// ============================================================================
-// verifyPasswordResetToken
-// ============================================================================
-
-describe('verifyPasswordResetToken', () => {
-  it('returns { success: false } when token not found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]));
-
-    const result = await verifyPasswordResetToken(TOKEN);
-
-    expect(result.success).toBe(false);
-    expect(result.error).toBeTruthy();
-  });
-
-  it('deletes the token and returns { success: true, email } on success', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeTokenRow()]));
-
-    const result = await verifyPasswordResetToken(TOKEN);
-
-    expect(result.success).toBe(true);
-    expect(result.email).toBe(EMAIL);
-    expect(mockDbDelete).toHaveBeenCalledTimes(1);
-  });
-
-  it('returns { success: false } on DB error (does not throw)', async () => {
-    mockDbSelect.mockReturnValueOnce({
-      ...makeChain([]),
-      from: vi.fn().mockReturnValue({
-        where: vi.fn().mockReturnValue(Promise.reject(new Error('timeout'))),
-      }),
-    } as unknown as ReturnType<typeof makeChain>);
-
-    const result = await verifyPasswordResetToken(TOKEN);
-
-    expect(result.success).toBe(false);
-  });
-});
-
-// ============================================================================
-// updateUserPassword
-// ============================================================================
-
-describe('updateUserPassword', () => {
-  it('returns { success: false } when user not found (empty returning)', async () => {
-    mockDbUpdate.mockImplementationOnce(() => makeChain([]));
-
-    const result = await updateUserPassword(EMAIL, 'new-hash');
-
-    expect(result.success).toBe(false);
-    expect(result.error).toContain('nicht gefunden');
-  });
-
-  it('returns { success: true } on successful password update', async () => {
-    mockDbUpdate.mockImplementationOnce(() => makeChain([{ id: 'user-1' }]));
-
-    const result = await updateUserPassword(EMAIL, 'new-hash');
-
-    expect(result.success).toBe(true);
-    const chain = mockDbUpdate.mock.results[0].value as { set: Mock };
-    const setArg = chain.set.mock.calls[0][0] as Record<string, unknown>;
-    expect(setArg.passwordHash).toBe('new-hash');
-    expect(setArg.emailVerified).toBeDefined();
-  });
-
-  it('returns { success: false } on DB error (does not throw)', async () => {
-    mockDbUpdate.mockReturnValueOnce({
-      ...makeChain([]),
-      set: vi.fn().mockReturnValue({
-        where: vi.fn().mockReturnValue({
-          returning: vi.fn().mockReturnValue(Promise.reject(new Error('constraint'))),
-        }),
-      }),
-    } as unknown as ReturnType<typeof makeChain>);
-
-    const result = await updateUserPassword(EMAIL, 'hash');
-
-    expect(result.success).toBe(false);
   });
 });
 

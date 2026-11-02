@@ -2912,7 +2912,8 @@
       "successLoginLink": "Aller à la connexion",
       "successOtherEmail": "Utiliser une autre adresse e-mail",
       "genericError": "Une erreur est survenue",
-      "resetFailed": "Échec de la réinitialisation du mot de passe"
+      "resetFailed": "Échec de la réinitialisation du mot de passe",
+      "unavailable": "La réinitialisation par e-mail n’est pas disponible pour le moment. Connecte-toi autrement ou écris-nous."
     },
     "verify": {
       "heading": "Confirmez votre e-mail",
@@ -5376,6 +5377,14 @@
       "decisionsTitle": "Votes",
       "decisionsDesc": "Votes ouverts où votre voix compte.",
       "decisionDetailTitle": "Vote"
+    },
+    "security": {
+      "title": "Connexion et sécurité",
+      "description": "Mot de passe, passkeys, connexion en deux étapes, connexions liées et suppression du compte.",
+      "keptSuperAdmin": "Un compte super-admin ne peut pas se supprimer lui-même.",
+      "keptRecords": "Ton compte figure sur des pièces que evig doit conserver ; il ne peut donc pas se supprimer lui-même.",
+      "requestDeletion": "Demander la suppression à l’équipe evig",
+      "manage": "Gérer le mot de passe, les passkeys et la connexion en deux étapes"
     }
   },
   "components": {

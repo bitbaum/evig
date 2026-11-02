@@ -455,7 +455,8 @@
       "successLoginLink": "Vai all'accesso",
       "successOtherEmail": "Usa un altro indirizzo e-mail",
       "genericError": "Si è verificato un errore",
-      "resetFailed": "Reimpostazione della password non riuscita"
+      "resetFailed": "Reimpostazione della password non riuscita",
+      "unavailable": "Il ripristino via e-mail non è disponibile al momento. Accedi in un altro modo o scrivici."
     },
     "verify": {
       "heading": "Conferma la tua e-mail",
@@ -5376,6 +5377,14 @@
       "decisionsTitle": "Votazioni",
       "decisionsDesc": "Votazioni aperte dove la tua voce conta.",
       "decisionDetailTitle": "Votazione"
+    },
+    "security": {
+      "title": "Accesso e sicurezza",
+      "description": "Password, passkey, accesso in due passaggi, accessi collegati ed eliminazione dell’account.",
+      "keptSuperAdmin": "Un account super admin non può eliminarsi da solo.",
+      "keptRecords": "Il tuo account compare su documenti che evig deve conservare, quindi non può eliminarsi da solo.",
+      "requestDeletion": "Chiedi al team evig di eliminarlo",
+      "manage": "Gestisci password, passkey e accesso in due passaggi"
     }
   },
   "components": {

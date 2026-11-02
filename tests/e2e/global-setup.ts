@@ -42,7 +42,9 @@ export default async function globalSetup(config: FullConfig) {
   }
   const { csrfToken } = await csrfRes.json();
 
+  // A documentation-range address of its own (helpers/auth.ts, nextSignInAddress).
   const loginRes = await page.request.post('/api/auth/callback/credentials', {
+    headers: { 'x-forwarded-for': '198.51.100.254' },
     form: {
       csrfToken,
       email,

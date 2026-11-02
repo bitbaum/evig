@@ -23,11 +23,11 @@ vi.hoisted(() => {
     Object.assign(process.env, {
       DATABASE_URL: url,
       NEXT_PUBLIC_SITE_URL: 'https://evig.example.test',
-      AUTH_RUNTIME: 'accountkit',
       AUTH_SECRET: 'synthetic-evig-journey-secret-at-least-32-chars',
     });
     delete process.env.RESEND_API_KEY;
     delete process.env.ORANGECAT_OAUTH_CLIENT_ID;
+    delete process.env.SIGNIN_CLIENT_ID;
   }
 });
 
@@ -58,6 +58,7 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
     browser = createCompatClient({ compat: await compat(), site: SITE });
     await exec(`DROP TRIGGER IF EXISTS evig_accountkit_from_users ON users;
       DROP TRIGGER IF EXISTS evig_accountkit_to_users ON auth_users;
+      DROP TRIGGER IF EXISTS evig_accountkit_delete_users ON auth_users;
       TRUNCATE auth_users, auth_accounts, auth_sessions, auth_verifications,
         auth_passkeys, auth_two_factors, users CASCADE`);
     const hash = await bcrypt.hash(PASSWORD, 4);
@@ -114,15 +115,6 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
     expect((await session()).user?.isStaff).toBe(false);
   });
 
-  test("evig's reset link writes the shared password and ends every session", async () => {
-    await signIn('staff@example.test', PASSWORD);
-    const { updateUserPassword } = await import('@/lib/auth/db');
-    await updateUserPassword('staff@example.test', await bcrypt.hash('a new one', 4));
-    expect((await session()).user).toBeUndefined();
-    expect((await signIn('staff@example.test', PASSWORD)).url).toContain('invalid_credentials');
-    expect((await signIn('staff@example.test', 'a new one')).url).toContain('/dashboard');
-  });
-
   test('change-password goes through AccountKit and the old password stops working', async () => {
     await signIn('staff@example.test', PASSWORD);
     const changed = await (
@@ -146,7 +138,7 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
     );
   });
 
-  test('a registration through evig signs in on the shared runtime', async () => {
+  test("a users row written outside AccountKit (seeds, Loki's live proof) signs in", async () => {
     const { createUser } = await import('@/lib/auth/db');
     await createUser({
       email: 'fresh@example.test',
@@ -177,6 +169,212 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
       [id],
     );
     expect(rows).toEqual([{ actor, emailVerified: null }]);
+  });
+
+  // What AccountKit's screens send: JSON to its own endpoints, same cookie jar.
+  let hop = 0;
+  async function native(route: string, body: Record<string, unknown>) {
+    hop += 1;
+    const res = await (
+      await compat()
+    ).route.POST(
+      new Request(`${SITE}/api/auth${route}`, {
+        method: 'POST',
+        headers: {
+          origin: SITE,
+          'content-type': 'application/json',
+          'x-forwarded-for': `203.0.113.${hop % 250}`,
+          cookie: browser.cookie,
+        },
+        body: JSON.stringify(body),
+      }) as never,
+    );
+    const jar = new Map(
+      browser.cookie
+        .split('; ')
+        .filter(Boolean)
+        .map((part) => [part.slice(0, part.indexOf('=')), part.slice(part.indexOf('=') + 1)]),
+    );
+    for (const set of res.headers.getSetCookie()) {
+      const [pair] = set.split(';');
+      const name = pair.slice(0, pair.indexOf('='));
+      const value = pair.slice(pair.indexOf('=') + 1);
+      if (/max-age=0/i.test(set) || value === '') jar.delete(name);
+      else jar.set(name, value);
+    }
+    browser.cookie = [...jar].map(([name, value]) => `${name}=${value}`).join('; ');
+    return res;
+  }
+
+  test('a sign-up through AccountKit makes an evig customer with a profile, under the same id', async () => {
+    const res = await native('/sign-up/email', {
+      name: '',
+      email: 'Fresh@Example.test',
+      password: 'a brand new password',
+    });
+    expect(res.status).toBe(200);
+    const { user } = await res.json();
+    const { rows } = await exec(
+      `SELECT email::text AS email, password_hash, is_staff, "emailVerified" FROM users WHERE id = $1`,
+      [user.id],
+    );
+    expect(rows).toEqual([
+      { email: 'fresh@example.test', password_hash: null, is_staff: false, emailVerified: null },
+    ]);
+    expect(
+      (await exec('SELECT 1 FROM user_profiles WHERE user_id = $1', [user.id])).rows,
+    ).toHaveLength(1);
+    expect((await session()).user).toMatchObject({ id: user.id, isStaff: false });
+    browser.cookie = '';
+    expect(
+      (
+        await native('/sign-in/email', {
+          email: 'fresh@example.test',
+          password: 'a brand new password',
+        })
+      ).status,
+    ).toBe(200);
+  });
+
+  test("AccountKit's form keeps evig's lockout: five wrong passwords lock the right one out", async () => {
+    for (let i = 0; i < 5; i += 1) {
+      const wrong = await native('/sign-in/email', { email: 'staff@example.test', password: 'no' });
+      expect([401, 429]).toContain(wrong.status);
+    }
+    const locked = await native('/sign-in/email', {
+      email: 'staff@example.test',
+      password: PASSWORD,
+    });
+    expect(locked.status).toBe(429);
+    expect((await locked.json()).code).toBe('ACCOUNT_LOCKED');
+    expect((await session()).user).toBeUndefined();
+    await exec('DELETE FROM user_lockouts');
+    expect(
+      (await native('/sign-in/email', { email: 'staff@example.test', password: PASSWORD })).status,
+    ).toBe(200);
+  });
+
+  test('an IT-Hilfe claim link sets the first password through AccountKit and confirms the address', async () => {
+    const { createUser, createPasswordResetToken } = await import('@/lib/auth/db');
+    const person = await createUser({ email: 'requester@example.test' });
+    const token = await createPasswordResetToken('requester@example.test', 7 * 24 * 3600 * 1000);
+    const res = await native('/reset-password', { token, newPassword: 'my first password' });
+    expect(res.status).toBe(200);
+    const { rows } = await exec(
+      `SELECT "emailVerified" IS NOT NULL AS verified FROM users WHERE id = $1`,
+      [person.id],
+    );
+    expect(rows[0].verified).toBe(true);
+    expect(
+      (await exec('SELECT 1 FROM verification_tokens WHERE token = $1', [token])).rows,
+    ).toHaveLength(0);
+    expect(
+      (
+        await native('/sign-in/email', {
+          email: 'requester@example.test',
+          password: 'my first password',
+        })
+      ).status,
+    ).toBe(200);
+  });
+
+  test('a claim link mailed before this release still works, and a 6-digit code never becomes one', async () => {
+    const { createUser, createVerificationCode } = await import('@/lib/auth/db');
+    await createUser({ email: 'early@example.test' });
+    const token = 'ab'.repeat(32);
+    await exec(
+      `INSERT INTO verification_tokens (identifier, token, expires) VALUES ('early@example.test', $1, now() + interval '1 day')`,
+      [token],
+    );
+    const { honourEvigResetLink } = await import('../reset-links');
+    await honourEvigResetLink(token);
+    await honourEvigResetLink(token);
+    expect(
+      (await native('/reset-password', { token, newPassword: 'set from an old link' })).status,
+    ).toBe(200);
+    expect((await native('/reset-password', { token, newPassword: 'twice' })).status).toBe(400);
+
+    const code = await createVerificationCode('staff@example.test');
+    await honourEvigResetLink(code);
+    expect((await native('/reset-password', { token: code, newPassword: 'takeover' })).status).toBe(
+      400,
+    );
+  });
+
+  test('a team invitation claim sets the password through AccountKit', async () => {
+    const { createUser } = await import('@/lib/auth/db');
+    const { createClaimToken, consumeClaim } = await import('@/lib/services/team-invites');
+    const placeholder = await createUser({
+      email: 'stand-in@placeholder.revamp-it.ch',
+      name: 'Stand-in',
+    });
+    const token = await createClaimToken(placeholder.id);
+    expect(token).toBeTruthy();
+    const claimed = await consumeClaim(token!, {
+      name: 'Real Person',
+      email: 'real@example.test',
+      password: 'claimed password',
+    });
+    expect(claimed).toEqual({ success: true });
+    expect(
+      (await consumeClaim(token!, { name: 'x', email: 'y@example.test', password: 'z' })).success,
+    ).toBe(false);
+    expect(
+      (await native('/sign-in/email', { email: 'real@example.test', password: 'claimed password' }))
+        .status,
+    ).toBe(200);
+    expect((await session()).user).toMatchObject({ id: placeholder.id, emailVerified: true });
+  });
+
+  test("a rename through AccountKit's panel reaches evig's row", async () => {
+    await native('/sign-in/email', { email: 'staff@example.test', password: PASSWORD });
+    expect((await native('/update-user', { name: 'Panel Name' })).status).toBe(200);
+    expect((await exec('SELECT name FROM users WHERE id = $1', [STAFF])).rows[0].name).toBe(
+      'Panel Name',
+    );
+  });
+
+  test('deleting an account through AccountKit deletes the evig account', async () => {
+    await native('/sign-in/email', { email: 'unverified@example.test', password: PASSWORD });
+    const res = await native('/delete-user', { password: PASSWORD });
+    expect(res.status).toBe(200);
+    expect((await exec('SELECT 1 FROM users WHERE id = $1', [UNVERIFIED_STAFF])).rows).toHaveLength(
+      0,
+    );
+    expect(
+      (await exec('SELECT 1 FROM auth_users WHERE id = $1', [UNVERIFIED_STAFF])).rows,
+    ).toHaveLength(0);
+    expect((await session()).user).toBeUndefined();
+  });
+
+  test('a super admin is refused deletion and keeps every way in', async () => {
+    await exec('UPDATE users SET is_super_admin = true WHERE id = $1', [STAFF]);
+    await native('/sign-in/email', { email: 'staff@example.test', password: PASSWORD });
+    expect((await native('/delete-user', { password: PASSWORD })).status).toBe(403);
+    expect(
+      (await exec('SELECT 1 FROM auth_accounts WHERE user_id = $1', [STAFF])).rows,
+    ).toHaveLength(1);
+    expect((await session()).user?.id).toBe(STAFF);
+  });
+
+  test('every method is offered by env', async () => {
+    const { evigMethods } = await import('../methods');
+    expect(evigMethods()).toMatchObject({
+      password: true,
+      passkey: true,
+      orangecat: false,
+      signin: false,
+    });
+    expect(
+      evigMethods({
+        ...process.env,
+        ORANGECAT_OAUTH_CLIENT_ID: 'evig',
+        ORANGECAT_OAUTH_CLIENT_SECRET: 's',
+        SIGNIN_ISSUER: 'https://signin.example.test',
+        SIGNIN_CLIENT_ID: 'evig',
+        SIGNIN_CLIENT_SECRET: 's',
+      }),
+    ).toMatchObject({ orangecat: true, signin: true, twoFactor: true });
   });
 
   test('with account mail on, an unconfirmed account still signs in (AccountKit default)', async () => {

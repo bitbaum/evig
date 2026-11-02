@@ -1,11 +1,11 @@
 'use client';
 
-import { Mail, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { KeyRound, Mail, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Heading from '@/components/ui/Heading';
 import { Input } from '@/components/ui/input';
 import { SETTINGS_CONFIG } from '@/config/profile';
-import { CONTACT } from '@/config/org';
 import { useTranslations } from 'next-intl';
 import type { ProfileData } from '../../profile/hooks/useProfileData';
 
@@ -17,7 +17,7 @@ interface AccountSectionProps {
 
 export function AccountSection({ profile, email, handleChange }: AccountSectionProps) {
   const labels = SETTINGS_CONFIG.labels.account;
-  const t = useTranslations('dashboard.settings.account');
+  const tSecurity = useTranslations('dashboard.security');
 
   return (
     <div className="space-y-8">
@@ -81,7 +81,10 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
           {labels.password}
         </Heading>
         <p className="text-sm text-text-secondary mb-4">{labels.passwordDescription}</p>
-        <p className="text-sm text-text-secondary">{t('passwordNote')}</p>
+        <Button as={Link} href="/dashboard/security" variant="outline">
+          <KeyRound className="w-4 h-4" />
+          {tSecurity('manage')}
+        </Button>
       </div>
 
       {/* Danger Zone */}
@@ -93,14 +96,9 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
           {labels.deleteAccount}
         </Heading>
         <p className="text-sm text-text-secondary mb-4">{labels.deleteAccountWarning}</p>
-        {/* Account deletion is handled manually by staff (no self-serve cascade
-            delete yet). The button opens a pre-filled deletion request to
-            support so it performs a real action instead of being inert. */}
-        <Button
-          as="a"
-          href={`mailto:${CONTACT.supportEmail}?subject=${encodeURIComponent(labels.deleteAccount)}&body=${encodeURIComponent(t('deleteRequestBody', { email }))}`}
-          variant="destructive-outline"
-        >
+        {/* AccountKit's panel deletes the account; where evig must keep it, the
+            page says so and offers deletion by the team instead. */}
+        <Button as={Link} href="/dashboard/security#account" variant="destructive-outline">
           <Trash2 className="w-4 h-4" />
           {labels.deleteAccountButton}
         </Button>
