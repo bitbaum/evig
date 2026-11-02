@@ -211,5 +211,19 @@ test('every way into an evig account works on AccountKit screens', async ({ page
     await page.goto(await mailed(EMAIL, link('/api/auth/magic-link/verify')));
     await page.waitForURL(/\/dashboard/, { timeout: 30_000 });
     expect(await sessionEmail(page)).toBe(EMAIL);
+    await signOut(page);
+  });
+
+  await test.step('an email sign-in link to a new address creates the evig account', async () => {
+    // evig's session is read from its own `users` row, so a person AccountKit
+    // created without that row would have no session here.
+    const fresh = `link-${run}@example.test`;
+    await visit(page, '/auth/login');
+    await page.locator('input[autocomplete="username webauthn"]').fill(fresh);
+    await button(page, 'Stattdessen einen Anmeldelink per E-Mail schicken').click();
+    await expect(page.getByText(`Wir haben einen Link an ${fresh} geschickt`)).toBeVisible();
+    await page.goto(await mailed(fresh, link('/api/auth/magic-link/verify')));
+    await page.waitForURL(/\/dashboard/, { timeout: 30_000 });
+    expect(await sessionEmail(page)).toBe(fresh);
   });
 });

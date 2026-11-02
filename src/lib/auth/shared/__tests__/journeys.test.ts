@@ -171,6 +171,25 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
     expect(rows).toEqual([{ actor, emailVerified: null }]);
   });
 
+  test('a person a first email sign-in link creates gets an evig row, address confirmed', async () => {
+    const { ensureEvigUser } = await import('../accounts');
+    const { NO_SIGN_IN_METHOD } = await import('@bitbaum/accountkit/auth/server');
+    const id = '00000000-0000-4000-8000-0000000000cc';
+    await exec(
+      `INSERT INTO auth_users (id, email, name, email_verified) VALUES ($1, 'link@example.test', '', true)`,
+      [id],
+    );
+    await ensureEvigUser({ userId: id, providerId: NO_SIGN_IN_METHOD, accountId: id });
+    const { rows } = await exec(
+      `SELECT email::text AS email, is_staff, orangecat_actor_id, "emailVerified" IS NOT NULL AS verified
+         FROM users WHERE id = $1`,
+      [id],
+    );
+    expect(rows).toEqual([
+      { email: 'link@example.test', is_staff: false, orangecat_actor_id: null, verified: true },
+    ]);
+  });
+
   // What AccountKit's screens send: JSON to its own endpoints, same cookie jar.
   let hop = 0;
   async function native(route: string, body: Record<string, unknown>) {
