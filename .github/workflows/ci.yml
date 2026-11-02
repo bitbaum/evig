@@ -254,9 +254,9 @@ jobs:
           PGDATABASE: evig_drift
         run: bash scripts/db/apply-migrations-ci.sh
 
-      # The AccountKit runtime (off in production until the switch) on the chain
-      # just applied: the cutover import, its mirror triggers, and every way in
-      # through the real handlers (docs/ACCOUNTKIT-MIGRATION.md).
+      # AccountKit on the chain just applied: the cutover import, its mirror
+      # triggers, and every way in through the real handlers
+      # (docs/ACCOUNTKIT-MIGRATION.md).
       - uses: pnpm/action-setup@v6
       - name: Set pnpm store dir
         run: pnpm config set store-dir ~/.pnpm-store --global
@@ -308,6 +308,8 @@ jobs:
           - 5432:5432
     env:
       AUTH_SECRET: ci-e2e-placeholder-secret-32chars
+      # AccountKit's origin check reads the public origin, baked in at build time.
+      NEXT_PUBLIC_SITE_URL: http://localhost:3001
       NEXTAUTH_URL: http://localhost:3001
       AUTH_URL: http://localhost:3001
       PLAYWRIGHT_BASE_URL: http://localhost:3001
@@ -330,6 +332,21 @@ jobs:
       AUTH_TEST_SECOND_ADMIN_PASSWORD: E2EAdmin123!
       AUTH_TEST_USER_EMAIL: e2e-user@evig.test
       AUTH_TEST_USER_PASSWORD: E2EUser123!
+      # The account journey (tests/e2e/account-journey.spec.ts): every way in
+      # on AccountKit's screens. Mail is caught by scripts/ci/mail-sink.cjs, in
+      # a file outside the uploaded artifacts (it holds synthetic reset tokens).
+      # The OrangeCat and bitbaum sign-in client values exist only so their
+      # buttons render, and are never used to sign in.
+      LEGACY_EMAIL: legacy-journey@example.test
+      LEGACY_PASSWORD: synthetic legacy journey password
+      MAIL_SINK: /tmp/evig-ci-mail.jsonl
+      RESEND_API_KEY: re_ci_sink_only
+      RESEND_FROM: evig <evig@example.test>
+      ORANGECAT_OAUTH_CLIENT_ID: evig-ci
+      ORANGECAT_OAUTH_CLIENT_SECRET: ci-only
+      SIGNIN_ISSUER: https://morulia.orangecat.ch
+      SIGNIN_CLIENT_ID: evig-ci
+      SIGNIN_CLIENT_SECRET: ci-only
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -360,6 +377,17 @@ jobs:
       - name: Seed E2E data
         run: pnpm run e2e:seed
 
+      # Every seeded account, plus one Auth.js-era account, moves to AccountKit
+      # the way production's did: the rehearsal (counts only), then the import
+      # and its mirror triggers.
+      - name: AccountKit import of the seeded accounts
+        env:
+          DATABASE_URL: postgres://postgres:ci@localhost:5432/evig_e2e
+        run: |
+          node scripts/ci/seed-legacy-account.mjs | psql -v ON_ERROR_STOP=1 -q -X
+          pnpm run db:rehearse-import
+          psql -v ON_ERROR_STOP=1 -q -X -1 -f scripts/db/accountkit-import.sql
+
       # Next keeps its compiler output in .next/cache. Without restoring it every
       # build in this repo is COLD — and this workflow builds twice (here and in
       # the E2E job), while the deploy builds again. Measured 2026-09-07: the
@@ -382,7 +410,7 @@ jobs:
 
       - name: Start app
         run: |
-          pnpm run start -p 3001 > evig-e2e.log 2>&1 &
+          NODE_OPTIONS="--require ./scripts/ci/mail-sink.cjs" pnpm run start -p 3001 > evig-e2e.log 2>&1 &
           for i in {1..90}; do
             if curl -fsS http://localhost:3001/api/health >/dev/null; then
               exit 0

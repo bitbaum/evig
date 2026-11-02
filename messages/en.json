@@ -2913,7 +2913,8 @@
       "successLoginLink": "Go to login",
       "successOtherEmail": "Use a different email address",
       "genericError": "An error occurred",
-      "resetFailed": "Password reset failed"
+      "resetFailed": "Password reset failed",
+      "unavailable": "Resetting by email is not available here right now. Sign in another way, or write to us."
     },
     "verify": {
       "heading": "Confirm your email",
@@ -5376,6 +5377,14 @@
       "decisionsTitle": "Votes",
       "decisionsDesc": "Open votes where your voice counts.",
       "decisionDetailTitle": "Vote"
+    },
+    "security": {
+      "title": "Sign-in and security",
+      "description": "Password, passkeys, two-step sign-in, linked sign-ins and deleting your account.",
+      "keptSuperAdmin": "A super admin account cannot delete itself.",
+      "keptRecords": "Your account is named on records evig must keep, so it cannot delete itself.",
+      "requestDeletion": "Ask the evig team to delete it",
+      "manage": "Manage password, passkeys and two-step sign-in"
     }
   },
   "components": {

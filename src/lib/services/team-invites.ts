@@ -12,7 +12,7 @@ import { db } from '@/db';
 import { users, verificationTokens } from '@/db/schema/auth';
 import { teams, teamMemberships } from '@/db/schema/teams';
 import { and, asc, eq, gt, isNull, sql } from 'drizzle-orm';
-import { generateToken, hashPassword } from '@/lib/auth/password';
+import { generateToken } from '@/lib/auth/password';
 import {
   isPlaceholderEmail,
   getTeamRoleLabel,
@@ -128,13 +128,17 @@ export async function consumeClaim(
     .limit(1);
   if (clash) return { success: false, error: 'Diese E-Mail-Adresse wird bereits verwendet.' };
 
-  const passwordHash = await hashPassword(input.password);
+  // The token is spent first, so a double submit cannot claim twice.
+  const [spent] = await db
+    .delete(verificationTokens)
+    .where(eq(verificationTokens.token, token))
+    .returning({ token: verificationTokens.token });
+  if (!spent) return { success: false, error: 'Dieses Konto wurde bereits übernommen.' };
   const [updated] = await db
     .update(users)
     .set({
       name: input.name.trim(),
       email,
-      passwordHash,
       emailVerified: sql`NOW()`.mapWith(String),
       updatedAt: sql`NOW()`.mapWith(String),
     })
@@ -143,7 +147,9 @@ export async function consumeClaim(
     .returning({ id: users.id });
   if (!updated) return { success: false, error: 'Dieses Konto wurde bereits übernommen.' };
 
-  await db.delete(verificationTokens).where(eq(verificationTokens.token, token));
+  // The password lives with AccountKit, the only credential writer.
+  const { setPassword } = await import('@/lib/auth/shared/credentials');
+  await setPassword(userId, input.password);
   return { success: true };
 }
 

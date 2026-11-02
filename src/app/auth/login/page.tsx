@@ -1,71 +1,60 @@
-'use client';
-
-import { LoginForm } from '@/components/auth/LoginForm';
+import { Suspense } from 'react';
+import { connection } from 'next/server';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { authLabelsFor } from '@bitbaum/accountkit/auth';
 import { AuthenticatedRedirect } from '@/components/auth/AuthenticatedRedirect';
-import Link from 'next/link';
-import { Suspense, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { Logo } from '@/components/ui/Logo';
+import { AuthShell, landingPath } from '@/components/auth/AuthShell';
+import { RecoveryForm, SignInForm, TokenScrubber } from '@/components/auth/AuthForms';
+import { evigMethods } from '@/lib/auth/shared/methods';
 
-function LoginFormFallback() {
+/**
+ * AccountKit's sign-in form, with every method this deployment offers:
+ * password, passkey, an email sign-in link, recovery, Sign in with OrangeCat
+ * and the shared bitbaum sign-in (src/lib/auth/shared/methods.ts).
+ */
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string; error?: string; token?: string; next?: string }>;
+}) {
+  // Which methods are offered is the box's env, read per request.
+  await connection();
+  const [{ callbackUrl, error, token, next }, t, locale] = await Promise.all([
+    searchParams,
+    getTranslations('auth.login'),
+    getLocale(),
+  ]);
+  const landing = landingPath(callbackUrl ?? next, '/dashboard');
+  const methods = evigMethods();
+  const labels = authLabelsFor(locale);
+  // A reset link (AccountKit's or evig's own) lands here with its token.
+  const resetting = typeof token === 'string' && token.length > 0;
+  const expiredLink = !resetting && error === 'INVALID_TOKEN';
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-surface-base rounded-2xl border border-strong p-8">
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-action" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function LoginPage() {
-  const t = useTranslations('auth.login');
-  const { status } = useSession();
-
-  useEffect(() => {
-    document.title = t('pageTitle');
-  }, [t]);
-
-  if (status === 'loading' || status === 'authenticated') {
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-surface-raised">
-        <Suspense fallback={null}>
-          <AuthenticatedRedirect />
-        </Suspense>
-        <Loader2 className="w-8 h-8 animate-spin text-action" />
-      </main>
-    );
-  }
-  return (
-    <main className="min-h-screen bg-surface-raised py-12 px-4 sm:px-6 lg:px-8">
+    <AuthShell backHome={t('backHome')} title={t('title')} subtitle={t('subtitle')}>
       <Suspense fallback={null}>
         <AuthenticatedRedirect />
       </Suspense>
-      <div className="max-w-7xl mx-auto">
-        {/* Back link */}
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center text-action hover:text-action transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            {t('backHome')}
-          </Link>
-        </div>
-
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <Logo showText={true} />
-        </div>
-
-        {/* Login Form with Suspense for useSearchParams */}
-        <Suspense fallback={<LoginFormFallback />}>
-          <LoginForm />
-        </Suspense>
-      </div>
-    </main>
+      {resetting || expiredLink ? (
+        <>
+          <TokenScrubber />
+          <RecoveryForm
+            labels={labels}
+            methods={methods}
+            next={landing}
+            token={resetting ? token : undefined}
+            invalidToken={expiredLink}
+          />
+        </>
+      ) : (
+        <SignInForm
+          labels={labels}
+          methods={methods}
+          next={landing}
+          initialError={Boolean(error)}
+          signUp={t('createAccount')}
+        />
+      )}
+    </AuthShell>
   );
 }

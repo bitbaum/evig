@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
-import { getToken } from 'next-auth/jwt';
 import { sharedAuth } from '@/lib/auth/shared/runtime';
-import { sharedRuntimeEnabled } from '@bitbaum/accountkit/auth/switch';
 import { routing, locales } from '@/i18n/routing';
 import {
   csrfMiddleware,
@@ -54,18 +52,8 @@ function shouldIssueCsrfCookie(pathname: string, method: string): boolean {
 }
 
 async function hasValidSession(request: NextRequest): Promise<boolean> {
-  // The shared runtime keeps sessions in the database, not in a signed token.
-  if (sharedRuntimeEnabled()) {
-    return Boolean(await sharedAuth.sessionFor(request.headers).catch(() => null));
-  }
-  const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
-  if (!secret) return false;
-
-  const token =
-    (await getToken({ req: request, secret, secureCookie: false })) ||
-    (await getToken({ req: request, secret, secureCookie: true }));
-
-  return Boolean(token);
+  // AccountKit keeps sessions in the database, not in a signed token.
+  return Boolean(await sharedAuth.sessionFor(request.headers).catch(() => null));
 }
 
 export async function proxy(request: NextRequest) {

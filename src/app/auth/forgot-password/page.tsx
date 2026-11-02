@@ -1,165 +1,42 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
-import { Mail, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { StatusBanner } from '@/components/ui/status-banner';
-import Heading from '@/components/ui/Heading';
-import { IconBadge } from '@/components/ui/IconBadge';
-import { apiFetch } from '@/lib/api/client';
-import { useTranslations } from 'next-intl';
+import { connection } from 'next/server';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { authLabelsFor } from '@bitbaum/accountkit/auth';
+import { AuthShell } from '@/components/auth/AuthShell';
+import { RecoveryForm } from '@/components/auth/AuthForms';
 import { ROUTES } from '@/config/routes';
+import { evigMethods } from '@/lib/auth/shared/methods';
 
-export default function ForgotPasswordPage() {
-  const t = useTranslations('auth.forgotPassword');
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const result = await apiFetch<unknown>('/api/auth/forgot-password', {
-        method: 'POST',
-        body: { email },
-      });
-
-      if (!result.success) {
-        throw new Error(result.error || t('resetFailed'));
-      }
-
-      setSuccess(true);
-    } catch (error) {
-      setError(error instanceof Error ? error.message : t('genericError'));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-surface-raised flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="flex justify-center">
-            <IconBadge icon={CheckCircle2} shape="circle" size="lg" />
-          </div>
-          <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
-            {t('successHeading')}
-          </Heading>
-          <p className="mt-2 text-center text-sm text-text-secondary">{t('successSubheading')}</p>
-        </div>
-
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-surface-base py-8 px-4 rounded-xl border border-strong sm:px-10">
-            <div className="text-center">
-              <p className="text-sm text-text-secondary mb-6">{t('successInstructions')}</p>
-
-              <div className="space-y-3">
-                <Button as={Link} href={ROUTES.public.login} variant="primary">
-                  {t('successLoginLink')}
-                </Button>
-                <p className="text-sm text-text-tertiary">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setSuccess(false)}
-                    className="text-action hover:text-action"
-                  >
-                    {t('successOtherEmail')}
-                  </Button>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+/**
+ * "Passwort vergessen?": AccountKit's recovery form. The mailed link lands on
+ * the sign-in page, which sets the new password. An account without a password
+ * yet (IT-Hilfe, an HR hire) sets its first one the same way.
+ */
+export default async function ForgotPasswordPage() {
+  await connection();
+  const [t, tLogin, locale] = await Promise.all([
+    getTranslations('auth.forgotPassword'),
+    getTranslations('auth.login'),
+    getLocale(),
+  ]);
+  const methods = evigMethods();
   return (
-    <div className="min-h-screen bg-surface-raised flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center">
-            <Mail className="w-8 h-8 text-text-secondary" />
-          </div>
-        </div>
-        <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
-          {t('heading')}
-        </Heading>
-        <p className="mt-2 text-center text-sm text-text-secondary">{t('subheading')}</p>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-surface-base py-8 px-4 rounded-xl border border-strong sm:px-10">
-          <Link
-            href={ROUTES.public.login}
-            className="inline-flex items-center text-action hover:text-action mb-6"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToLogin')}
+    <AuthShell backHome={tLogin('backHome')} title={t('heading')} subtitle={t('subheading')}>
+      <div className="flex flex-col gap-4">
+        {methods.passwordReset ? (
+          <RecoveryForm labels={authLabelsFor(locale)} methods={methods} next="/dashboard" />
+        ) : (
+          <p role="status" className="rounded-md bg-surface-raised p-3 text-sm text-text-primary">
+            {t('unavailable')}
+          </p>
+        )}
+        <p className="text-center text-sm text-text-secondary">
+          {t('rememberPassword')}{' '}
+          <Link href={ROUTES.public.login} className="font-medium text-action hover:underline">
+            {t('loginLink')}
           </Link>
-
-          {error && (
-            <div id="email-error" className="mb-6">
-              <StatusBanner variant="error">{error}</StatusBanner>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1">
-                {t('emailLabel')}
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  aria-invalid={!!error}
-                  aria-describedby={error ? 'email-error' : undefined}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-11"
-                  placeholder={t('emailPlaceholder')}
-                />
-              </div>
-            </div>
-
-            <Button type="submit" disabled={isLoading} className="w-full gap-2 py-2.5">
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  {t('submitLoading')}
-                </>
-              ) : (
-                t('submit')
-              )}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-text-secondary">
-              {t('rememberPassword')}{' '}
-              <Link
-                href={ROUTES.public.login}
-                className="font-medium text-action hover:text-action"
-              >
-                {t('loginLink')}
-              </Link>
-            </p>
-          </div>
-        </div>
+        </p>
       </div>
-    </div>
+    </AuthShell>
   );
 }

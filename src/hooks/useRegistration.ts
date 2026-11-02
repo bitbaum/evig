@@ -3,57 +3,15 @@
 import { useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api/client';
 
-interface RegisterParams {
-  email: string;
-  password: string;
-  name: string;
-  referralCode?: string;
-}
-
-interface RegisterResult {
-  userId?: string;
-  emailSent?: boolean;
-}
-
 interface UseRegistrationResult {
-  isLoading: boolean;
-  errors: string[];
   verifyError: string | undefined;
-  register: (params: RegisterParams) => Promise<RegisterResult | null>;
   verifyCode: (email: string, code: string) => Promise<boolean>;
   resendCode: (email: string) => Promise<boolean>;
 }
 
+/** evig's 6-digit address confirmation: check a code, send a new one. */
 export function useRegistration(): UseRegistrationResult {
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
   const [verifyError, setVerifyError] = useState<string | undefined>();
-
-  const register = useCallback(async (params: RegisterParams): Promise<RegisterResult | null> => {
-    setIsLoading(true);
-    setErrors([]);
-
-    try {
-      const result = await apiFetch<{ userId: string; emailSent: boolean }>('/api/auth/register', {
-        method: 'POST',
-        body: {
-          email: params.email,
-          password: params.password,
-          name: params.name,
-          ...(params.referralCode ? { referralCode: params.referralCode } : {}),
-        },
-      });
-
-      if (!result.success || !result.data) {
-        setErrors([result.error || 'Registrierung fehlgeschlagen']);
-        return null;
-      }
-
-      return { userId: result.data.userId, emailSent: result.data.emailSent };
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
   const verifyCode = useCallback(async (email: string, code: string): Promise<boolean> => {
     setVerifyError(undefined);
@@ -81,10 +39,7 @@ export function useRegistration(): UseRegistrationResult {
   }, []);
 
   return {
-    isLoading,
-    errors,
     verifyError,
-    register,
     verifyCode,
     resendCode,
   };

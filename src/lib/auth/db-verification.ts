@@ -213,68 +213,19 @@ export async function createPasswordResetToken(
     expires: expires.toISOString(),
   });
 
+  // AccountKit sets the password (its reset accepts this same token), so the
+  // link works on its screens: /auth/reset-password → the sign-in page.
+  const [person] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, lowerEmail))
+    .limit(1);
+  if (person) {
+    const { mintResetToken } = await import('@/lib/auth/shared/credentials');
+    await mintResetToken(person.id, token, expires);
+  }
+
   return token;
-}
-
-/**
- * Verify password reset token
- */
-export async function verifyPasswordResetToken(
-  token: string,
-): Promise<{ success: boolean; email?: string; error?: string }> {
-  try {
-    const rows = await db
-      .select()
-      .from(verificationTokens)
-      .where(and(eq(verificationTokens.token, token), gt(verificationTokens.expires, sql`NOW()`)));
-
-    if (rows.length === 0) {
-      return { success: false, error: 'Ungültiger oder abgelaufener Token' };
-    }
-
-    const resetToken = rows[0];
-    const email = resetToken.identifier;
-
-    // Delete the used token for security
-    await db.delete(verificationTokens).where(eq(verificationTokens.token, token));
-
-    return { success: true, email };
-  } catch (error) {
-    logger.error('Password reset token verification error', { error });
-    return { success: false, error: 'Token-Verifizierung fehlgeschlagen' };
-  }
-}
-
-/**
- * Update user password
- */
-export async function updateUserPassword(
-  email: string,
-  passwordHash: string,
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const result = await db
-      .update(users)
-      .set({
-        passwordHash,
-        // Clicking a reset link proves mailbox control — same bar as
-        // verify-code. Without this, IT-Hilfe claim + forgot-password users
-        // set a password but login still rejects with "confirm your email".
-        emailVerified: sql`NOW()`.mapWith(String),
-        updatedAt: sql`NOW()`.mapWith(String),
-      })
-      .where(eq(users.email, email.toLowerCase()))
-      .returning({ id: users.id });
-
-    if (result.length === 0) {
-      return { success: false, error: 'Benutzer nicht gefunden' };
-    }
-
-    return { success: true };
-  } catch (error) {
-    logger.error('Update password error', { error });
-    return { success: false, error: 'Passwort konnte nicht aktualisiert werden' };
-  }
 }
 
 /**

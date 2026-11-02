@@ -2913,7 +2913,8 @@
       "successLoginLink": "Zur Anmeldung",
       "successOtherEmail": "Andere E-Mail-Adresse verwenden",
       "genericError": "Ein Fehler ist aufgetreten",
-      "resetFailed": "Passwort-Reset fehlgeschlagen"
+      "resetFailed": "Passwort-Reset fehlgeschlagen",
+      "unavailable": "Das Zurücksetzen per E-Mail ist hier gerade nicht verfügbar. Melde dich auf einem anderen Weg an oder schreib uns."
     },
     "verify": {
       "heading": "Bestätige deine E-Mail",
@@ -5526,6 +5527,14 @@
       "decisionsTitle": "Abstimmungen",
       "decisionsDesc": "Offene Abstimmungen, bei denen deine Stimme zählt.",
       "decisionDetailTitle": "Abstimmung"
+    },
+    "security": {
+      "title": "Anmeldung und Sicherheit",
+      "description": "Passwort, Passkeys, Anmeldung in zwei Schritten, verbundene Anmeldungen und dein Konto löschen.",
+      "keptSuperAdmin": "Ein Super-Admin-Konto kann sich nicht selbst löschen.",
+      "keptRecords": "Dein Konto steht auf Belegen, die evig aufbewahren muss, und kann sich deshalb nicht selbst löschen.",
+      "requestDeletion": "Löschung beim evig-Team anfragen",
+      "manage": "Passwort, Passkeys und Anmeldung in zwei Schritten verwalten"
     }
   },
   "components": {

@@ -85,7 +85,9 @@ fleet must not repeat live in `bitbaum/fleet` `registers/retired.json`, and
 
 - Next.js 16, TypeScript, Tailwind CSS 4
 - PostgreSQL + Drizzle. Prod is self-hosted Postgres on Hetzner. Neon is retired.
-- Auth: NextAuth v5 (Auth.js). See `src/lib/permissions.ts`.
+- Auth: `@bitbaum/accountkit` on its own screens (`src/lib/auth/shared/`,
+  `docs/ACCOUNTKIT-MIGRATION.md`). Pages keep `next-auth/react`'s `useSession`
+  through its compat layer. Permissions: `src/lib/permissions.ts`.
 - Search: Meilisearch. Payments: Payrexx.
 
 ## Develop
@@ -217,13 +219,15 @@ no divisions card grid; `EVIG_PILLARS` says what evig does.
 
 ## Auth
 
-- **Sign in with OrangeCat** is primary when `ORANGECAT_OAUTH_CLIENT_ID` /
-  `_SECRET` are set (`src/components/auth/OrangeCatSignIn.tsx`); the password
-  form sits one click behind. Rules in `src/lib/auth/orangecat.ts`:
+- Every auth page is AccountKit's form, offering every method its env allows
+  (`src/lib/auth/shared/methods.ts`); evig's lockout, 6-digit code, IT-Hilfe
+  claim link and referral credit run as AccountKit hooks
+  (`src/lib/auth/shared/evig-plugin.ts`). AccountKit is the only credential
+  writer: never add a route under `/api/auth/` (it would shadow AccountKit's)
+  or write `users.password_hash`.
+- OrangeCat rules are in `src/lib/auth/orangecat.ts`:
   `users.orangecat_actor_id` (migration 141) is the only cross-product key —
-  **never link by email**, since OrangeCat's sign-up does not verify it. An
-  existing unlinked account with that email is refused and told to sign in with
-  the password and connect from the profile.
+  **never link by email**, since OrangeCat's sign-up does not verify it.
 - Super admins: `users.is_super_admin`; `SUPER_ADMIN_EMAILS` holds only the
   owner as a lockout floor.
 - Admin sections are SSOT in `src/config/sections.ts`; `ADMIN_SECTIONS` derives

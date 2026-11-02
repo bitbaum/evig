@@ -6,7 +6,7 @@ it is generated from this script, and the rule lives in src/lib/permissions.ts.
 
 ## Overview
 
-Total endpoints: 329
+Total endpoints: 324
 Categories: admin, ai, appointments, auth, blog, careers, cron, decisions, deliverables, donations, health, hirn, inquiry, inventory, invoices, it-hilfe, listings, locations, marketplace, me, members, membership, messages, newsletter, notifications, org-numbers, payments, pools, presentations, profiles, projects, protocols, public, referral, repairer, reviews, search, search-index, sellers, services, stats, suggestions, task-analytics, task-projects, task-requests, tasks, team, technicians, time-off, timecards, uploads, user, version, vote, webhooks, workshops
 
 ## Authentication
@@ -2917,24 +2917,6 @@ Auth.js API Route Handler Handles all authentication requests: /api/auth/*
 | Auth | None |
 | Params | `...nextauth` |
 
-#### `POST /api/auth/forgot-password`
-
-Forgot Password API POST /api/auth/forgot-password
-
-| Property | Value |
-|----------|-------|
-| File | `src/app/api/auth/forgot-password/route.ts` |
-| Auth | None |
-
-<details>
-<summary>Code Preview</summary>
-
-```typescript
-export async function POST(request: NextRequest) {...
-```
-
-</details>
-
 #### `POST /api/auth/login-status`
 
 POST /api/auth/login-status Historical purpose: pre-flight check during sign-in to hint at UX (email verification, lockout, OAuth-only accounts). No UI surface consumes this endpoint as of 2026-06-11. The previous implementation returned distinct `exists: false / EMAIL_NOT_FOUND` vs `exists: true, emailVerified, hasPassword, locked, lockedUntil` responses, which turned the user table into a discoverable address book — the rate limit (10/min/IP) is trivially bypassed via IP rotation. The forgot-password endpoint correctly hides existence; this one was leaking it. Current contract: always returns a uniform safe-default payload regardless of whether the email is registered. Failed-auth UX must live in the NextAuth signin response, not here. Kept reachable (rather than deleted) so existing/future callers don't 404; the response shape is unchanged.
@@ -2953,24 +2935,6 @@ export async function POST(req: NextRequest) {...
 
 </details>
 
-#### `POST /api/auth/register`
-
-User Registration API POST /api/auth/register Includes rate limiting to prevent abuse
-
-| Property | Value |
-|----------|-------|
-| File | `src/app/api/auth/register/route.ts` |
-| Auth | None |
-
-<details>
-<summary>Code Preview</summary>
-
-```typescript
-export async function POST(request: NextRequest) {...
-```
-
-</details>
-
 #### `POST /api/auth/resend-code`
 
 Resend Verification Code API POST /api/auth/resend-code Generates a new 6-digit verification code and sends it via email
@@ -2978,24 +2942,6 @@ Resend Verification Code API POST /api/auth/resend-code Generates a new 6-digit 
 | Property | Value |
 |----------|-------|
 | File | `src/app/api/auth/resend-code/route.ts` |
-| Auth | None |
-
-<details>
-<summary>Code Preview</summary>
-
-```typescript
-export async function POST(request: NextRequest) {...
-```
-
-</details>
-
-#### `POST /api/auth/reset-password`
-
-Reset Password API POST /api/auth/reset-password
-
-| Property | Value |
-|----------|-------|
-| File | `src/app/api/auth/reset-password/route.ts` |
 | Auth | None |
 
 <details>
@@ -3020,26 +2966,6 @@ Email Verification Code API POST /api/auth/verify-code Verifies a 6-digit email 
 <summary>Code Preview</summary>
 
 ```typescript
-export async function POST(request: NextRequest) {...
-```
-
-</details>
-
-#### `GET, POST /api/auth/verify-email`
-
-API endpoint at /api/auth/verify-email
-
-| Property | Value |
-|----------|-------|
-| File | `src/app/api/auth/verify-email/route.ts` |
-| Auth | Staff only |
-
-<details>
-<summary>Code Preview</summary>
-
-```typescript
-export async function GET(request: NextRequest) {...
-
 export async function POST(request: NextRequest) {...
 ```
 
@@ -6181,24 +6107,6 @@ export const POST = withAuth(async (request, session) => {...
 
 ### User
 
-#### `POST /api/user/change-password`
-
-Change Password API POST /api/user/change-password
-
-| Property | Value |
-|----------|-------|
-| File | `src/app/api/user/change-password/route.ts` |
-| Auth | Authenticated users |
-
-<details>
-<summary>Code Preview</summary>
-
-```typescript
-export const POST = withAuth(async (request: NextRequest, session) => {...
-```
-
-</details>
-
 #### `GET /api/user/donations`
 
 GET /api/user/donations Fetch current user's donation history. For device donations, joins linked inventory items + marketplace listings to surface the device journey (received → refurbished → listed → rehomed). Privacy: never exposes buyer info, exact sold price, or recipient identity.
@@ -6719,13 +6627,9 @@ export const PATCH = withAuth<{ id: string }>(...
 | GET/PATCH | `/api/appointments/[id]` | None | API endpoint at /api/appointments/[id] |
 | POST | `/api/appointments/[id]/pay` | Staff only | API endpoint at /api/appointments/[id]/pay |
 | GET/POST | `/api/auth/[...nextauth]` | None | Auth.js API Route Handler Handles all authenticati... |
-| POST | `/api/auth/forgot-password` | None | Forgot Password API POST /api/auth/forgot-password |
 | POST | `/api/auth/login-status` | None | POST /api/auth/login-status Historical purpose: pr... |
-| POST | `/api/auth/register` | None | User Registration API POST /api/auth/register Incl... |
 | POST | `/api/auth/resend-code` | None | Resend Verification Code API POST /api/auth/resend... |
-| POST | `/api/auth/reset-password` | None | Reset Password API POST /api/auth/reset-password |
 | POST | `/api/auth/verify-code` | Staff only | Email Verification Code API POST /api/auth/verify-... |
-| GET/POST | `/api/auth/verify-email` | Staff only | API endpoint at /api/auth/verify-email |
 | GET/POST | `/api/blog/[slug]/comments` | Super admin only | API endpoint at /api/blog/[slug]/comments |
 | GET | `/api/blog/categories` | None | API: Public Blog Categories GET /api/blog/categori... |
 | PATCH/DELETE | `/api/blog/comments/[id]` | Staff only | Moderate a comment — staff-only. Sets status to hi... |
@@ -6881,7 +6785,6 @@ export const PATCH = withAuth<{ id: string }>(...
 | GET/POST/PUT | `/api/timecards` | Staff only | API endpoint at /api/timecards |
 | GET | `/api/timecards/saldo` | Super admin only | GET /api/timecards/saldo — Zeit- und Feriensaldo. ... |
 | POST | `/api/uploads` | Authenticated users | API endpoint at /api/uploads |
-| POST | `/api/user/change-password` | Authenticated users | Change Password API POST /api/user/change-password |
 | GET | `/api/user/donations` | Authenticated users | GET /api/user/donations Fetch current user's donat... |
 | GET | `/api/user/export-data` | Authenticated users | GET /api/user/export-data GDPR/Swiss DSG compliant... |
 | GET/POST | `/api/user/orangecat` | Authenticated users | GET  /api/user/orangecat — is this account an Oran... |

@@ -2,9 +2,9 @@ import { createAuthTables } from '@bitbaum/accountkit/auth/schema';
 
 /**
  * AccountKit's account tables under the `auth_` prefix, beside Auth.js's own
- * `users` / `accounts` / `sessions` (migration 142). Read and written only by
- * the shared runtime (src/lib/auth/shared/), which is off until
- * AUTH_RUNTIME=accountkit. See docs/ACCOUNTKIT-MIGRATION.md.
+ * `users` / `accounts` / `sessions` (migration 142). Read and written by the
+ * shared runtime (src/lib/auth/shared/) and the mirror triggers (migrations
+ * 142 and 143). See docs/ACCOUNTKIT-MIGRATION.md.
  */
 export const authTables = createAuthTables('auth_');
 
