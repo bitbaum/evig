@@ -35,7 +35,9 @@ const NEW_LEGACY_PASSWORD = `synthetic reset password ${run}`;
 const EXPECT = {
   mail: Boolean(SINK),
   orangecat: Boolean(process.env.ORANGECAT_OAUTH_CLIENT_ID),
-  signin: Boolean(process.env.SIGNIN_CLIENT_ID),
+  // AccountKit 0.24+ shows the shared sign-in only once its service publishes
+  // a provider (<SIGNIN_ISSUER>/api/providers); the synthetic issuer has none.
+  signin: false,
 };
 
 // Each page load from its own (documentation-range) address, so the journey
@@ -47,7 +49,8 @@ async function visit(page: Page, path: string) {
   await page.goto(path);
 }
 
-const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
+const button = (page: Page, name: string | RegExp) =>
+  page.getByRole('button', { name, exact: true });
 
 async function sessionEmail(page: Page): Promise<string | null> {
   const session = await (await page.request.get('/api/auth/session')).json();
@@ -107,7 +110,7 @@ test('every way into an evig account works on AccountKit screens', async ({ page
     }
   });
 
-  const offered = async (route: string, labels: Array<[string, boolean]>) => {
+  const offered = async (route: string, labels: Array<[string | RegExp, boolean]>) => {
     await visit(page, route);
     for (const [name, wanted] of labels) {
       const control = button(page, name);
@@ -123,7 +126,7 @@ test('every way into an evig account works on AccountKit screens', async ({ page
       ['Stattdessen einen Anmeldelink per E-Mail schicken', EXPECT.mail],
       ['Passwort vergessen?', EXPECT.mail],
       ['Weiter mit OrangeCat', EXPECT.orangecat],
-      ['Weiter mit Google, Apple, GitHub, X oder Facebook', EXPECT.signin],
+      [/^Weiter mit (Google|Apple|GitHub|X|Facebook|Microsoft)/, EXPECT.signin],
     ]);
   });
 
@@ -132,7 +135,7 @@ test('every way into an evig account works on AccountKit screens', async ({ page
       ['Konto erstellen', true],
       ['Stattdessen einen Link per E-Mail senden', EXPECT.mail],
       ['Weiter mit OrangeCat', EXPECT.orangecat],
-      ['Weiter mit Google, Apple, GitHub, X oder Facebook', EXPECT.signin],
+      [/^Weiter mit (Google|Apple|GitHub|X|Facebook|Microsoft)/, EXPECT.signin],
     ]);
   });
 
