@@ -18,23 +18,17 @@ import { sendConfirmationCode } from './confirmation-code';
 // The secret is BETTER_AUTH_SECRET, or the AUTH_SECRET the box already holds.
 const site = { url: PUBLIC_SITE_URL, title: 'evig', slug: 'evig' };
 
-const fleetMailer = createAuthMailer({ site });
-
 /**
- * Account mail through the fleet transport (RESEND_*). An address is
- * confirmed by evig's own 6-digit code, as before: AccountKit's confirmation
- * mail is replaced by the code mail, and its link mail is the fallback when
- * the code cannot be sent.
+ * Account mail through the fleet transport (RESEND_*), by AccountKit's shared
+ * mailer. An address is confirmed by evig's own 6-digit code, as before: it is
+ * the mailer's own mail for `verify`, and AccountKit's confirmation link is
+ * the fallback when the code cannot be sent. The sign-in link's email also
+ * carries AccountKit's sign-in code.
  */
-export const sharedAuthMailer: typeof fleetMailer = {
-  get configured() {
-    return fleetMailer.configured;
-  },
-  async send(kind, to, url) {
-    if (kind === 'verify' && (await sendConfirmationCode(to))) return;
-    await fleetMailer.send(kind, to, url);
-  },
-};
+export const sharedAuthMailer = createAuthMailer({
+  site,
+  own: { verify: (to) => sendConfirmationCode(to) },
+});
 
 export const sharedAuth = createAuthRuntime({
   site,
