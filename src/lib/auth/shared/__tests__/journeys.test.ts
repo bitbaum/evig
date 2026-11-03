@@ -393,7 +393,9 @@ describe.skipIf(!URL_)('evig on AccountKit (real PostgreSQL)', () => {
         SIGNIN_CLIENT_ID: 'evig',
         SIGNIN_CLIENT_SECRET: 's',
       }),
-    ).toMatchObject({ orangecat: true, signin: true, twoFactor: true });
+      // The shared sign-in shows only once its service publishes a provider
+      // (AccountKit 0.24+); this synthetic issuer publishes none.
+    ).toMatchObject({ orangecat: true, signin: false, twoFactor: true });
   });
 
   test('with account mail on, an unconfirmed account still signs in (AccountKit default)', async () => {
