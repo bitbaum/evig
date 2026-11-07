@@ -47,8 +47,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0(react@19.3.1)
       '@bitbaum/chatkit':
-        specifier: github:bitbaum/chatkit#6451d3b9d0c3d467011a80f8cf023da90dffe92c
-        version: https://codeload.github.com/bitbaum/chatkit/tar.gz/6451d3b9d0c3d467011a80f8cf023da90dffe92c(react@19.3.1)
+        specifier: ^0.23.0
+        version: 0.23.0(react@19.3.1)
       '@bitbaum/design-tokens':
         specifier: ^1.5.2
         version: 1.5.2
@@ -637,9 +637,8 @@ packages:
     peerDependencies:
       react: '>=18'
 
-  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/6451d3b9d0c3d467011a80f8cf023da90dffe92c':
-    resolution: {gitHosted: true, integrity: sha512-jJ+ZEEVUicjZchEwZ3z3VuXulbt5L2uAz1hwKjq4yauxS7mKpYYj/lagty8cDxgn0cnOg4cI7jLVs1/sjg4ZmA==, tarball: https://codeload.github.com/bitbaum/chatkit/tar.gz/6451d3b9d0c3d467011a80f8cf023da90dffe92c}
-    version: 0.23.0
+  '@bitbaum/chatkit@0.23.0':
+    resolution: {integrity: sha512-iI7tyLcN7Zj3tXN9xZsb7Ixa2VPoDnuMX2taEzb2S1wMtV1A2A7tKfCJsqZp2GELrBCJTH9j59f6djbBF1H1RA==}
     engines: {node: '>=20'}
     hasBin: true
     peerDependencies:
@@ -2105,12 +2104,16 @@ packages:
   '@smithy/core@3.35.1':
     resolution: {integrity: sha512-i4YPS4B6ts7bjn7UwLnGjiZdprOvHvgGobFZsYK3GIY3E5hIqtj0rReU69BcTpGp+fvtraSNXeG1l+jtJvF55w==}
     engines: {node: '>=18.0.0'}
-    deprecated: Deprecated due to a bug in custom logger data redaction. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
+    deprecated: |-
+      Deprecated due to a bug in custom logger data redaction. Upgrade to the latest version. If you used a custom logger with this
+        version, review your logs and rotate any credentials or other secrets. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
 
   '@smithy/core@3.38.0':
     resolution: {integrity: sha512-aLyyCnK2p4yvNA2TaM+5owXqb+rZGSiUKEsNP329AzeYnERtAz7NrlTbRsaxqmZ0ooxwoID8LMm959UGQQDIsg==}
     engines: {node: '>=18.0.0'}
-    deprecated: Deprecated due to a bug in custom logger data redaction. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
+    deprecated: |-
+      Deprecated due to a bug in custom logger data redaction. Upgrade to the latest version. If you used a custom logger with this
+        version, review your logs and rotate any credentials or other secrets. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
 
   '@smithy/credential-provider-imds@4.5.2':
     resolution: {integrity: sha512-A9uSdn72ozbRUSit0eib0TW7nXuNPlaeM0zcGkJ+nE6tFcSDbnmtwoxbTCFBukVQcszDAyvsd7+rTduPTXpygg==}
@@ -7207,7 +7210,7 @@ snapshots:
     dependencies:
       react: 19.3.1
 
-  '@bitbaum/chatkit@https://codeload.github.com/bitbaum/chatkit/tar.gz/6451d3b9d0c3d467011a80f8cf023da90dffe92c(react@19.3.1)':
+  '@bitbaum/chatkit@0.23.0(react@19.3.1)':
     dependencies:
       pdfjs-dist: 6.4.299
       react: 19.3.1
