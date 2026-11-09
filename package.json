@@ -129,7 +129,7 @@
     "busboy": "^1.6.0",
     "clsx": "^2.1.1",
     "cookie": "^2.0.1",
-    "cron-parser": "^5.10.2",
+    "cron-parser": "^5.10.3",
     "csv-parse": "^7.0.2",
     "drizzle-orm": "^0.45.4",
     "exceljs": "^4.4.0",
