@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { changeAnchor } from 'bip-kit';
+import { changeAnchor } from '@bitbaum/bip-kit';
 import { getTranslations } from 'next-intl/server';
 import { ChangelogHero } from '@/components/changelog/ChangelogHero';
 import { ChangelogLatestBar } from '@/components/changelog/ChangelogLatestBar';

@@ -38,7 +38,7 @@ test(
 );
 
 test('the publishing renderer still produces accessible math with patched KaTeX', async () => {
-  const { renderMath } = await import('bip-kit/react');
+  const { renderMath } = await import('@bitbaum/bip-kit/react');
   for (const tex of ['x^2 + y^2 = z^2', String.raw`\frac{1}{2}`, String.raw`\sum_{n=1}^{10} n`]) {
     const html = await renderMath(tex, true);
     assert.ok(html, 'Installed math peer must render instead of falling back silently');

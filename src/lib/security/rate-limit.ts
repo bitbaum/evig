@@ -1,4 +1,4 @@
-import { slidingWindow, clientIp, MemoryStore, type Limiter } from 'limitkit';
+import { slidingWindow, clientIp, MemoryStore, type Limiter } from '@bitbaum/limitkit';
 import { logger } from '@/lib/logger';
 
 /**

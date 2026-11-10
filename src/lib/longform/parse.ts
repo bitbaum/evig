@@ -15,8 +15,8 @@
  * preview can run the exact same parse.
  */
 
-import { parseContentBlocks, extractToc, unicodeSlugify } from 'bip-kit';
-import type { ContentBlock, TocEntry } from 'bip-kit';
+import { parseContentBlocks, extractToc, unicodeSlugify } from '@bitbaum/bip-kit';
+import type { ContentBlock, TocEntry } from '@bitbaum/bip-kit';
 import { type TocHeading } from '@/lib/blog-toc';
 
 /**
