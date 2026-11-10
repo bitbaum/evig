@@ -29,15 +29,6 @@ export const CONDITION_COLORS: Record<string, { label: string; color: string; bg
   damaged: { label: 'Beschädigt', color: '#DC2626', bgColor: '#FEE2E2' },
 };
 
-/** Trend chart colors for year-over-year comparison */
-export const TREND_CHART_COLORS = {
-  previousYear: '#9ca3af',
-  currentYear: '#3b82f6',
-  positive: '#22c55e',
-  negative: '#ef4444',
-  neutral: '#3b82f6',
-} as const;
-
 /** Default color palette for pickers and category assignment */
 export const UI_COLOR_PALETTE = [
   '#22c55e',
