@@ -24,7 +24,7 @@ const percent = new Intl.NumberFormat('de-CH', {
 /**
  * Year-over-year comparison by revenue category: the previous and the current
  * year side by side per category, drawn by @bitbaum/chartkit on the server.
- * The change is the note on each current-year column and in the table behind
+ * The change against the previous year is the note on each current-year column and in the table behind
  * the chart, so it is readable without colour.
  */
 export function TrendBarChart({ data, currentYear, previousYear, source }: TrendBarChartProps) {
@@ -42,7 +42,7 @@ export function TrendBarChart({ data, currentYear, previousYear, source }: Trend
         y: d.currentValue,
         note:
           d.previousValue > 0
-            ? `Veränderung ${percent.format((d.currentValue - d.previousValue) / d.previousValue)}`
+            ? percent.format((d.currentValue - d.previousValue) / d.previousValue)
             : undefined,
       })),
     },

@@ -18,7 +18,7 @@ describe('TrendBarChart', () => {
     expect(html).toContain('Vergleich 2024 vs 2025');
     expect(html).toContain('Verkauf');
     expect(html).toContain('Spenden');
-    expect(html).toMatch(/Veränderung \+10\s?%/);
+    expect(html).toMatch(/\+10\s?%/);
     expect(html).toContain('Quelle: Kivitendo');
     expect(html).not.toContain('recharts');
   });
