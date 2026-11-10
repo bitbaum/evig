@@ -21,17 +21,15 @@ allowBuilds:
 # two packages most likely to be installed the minute they are released.
 # Naming the version makes each new release a deliberate line in a diff, which
 # is the entire point of the delay.
+# Our own packages are published by our own tagged workflows; minimumReleaseAge
+# would refuse each fresh publish until it ages. One scope glob covers every
+# @bitbaum package; the four unscoped ones are named (fleet SHARED.md).
 minimumReleaseAgeExclude:
-  - '@bitbaum/chatkit'
-  - '@bitbaum/ai-kit'
-  - '@bitbaum/mail-kit@0.1.1'
-  - bip-kit@0.2.6 || 0.2.7 || 0.3.1
-  - '@bitbaum/accountkit@0.9.0 || 0.9.1 || 0.10.0 || 0.11.0 || 0.12.0 || 0.13.0 || 0.14.0 || 0.15.0 || 0.16.0 || 0.17.0 || 0.18.0 || 0.18.1 || 0.19.0 || 0.20.0 || 0.23.1 || 0.27.0'
-  - '@bitbaum/searchkit@0.2.3'
-  - '@bitbaum/whenkit@0.3.3'
-  - limitkit@0.2.1
-  - '@bitbaum/chartkit@0.6.0 || 0.7.0'
-  - '@bitbaum/design-tokens@1.3.0 || 1.3.1 || 1.5.1 || 1.5.2'
+  - '@bitbaum/*'
+  - limitkit
+  - bip-kit
+  - threadkit
+  - ai-forms
 overrides:
   '@swc/helpers': 0.5.23
   '@opentelemetry/core': ^2.8.0
