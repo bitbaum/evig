@@ -7,15 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 interface Status {
-  provider: 'listmonk' | 'smtp';
+  provider: 'resend' | 'listmonk';
   connectionTest: { success: boolean; error?: string };
-  smtp: {
-    host: string;
-    port: number;
-    secure: boolean;
+  resend: {
+    keySet: boolean;
     from: string;
-    userSet: boolean;
-    passSet: boolean;
   };
   listmonk: {
     enabled: boolean;
@@ -95,23 +91,14 @@ export function EmailDiagnostics() {
           />
         </div>
 
-        {status.provider === 'smtp' ? (
+        {status.provider === 'resend' ? (
           <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
             <div>
-              <dt className="text-text-tertiary">Host</dt>
-              <dd className="font-mono text-text-primary">
-                {status.smtp.host}:{status.smtp.port}
-              </dd>
-            </div>
-            <div>
               <dt className="text-text-tertiary">Absender</dt>
-              <dd className="font-mono text-text-primary">{status.smtp.from}</dd>
+              <dd className="font-mono text-text-primary">{status.resend.from}</dd>
             </div>
             <div className="pt-1">
-              <Flag ok={status.smtp.userSet} label="Benutzer gesetzt" />
-            </div>
-            <div className="pt-1">
-              <Flag ok={status.smtp.passSet} label="Passwort gesetzt" />
+              <Flag ok={status.resend.keySet} label="RESEND_API_KEY" />
             </div>
           </dl>
         ) : (

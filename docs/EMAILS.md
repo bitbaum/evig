@@ -24,10 +24,10 @@ Central dispatcher for workflow events (timecards, time-off, permissions): `src/
 
 ## Deliverability caveat (READ THIS)
 
-Prod sends via **Brevo**. If the `revampit.ch` sending domain isn't SPF/DKIM-authenticated, Brevo **accepts + queues** the mail but Gmail/consumer mailboxes **silently drop it**. So an email being "sent" ≠ delivered.
+Prod sends via **Resend** (`@bitbaum/mail-kit`), from the fleet's verified domain (`evig@fleetcrown.orangecat.ch`). Before mail-kit it went through Brevo from `revampit.ch`, which had no SPF/DKIM there, so Brevo accepted mail that consumer mailboxes dropped; that SMTP fallback was removed on 2026-11-10. Still: a provider accepting an email ≠ delivered.
 - **Most at risk — external recipients:** IT-Hilfe requesters + community technicians, marketplace buyers + P2P sellers, job applicants, workshop registrants, service-appointment customers, paying members.
 - **Lower risk — internal `@revamp-it.ch`:** all staff-facing notifications (timecards, time-off, decisions, tasks, admin alerts).
-- **Mitigation in code:** prefer an **in-app notification** (Path A, bell) for anything the user must not miss, so it lands regardless of email. The DNS fix (authenticate `revampit.ch` in Brevo + SPF/DKIM/DMARC records) is a separate ops task and is the real fix for external delivery.
+- **Mitigation in code:** prefer an **in-app notification** (Path A, bell) for anything the user must not miss, so it lands regardless of email. Sending from evig's own domain needs that domain verified in Resend first (DNS + DKIM), a separate ops task.
 
 ---
 
@@ -104,4 +104,4 @@ Legend: **A** = notification system (in-app + maybe email) · **B** = direct ema
 4. ✅ **DONE** — **Time-off requester acknowledgement** added: `createTimeOffRequest` now sends the requester an in-app `time_off_requested` confirmation (→ `/admin/zeiterfassung`) at submit time, mirroring the timecard-submit confirmation.
 5. ✅ **DONE** — **SSOT drift** fixed: added `NOTIFICATION_TYPES.TASK_ASSIGNED` and both task routes use the constant (the stale `notifications_type_check` DB constraint note in the config was also corrected — it was dropped in migration 110).
 6. ✅ **DONE** — **Dead notification types pruned:** removed `message`, `vacancy_published`, `marketing`, `task_broadcast` from `NOTIFICATION_TYPES` (verified zero producers — no `createNotification`/`notifyUsers` emits them, and they appear in no label/icon/href map). Kept `appointment`/`marketplace`/`system` (all have producers).
-7. **Deliverability:** authenticate `revampit.ch` in Brevo (SPF/DKIM/DMARC) so external emails actually land.
+7. **Deliverability:** mail leaves from the shared verified fleet domain. Sending from evig's own domain needs it registered and verified in Resend first.

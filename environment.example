@@ -64,14 +64,6 @@ NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER=false
 # Admin bootstrap (setup scripts only)
 # ADMIN_PASSWORD=your-secure-admin-password-here
 
-# Email — local dev uses Mailpit (docker-compose port 1025 / UI 8025)
-EMAIL_HOST=localhost
-EMAIL_PORT=1025
-EMAIL_SECURE=false
-EMAIL_USER=
-EMAIL_PASS=
-EMAIL_FROM=noreply@revamp-it.ch
-
 # File uploads (local fallback)
 UPLOAD_DIR=./uploads
 MAX_FILE_SIZE=10485760

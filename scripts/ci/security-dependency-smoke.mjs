@@ -1,29 +1,7 @@
 import { createServer } from 'node:http';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import nodemailer from 'nodemailer';
 import puppeteer from 'puppeteer';
-
-// Exercise the runtime API crossed by the security upgrade, without delivery.
-test('patched Nodemailer still generates the app SMTP message format locally', async () => {
-  const transport = nodemailer.createTransport({
-    streamTransport: true,
-    buffer: true,
-    newline: 'unix',
-  });
-  const result = await transport.sendMail({
-    from: 'Example <sender@example.invalid>',
-    to: 'recipient@example.invalid',
-    subject: 'Synthetic account confirmation',
-    text: 'Local compatibility fixture. No message leaves the test process.',
-    html: '<p>Local compatibility fixture.</p>',
-  });
-  const message = result.message.toString();
-  assert.match(message, /Subject: Synthetic account confirmation/);
-  assert.match(message, /multipart\/alternative/);
-  assert.deepEqual(result.envelope.to, ['recipient@example.invalid']);
-  transport.close();
-});
 
 // Puppeteer's upstream update replaces chromium-bidi's vulnerable Zod 3 path.
 // Drive BiDi itself, rather than proving only that the default CDP path starts.

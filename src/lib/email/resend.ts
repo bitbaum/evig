@@ -5,7 +5,7 @@
  * mail-kit owns the HTTP call, timeout, and the "configured-looking but dead"
  * guards (placeholder key, sandbox sender); this file only adapts its
  * SendResult to evig's SendEmailResult and preserves the throw-on-failure
- * contract that sendEmail() uses to fall back to SMTP.
+ * contract sendEmail() turns into { success: false }.
  *
  * Sender: only `loki.orangecat.ch` is verified in the Resend account, so
  * like surf-your-life and vitareba we send as <app>@fleetcrown.orangecat.ch
@@ -32,8 +32,8 @@ export async function sendViaResend(to: string, content: EmailContent): Promise<
   });
 
   if (!result.sent) {
-    // Throw instead of returning failure: sendEmail() treats a thrown resend
-    // error as "fall back to SMTP", mirroring the existing Listmonk pattern.
+    // Throw instead of returning failure: sendEmail()/sendCustomEmail() catch
+    // it and answer { success: false } with this message.
     throw new Error(`Resend send failed: ${result.error}`);
   }
 
