@@ -1,19 +1,5 @@
-'use client';
-
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ReferenceLine,
-  Cell,
-} from 'recharts';
-import { ChartWrapper } from './ChartWrapper';
-import { formatCHF } from '@/lib/hirn/format';
-import { TREND_CHART_COLORS } from '@/config/ui-colors';
+import { ColumnChart } from '@bitbaum/chartkit/react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 interface TrendDataPoint {
   category: string;
@@ -29,102 +15,56 @@ interface TrendBarChartProps {
   source?: string;
 }
 
-function CustomTooltip({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: Array<{ name: string; value: number; dataKey: string }>;
-  label?: string;
-}) {
-  if (!active || !payload || !payload[0]) return null;
-
-  const current = payload.find((p) => p.dataKey === 'currentValue')?.value || 0;
-  const previous = payload.find((p) => p.dataKey === 'previousValue')?.value || 0;
-  const percentChange = previous > 0 ? (((current - previous) / previous) * 100).toFixed(1) : 'N/A';
-
-  return (
-    <div className="card-shell p-3">
-      <p className="font-semibold mb-2">{label}</p>
-      <div className="space-y-1 text-sm">
-        <div className="flex justify-between gap-4">
-          <span className="text-action">Aktuell</span>
-          <span className="font-medium">{formatCHF(current)}</span>
-        </div>
-        <div className="flex justify-between gap-4">
-          <span className="text-text-tertiary">Vorjahr</span>
-          <span className="font-medium">{formatCHF(previous)}</span>
-        </div>
-        <div className="border-t pt-1 flex justify-between gap-4">
-          <span>Veränderung</span>
-          <span
-            className={`font-semibold ${
-              Number(percentChange) > 0
-                ? 'text-action'
-                : Number(percentChange) < 0
-                  ? 'text-error-500'
-                  : ''
-            }`}
-          >
-            {percentChange !== 'N/A' ? `${percentChange}%` : percentChange}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
+const percent = new Intl.NumberFormat('de-CH', {
+  style: 'percent',
+  maximumFractionDigits: 1,
+  signDisplay: 'exceptZero',
+});
 
 /**
- * Grouped bar chart showing year-over-year comparison by category.
+ * Year-over-year comparison by revenue category: the previous and the current
+ * year side by side per category, drawn by @bitbaum/chartkit on the server.
+ * The change is the note on each current-year column and in the table behind
+ * the chart, so it is readable without colour.
  */
 export function TrendBarChart({ data, currentYear, previousYear, source }: TrendBarChartProps) {
+  const series = [
+    {
+      id: 'previous',
+      label: String(previousYear),
+      points: data.map((d) => ({ x: d.category, y: d.previousValue })),
+    },
+    {
+      id: 'current',
+      label: String(currentYear),
+      points: data.map((d) => ({
+        x: d.category,
+        y: d.currentValue,
+        note:
+          d.previousValue > 0
+            ? `Veränderung ${percent.format((d.currentValue - d.previousValue) / d.previousValue)}`
+            : undefined,
+      })),
+    },
+  ];
+
   return (
-    <ChartWrapper
-      title={`Vergleich ${previousYear} vs ${currentYear}`}
-      description="Jahresvergleich nach Einnahmekategorie"
-      source={source}
-      height={300}
-    >
-      <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-        <CartesianGrid
-          strokeDasharray="3 3"
-          className="stroke-neutral-200 dark:stroke-neutral-700"
+    <Card className="min-w-0">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg">{`Vergleich ${previousYear} vs ${currentYear}`}</CardTitle>
+        <CardDescription>Jahresvergleich nach Einnahmekategorie</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ColumnChart
+          series={series}
+          unit="CHF"
+          caption={`Einnahmen ${previousYear} und ${currentYear} nach Kategorie`}
+          locale="de-CH"
+          periodLabel="Kategorie"
+          height={300}
         />
-        <XAxis dataKey="category" tick={{ fontSize: 11 }} className="text-muted-foreground" />
-        <YAxis
-          tickFormatter={(value) => `${Math.round(value / 1000)}k`}
-          tick={{ fontSize: 12 }}
-          className="text-muted-foreground"
-        />
-        <Tooltip content={<CustomTooltip />} />
-        <Legend />
-        <Bar
-          dataKey="previousValue"
-          name={`${previousYear}`}
-          fill={TREND_CHART_COLORS.previousYear}
-          radius={[4, 4, 0, 0]}
-        />
-        <Bar
-          dataKey="currentValue"
-          name={`${currentYear}`}
-          fill={TREND_CHART_COLORS.currentYear}
-          radius={[4, 4, 0, 0]}
-        >
-          {data.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={
-                entry.percentChange > 0
-                  ? TREND_CHART_COLORS.positive
-                  : entry.percentChange < 0
-                    ? TREND_CHART_COLORS.negative
-                    : TREND_CHART_COLORS.neutral
-              }
-            />
-          ))}
-        </Bar>
-      </BarChart>
-    </ChartWrapper>
+        {source && <div className="mt-2 text-xs text-muted-foreground">Quelle: {source}</div>}
+      </CardContent>
+    </Card>
   );
 }
