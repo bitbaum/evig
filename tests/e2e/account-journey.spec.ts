@@ -36,9 +36,24 @@ const EXPECT = {
   mail: Boolean(SINK),
   orangecat: Boolean(process.env.ORANGECAT_OAUTH_CLIENT_ID),
   // AccountKit 0.24+ shows the shared sign-in only once its service publishes
-  // a provider (<SIGNIN_ISSUER>/api/providers); the synthetic issuer has none.
+  // a provider (<SIGNIN_ISSUER>/api/providers). CI points at the real
+  // service, so the answer is read from it in beforeAll, as the app does.
   signin: false,
 };
+
+test.beforeAll(async () => {
+  const issuer = process.env.SIGNIN_ISSUER;
+  if (!issuer || !process.env.SIGNIN_CLIENT_ID) return;
+  try {
+    const response = await fetch(`${issuer.replace(/\/$/, '')}/api/providers`, {
+      signal: AbortSignal.timeout(10_000),
+    });
+    const body = (await response.json()) as { providers?: unknown[] };
+    EXPECT.signin = response.ok && Array.isArray(body.providers) && body.providers.length > 0;
+  } catch {
+    EXPECT.signin = false;
+  }
+});
 
 // Each page load from its own (documentation-range) address, so the journey
 // never spends one visitor's rate limit.
