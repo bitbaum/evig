@@ -34,7 +34,7 @@ Curated reference for engineers, operators, and contributors. Everything in this
 ## Operations
 
 - [MIGRATIONS.md](./MIGRATIONS.md) — canonical migration path (`scripts/db/migrations/`), naming, idempotency rules, applied to the prod self-hosted Hetzner Postgres on deploy (tracked in `schema_migrations`)
-- [EMAIL_SETUP.md](./EMAIL_SETUP.md) — Listmonk + Brevo configuration
+- [EMAIL_SETUP.md](./EMAIL_SETUP.md) — Resend (mail-kit) and optional Listmonk configuration
 - [RELIABILITY.md](./RELIABILITY.md) — uptime expectations, on-call practices
 - [AUDIT_BACKLOG_2026-08.md](./AUDIT_BACKLOG_2026-08.md) — audit findings still open (the older `CODE_AUDIT.md` list is in [`archive/`](./archive))
 - [LEGAL_NONPROFIT_COMPLIANCE.md](./LEGAL_NONPROFIT_COMPLIANCE.md) — Swiss-Verein legal posture, data handling

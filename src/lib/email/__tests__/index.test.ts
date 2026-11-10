@@ -8,16 +8,16 @@
  *
  * Behaviors locked:
  *   sendEmail
- *   - uses SMTP when provider is 'smtp'
+ *   - uses Resend when provider is 'resend'
  *   - uses Listmonk when provider is 'listmonk'
- *   - falls back to SMTP when Listmonk throws
- *   - returns { success: true, messageId } on SMTP success
+ *   - falls back to Resend when Listmonk throws
+ *   - returns { success: true, messageId } on Resend success
  *   - returns { success: false, error } on total failure (never throws)
  *
  *   sendCustomEmail
- *   - sends content directly via SMTP when provider is 'smtp'
+ *   - sends content via Resend when provider is 'resend'
  *   - uses Listmonk when provider is 'listmonk'
- *   - falls back to SMTP when Listmonk throws
+ *   - falls back to Resend when Listmonk throws
  *   - returns { success: false, error } on failure
  */
 
@@ -200,14 +200,12 @@ vi.mock('../templates', () => ({}));
 // Transport and provider mocks
 // ---------------------------------------------------------------------------
 
-const mockSendMail = vi.fn();
-const mockGetTransporter = vi.fn();
-const mockGetFromEmail = vi.fn();
+const mockSendViaResend = vi.fn();
 
-vi.mock('../transporter', () => ({
-  getTransporter: (...args: unknown[]) => mockGetTransporter(...args),
-  getFromEmail: (...args: unknown[]) => mockGetFromEmail(...args),
-  testEmailConfig: vi.fn(),
+vi.mock('../resend', () => ({
+  sendViaResend: (...args: unknown[]) => mockSendViaResend(...args),
+  testResendConnection: vi.fn(),
+  isResendEnabled: vi.fn(),
 }));
 
 const mockSendViaListmonk = vi.fn();
@@ -253,11 +251,9 @@ const CUSTOM_CONTENT: EmailContent = {
 beforeEach(() => {
   vi.clearAllMocks();
 
-  // Default: SMTP provider
-  mockGetEmailProvider.mockReturnValue('smtp');
-  mockGetFromEmail.mockReturnValue('noreply@revamp-it.ch');
-  mockSendMail.mockResolvedValue({ messageId: 'smtp-msg-1' });
-  mockGetTransporter.mockResolvedValue({ sendMail: mockSendMail });
+  // Default: Resend provider
+  mockGetEmailProvider.mockReturnValue('resend');
+  mockSendViaResend.mockResolvedValue({ success: true, messageId: 'resend-msg-1' });
   mockSendViaListmonk.mockResolvedValue({ success: true, messageId: 'listmonk-msg-1' });
 });
 
@@ -266,13 +262,13 @@ beforeEach(() => {
 // ============================================================================
 
 describe('sendEmail', () => {
-  it('sends via SMTP when provider is smtp and returns success', async () => {
+  it('sends via Resend when provider is resend and returns success', async () => {
     const result = await sendEmail(RECIPIENT, 'verificationCode', 'Hans');
 
-    expect(mockSendMail).toHaveBeenCalledTimes(1);
+    expect(mockSendViaResend).toHaveBeenCalledTimes(1);
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.messageId).toBe('smtp-msg-1');
+      expect(result.messageId).toBe('resend-msg-1');
     }
     expect(mockSendViaListmonk).not.toHaveBeenCalled();
   });
@@ -284,22 +280,24 @@ describe('sendEmail', () => {
 
     expect(mockSendViaListmonk).toHaveBeenCalledTimes(1);
     expect(result.success).toBe(true);
-    expect(mockSendMail).not.toHaveBeenCalled();
+    expect(mockSendViaResend).not.toHaveBeenCalled();
   });
 
-  it('falls back to SMTP when Listmonk throws', async () => {
+  it('falls back to Resend when Listmonk throws', async () => {
     mockGetEmailProvider.mockReturnValue('listmonk');
     mockSendViaListmonk.mockRejectedValueOnce(new Error('Listmonk unavailable'));
 
     const result = await sendEmail(RECIPIENT, 'verificationCode', 'Hans');
 
     expect(mockSendViaListmonk).toHaveBeenCalledTimes(1);
-    expect(mockSendMail).toHaveBeenCalledTimes(1);
+    expect(mockSendViaResend).toHaveBeenCalledTimes(1);
     expect(result.success).toBe(true);
   });
 
   it('returns { success: false, error } on total failure (never throws)', async () => {
-    mockGetTransporter.mockRejectedValueOnce(new Error('No SMTP config'));
+    mockSendViaResend.mockRejectedValueOnce(
+      new Error('Resend send failed: RESEND_API_KEY is not set'),
+    );
 
     const result = await sendEmail(RECIPIENT, 'verificationCode');
 
@@ -315,11 +313,11 @@ describe('sendEmail', () => {
 // ============================================================================
 
 describe('sendCustomEmail', () => {
-  it('sends content via SMTP when provider is smtp', async () => {
+  it('sends content via Resend when provider is resend', async () => {
     const result = await sendCustomEmail(RECIPIENT, CUSTOM_CONTENT);
 
-    expect(mockSendMail).toHaveBeenCalledTimes(1);
-    const callArgs = mockSendMail.mock.calls[0][0];
+    expect(mockSendViaResend).toHaveBeenCalledTimes(1);
+    const callArgs = mockSendViaResend.mock.calls[0][1];
     expect(callArgs.subject).toBe(CUSTOM_CONTENT.subject);
     expect(result.success).toBe(true);
   });
@@ -331,21 +329,21 @@ describe('sendCustomEmail', () => {
 
     expect(mockSendViaListmonk).toHaveBeenCalledTimes(1);
     expect(result.success).toBe(true);
-    expect(mockSendMail).not.toHaveBeenCalled();
+    expect(mockSendViaResend).not.toHaveBeenCalled();
   });
 
-  it('falls back to SMTP when Listmonk throws', async () => {
+  it('falls back to Resend when Listmonk throws', async () => {
     mockGetEmailProvider.mockReturnValue('listmonk');
     mockSendViaListmonk.mockRejectedValueOnce(new Error('timeout'));
 
     const result = await sendCustomEmail(RECIPIENT, CUSTOM_CONTENT);
 
-    expect(mockSendMail).toHaveBeenCalledTimes(1);
+    expect(mockSendViaResend).toHaveBeenCalledTimes(1);
     expect(result.success).toBe(true);
   });
 
   it('returns { success: false, error } on failure', async () => {
-    mockGetTransporter.mockRejectedValueOnce(new Error('connection refused'));
+    mockSendViaResend.mockRejectedValueOnce(new Error('connection refused'));
 
     const result = await sendCustomEmail(RECIPIENT, CUSTOM_CONTENT);
 

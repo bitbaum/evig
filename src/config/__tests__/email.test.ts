@@ -9,16 +9,15 @@
  * Behaviors locked:
  *   getEmailProvider
  *   - returns 'listmonk' when LISTMONK_ENABLED=true
- *   - returns 'smtp' when LISTMONK_ENABLED is not set
+ *   - returns 'resend' when LISTMONK_ENABLED is not set (there is no SMTP fallback)
  *
  *   isEmailConfigured
  *   - returns true when LISTMONK_ENABLED=true
- *   - returns true when EMAIL_USER and EMAIL_PASS are set
+ *   - returns true when RESEND_API_KEY is set
  *   - returns false when neither is configured
  *
  *   validateEmailConfig
- *   - throws when SMTP is used without EMAIL_USER
- *   - throws when SMTP is used without EMAIL_PASS
+ *   - throws when Resend is used without RESEND_API_KEY
  *   - does not throw when listmonk is enabled
  */
 
@@ -61,12 +60,11 @@ async function withEnv(vars: Record<string, string | undefined>, fn: () => void 
 // process.env at call time, so we only need vi.resetModules for constants)
 
 describe('getEmailProvider', () => {
-  it('returns "smtp" when LISTMONK_ENABLED is not set', async () => {
-    // Import fresh in each test to avoid cross-contamination
+  it('returns "resend" when LISTMONK_ENABLED is not set', async () => {
     vi.resetModules();
-    await withEnv({ LISTMONK_ENABLED: undefined }, async () => {
+    await withEnv({ LISTMONK_ENABLED: undefined, RESEND_API_KEY: undefined }, async () => {
       const { getEmailProvider } = (await import('../email')) as any;
-      expect(getEmailProvider()).toBe('smtp');
+      expect(getEmailProvider()).toBe('resend');
     });
   });
 
@@ -78,84 +76,68 @@ describe('getEmailProvider', () => {
     });
   });
 
-  it('returns "smtp" when LISTMONK_ENABLED=false', async () => {
+  it('returns "resend" when LISTMONK_ENABLED=false', async () => {
     vi.resetModules();
     await withEnv({ LISTMONK_ENABLED: 'false' }, async () => {
       const { getEmailProvider } = (await import('../email')) as any;
-      expect(getEmailProvider()).toBe('smtp');
-    });
-  });
-});
-
-describe('isEmailConfigured', () => {
-  it('returns true when LISTMONK_ENABLED=true', async () => {
-    vi.resetModules();
-    await withEnv({ LISTMONK_ENABLED: 'true' }, async () => {
-      const { isEmailConfigured } = (await import('../email')) as any;
-      expect(isEmailConfigured()).toBe(true);
+      expect(getEmailProvider()).toBe('resend');
     });
   });
 
-  it('returns true when EMAIL_USER and EMAIL_PASS are both set', async () => {
+  it('never answers "smtp", even with the old SMTP variables set', async () => {
     vi.resetModules();
     await withEnv(
-      {
-        LISTMONK_ENABLED: undefined,
-        EMAIL_USER: 'test@example.com',
-        EMAIL_PASS: 'secret',
-      },
+      { LISTMONK_ENABLED: undefined, RESEND_API_KEY: undefined, EMAIL_USER: 'u', EMAIL_PASS: 'p' },
       async () => {
-        const { isEmailConfigured } = (await import('../email')) as any;
-        expect(isEmailConfigured()).toBe(true);
-      },
-    );
-  });
-
-  it('returns false when neither listmonk nor SMTP credentials are set', async () => {
-    vi.resetModules();
-    await withEnv(
-      {
-        LISTMONK_ENABLED: undefined,
-        EMAIL_USER: undefined,
-        EMAIL_PASS: undefined,
-      },
-      async () => {
-        const { isEmailConfigured } = (await import('../email')) as any;
+        const { getEmailProvider, isEmailConfigured } = (await import('../email')) as any;
+        expect(getEmailProvider()).toBe('resend');
         expect(isEmailConfigured()).toBe(false);
       },
     );
   });
 });
 
-describe('validateEmailConfig', () => {
-  it('throws when SMTP is used without EMAIL_USER', async () => {
+describe('isEmailConfigured', () => {
+  it('returns true when LISTMONK_ENABLED=true', async () => {
     vi.resetModules();
-    await withEnv(
-      {
-        LISTMONK_ENABLED: undefined,
-        EMAIL_USER: undefined,
-        EMAIL_PASS: 'secret',
-      },
-      async () => {
-        const { validateEmailConfig } = (await import('../email')) as any;
-        expect(() => validateEmailConfig()).toThrow(/EMAIL_USER/);
-      },
-    );
+    await withEnv({ LISTMONK_ENABLED: 'true', RESEND_API_KEY: undefined }, async () => {
+      const { isEmailConfigured } = (await import('../email')) as any;
+      expect(isEmailConfigured()).toBe(true);
+    });
   });
 
-  it('throws when SMTP is used without EMAIL_PASS', async () => {
+  it('returns true when RESEND_API_KEY is set', async () => {
     vi.resetModules();
-    await withEnv(
-      {
-        LISTMONK_ENABLED: undefined,
-        EMAIL_USER: 'test@example.com',
-        EMAIL_PASS: undefined,
-      },
-      async () => {
-        const { validateEmailConfig } = (await import('../email')) as any;
-        expect(() => validateEmailConfig()).toThrow(/EMAIL_PASS/);
-      },
-    );
+    await withEnv({ LISTMONK_ENABLED: undefined, RESEND_API_KEY: 're_test' }, async () => {
+      const { isEmailConfigured } = (await import('../email')) as any;
+      expect(isEmailConfigured()).toBe(true);
+    });
+  });
+
+  it('returns false when neither Listmonk nor Resend is set', async () => {
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: undefined, RESEND_API_KEY: undefined }, async () => {
+      const { isEmailConfigured } = (await import('../email')) as any;
+      expect(isEmailConfigured()).toBe(false);
+    });
+  });
+});
+
+describe('validateEmailConfig', () => {
+  it('throws when Resend is used without RESEND_API_KEY', async () => {
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: undefined, RESEND_API_KEY: undefined }, async () => {
+      const { validateEmailConfig } = (await import('../email')) as any;
+      expect(() => validateEmailConfig()).toThrow(/RESEND_API_KEY/);
+    });
+  });
+
+  it('does not throw when RESEND_API_KEY is set', async () => {
+    vi.resetModules();
+    await withEnv({ LISTMONK_ENABLED: undefined, RESEND_API_KEY: 're_test' }, async () => {
+      const { validateEmailConfig } = (await import('../email')) as any;
+      expect(() => validateEmailConfig()).not.toThrow();
+    });
   });
 
   it('does not throw when LISTMONK_ENABLED=true', async () => {

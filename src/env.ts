@@ -53,23 +53,6 @@ const serverEnvSchema = z.object({
   DB_USER: z.string().optional(),
   DB_PASSWORD: z.string().optional(),
 
-  // --- Email -----------------------------------------------------------------
-  // Email is required for password reset, verification, donations confirmations.
-  // Without it, those flows silently fail (we already log the failures, but the
-  // user never gets the email). We validate PRESENCE only, not format —
-  // production environments may have legitimately weird shapes (e.g.
-  // `EMAIL_FROM=noreply` for relays that prepend a domain, or `EMAIL_PORT`
-  // set as an integer rather than string in some platforms). The email
-  // transport code in src/lib/email/* validates the values at use-time.
-  // Presence-only; the email transport (src/lib/email/index.ts) handles
-  // missing config gracefully (logs warning, never crashes the page).
-  EMAIL_HOST: z.string().optional(),
-  EMAIL_USER: z.string().optional(),
-  EMAIL_PASS: z.string().optional(),
-  EMAIL_FROM: z.string().optional(),
-  EMAIL_PORT: z.string().optional(),
-  EMAIL_SECURE: z.string().optional(),
-
   // --- App URL ---------------------------------------------------------------
   // PRESENCE only — we used to enforce .url() but env values can hold shapes
   // that are valid at runtime yet fail Zod's strict URL check at build time.

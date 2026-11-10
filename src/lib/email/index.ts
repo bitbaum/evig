@@ -2,13 +2,14 @@
  * Email Module
  *
  * Main entry point for email functionality.
- * Supports both Listmonk (recommended) and direct SMTP via nodemailer.
+ * Sends through Resend (@bitbaum/mail-kit, the fleet standard), or Listmonk
+ * when LISTMONK_ENABLED=true (falling back to Resend if Listmonk fails).
  *
  * Directory structure:
  * - email/
  *   - index.ts (this file) - Main entry point
  *   - types.ts - Type definitions
- *   - transporter.ts - Nodemailer setup
+ *   - resend.ts - Resend adapter over @bitbaum/mail-kit
  *   - listmonk.ts - Listmonk API client
  *   - templates/
  *     - index.ts - Template exports
@@ -22,7 +23,6 @@
 
 import { logger } from '@/lib/logger';
 import { getEmailProvider } from '@/config/email';
-import { getTransporter, getFromEmail, testEmailConfig } from './transporter';
 import {
   sendViaListmonk,
   testListmonkConnection,
@@ -34,9 +34,6 @@ import type { EmailContent, SendEmailResult, TestEmailResult } from './types';
 
 // Re-export types
 export type { EmailContent, SendEmailResult, TestEmailResult } from './types';
-
-// Re-export transporter utilities (SMTP)
-export { getTransporter, testEmailConfig } from './transporter';
 
 // Re-export Resend utilities
 export { sendViaResend, testResendConnection, isResendEnabled } from './resend';
@@ -132,7 +129,7 @@ type EmailTemplateFn = (...args: unknown[]) => EmailContent;
 /**
  * Send an email using a template
  *
- * Automatically uses Listmonk if enabled, otherwise falls back to SMTP.
+ * Uses Listmonk if enabled (falling back to Resend), otherwise Resend.
  *
  * @param to - Recipient email address
  * @param template - Template name from emailTemplates
@@ -148,7 +145,7 @@ export async function sendEmail(
     const emailContent = templateFn(...args);
     const provider = getEmailProvider();
 
-    // Try Listmonk first if enabled, fall back to SMTP on failure
+    // Listmonk when enabled; on failure, Resend.
     if (provider === 'listmonk') {
       try {
         return await sendViaListmonk(to, emailContent, {
@@ -156,7 +153,7 @@ export async function sendEmail(
           name: typeof args[0] === 'string' ? args[0] : undefined,
         });
       } catch (listmonkError) {
-        logger.warn('Listmonk failed, falling back to SMTP', {
+        logger.warn('Listmonk failed, falling back to Resend', {
           error: listmonkError instanceof Error ? listmonkError.message : 'unknown',
           to,
           template,
@@ -164,32 +161,9 @@ export async function sendEmail(
       }
     }
 
-    // Resend (fleet standard) — falls back to SMTP on failure like Listmonk
-    if (provider === 'resend') {
-      try {
-        return await sendViaResend(to, emailContent);
-      } catch (resendError) {
-        logger.warn('Resend failed, falling back to SMTP', {
-          error: resendError instanceof Error ? resendError.message : 'unknown',
-          to,
-          template,
-        });
-      }
-    }
-
-    // SMTP (primary if provider=smtp, fallback if Listmonk failed)
-    const transporter = await getTransporter();
-    const mailOptions = {
-      from: getFromEmail(),
-      to,
-      subject: emailContent.subject,
-      html: emailContent.html,
-      text: emailContent.text,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    logger.info('Email sent via SMTP', { messageId: info.messageId, to, template });
-    return { success: true, messageId: info.messageId };
+    // Resend (fleet standard). A failure throws and is reported below as
+    // { success: false } — there is no further fallback to pretend with.
+    return await sendViaResend(to, emailContent);
   } catch (error) {
     logger.error('Email send error', { error, to, template });
     return {
@@ -202,7 +176,7 @@ export async function sendEmail(
 /**
  * Send a custom email (not using a predefined template)
  *
- * Automatically uses Listmonk if enabled, otherwise falls back to SMTP.
+ * Uses Listmonk if enabled (falling back to Resend), otherwise Resend.
  *
  * @param to - Recipient email address
  * @param content - Email content with subject, html, and text
@@ -211,43 +185,19 @@ export async function sendCustomEmail(to: string, content: EmailContent): Promis
   try {
     const provider = getEmailProvider();
 
-    // Try Listmonk first if enabled, fall back to SMTP on failure
+    // Listmonk when enabled; on failure, Resend.
     if (provider === 'listmonk') {
       try {
         return await sendViaListmonk(to, content);
       } catch (listmonkError) {
-        logger.warn('Listmonk failed for custom email, falling back to SMTP', {
+        logger.warn('Listmonk failed for custom email, falling back to Resend', {
           error: listmonkError instanceof Error ? listmonkError.message : 'unknown',
           to,
         });
       }
     }
 
-    // Resend (fleet standard) — falls back to SMTP on failure like Listmonk
-    if (provider === 'resend') {
-      try {
-        return await sendViaResend(to, content);
-      } catch (resendError) {
-        logger.warn('Resend failed for custom email, falling back to SMTP', {
-          error: resendError instanceof Error ? resendError.message : 'unknown',
-          to,
-        });
-      }
-    }
-
-    // SMTP (primary if provider=smtp, fallback if Listmonk failed)
-    const transporter = await getTransporter();
-    const mailOptions = {
-      from: getFromEmail(),
-      to,
-      subject: content.subject,
-      html: content.html,
-      text: content.text,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    logger.info('Custom email sent via SMTP', { messageId: info.messageId, to });
-    return { success: true, messageId: info.messageId };
+    return await sendViaResend(to, content);
   } catch (error) {
     logger.error('Custom email send error', { error, to });
     return {

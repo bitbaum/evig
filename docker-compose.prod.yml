@@ -77,12 +77,6 @@ services:
       # Search
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
       MEILI_PORT: 7700
-      # Email
-      SMTP_HOST: ${SMTP_HOST}
-      SMTP_PORT: ${SMTP_PORT}
-      SMTP_USER: ${SMTP_USER}
-      SMTP_PASSWORD: ${SMTP_PASSWORD}
-      EMAIL_FROM: ${EMAIL_FROM}
     depends_on:
       db:
         condition: service_healthy
