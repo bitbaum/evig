@@ -1,6 +1,11 @@
 import { Check, Circle, ListChecks, Unplug } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { linkDevelopment, readRefs, type DevelopmentProfile, type LinkedGoal } from 'bip-kit';
+import {
+  linkDevelopment,
+  readRefs,
+  type DevelopmentProfile,
+  type LinkedGoal,
+} from '@bitbaum/bip-kit';
 import { Link } from '@/i18n/navigation';
 import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/EmptyState';

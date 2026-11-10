@@ -1,4 +1,4 @@
-import { loadDevelopmentProfile, type DevelopmentProfile } from 'bip-kit';
+import { loadDevelopmentProfile, type DevelopmentProfile } from '@bitbaum/bip-kit';
 import {
   FLEET_MAP_REVALIDATE_SECONDS,
   FLEET_MAP_SLUG,

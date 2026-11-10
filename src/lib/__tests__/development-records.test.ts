@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { developmentProfileFromMap } from 'bip-kit';
+import { developmentProfileFromMap } from '@bitbaum/bip-kit';
 import {
   FLEET_MAP_REVALIDATE_SECONDS,
   FLEET_MAP_SLUG,
