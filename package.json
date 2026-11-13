@@ -108,7 +108,7 @@
     "@aws-sdk/client-s3": "^3.1160.0",
     "@better-auth/passkey": "^1.7.14",
     "@bitbaum/accountkit": "^0.27.0",
-    "@bitbaum/ai-kit": "^1.24.0",
+    "@bitbaum/ai-kit": "^1.26.0",
     "@bitbaum/chartkit": "^0.7.0",
     "@bitbaum/chatkit": "github:bitbaum/chatkit#6451d3b9d0c3d467011a80f8cf023da90dffe92c",
     "@bitbaum/design-tokens": "^1.5.2",
